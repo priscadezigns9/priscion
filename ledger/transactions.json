@@ -1,0 +1,118 @@
+[
+    {
+        "id": "tx_9921",
+        "type": "TRANSFER",
+        "asset": "SolarEdge Sovereign Node",
+        "from": "PRISCA DESIGNS",
+        "to": "$prisca.pri",
+        "status": "MIGRATED",
+        "time": "2026-06-07 17:00"
+    },
+    {
+        "id": "tx_Client_000",
+        "type": "INTEGRATION",
+        "client": "Prisca Designs",
+        "handle": "$priscadezigns.pri",
+        "service": "Sovereign Bridge & Wallet",
+        "status": "ANCHOR_NODE",
+        "time": "2026-06-07 17:45"
+    },
+    {
+        "id": "tx_Client_001",
+        "type": "INTEGRATION",
+        "client": "Calalloo",
+        "handle": "$calalloo.pri",
+        "service": "Sovereign Wallet Sync",
+        "status": "ACTIVE_NODE",
+        "time": "2026-06-07 17:40"
+    },
+    {
+        "id": "tx_Client_002",
+        "type": "INTEGRATION",
+        "client": "D'Panyard",
+        "handle": "$dpanyard.pri",
+        "service": "Sovereign Wallet Sync",
+        "status": "ACTIVE_NODE",
+        "time": "2026-06-07 17:40"
+    },
+    {
+        "id": "tx_RES_100",
+        "type": "PROVISION",
+        "asset": "$apple.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_101",
+        "type": "PROVISION",
+        "asset": "$microsoft.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_102",
+        "type": "PROVISION",
+        "asset": "$google.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_103",
+        "type": "PROVISION",
+        "asset": "$amazon.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_104",
+        "type": "PROVISION",
+        "asset": "$nvidia.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_105",
+        "type": "PROVISION",
+        "asset": "$tesla.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_106",
+        "type": "PROVISION",
+        "asset": "$meta.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_107",
+        "type": "PROVISION",
+        "asset": "$nike.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_108",
+        "type": "PROVISION",
+        "asset": "$dior.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_109",
+        "type": "PROVISION",
+        "asset": "$rolex.pri",
+        "to": "$prisca.pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:35"
+    }
+]
