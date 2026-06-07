@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISCION | Pulse Ledger Explorer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap">
+    <style>
+        :root { --accent: #7B35D4; --bg: #000; --surface: #050505; --border: #111; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding: 50px 10%; }
+        h1 { font-weight: 900; letter-spacing: -2px; font-size: 3rem; margin-bottom: 50px; }
+        .node-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .node-card { background: var(--surface); border: 1px solid var(--border); padding: 30px; border-radius: 15px; position: relative; }
+        .node-card.anchor { border-color: var(--accent); box-shadow: 0 0 20px rgba(123, 53, 212, 0.2); }
+        .node-card h3 { margin: 0; font-weight: 900; }
+        .node-card .handle { color: var(--accent); font-size: 0.8rem; font-weight: 900; margin-top: 5px; }
+        .node-card .status { position: absolute; top: 30px; right: 30px; font-size: 0.6rem; font-weight: 900; background: #111; padding: 5px 10px; border-radius: 5px; }
+        .node-card .desc { color: #555; font-size: 0.8rem; margin-top: 15px; line-height: 1.6; }
+        .tx-feed { margin-top: 80px; }
+        .tx-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--border); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div style="font-weight:900; color:#444; font-size:0.7rem; letter-spacing:3px; margin-bottom:10px;">PRISCION // PULSE</div>
+    <h1>Sovereign Node Network</h1>
+
+    <div class="node-grid">
+        <div class="node-card anchor">
+            <div class="status" style="color:#7B35D4;">MASTER_NODE</div>
+            <h3>Prisca Designs</h3>
+            <div class="handle">$priscadezigns.pri</div>
+            <p class="desc">The primary Web2-to-Web3 bridge client. Utilizing Priscion for sovereign identity and deterministic transaction anchoring.</p>
+        </div>
+        <div class="node-card">
+            <div class="status" style="color:#00ff00;">ACTIVE_NODE</div>
+            <h3>Calalloo</h3>
+            <div class="handle">$calalloo.pri</div>
+            <p class="desc">Independent culinary heritage brand. Integrated via Sovereign Wallet for verified ownership and portfolio management.</p>
+        </div>
+        <div class="node-card">
+            <div class="status" style="color:#00ff00;">ACTIVE_NODE</div>
+            <h3>D'Panyard</h3>
+            <div class="handle">$dpanyard.pri</div>
+            <p class="desc">Independent music authority node. Leveraging the Priscion Ledger for sovereign audio engineering and distribution truth.</p>
+        </div>
+    </div>
+
+    <div class="tx-feed">
+        <h2 style="font-weight:900;">Latest Ledger Commits</h2>
+        <div id="feed-root">
+            <div class="tx-row"><span>tx_Client_000</span> <span>INTEGRATION: PRISCA DESIGNS</span> <span style="color:#444;">2026-06-07 17:45</span></div>
+            <div class="tx-row"><span>tx_Client_001</span> <span>INTEGRATION: CALALLOO</span> <span style="color:#444;">2026-06-07 17:40</span></div>
+            <div class="tx-row"><span>tx_Client_002</span> <span>INTEGRATION: DPANYARD</span> <span style="color:#444;">2026-06-07 17:40</span></div>
+            <div class="tx-row"><span>tx_9921</span> <span>TRANSFER: SOLAREDGE NODE</span> <span style="color:#444;">2026-06-07 17:00</span></div>
+        </div>
+    </div>
+</body>
+</html>
