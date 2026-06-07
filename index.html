@@ -33,18 +33,22 @@
             .hero h1 { font-size: 3.5rem; }
             .dapp-grid { padding: 0 5% 100px; }
         }
+        .sidebar { position: fixed; top: 0; right: -400px; width: 400px; height: 100vh; background: #000; border-left: 1px solid var(--border); z-index: 2000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); visibility: hidden; }
+        .sidebar.active { right: 0; visibility: visible; }
     </style>
 </head>
 <body>
     <nav>
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/p-logo.png" class="p-logo" onclick="location.href='index.html'">
-        <a href="muse.html" class="wallet-btn" style="padding: 12px 25px; margin: 0; font-size: 0.6rem;">MUSE WALLET</a>
+        <button onclick="toggleSidebar()" class="wallet-btn" style="padding: 12px 25px; margin: 0; font-size: 0.6rem; border: none; cursor: pointer;">MUSE WALLET</button>
     </nav>
 
     <div class="hero">
-        <h1>Sovereign<br>Neural Hub.</h1>
-        <p>The core infrastructure for the Priscion Blockchain. Secure your identity, manage assets, and explore the ledger.</p>
+        <h1>The Sovereign<br>Ledger.</h1>
+        <p>The core infrastructure for the Priscion Blockchain. Secure your identity, manage assets, and explore the neural registry.</p>
     </div>
+
+    <div id="sidebar" class="sidebar"></div>
 
     <div class="dapp-grid">
         <a href="pulse/" class="dapp-card">
