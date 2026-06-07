@@ -2,136 +2,169 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Priscion | The Sovereign Ledger</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
+    <title>Priscion | The Sovereign Ledger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #7B35D4; --bg: #000; --surface: #080808; --border: #111; --muted: #666; }
-        * { box-sizing: border-box; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; overflow-x: hidden; }
-        
-        nav { height: 90px; display: flex; align-items: center; justify-content: space-between; padding: 0 8%; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; }
-        .nav-links { display: flex; gap: 40px; align-items: center; }
-        .nav-links a { color: #fff; text-decoration: none; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-        .p-logo { height: 35px; cursor: pointer; }
-        
-        .hero { padding: 150px 8% 100px; text-align: center; }
-        .hero h1 { font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; line-height: 0.9; letter-spacing: -4px; margin: 0; color: #fff; }
-        .hero p { color: var(--muted); font-size: 1.2rem; max-width: 700px; margin: 30px auto; letter-spacing: 1px; }
-        
-        .section-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 4px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block; }
-        
-        .dapp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 0 8% 100px; max-width: 1400px; margin: 0 auto; }
-        .dapp-card { background: var(--surface); border: 1px solid var(--border); border-radius: 25px; padding: 40px; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); text-decoration: none; color: inherit; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 320px; }
-        .dapp-card:hover { border-color: var(--accent); transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .dapp-card h3 { font-size: 1.8rem; font-weight: 900; margin: 0; letter-spacing: -1px; }
-        .dapp-card p { color: var(--muted); font-size: 0.9rem; margin-top: 15px; }
-        .dapp-card .status { position: absolute; top: 20px; right: 20px; font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; border: 1px solid var(--accent); padding: 5px 12px; border-radius: 50px; }
-        
-        .services-section { padding: 100px 8%; border-top: 1px solid var(--border); background: #050505; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
-        .service-card { background: var(--bg); border: 1px solid var(--border); padding: 50px; border-radius: 30px; transition: 0.4s; }
-        .service-card:hover { border-color: var(--accent); }
-        .service-card h3 { font-weight: 900; font-size: 1.5rem; margin: 0; }
-        .service-card .price { font-size: 2rem; font-weight: 900; color: var(--accent); margin: 20px 0; }
-        .service-card p { color: var(--muted); font-size: 0.9rem; }
-        
-        .cta-btn { background: #fff; color: #000; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; display: inline-block; transition: 0.4s; border: none; cursor: pointer; }
-        .cta-btn:hover { background: var(--accent); color: #fff; transform: scale(1.05); }
+        :root {
+            --bg: #FFFFFF;
+            --text: #1A1A1A;
+            --muted: #666666;
+            --accent: #7B35D4;
+            --border: rgba(0,0,0,0.08);
+            --surface: #F9F9F9;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
 
-        .sidebar { position: fixed; top: 0; right: -450px; width: 450px; height: 100vh; background: #000; border-left: 1px solid var(--border); z-index: 2000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); visibility: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+        nav {
+            height: 90px; padding: 0 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px); z-index: 1000;
+        }
+        .logo { height: 40px; cursor: pointer; }
+        .nav-links { display: flex; gap: 35px; align-items: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--text);
+            font-weight: 700; font-size: 0.75rem; letter-spacing: 1px;
+            text-transform: uppercase; transition: 0.3s; opacity: 0.8;
+        }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        .hero { padding: 140px 8% 100px; text-align: center; }
+        .hero h1 {
+            font-family: var(--font-heading); font-size: clamp(3rem, 10vw, 5.5rem);
+            line-height: 0.9; letter-spacing: -2px; margin-bottom: 25px;
+        }
+        .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 8% 100px; max-width: 1400px; margin: 0 auto; }
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 45px; border-radius: 30px; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none; color: inherit; position: relative;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
+        .card h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
+        .card p { color: var(--muted); font-size: 0.95rem; }
+        .status { position: absolute; top: 25px; right: 25px; font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 50px; }
+
+        .services-section { padding: 100px 8%; background: #FAFAFA; border-top: 1px solid var(--border); }
+        .service-card { background: #fff; border: 1px solid var(--border); padding: 50px; border-radius: 35px; transition: 0.4s; }
+        .service-card:hover { border-color: var(--accent); }
+        .service-card h3 { font-family: var(--font-heading); font-size: 1.6rem; }
+        .price { font-size: 2.2rem; font-weight: 900; color: var(--accent); margin: 25px 0; font-family: var(--font-heading); }
+
+        .btn {
+            background: var(--text); color: #fff; padding: 16px 35px;
+            border-radius: 100px; font-weight: 700; font-size: 0.75rem;
+            letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+            display: inline-block; transition: 0.4s; border: none; cursor: pointer;
+        }
+        .btn:hover { background: var(--accent); transform: scale(1.05); }
+
+        /* Wallet Sidebar */
+        .sidebar {
+            position: fixed; top: 0; right: -500px; width: 500px; height: 100vh;
+            background: #FFFFFF; border-left: 1px solid var(--border);
+            z-index: 2000; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            visibility: hidden; box-shadow: -20px 0 60px rgba(0,0,0,0.05);
+        }
         .sidebar.active { right: 0; visibility: visible; }
 
-        .footer { padding: 80px 8%; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
-        
+        footer { padding: 80px 8%; border-top: 1px solid var(--border); text-align: center; }
+        .copyright { color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+
         @media(max-width: 768px) {
-            .hero h1 { font-size: 3.5rem; }
             .sidebar { width: 100%; right: -100%; }
+            nav { padding: 0 5%; }
+            .hero h1 { font-size: 3.5rem; }
         }
     </style>
 </head>
 <body>
+
     <nav>
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/p-logo.png" class="p-logo" onclick="location.href='index.html'">
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/p-logo.png" class="logo" onclick="location.href='index.html'">
         <div class="nav-links">
-            <a href="#mission">Mission</a>
             <a href="whitepaper.html">White Paper</a>
             <a href="leggo.html">OS</a>
-            <button onclick="toggleSidebar()" class="cta-btn" style="padding: 12px 25px; font-size: 0.6rem;">MUSE WALLET</button>
+            <button onclick="toggleSidebar()" class="btn" style="padding: 10px 25px; font-size: 0.65rem;">MUSE WALLET</button>
         </div>
     </nav>
 
-    <div class="hero">
-        <h1>The Sovereign<br>Ledger.</h1>
-        <p>Architecting the high-fidelity future. Secure your identity, manage global assets, and migrate your legacy to the Priscion Blockchain.</p>
-        <div style="margin-top: 40px; display: flex; gap: 20px; justify-content: center;">
-            <a href="leggo.html" class="cta-btn">Enter the OS</a>
-            <a href="whitepaper.html" class="cta-btn" style="background:none; border:1px solid #fff; color:#fff;">Read Manifesto</a>
+    <section class="hero">
+        <span style="font-size: 0.65rem; font-weight: 900; letter-spacing: 5px; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 20px;">The Sovereign Ledger</span>
+        <h1>Architecting<br>Reality.</h1>
+        <p>Migrate your brand to the Priscion Blockchain. Secure your legacy with high-fidelity digital architecture and neural identity protocols.</p>
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <a href="leggo.html" class="btn">Enter the OS</a>
+            <a href="whitepaper.html" class="btn" style="background:none; border:1px solid #1A1A1A; color:#1A1A1A;">Read Manifesto</a>
         </div>
-    </div>
+    </section>
 
-    <div class="dapp-grid">
-        <a href="pulse/" class="dapp-card">
+    <div class="grid">
+        <a href="pulse/" class="card">
             <span class="status">Live</span>
-            <div>
-                <h3>PULSE</h3>
-                <p>The official block explorer. Real-time transaction monitoring and ledger analytics.</p>
-            </div>
+            <h3>PULSE</h3>
+            <p>The official block explorer. Monitor transactions and ledger health in real-time.</p>
         </a>
-        <a href="muse.html" class="dapp-card">
+        <a href="muse.html" class="card">
             <span class="status">Beta</span>
-            <div>
-                <h3>MUSE</h3>
-                <p>High-fidelity sovereign wallet. Manage $PRN, $NRL, and your .pri identity handles.</p>
-            </div>
+            <h3>MUSE</h3>
+            <p>High-fidelity sovereign wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
         </a>
-        <a href="peanuts/" class="dapp-card">
+        <a href="peanuts/" class="card">
             <span class="status">Alpha</span>
-            <div>
-                <h3>PEANUTS</h3>
-                <p>The sovereign office suite. Decentralized document engineering and collaboration.</p>
-            </div>
+            <h3>PEANUTS</h3>
+            <p>Sovereign office suite. Decentralized document engineering for high-pressure workflows.</p>
         </a>
-        <a href="mynt/" class="dapp-card">
+        <a href="mynt/" class="card">
             <span class="status">Dev</span>
-            <div>
-                <h3>MYNT</h3>
-                <p>NFT Factory. Mint sovereign artifacts and high-fidelity digital assets.</p>
-            </div>
+            <h3>MYNT</h3>
+            <p>The NFT Factory. Mint sovereign artifacts and high-fidelity legacy assets.</p>
         </a>
     </div>
 
     <section class="services-section">
-        <span class="section-label">Migration Services</span>
-        <h2>Onboard to Sovereignty</h2>
-        <div class="services-grid">
-            <div class="service-card" onclick="buy('Digital Architecture', '1500')">
-                <h3>Digital Architecture</h3>
-                <div class="price">$1,500.00</div>
-                <p>Full-scale Web2/Web3 infrastructure migration, identity engineering, and node setup.</p>
-                <button class="cta-btn" style="margin-top: 30px; width: 100%;">Acquire</button>
-            </div>
-            <div class="service-card" onclick="buy('Neural Security', '2500')">
-                <h3>Neural Security</h3>
-                <div class="price">$2,500.00</div>
-                <p>Deep signal inspection, neural firewalling, and sovereign asset protection protocols.</p>
-                <button class="cta-btn" style="margin-top: 30px; width: 100%;">Acquire</button>
-            </div>
-            <div class="service-card" onclick="buy('Legacy Tokenization', '799')">
-                <h3>Legacy Tokenization</h3>
-                <div class="price">$799.00</div>
-                <p>Establishing on-chain heritage, Sovereign Handles (.pri), and high-fidelity asset minting.</p>
-                <button class="cta-btn" style="margin-top: 30px; width: 100%;">Acquire</button>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <span style="font-size: 0.65rem; font-weight: 900; letter-spacing: 5px; color: var(--accent); text-transform: uppercase;">Premium Services</span>
+            <h2 style="font-family: var(--font-heading); font-size: 3rem; margin: 20px 0 60px;">Web3 Migration</h2>
+            
+            <div class="grid" style="padding: 0; margin-bottom: 0;">
+                <div class="service-card">
+                    <h3>Digital Architecture</h3>
+                    <div class="price">$1,500.00</div>
+                    <p>Full-scale infrastructure migration, sovereign node setup, and identity engineering.</p>
+                    <button class="btn" style="margin-top: 30px; width: 100%;">Acquire</button>
+                </div>
+                <div class="service-card">
+                    <h3>Neural Security</h3>
+                    <div class="price">$2,500.00</div>
+                    <p>Deep signal inspection, neural firewalling, and absolute asset protection.</p>
+                    <button class="btn" style="margin-top: 30px; width: 100%;">Acquire</button>
+                </div>
+                <div class="service-card">
+                    <h3>Legacy Tokenization</h3>
+                    <div class="price">$799.00</div>
+                    <p>On-chain heritage anchoring, Sovereign Handle registration, and asset minting.</p>
+                    <button class="btn" style="margin-top: 30px; width: 100%;">Acquire</button>
+                </div>
             </div>
         </div>
     </section>
 
     <div id="sidebar" class="sidebar"></div>
 
-    <div class="footer">
-        Priscion Sovereign Ledger &copy; 2026 | Anchored to Eternity
-    </div>
+    <footer>
+        <p class="copyright">Priscion Sovereign Ledger &copy; 2026 | Anchored to Eternity</p>
+    </footer>
 
     <script src="wallet-core.js"></script>
 </body>
