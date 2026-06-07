@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRISCION | Sovereign White Paper v2.0</title>
+    <title>PRISCION | Sovereign White Paper v2.5</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Playfair+Display:wght@700&display=swap">
     <style>
         :root { --accent: #7B35D4; --bg: #FFF; --text: #1A1A1A; --muted: #666; --border: #EEE; }
@@ -22,6 +22,11 @@
         .back-link { text-decoration: none; color: var(--accent); font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
         .toc { margin: 40px 0; padding: 30px; background: #F9F9F9; border-radius: 20px; }
         .toc a { display: block; text-decoration: none; color: var(--text); margin-bottom: 10px; font-weight: 700; font-size: 0.9rem; }
+        
+        .roadmap { position: relative; margin-top: 50px; padding-left: 30px; border-left: 2px solid var(--border); }
+        .roadmap-item { margin-bottom: 40px; position: relative; }
+        .roadmap-item::before { content: ''; position: absolute; left: -36px; top: 0; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; border: 4px solid #fff; }
+        .roadmap-item h4 { font-weight: 900; margin: 0; color: var(--accent); }
     </style>
 </head>
 <body>
@@ -32,65 +37,94 @@
 
     <div class="container">
         <h1>Sovereign<br>White Paper</h1>
-        <p style="font-size: 1.4rem; color: var(--text); font-weight: 300;">The technical and legal framework for the Priscion Sovereign Ledger.</p>
+        <p style="font-size: 1.4rem; color: var(--text); font-weight: 300;">The technical, economic, and legal framework for the Priscion Sovereign Ledger.</p>
 
         <div class="toc">
             <h3>Contents</h3>
             <a href="#vision">1. Vision & Purpose</a>
-            <a href="#tokens">2. The Economic Model (Tokens)</a>
-            <a href="#services">3. Migration Services (The Architecture)</a>
-            <a href="#jello">4. Jello Layer & Lynx Privacy</a>
-            <a href="#legal">5. Global Legal Alignment</a>
+            <a href="#consensus">2. Consensus: Proof of Sovereignty</a>
+            <a href="#tokens">3. The Economic Model (Tokens)</a>
+            <a href="#staking">4. Staking & Node Infrastructure</a>
+            <a href="#services">5. Migration Services (Architecture)</a>
+            <a href="#bridge">6. The Sovereign Bridge</a>
+            <a href="#jello">7. Jello Layer & Lynx Privacy</a>
+            <a href="#legal">8. Global Legal Alignment</a>
+            <a href="#roadmap">9. The Roadmap</a>
         </div>
 
         <h2 id="vision">1. Vision & Purpose</h2>
         <p>Priscion is a Layer 1 Neural Ledger architected to solve the "Heritage Gap" in Web3. While legacy blockchains focus on anonymous transactions, Priscion focuses on <b>Sovereign Identity and Data Permanence</b>. We provide a deterministic environment where brand DNA, business logic, and creative assets are anchored to eternity through the <b>.pri</b> namespace.</p>
 
-        <h2 id="tokens">2. The Economic Model</h2>
+        <h2 id="consensus">2. Consensus: Proof of Sovereignty (PoS)</h2>
+        <p>Unlike Proof of Work (Power-heavy) or standard Proof of Stake (Capital-heavy), Priscion utilizes <b>Proof of Sovereignty</b>. This consensus mechanism prioritizes "Anchored Identity Nodes." Validators are required to maintain a high-fidelity $PRN stake and a verified .pri identity. This ensures that the network is secured by the stakeholders of the Empire itself.</p>
+
+        <h2 id="tokens">3. The Economic Model</h2>
         <div class="token-grid">
             <div class="token-card">
                 <h4>$PRN</h4>
-                <p>The <b>Reserve Asset</b>. Used for long-term storage anchoring and the primary medium of exchange across the Priscion Empire.</p>
+                <p>The <b>Reserve Asset</b>. Total Supply: 1,000,000,000. Used for gas, storage anchoring, and primary liquidity.</p>
             </div>
             <div class="token-card">
                 <h4>$MUSD</h4>
-                <p>The <b>Sovereign Stablecoin</b>. Pegged to USD value, ensuring price stability for retail commerce and service acquisition.</p>
+                <p>The <b>Sovereign Stablecoin</b>. Algorithmically pegged to USD, collateralized by $PRN reserves.</p>
             </div>
             <div class="token-card">
                 <h4>$NRL</h4>
-                <p>The <b>Neural Token</b>. Governs the AI-Agent layer and neural security processing across the network.</p>
+                <p>The <b>Neural Token</b>. Fuels the AI-Agent layer (Architect Nodes) and Neural Security protocols.</p>
             </div>
             <div class="token-card">
                 <h4>$ATLR</h4>
-                <p>The <b>Utility Asset</b>. Specifically for the Atelia Gaming ecosystem and interactive dApp rewards.</p>
+                <p>The <b>Utility Asset</b>. Specifically for the Atelia Gaming ecosystem, rewards, and in-game governance.</p>
             </div>
         </div>
 
-        <h2 id="services">3. Migration Services</h2>
+        <h2 id="staking">4. Staking & Node Infrastructure</h2>
+        <p>Users can commit their $PRN to the network to earn <b>Sovereign Yield</b>. Staking is integrated directly into the MUSE Wallet. Validators running "Sovereign Nodes" receive a portion of the transaction fees and new $PRN emissions, provided they maintain 99.9% uptime and identity integrity.</p>
+
+        <h2 id="services">5. Migration Services</h2>
         <h3>Sovereign Onboarding</h3>
-        <p>This entry-level service focuses on identity engineering. It includes the provision of a primary .pri handle, the generation of a Sovereign Vault key, and the mapping of personal brand DNA to the ledger. This ensures that a user’s digital presence is cryptographically owned and immutable from day one.</p>
+        <p>Identity engineering: Provision of a primary .pri handle, Sovereign Vault key generation, and brand DNA mapping.</p>
 
         <h3>Ledger Migration</h3>
-        <p>A deep-tissue architectural service for corporations. This involves "Heritage Anchoring"—the process of moving legacy Web2 databases, inventory systems, and contract logic into the Priscion L1. This allows businesses to operate with 100% transparency and near-zero latency, using the blockchain as their primary server infrastructure.</p>
+        <p>Corporate architectural service: Moving legacy databases, inventory, and contract logic into the Priscion L1 ("Heritage Anchoring").</p>
 
-        <h2 id="jello">4. Jello Layer & Lynx Privacy</h2>
-        <p>Privacy on Priscion is powered by the <b>Jello Layer</b>—a zero-knowledge encryption protocol that allows users to prove identity without revealing private data. <b>Lynx Messenger</b> operates on this layer, ensuring that peer-to-peer and agent-to-user communication is entirely sovereign and invisible to third-party observers. It is a "Dark Signal" channel, meaning no metadata is leaked to the public ledger.</p>
+        <h2 id="bridge">6. The Sovereign Bridge</h2>
+        <p>To ensure global interoperability, the <b>Priscion Bridge</b> allows for the seamless transfer of assets between the Priscion Ledger and major chains (Cardano, Ethereum, Solana). This ensures $PRN can be traded globally while maintaining its sovereign utility within the Empire.</p>
 
-        <h2 id="legal">5. Global Legal Alignment</h2>
+        <h2 id="jello">7. Jello Layer & Lynx Privacy</h2>
+        <p>Privacy is powered by the <b>Jello Layer</b>—a zero-knowledge encryption protocol. <b>Lynx Messenger</b> operates here, ensuring peer-to-peer and agent-to-user communication is entirely sovereign and metadata-free.</p>
+
+        <h2 id="legal">8. Global Legal Alignment</h2>
         <div class="legal-box">
             <h3>Sovereign Compliance Framework</h3>
-            <p>Priscion is engineered to align with global regulatory standards while preserving decentralization:</p>
+            <p>Priscion aligns with global regulatory standards to protect users and the Empire:</p>
             <ul>
-                <li><b>MiCA & VASP Ready:</b> Our architecture supports regulated asset classifications to ensure seamless integration with EU and International markets.</li>
-                <li><b>Data Sovereignty (GDPR/CCPA):</b> By placing data control in the user's MUSE Wallet, we comply with the "Right to be Forgotten" through cryptographic revocation.</li>
-                <li><b>Analytical Transparency:</b> While transactions are private via Jello, the ledger remains auditable for AML/KYC purposes through "view keys" provided only by the owner.</li>
+                <li><b>MiCA (EU) & VASP:</b> Compliant asset classification and provider registration protocols.</li>
+                <li><b>Global AML/KYC:</b> Integrated identity verification via "Sovereign View Keys" controlled by the user.</li>
+                <li><b>Data Sovereignty:</b> Full alignment with GDPR/CCPA through cryptographic user-controlled revocation.</li>
+                <li><b>Legal Entity:</b> Priscion operates as a Decentralized Autonomous Organization (DAO) with established legal shells for global contract enforcement.</li>
             </ul>
         </div>
-        <p>Our legal strategy ensures that Priscion remains a legitimate, high-fidelity business environment for global corporations and individual evangelists alike.</p>
+
+        <h2 id="roadmap">9. The Roadmap</h2>
+        <div class="roadmap">
+            <div class="roadmap-item">
+                <h4>Q3 2026: Genesis</h4>
+                <p>Mainnet launch, .pri handle minting, and the deployment of the MUSE Wallet v1.0.</p>
+            </div>
+            <div class="roadmap-item">
+                <h4>Q4 2026: Expansion</h4>
+                <p>Launch of the Sovereign Bridge and the integration of the Atelia Gaming node.</p>
+            </div>
+            <div class="roadmap-item">
+                <h4>2027: Neural Era</h4>
+                <p>Deployment of the $NRL Neural layer and the mass migration of corporate heritage hubs.</p>
+            </div>
+        </div>
     </div>
 
     <footer style="padding: 60px 8%; text-align: center; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase;">
-        Priscion Sovereign Ledger &copy; 2026 | Genesis Block Confirmed
+        Priscion Sovereign Ledger &copy; 2026 | Anchored to Eternity
     </footer>
 </body>
 </html>
