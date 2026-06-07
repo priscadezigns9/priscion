@@ -114,5 +114,13 @@
         "to": "$prisca.pri",
         "status": "SECURED_IN_VAULT",
         "time": "2026-06-07 18:35"
+    },
+    {
+        "id": "tx_RES_110",
+        "type": "PROVISION",
+        "asset": ".pri",
+        "to": ".pri",
+        "status": "SECURED_IN_VAULT",
+        "time": "2026-06-07 18:40"
     }
 ]
