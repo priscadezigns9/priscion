@@ -56,10 +56,13 @@
         .status { position: absolute; top: 25px; right: 25px; font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 50px; }
 
         .services-section { padding: 100px 8%; background: #FAFAFA; border-top: 1px solid var(--border); }
-        .service-card { background: #fff; border: 1px solid var(--border); padding: 50px; border-radius: 35px; transition: 0.4s; }
+        .service-card { background: #fff; border: 1px solid var(--border); padding: 50px; border-radius: 35px; transition: 0.4s; cursor: pointer; }
         .service-card:hover { border-color: var(--accent); }
         .service-card h3 { font-family: var(--font-heading); font-size: 1.6rem; }
         .price { font-size: 2.2rem; font-weight: 900; color: var(--accent); margin: 25px 0; font-family: var(--font-heading); }
+        .service-details { text-align: left; list-style: none; margin-top: 20px; }
+        .service-details li { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; display: flex; gap: 10px; align-items: center; }
+        .service-details li::before { content: '✓'; color: var(--accent); font-weight: 900; }
 
         .btn {
             background: var(--text); color: #fff; padding: 16px 35px;
@@ -69,7 +72,6 @@
         }
         .btn:hover { background: var(--accent); transform: scale(1.05); }
 
-        /* Wallet Sidebar */
         .sidebar {
             position: fixed; top: 0; right: -500px; width: 500px; height: 100vh;
             background: #FFFFFF; border-left: 1px solid var(--border);
@@ -121,9 +123,9 @@
             <p>High-fidelity sovereign wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
         </a>
         <a href="peanuts/" class="card">
-            <span class="status">Alpha</span>
+            <span class="status">Live</span>
             <h3>PEANUTS</h3>
-            <p>Sovereign office suite. Decentralized document engineering for high-pressure workflows.</p>
+            <p>Sovereign Analytics. High-fidelity ledger intelligence and real-time watchdog data.</p>
         </a>
         <a href="mynt/" class="card">
             <span class="status">Dev</span>
@@ -136,17 +138,28 @@
         <div style="max-width: 1200px; margin: 0 auto;">
             <span style="font-size: 0.65rem; font-weight: 900; letter-spacing: 5px; color: var(--accent); text-transform: uppercase;">Premium Services</span>
             <h2 style="font-family: var(--font-heading); font-size: 3rem; margin: 20px 0 60px;">Web3 Migration</h2>
+            
             <div class="grid" style="padding: 0; margin-bottom: 0;">
                 <div class="service-card" onclick="toggleSidebar()">
                     <h3>Sovereign Onboarding</h3>
-                    <div class="price">,500.00</div>
-                    <p>Full-scale infrastructure migration, sovereign node setup, and identity engineering.</p>
+                    <div class="price">$1,500.00</div>
+                    <p>Designed for emerging brands and personal nodes looking for immediate entry into the Priscion network.</p>
+                    <ul class="service-details">
+                        <li>Primary .pri handle registration</li>
+                        <li>Sovereign identity engineering</li>
+                        <li>MUSE Wallet handshake integration</li>
+                    </ul>
                     <button class="btn" style="margin-top: 30px; width: 100%;">Acquire Service</button>
                 </div>
                 <div class="service-card" onclick="toggleSidebar()">
                     <h3>Ledger Migration</h3>
-                    <div class="price">,900.00</div>
-                    <p>Advanced heritage anchoring, large-scale database tokenization, and neural ledger integration.</p>
+                    <div class="price">$7,900.00</div>
+                    <p>High-fidelity deep-tissue migration for established corporations and heritage datasets.</p>
+                    <ul class="service-details">
+                        <li>Legacy database heritage anchoring</li>
+                        <li>Custom revenue-tithing smart contracts</li>
+                        <li>Deep neural security firewalling</li>
+                    </ul>
                     <button class="btn" style="margin-top: 30px; width: 100%;">Acquire Service</button>
                 </div>
             </div>
