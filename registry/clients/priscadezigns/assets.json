@@ -1,0 +1,11 @@
+{
+    "client": "Prisca Designs",
+    "registry_status": "BLOCKCHAIN_SYNCED",
+    "assets": [
+        "brand_dna.json",
+        "product_catalog.json",
+        "client_vault.json",
+        "media_library/images/",
+        "security_logs/"
+    ]
+}
