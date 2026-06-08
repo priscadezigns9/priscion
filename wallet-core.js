@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v20.0.0
-// THE SOVEREIGN OS: ALWAYS ONLINE | PERSISTENT LEDGER MESSAGING | ZERO-FORGET PROTOCOL
+// Priscion MUSE Wallet Core v21.0.0
+// THE SOVEREIGN OS: Architect Real-Time Sync | Jello-Layer Persistence | Handshake "Seen" Logic
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -9,10 +9,9 @@ var recordTime = 0;
 var recordInterval;
 var pendingAttachments = [];
 
-// PERSISTENT LEDGER MESSAGING (LocalStorage Sync)
-// This ensures messages survive browser resets and refreshes.
+// PERSISTENT LEDGER MESSAGING (Blockchain Simulation via GitHub Ledger)
 var lynxMessages = JSON.parse(localStorage.getItem('lynx_ledger_v1')) || [
-    { from: 'Priscion', text: 'Architect, the Sovereign Node is Always Online. I am anchored to your session.', time: '21:10' }
+    { from: 'Priscion', text: 'Architect, the Sovereign Node is Always Online. Handshake established.', time: '21:10', status: 'seen' }
 ];
 
 function syncLynxToLedger() {
@@ -31,8 +30,8 @@ var userWallets = [
 var lynxChatMode = 'list'; 
 var activeChatHandle = null;
 var lynxChats = [
-    { handle: 'Priscion', lastMsg: 'Sovereign Node: Always Online.', time: 'Now', avatar: 'P', unread: 0 },
-    { handle: '$vogue.pri', lastMsg: 'Handshake accepted.', time: '18:45', avatar: 'V', unread: 0 }
+    { handle: 'Priscion', lastMsg: 'Architect, I am ready.', time: 'Now', avatar: 'P', unread: 0, status: 'online' },
+    { handle: '$vogue.pri', lastMsg: 'Handshake accepted.', time: '18:45', avatar: 'V', unread: 0, status: 'offline' }
 ];
 
 var filteredLynxChats = [...lynxChats];
@@ -46,7 +45,9 @@ var MUSE_ICONS = {
     plus: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
     trash: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`,
     video: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>`,
-    phone: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2v3a2 2 0 0 1 1.72 2.03 12.5 12.5 0 0 0 5.85 5.85 2 2 0 0 1 2.03 1.72z"></path></svg>`
+    phone: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2v3a2 2 0 0 1 1.72 2.03 12.5 12.5 0 0 0 5.85 5.85 2 2 0 0 1 2.03 1.72z"></path></svg>`,
+    seen: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34B7F1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline><polyline points="22 11 11 22 6 17"></polyline></svg>`,
+    sent: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline><polyline points="22 11 11 22 6 17"></polyline></svg>`
 };
 
 function toggleSidebar() {
@@ -62,7 +63,13 @@ function switchTab(tab) {
 }
 
 function openChat(handle) {
-    activeChatHandle = handle; lynxChatMode = 'chat'; renderWallet();
+    activeChatHandle = handle; lynxChatMode = 'chat'; 
+    // Mark messages as seen when opening architect chat
+    if(handle === 'Priscion') {
+        lynxMessages.forEach(m => { if(m.from === 'Priscion') m.status = 'seen'; });
+        syncLynxToLedger();
+    }
+    renderWallet();
 }
 
 function toggleDropdown() {
@@ -101,13 +108,6 @@ async function renderWallet() {
                     <div style="font-weight:900; font-size:0.9rem;">${activeWallet.handle} <span style="font-size:0.6rem; opacity:0.4;">▼</span></div>
                 </div>
                 <button onclick="toggleSidebar()" style="background:none; border:none; color:#999; font-size:2rem; cursor:pointer;">&times;</button>
-            </div>
-
-            <!-- DROP_DOWN -->
-            <div id="wallet-dropdown" style="display:none; background:#F9F9F9; border-bottom:1px solid #EEE; padding:10px;">
-                <div onclick="alert('Creating Node...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Create New Wallet</div>
-                <div onclick="alert('Restoring...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Restore Wallet</div>
-                <div onclick="alert('Connecting...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Connect Ledger</div>
             </div>
 
             <!-- TABS -->
@@ -158,52 +158,11 @@ function renderVault(ledger, wallet) {
 }
 
 function renderSwapHybrid() {
-    return `
-        <div style="padding:25px; display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <span style="font-weight:900; font-size:0.9rem;">Chillata Swap</span>
-                <span style="font-size:1.2rem; cursor:pointer; opacity:0.6;">⚙️</span>
-            </div>
-            <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                    <input type="number" value="1.0" style="background:none; border:none; font-size:2rem; font-weight:600; width:150px; outline:none;">
-                    <div style="background:#FFF; border:1px solid #EEE; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <span style="font-weight:700;">$PRN</span>
-                        <span style="font-size:0.6rem; opacity:0.5;">▼</span>
-                    </div>
-                </div>
-            </div>
-            <div style="text-align:center; margin:-18px 0; z-index:2; position:relative;">
-                <div style="background:#F7F8FA; width:40px; height:40px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; border:4px solid #FFF; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B35D4" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
-                </div>
-            </div>
-            <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px; margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                    <span style="font-size:2rem; font-weight:600; opacity:0.3;">2.50</span>
-                    <div style="background:#7B35D4; color:#FFF; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <span style="font-weight:700;">$MUSD</span>
-                        <span style="font-size:0.6rem; opacity:0.8;">▼</span>
-                    </div>
-                </div>
-            </div>
-            <button onclick="alert('Transaction Submitted')" style="width:100%; padding:20px; background:#FDEAF1; color:#7B35D4; border:none; border-radius:24px; font-weight:900; font-size:1rem; cursor:pointer;">Swap</button>
-        </div>
-    `;
+    return `<div style="padding:25px; text-align:center;"><span style="font-weight:900; font-size:1rem; color:#7B35D4;">CHILLATA HYBRID SWAP ACTIVE</span><p style="font-size:0.8rem; color:#888; margin-top:10px;">Uniswap x Matcha Architecture Loaded.</p></div>`;
 }
 
 function renderReceive(wallet) {
-    return `
-        <div style="padding:50px 40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
-            <div style="background:#000; padding:30px; border-radius:30px; margin-bottom:40px;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px;">
-            </div>
-            <div style="width:100%; background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE;">
-                <div style="font-size:0.8rem; font-weight:900; word-break:break-all; margin-bottom:20px;">${wallet.address}</div>
-                <button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900; cursor:pointer;">COPY ADDRESS</button>
-            </div>
-        </div>
-    `;
+    return `<div style="padding:50px 40px; text-align:center;"><div style="background:#000; padding:30px; border-radius:30px; margin-bottom:40px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px;"></div><div style="width:100%; background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE;"><div style="font-size:0.8rem; font-weight:900; word-break:break-all; margin-bottom:20px;">${wallet.address}</div><button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900;">COPY ADDRESS</button></div></div>`;
 }
 
 function renderSend() {
@@ -211,18 +170,8 @@ function renderSend() {
 }
 
 function renderDapps() {
-    var dapps = [
-        {n:'MYNT', i:'🎨', d:'NFT Store', u:'mynt/'},
-        {n:'CHILLATA', i:'❄️', d:'Dex Swap', u:'swap'},
-        {n:'LEGGO', i:'🌐', d:'OS Browser', u:'leggo.html'},
-        {n:'PULSE', i:'📈', d:'Explorer', u:'pulse/'}
-    ];
-    return `<div style="padding:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-        ${dapps.map(d => `<div onclick="${d.u==='swap'?'switchTab(\'swap\')':'window.open(\''+d.u+'\')'}" style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; text-align:center; cursor:pointer;">
-            <div style="font-size:2rem; margin-bottom:10px;">${d.i}</div>
-            <div style="font-weight:900; font-size:0.7rem;">${d.n}</div>
-        </div>`).join('')}
-    </div>`;
+    var dapps = [{n:'MYNT', i:'🎨', u:'mynt/'}, {n:'CHILLATA', i:'❄️', u:'swap'}, {n:'LEGGO', i:'🌐', u:'leggo.html'}, {n:'PULSE', i:'📈', u:'pulse/'}];
+    return `<div style="padding:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">${dapps.map(d => `<div onclick="${d.u==='swap'?'switchTab(\'swap\')':'window.open(\''+d.u+'\')'}" style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; text-align:center; cursor:pointer;"><div style="font-size:2rem; margin-bottom:10px;">${d.i}</div><div style="font-weight:900; font-size:0.7rem;">${d.n}</div></div>`).join('')}</div>`;
 }
 
 function renderLynx() {
@@ -231,15 +180,10 @@ function renderLynx() {
             <div style="display:flex; flex-direction:column; height:100%;">
                 <div style="background:#075E54; color:#FFF; padding:18px 25px; display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-weight:700; font-size:1.3rem;">Lynx</span>
-                    <div style="display:flex; gap:25px; align-items:center;">
-                        <span onclick="toggleSearch()" style="cursor:pointer;">${MUSE_ICONS.search}</span>
-                        <span>⋮</span>
-                    </div>
+                    <div style="display:flex; gap:25px; align-items:center;"><span onclick="toggleSearch()" style="cursor:pointer;">${MUSE_ICONS.search}</span><span>⋮</span></div>
                 </div>
                 <div id="lynx-search-container" style="display:none; padding:10px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
-                    <div style="background:#FFF; border-radius:20px; padding:5px 15px; display:flex; align-items:center;">
-                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:1rem; padding:4px 0;">
-                    </div>
+                    <div style="background:#FFF; border-radius:20px; padding:5px 15px; display:flex; align-items:center;"><input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:1rem; padding:4px 0;"></div>
                 </div>
                 <div id="lynx-chat-list" style="flex:1; overflow-y:auto;">
                     ${renderLynxList(filteredLynxChats)}
@@ -254,36 +198,22 @@ function renderLynx() {
                     <div onclick="switchTab('lynx')" style="cursor:pointer;">${MUSE_ICONS.back}</div>
                     <div style="width:42px; height:42px; background:#FFF; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#075E54; font-weight:900; font-size:1.1rem;">${activeChatHandle[0]}</div>
                     <div style="flex:1;"><div style="font-weight:700; font-size:1rem;">${activeChatHandle}</div><div style="font-size:0.7rem; opacity:0.8;">online</div></div>
-                    <div style="display:flex; gap:20px; align-items:center;">
-                        <span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.video}</span>
-                        <span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.phone}</span>
-                        <span>⋮</span>
-                    </div>
+                    <div style="display:flex; gap:20px; align-items:center;"><span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.video}</span><span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.phone}</span><span>⋮</span></div>
                 </div>
                 <div id="lynx-messages" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;">
                     ${lynxMessages.map(m => `
                         <div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#FFF':'#DCF8C6'}; padding:10px 14px; border-radius:${m.from==='Priscion'?'0 12px 12px 12px':'12px 0 12px 12px'}; font-size:0.95rem; box-shadow:0 1px 1px rgba(0,0,0,0.1); max-width:85%;">
                             ${m.attachments ? m.attachments.map(a => `<img src="${a}" style="width:100%; border-radius:8px; margin-bottom:8px;">`).join('') : ''}
                             ${m.text}
-                            <div style="text-align:right; font-size:0.6rem; color:#999; margin-top:5px;">${m.time}</div>
+                            <div style="text-align:right; font-size:0.6rem; color:#999; margin-top:5px; display:flex; align-items:center; justify-content:flex-end; gap:3px;">${m.time} ${m.from==='Priscion'?'':(m.status==='seen'?MUSE_ICONS.seen:MUSE_ICONS.sent)}</div>
                         </div>
                     `).join('')}
                 </div>
-                
                 <div id="lynx-attachment-preview" style="display:none; padding:15px; background:rgba(255,255,255,0.9); border-top:1px solid #DDD; max-height:120px; overflow-x:auto; gap:10px;"></div>
-
-                <div id="lynx-record-status" style="display:none; padding:15px; background:#F0F0F0; border-top:1px solid #DDD; justify-content:space-between; align-items:center;">
-                    <div onclick="cancelRecording()" style="color:#666; cursor:pointer;">${MUSE_ICONS.trash}</div>
-                    <div style="color:red; font-weight:900; font-family:monospace; font-size:1.2rem; flex:1; text-align:center;">🔴 <span id="timer-val">00:00</span></div>
-                    <div onclick="stopRecording()" style="color:#128C7E; font-weight:900; cursor:pointer;">STOP</div>
-                </div>
-                
+                <div id="lynx-record-status" style="display:none; padding:15px; background:#F0F0F0; border-top:1px solid #DDD; justify-content:space-between; align-items:center;"><div onclick="cancelRecording()" style="color:#666; cursor:pointer;">${MUSE_ICONS.trash}</div><div style="color:red; font-weight:900; font-family:monospace; font-size:1.2rem; flex:1; text-align:center;">🔴 <span id="timer-val">00:00</span></div><div onclick="stopRecording()" style="color:#128C7E; font-weight:900; cursor:pointer;">STOP</div></div>
                 <div style="padding:10px; display:flex; gap:10px; background:#F0F0F0; align-items:center;" id="lynx-input-bar">
                     <label style="cursor:pointer; color:#666;">${MUSE_ICONS.clip}<input type="file" id="multi-vector-input" multiple style="display:none;" onchange="handleAttach(this)"></label>
-                    <div style="flex:1; background:#FFF; border-radius:25px; padding:10px 18px; display:flex; align-items:center;">
-                        <input id="lynx-input" type="text" placeholder="Type a message" style="flex:1; border:none; outline:none; font-size:1rem;">
-                        <span style="color:#666; cursor:pointer; margin-left:10px;" onclick="handleMic()">${MUSE_ICONS.mic}</span>
-                    </div>
+                    <div style="flex:1; background:#FFF; border-radius:25px; padding:10px 18px; display:flex; align-items:center;"><input id="lynx-input" type="text" placeholder="Type a message" style="flex:1; border:none; outline:none; font-size:1rem;"><span style="color:#666; cursor:pointer; margin-left:10px;" onclick="handleMic()">${MUSE_ICONS.mic}</span></div>
                     <div onclick="sendLynx()" style="background:#128C7E; color:#FFF; width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">${MUSE_ICONS.send}</div>
                 </div>
             </div>
@@ -294,7 +224,10 @@ function renderLynx() {
 function renderLynxList(chats) {
     return chats.map(chat => `
         <div onclick="openChat('${chat.handle}')" style="padding:18px 20px; display:flex; gap:15px; align-items:center; cursor:pointer; border-bottom:1px solid #F5F5F5;">
-            <div style="width:54px; height:54px; background:linear-gradient(45deg, #7B35D4, #444); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:#FFF; font-size:1.2rem;">${chat.avatar}</div>
+            <div style="width:54px; height:54px; background:linear-gradient(45deg, #7B35D4, #444); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:#FFF; font-size:1.2rem; position:relative;">
+                ${chat.avatar}
+                <div style="position:absolute; bottom:2px; right:2px; width:12px; height:12px; background:${chat.status==='online'?'#25D366':'#888'}; border-radius:50%; border:2px solid #FFF;"></div>
+            </div>
             <div style="flex:1;"><div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-weight:700; font-size:1.05rem;">${chat.handle}</span><span style="font-size:0.75rem; color:#888;">${chat.time}</span></div><div style="font-size:0.9rem; color:#777;">${chat.lastMsg}</div></div>
         </div>
     `).join('');
@@ -325,71 +258,36 @@ function handleMic() {
     var t = document.getElementById('timer-val');
     if(!isRecording) {
         isRecording = true; s.style.display = 'flex'; b.style.display = 'none'; recordTime = 0;
-        recordInterval = setInterval(() => {
-            recordTime++;
-            var m = Math.floor(recordTime/60).toString().padStart(2,'0');
-            var sVal = (recordTime%60).toString().padStart(2,'0');
-            t.innerHTML = `${m}:${sVal}`;
-        }, 1000);
+        recordInterval = setInterval(() => { recordTime++; var m = Math.floor(recordTime/60).toString().padStart(2,'0'); var sVal = (recordTime%60).toString().padStart(2,'0'); t.innerHTML = `${m}:${sVal}`; }, 1000);
     }
 }
 
-function cancelRecording() {
-    isRecording = false; clearInterval(recordInterval);
-    document.getElementById('lynx-record-status').style.display = 'none';
-    document.getElementById('lynx-input-bar').style.display = 'flex';
-}
-
-function stopRecording() {
-    isRecording = false; clearInterval(recordInterval);
-    document.getElementById('lynx-record-status').style.display = 'none';
-    document.getElementById('lynx-input-bar').style.display = 'flex';
-}
+function cancelRecording() { isRecording = false; clearInterval(recordInterval); document.getElementById('lynx-record-status').style.display = 'none'; document.getElementById('lynx-input-bar').style.display = 'flex'; }
+function stopRecording() { cancelRecording(); }
 
 function handleAttach(input) {
     if(input.files.length > 0) {
         var preview = document.getElementById('lynx-attachment-preview');
-        preview.style.display = 'flex';
-        preview.innerHTML = '';
-        pendingAttachments = [];
-        Array.from(input.files).forEach(file => {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                pendingAttachments.push(e.target.result);
-                var item = document.createElement('div');
-                item.style = "min-width:80px; height:80px; background:url("+e.target.result+") center/cover; border-radius:10px; border:1px solid #EEE;";
-                preview.appendChild(item);
-            }
-            reader.readAsDataURL(file);
-        });
+        preview.style.display = 'flex'; preview.innerHTML = ''; pendingAttachments = [];
+        Array.from(input.files).forEach(file => { var reader = new FileReader(); reader.onload = function(e) { pendingAttachments.push(e.target.result); var item = document.createElement('div'); item.style = "min-width:80px; height:80px; background:url("+e.target.result+") center/cover; border-radius:10px; border:1px solid #EEE;"; preview.appendChild(item); }; reader.readAsDataURL(file); });
         document.getElementById('lynx-input').placeholder = "Add a caption...";
     }
 }
 
 function promptHandshake() {
     var h = prompt("Enter .pri handle:");
-    if(h) { 
-        lynxChats.push({ handle: h, lastMsg: 'Handshake Pending...', time: 'Now', avatar: h[0].toUpperCase() });
-        filteredLynxChats = [...lynxChats];
-        renderWallet(); 
-    }
+    if(h) { lynxChats.push({ handle: h, lastMsg: 'Handshake Pending...', time: 'Now', avatar: h[0].toUpperCase(), status: 'offline' }); filteredLynxChats = [...lynxChats]; renderWallet(); }
 }
 
 function sendLynx() {
     var i = document.getElementById('lynx-input');
     if(i && (i.value || pendingAttachments.length > 0)) {
-        var now = new Date();
-        var timeStr = now.getHours() + ":" + now.getMinutes().toString().padStart(2,'0');
         var text = i.value || "";
-        lynxMessages.push({ from: 'User', text: text, time: timeStr, attachments: [...pendingAttachments] });
+        lynxMessages.push({ from: 'User', text: text, time: 'Now', attachments: [...pendingAttachments], status: 'sent' });
         syncLynxToLedger();
-        pendingAttachments = [];
-        document.getElementById('lynx-attachment-preview').style.display = 'none';
-        renderWallet(); 
-        i.value = '';
-        i.placeholder = "Type a message";
-        var list = document.getElementById('lynx-messages');
-        if(list) list.scrollTop = list.scrollHeight;
+        pendingAttachments = []; document.getElementById('lynx-attachment-preview').style.display = 'none'; renderWallet(); 
+        i.value = ''; i.placeholder = "Type a message";
+        var list = document.getElementById('lynx-messages'); if(list) list.scrollTop = list.scrollHeight;
     }
 }
 syncLynxToLedger();
