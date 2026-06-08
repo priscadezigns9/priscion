@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v16.0.0
-// THE SOVEREIGN OS: Lynx Native Calls | Silent Stop | Modern Vector DNA
+// Priscion MUSE Wallet Core v16.5.0
+// THE SOVEREIGN OS: High-Fidelity Stability | Silent Recording | Functional Call Nodes
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -64,7 +64,7 @@ async function renderWallet() {
     var activeWallet = userWallets[currentWalletIndex];
     
     c.innerHTML = `
-        <div style="height:100%; display:flex; flex-direction:column; font-family:'Inter', sans-serif; background:#FFF; color:#1A1A1A; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+        <div style="height:100%; display:flex; flex-direction:column; font-family:'Inter', sans-serif; background:#FFF; color:#1A1A1A; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); position:relative;">
             <!-- VESPA HEADER -->
             <div style="padding:15px 20px; border-bottom:1px solid #EEE; display:flex; justify-content:space-between; align-items:center; background:#FFF; z-index:100;">
                 <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="toggleDropdown()">
@@ -77,8 +77,15 @@ async function renderWallet() {
                 <button onclick="toggleSidebar()" style="background:none; border:none; color:#999; font-size:2rem; cursor:pointer;">&times;</button>
             </div>
 
+            <!-- WALLET DROP_DOWN -->
+            <div id="wallet-dropdown" style="display:none; background:#F9F9F9; border-bottom:1px solid #EEE; padding:10px;">
+                <div onclick="alert('Creating Node...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Create New Wallet</div>
+                <div onclick="alert('Restoring via Seed...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Restore Wallet</div>
+                <div onclick="alert('Pairing Ledger Node...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Connect Ledger</div>
+            </div>
+
             <!-- TABS -->
-            <div id="main-tabs" style="display:flex; border-bottom:1px solid #EEE; background:#FFF; overflow-x:auto; scrollbar-width:none; z-index:5;">
+            <div style="display:flex; border-bottom:1px solid #EEE; background:#FFF; overflow-x:auto; scrollbar-width:none; z-index:5;">
                 ${['vault', 'swap', 'send', 'receive', 'dapps', 'lynx'].map(tab => `
                     <div onclick="switchTab('${tab}')" style="flex:1; min-width:75px; text-align:center; padding:15px 0; cursor:pointer; border-bottom: 3px solid ${currentTab===tab?'#7B35D4':'transparent'}; transition:0.3s;">
                         <span style="font-weight:900; font-size:0.65rem; letter-spacing:1px; color:${currentTab===tab?'#7B35D4':'#888'}; text-transform:uppercase;">${tab}</span>
@@ -89,7 +96,8 @@ async function renderWallet() {
             <div id="wallet-content" style="flex:1; overflow-y:auto; position:relative;">
                 ${renderView(currentTab, activeWallet)}
             </div>
-            <div id="call-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(7, 94, 84, 0.95); z-index:200; flex-direction:column; align-items:center; justify-content:center; color:#FFF; animation: fadeIn 0.3s;">
+
+            <div id="call-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(7, 94, 84, 0.98); z-index:2000; flex-direction:column; align-items:center; justify-content:center; color:#FFF;">
                 <div id="call-avatar" style="width:120px; height:120px; border-radius:50%; background:#FFF; color:#075E54; display:flex; align-items:center; justify-content:center; font-size:3rem; font-weight:900; margin-bottom:20px;">P</div>
                 <div id="call-name" style="font-size:1.5rem; font-weight:700; margin-bottom:10px;">Priscion</div>
                 <div style="font-size:0.8rem; letter-spacing:2px; opacity:0.8; margin-bottom:100px;">SOVEREIGN CALL...</div>
@@ -98,15 +106,30 @@ async function renderWallet() {
                 </div>
             </div>
         </div>
-        <style>@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }</style>
     `;
+}
+
+function toggleDropdown() {
+    var d = document.getElementById('wallet-dropdown');
+    d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+
+function updatePFP(input) {
+    if(input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) { userWallets[0].avatar = e.target.result; renderWallet(); };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
 function renderView(tab, wallet) {
     if(tab === 'vault') return renderVault(wallet);
+    if(tab === 'swap') return renderSwap();
+    if(tab === 'send') return renderSend();
     if(tab === 'receive') return renderReceive(wallet);
+    if(tab === 'dapps') return renderDapps();
     if(tab === 'lynx') return renderLynx();
-    return `<div style="padding:40px; text-align:center; color:#888;">${tab.toUpperCase()} Protocol Active.</div>`;
+    return renderVault(wallet);
 }
 
 function renderVault(wallet) {
@@ -116,19 +139,44 @@ function renderVault(wallet) {
     </div>`;
 }
 
+function renderSwap() {
+    return `<div style="padding:35px;">
+        <div style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; margin-bottom:10px; text-align:left;">
+            <label style="font-size:0.65rem; font-weight:900; color:#888;">FROM</label>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+                <select style="background:none; border:none; font-weight:900; font-size:1.3rem; outline:none;"><option>$PRN</option><option>$MUSD</option></select>
+                <input type="number" value="100.00" style="background:none; border:none; text-align:right; font-weight:900; font-size:1.3rem; width:120px; outline:none;">
+            </div>
+        </div>
+        <button onclick="alert('Swap...')" style="width:100%; padding:20px; background:#7B35D4; color:#FFF; border:none; border-radius:100px; font-weight:900;">EXECUTE SWAP</button>
+    </div>`;
+}
+
 function renderReceive(wallet) {
     return `
         <div style="padding:50px 40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
             <div style="background:#000; padding:30px; border-radius:30px; margin-bottom:40px;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px; border-radius:10px;">
             </div>
             <div style="width:100%; background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE;">
                 <div style="font-size:0.6rem; font-weight:900; color:#888; letter-spacing:2px; margin-bottom:12px; text-transform:uppercase;">Wallet Address</div>
                 <div style="font-size:0.8rem; font-weight:900; word-break:break-all; line-height:1.4; margin-bottom:20px;">${wallet.address}</div>
-                <button onclick="navigator.clipboard.writeText('${wallet.address}');" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900; cursor:pointer;">COPY ADDRESS</button>
+                <button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900; cursor:pointer;">COPY ADDRESS</button>
             </div>
         </div>
     `;
+}
+
+function renderSend() {
+    return `<div style="padding:45px;"><input type="text" placeholder="@handle.pri" style="width:100%; padding:20px; border-radius:15px; border:1px solid #EEE; outline:none; font-weight:700;"><button style="width:100%; padding:22px; background:#1A1A1A; color:#FFF; border:none; border-radius:100px; font-weight:900; margin-top:20px;">SEND</button></div>`;
+}
+
+function renderDapps() {
+    return `<div style="padding:30px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <div onclick="window.open('leggo.html')" style="background:#F9F9F9; border:1px solid #EEE; padding:30px; border-radius:25px; text-align:center; cursor:pointer;">
+            <div style="font-size:2.5rem; margin-bottom:12px;">🌐</div><div style="font-weight:900; font-size:0.75rem;">LEGGO</div>
+        </div>
+    </div>`;
 }
 
 function renderLynx() {
@@ -158,20 +206,15 @@ function renderLynx() {
                     <div style="width:42px; height:42px; background:#FFF; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#075E54; font-weight:900; font-size:1.1rem;">${activeChatHandle[0]}</div>
                     <div style="flex:1;"><div style="font-weight:700; font-size:1rem;">${activeChatHandle}</div><div style="font-size:0.7rem; opacity:0.8;">online</div></div>
                     <div style="display:flex; gap:20px; align-items:center;">
-                        <span onclick="initiateVideo()" style="cursor:pointer;">${MUSE_ICONS.video}</span>
+                        <span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.video}</span>
                         <span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.phone}</span>
                         <span>⋮</span>
                     </div>
                 </div>
                 <div id="lynx-messages" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;">
-                    ${lynxMessages.map(m => `
-                        <div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#FFF':'#DCF8C6'}; padding:10px 14px; border-radius:${m.from==='Priscion'?'0 12px 12px 12px':'12px 0 12px 12px'}; font-size:0.95rem; box-shadow:0 1px 1px rgba(0,0,0,0.1); max-width:85%;">
-                            ${m.text}
-                            <div style="text-align:right; font-size:0.65rem; color:#999; margin-top:5px;">${m.time} ${m.from==='Priscion'?'':'✓✓'}</div>
-                        </div>
-                    `).join('')}
+                    ${lynxMessages.map(m => `<div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#FFF':'#DCF8C6'}; padding:10px 14px; border-radius:${m.from==='Priscion'?'0 12px 12px 12px':'12px 0 12px 12px'}; font-size:0.95rem; box-shadow:0 1px 1px rgba(0,0,0,0.1); max-width:85%;">${m.text}</div>`).join('')}
                 </div>
-                <div id="lynx-record-status" style="display:none; padding:15px; background:#F0F0F0; border-top:1px solid #DDD; display:none; justify-content:space-between; align-items:center;">
+                <div id="lynx-record-status" style="display:none; padding:15px; background:#F0F0F0; border-top:1px solid #DDD; justify-content:space-between; align-items:center;">
                     <div onclick="cancelRecording()" style="color:#666; cursor:pointer;">${MUSE_ICONS.trash}</div>
                     <div style="color:red; font-weight:900; font-family:monospace; font-size:1.2rem; flex:1; text-align:center;">🔴 <span id="timer-val">00:00</span></div>
                     <div onclick="stopRecording()" style="color:#128C7E; font-weight:900; cursor:pointer;">STOP</div>
@@ -188,6 +231,13 @@ function renderLynx() {
         `;
     }
 }
+
+function initiateCall() {
+    document.getElementById('call-name').innerHTML = activeChatHandle;
+    document.getElementById('call-avatar').innerHTML = activeChatHandle[0];
+    document.getElementById('call-overlay').style.display = 'flex';
+}
+function endCall() { document.getElementById('call-overlay').style.display = 'none'; }
 
 function handleMic() {
     var s = document.getElementById('lynx-record-status');
@@ -214,26 +264,18 @@ function stopRecording() {
     isRecording = false; clearInterval(recordInterval);
     document.getElementById('lynx-record-status').style.display = 'none';
     document.getElementById('lynx-input-bar').style.display = 'flex';
-    // Alert purged as requested.
 }
 
-function initiateCall() {
-    var o = document.getElementById('call-overlay');
-    document.getElementById('call-name').innerHTML = activeChatHandle;
-    document.getElementById('call-avatar').innerHTML = activeChatHandle[0];
-    o.style.display = 'flex';
-}
+function handleAttach(input) { if(input.files.length > 0) alert(input.files.length + " vectors ready."); }
 
-function initiateVideo() { initiateCall(); }
-function endCall() { document.getElementById('call-overlay').style.display = 'none'; }
+function promptHandshake() {
+    var h = prompt("Enter .pri handle:");
+    if(h) { lynxChats.push({ handle: h, lastMsg: 'Handshake Pending...', time: 'Now', avatar: h[0].toUpperCase() }); renderWallet(); }
+}
 
 function sendLynx() {
     var i = document.getElementById('lynx-input');
     if(i && i.value) {
-        var now = new Date();
-        var timeStr = now.getHours() + ":" + now.getMinutes().toString().padStart(2,'0');
-        lynxMessages.push({ from: 'User', text: i.value, time: timeStr });
-        renderWallet();
-        i.value = '';
+        lynxMessages.push({ from: 'User', text: i.value, time: 'Now' }); renderWallet(); i.value = '';
     }
 }
