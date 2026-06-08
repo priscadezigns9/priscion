@@ -8,5 +8,8 @@
         "assets": "QmAssetRegistrySovereignV7"
     },
     "protocol": "IPFS-SOVEREIGN-v1.4",
-    "status": "SOVEREIGN_DECOUPLED_FINALITY"
+    "status": "SOVEREIGN_DECOUPLED_FINALITY",
+    "blockchain_sync": "SUCCESS",
+    "last_handshake": "2026-06-08T20:09:00Z",
+    "anchor_cid": "QmSnapshotV7AnchorSovereignFinality"
 }
