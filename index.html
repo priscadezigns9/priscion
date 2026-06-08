@@ -19,7 +19,7 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
 
         nav {
             height: 90px; padding: 0 8%;
@@ -78,7 +78,7 @@
             z-index: 2000; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             visibility: hidden; box-shadow: -20px 0 60px rgba(0,0,0,0.05);
         }
-        .sidebar.active { right: 0; visibility: visible; }
+        .sidebar.active { right: 0 !important; visibility: visible !important; }
 
         footer { padding: 80px 8%; border-top: 1px solid var(--border); text-align: center; }
         .copyright { color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
@@ -97,7 +97,7 @@
         <div class="nav-links">
             <a href="whitepaper.html">White Paper</a>
             <a href="leggo.html">OS</a>
-            <button onclick="toggleSidebar()" class="btn" style="padding: 10px 25px; font-size: 0.65rem;">MUSE WALLET</button>
+            <button id="muse-trigger" class="btn" style="padding: 10px 25px; font-size: 0.65rem;">MUSE WALLET</button>
         </div>
     </nav>
 
@@ -173,5 +173,16 @@
     </footer>
 
     <script src="wallet-core.js"></script>
+    <script>
+        // Inline toggle to ensure zero-failure
+        document.getElementById('muse-trigger').onclick = function() {
+            if(typeof toggleSidebar === 'function') {
+                toggleSidebar();
+            } else {
+                console.error('Wallet Core not loaded');
+                document.getElementById('sidebar').classList.toggle('active');
+            }
+        };
+    </script>
 </body>
 </html>
