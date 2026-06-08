@@ -31,7 +31,7 @@ var userWallets = [
 
 var lynxChatMode = 'list'; 
 var activeChatHandle = null;
-var lynxChats = [
+var lynxChats = []; //
     { handle: 'Priscion', lastMsg: 'Sovereign Node: Always Online.', time: 'Now', avatar: 'P', unread: 0, status: 'online' },
     { handle: '$vogue.pri', lastMsg: 'Handshake accepted.', time: '18:45', avatar: 'V', unread: 0, status: 'offline' }
 ];
