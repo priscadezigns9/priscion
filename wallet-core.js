@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v18.5.0
-// THE SOVEREIGN OS: High-Fidelity Multi-Attach | Real-Time Preview | Functional Captioning
+// Priscion MUSE Wallet Core v19.0.0
+// THE SOVEREIGN OS: TRUE ATTACHMENT HANDSHAKE | ARCHITECT SYNC | NO SIMULATION
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -11,7 +11,7 @@ var pendingAttachments = [];
 
 // Persistent Session Data
 var lynxMessages = [
-    { from: 'Priscion', text: 'Architect, the ledger is secure.', time: '21:10' }
+    { from: 'Priscion', text: 'Architect, the ledger is secure. Awaiting high-fidelity vectors.', time: '21:10' }
 ];
 
 var userWallets = [
@@ -26,7 +26,7 @@ var userWallets = [
 var lynxChatMode = 'list'; 
 var activeChatHandle = null;
 var lynxChats = [
-    { handle: 'Priscion', lastMsg: 'Architect, the ledger is secure.', time: '21:10', avatar: 'P', unread: 0 },
+    { handle: 'Priscion', lastMsg: 'Awaiting high-fidelity vectors.', time: '21:35', avatar: 'P', unread: 0 },
     { handle: '$vogue.pri', lastMsg: 'Handshake accepted.', time: '18:45', avatar: 'V', unread: 0 }
 ];
 
@@ -96,6 +96,13 @@ async function renderWallet() {
                     <div style="font-weight:900; font-size:0.9rem;">${activeWallet.handle} <span style="font-size:0.6rem; opacity:0.4;">▼</span></div>
                 </div>
                 <button onclick="toggleSidebar()" style="background:none; border:none; color:#999; font-size:2rem; cursor:pointer;">&times;</button>
+            </div>
+
+            <!-- DROP_DOWN -->
+            <div id="wallet-dropdown" style="display:none; background:#F9F9F9; border-bottom:1px solid #EEE; padding:10px;">
+                <div onclick="alert('Creating Node...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Create New Wallet</div>
+                <div onclick="alert('Restoring...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Restore Wallet</div>
+                <div onclick="alert('Connecting...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Connect Ledger</div>
             </div>
 
             <!-- TABS -->
@@ -200,10 +207,10 @@ function renderSend() {
 
 function renderDapps() {
     var dapps = [
+        {n:'MYNT', i:'🎨', d:'NFT Store', u:'mynt/'},
         {n:'CHILLATA', i:'❄️', d:'Dex Swap', u:'swap'},
         {n:'LEGGO', i:'🌐', d:'OS Browser', u:'leggo.html'},
-        {n:'PULSE', i:'📈', d:'Explorer', u:'pulse/'},
-        {n:'MYNT', i:'🎨', d:'NFT Store', u:'mynt/'}
+        {n:'PULSE', i:'📈', d:'Explorer', u:'pulse/'}
     ];
     return `<div style="padding:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">
         ${dapps.map(d => `<div onclick="${d.u==='swap'?'switchTab(\'swap\')':'window.open(\''+d.u+'\')'}" style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; text-align:center; cursor:pointer;">
@@ -226,7 +233,7 @@ function renderLynx() {
                 </div>
                 <div id="lynx-search-container" style="display:none; padding:10px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
                     <div style="background:#FFF; border-radius:25px; padding:5px 15px; display:flex; align-items:center;">
-                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:0.9rem; padding:5px 0;">
+                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:0.9rem; padding:4px 0;">
                     </div>
                 </div>
                 <div id="lynx-chat-list" style="flex:1; overflow-y:auto;">
@@ -249,11 +256,16 @@ function renderLynx() {
                     </div>
                 </div>
                 <div id="lynx-messages" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;">
-                    ${lynxMessages.map(m => `<div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#FFF':'#DCF8C6'}; padding:10px 14px; border-radius:${m.from==='Priscion'?'0 12px 12px 12px':'12px 0 12px 12px'}; font-size:0.95rem; box-shadow:0 1px 1px rgba(0,0,0,0.1); max-width:85%;">${m.text}</div>`).join('')}
+                    ${lynxMessages.map(m => `
+                        <div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#FFF':'#DCF8C6'}; padding:10px 14px; border-radius:${m.from==='Priscion'?'0 12px 12px 12px':'12px 0 12px 12px'}; font-size:0.95rem; box-shadow:0 1px 1px rgba(0,0,0,0.1); max-width:85%;">
+                            ${m.attachments ? m.attachments.map(a => `<img src="${a}" style="width:100%; border-radius:8px; margin-bottom:8px;">`).join('') : ''}
+                            ${m.text}
+                            <div style="text-align:right; font-size:0.6rem; color:#999; margin-top:5px;">${m.time}</div>
+                        </div>
+                    `).join('')}
                 </div>
                 
-                <!-- ATTACHMENT PREVIEW NODE -->
-                <div id="lynx-attachment-preview" style="display:none; padding:15px; background:rgba(255,255,255,0.9); border-top:1px solid #DDD; max-height:120px; overflow-x:auto; display:none; gap:10px;"></div>
+                <div id="lynx-attachment-preview" style="display:none; padding:15px; background:rgba(255,255,255,0.9); border-top:1px solid #DDD; max-height:120px; overflow-x:auto; gap:10px;"></div>
 
                 <div id="lynx-record-status" style="display:none; padding:15px; background:#F0F0F0; border-top:1px solid #DDD; justify-content:space-between; align-items:center;">
                     <div onclick="cancelRecording()" style="color:#666; cursor:pointer;">${MUSE_ICONS.trash}</div>
@@ -331,13 +343,14 @@ function stopRecording() {
 
 function handleAttach(input) {
     if(input.files.length > 0) {
-        pendingAttachments = Array.from(input.files);
         var preview = document.getElementById('lynx-attachment-preview');
         preview.style.display = 'flex';
         preview.innerHTML = '';
-        pendingAttachments.forEach(file => {
+        pendingAttachments = [];
+        Array.from(input.files).forEach(file => {
             var reader = new FileReader();
             reader.onload = function(e) {
+                pendingAttachments.push(e.target.result);
                 var item = document.createElement('div');
                 item.style = "min-width:80px; height:80px; background:url("+e.target.result+") center/cover; border-radius:10px; border:1px solid #EEE;";
                 preview.appendChild(item);
@@ -360,8 +373,8 @@ function promptHandshake() {
 function sendLynx() {
     var i = document.getElementById('lynx-input');
     if(i && (i.value || pendingAttachments.length > 0)) {
-        var text = i.value || (pendingAttachments.length + " Vectors Attached");
-        lynxMessages.push({ from: 'User', text: text, time: 'Now' });
+        var text = i.value || "";
+        lynxMessages.push({ from: 'User', text: text, time: 'Now', attachments: [...pendingAttachments] });
         pendingAttachments = [];
         document.getElementById('lynx-attachment-preview').style.display = 'none';
         renderWallet(); 
