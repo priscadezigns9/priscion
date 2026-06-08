@@ -2,7 +2,7 @@
     "anchor_height": 100,
     "snapshot_id": "v7-SOVEREIGN-GOLD",
     "state_root": "QmSovereignStateRootV7_Finality",
-    "timestamp": "2026-06-08T10:47:00Z",
+    "timestamp": "2026-06-08T15:17:00Z",
     "validators": ["$prisca.pri"],
     "neural_weight_sum": 1000000,
     "finalized": true
