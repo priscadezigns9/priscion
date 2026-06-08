@@ -1,0 +1,10 @@
+{
+    "chain_id": "priscion-sovereign-alpha",
+    "timestamp": "2026-06-08T04:02:05Z",
+    "architect": "$prisca.pri",
+    "consensus": "Proof of Neural (PoN)",
+    "genesis_allocation": {
+        "$prisca.pri": "1000000000",
+        "TWMK_Endowment": "100000000"
+    }
+}
