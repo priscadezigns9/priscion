@@ -227,7 +227,7 @@ function renderSwapHybrid() {
                 <div style="background:#FFF; padding:5px 10px; border-radius:100px; font-weight:900; font-size:0.6rem; border:1px solid #EEE;">$MUSD</div>
             </div>
         </div>
-        <button onclick="executeSwap()" style="width:100%; padding:15px; background:#7B35D4; color:#FFF; border:none; border-radius:100px; font-weight:900; font-size:0.7rem; cursor:pointer;">SWAP</button>
+        <button onclick="executeSwap()" style="width:100%; padding:15px; background:#FF4D4D; color:#FFF; border:none; border-radius:100px; font-weight:900; font-size:0.7rem; cursor:pointer;">SWAP</button>
     </div>`;
 }
 
