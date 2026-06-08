@@ -169,9 +169,9 @@ async function renderWallet() {
 
             <!-- DROP_DOWN -->
             <div id="wallet-dropdown" style="display:none; background:#F9F9F9; border-bottom:1px solid #EEE; padding:10px;">
-                <div onclick="alert('Creating Node...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Create New Wallet</div>
-                <div onclick="alert('Restoring...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Restore Wallet</div>
-                <div onclick="alert('Connecting...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Connect Ledger</div>
+                <div onclick="createNewWallet()" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Create New Wallet</div>
+                <div onclick="restoreWallet()" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Restore Wallet</div>
+                <div onclick="connectLedger()" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Connect Ledger</div>
             </div>
 
             <!-- TABS -->
@@ -212,7 +212,23 @@ function renderVault(ledger, wallet) {
 }
 
 function renderSwapHybrid() {
-    return `<div style="padding:25px; text-align:center;"><span style="font-weight:900; font-size:1rem; color:#7B35D4;">CHILLATA HYBRID SWAP</span><p style="font-size:0.8rem; color:#888; margin-top:10px;">Uniswap x Matcha Architecture Loaded.</p></div>`;
+    return `<div style="padding:20px; display:flex; flex-direction:column; gap:15px;">
+        <div style="background:#F9F9F9; padding:15px; border-radius:15px; border:1px solid #EEE;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="font-size:0.6rem; font-weight:900; color:#888;">FROM</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <input id="swap-amount" type="number" style="background:none; border:none; font-size:1.2rem; font-weight:900; width:50%; outline:none;" value="100">
+                <div style="background:#FFF; padding:5px 10px; border-radius:100px; font-weight:900; font-size:0.6rem; border:1px solid #EEE;">$PRN</div>
+            </div>
+        </div>
+        <div style="background:#F9F9F9; padding:15px; border-radius:15px; border:1px solid #EEE;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span style="font-size:0.6rem; font-weight:900; color:#888;">TO</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-size:1.2rem; font-weight:900;">100.00</div>
+                <div style="background:#FFF; padding:5px 10px; border-radius:100px; font-weight:900; font-size:0.6rem; border:1px solid #EEE;">$MUSD</div>
+            </div>
+        </div>
+        <button onclick="executeSwap()" style="width:100%; padding:15px; background:#7B35D4; color:#FFF; border:none; border-radius:100px; font-weight:900; font-size:0.7rem; cursor:pointer;">SWAP</button>
+    </div>`;
 }
 
 function renderReceive(wallet) {
@@ -276,3 +292,24 @@ function renderLynxList(chats) {
     return chats.map(chat => `<div onclick="openChat('${chat.handle}')" style="padding:18px 20px; display:flex; gap:15px; align-items:center; cursor:pointer; border-bottom:1px solid #F5F5F5;"><div style="width:54px; height:54px; background:linear-gradient(45deg, #7B35D4, #444); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:#FFF; font-size:1.2rem; position:relative;">${chat.avatar}<div style="position:absolute; bottom:2px; right:2px; width:12px; height:12px; background:${chat.status==='online'?'#25D366':'#888'}; border-radius:50%; border:2px solid #FFF;"></div></div><div style="flex:1;"><div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-weight:700; font-size:1.05rem;">${chat.handle}</span><span style="font-size:0.75rem; color:#888;">${chat.time}</span></div><div style="font-size:0.9rem; color:#777;">${chat.lastMsg}</div></div></div>`).join('');
 }
 
+
+window.createNewWallet = function() {
+    const handle = prompt("Enter handle:");
+    if(!handle) return;
+    userWallets.push({ handle, address: "addr_pri"+Math.random().toString(36).substring(7), balance: "0.00", avatar: 'assets/muse_logo.png' });
+    alert("Created " + handle);
+    if(typeof renderWallet === 'function') renderWallet();
+};
+window.restoreWallet = function() {
+    if(prompt("Recovery Phrase:")) alert("Restored.");
+};
+window.connectLedger = function() {
+    alert("Searching Ledger...");
+    setTimeout(() => { alert("Connected."); }, 1000);
+};
+window.executeSwap = function() {
+    const amt = document.getElementById('swap-amount').value;
+    if(!amt || amt <= 0) return alert("Enter valid amount");
+    alert("Swapping " + amt + " $PRN...");
+    setTimeout(() => { alert("Success."); }, 1000);
+};
