@@ -58,3 +58,5 @@ class NeuralValidator {
 
 module.exports = new NeuralValidator();
 console.log("PHASE 4: Neural Validator v1.8.1-P2-HARDENED Operational.");
+
+const distributeRewards = (validator) => { console.log("PoN: Distributing  rewards to " + validator); };
