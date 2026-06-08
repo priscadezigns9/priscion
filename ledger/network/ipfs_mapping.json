@@ -1,7 +1,11 @@
 {
-    "genesis": "QmPriscionGenesisAlpha001",
-    "transactions": "QmSovereignLedgerStateV2",
-    "lynx_messages": "QmJelloLayerEncryptedState",
-    "assets": "QmBrandDNARegistry",
-    "kernel": "QmNeuralCoreKernelV2"
+    "chain_id": "priscion-sovereign-alpha",
+    "last_checkpoint": "2026-06-08T05:00:00Z",
+    "state_cid": "QmPriscionStateHighFidelityV3",
+    "registry_cid": "QmAssetRegistrySovereignV3",
+    "bootstrap_nodes": [
+        "https://nodes.priscion.com/alpha",
+        "https://nodes.priscion.com/beta"
+    ],
+    "migration_status": "COMPLETED_PHASE_2"
 }
