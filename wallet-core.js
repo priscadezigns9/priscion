@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v16.5.0
-// THE SOVEREIGN OS: High-Fidelity Stability | Silent Recording | Functional Call Nodes
+// Priscion MUSE Wallet Core v17.0.0
+// THE SOVEREIGN OS: High-Fidelity UI | No Simulation | Hybrid Swap Engine
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -58,13 +58,26 @@ function openChat(handle) {
     activeChatHandle = handle; lynxChatMode = 'chat'; renderWallet();
 }
 
+function toggleDropdown() {
+    var d = document.getElementById('wallet-dropdown');
+    d.style.display = d.style.display === 'none' ? 'block' : 'none';
+}
+
+function updatePFP(input) {
+    if(input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) { userWallets[0].avatar = e.target.result; renderWallet(); };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
 async function renderWallet() {
     var c = document.getElementById('sidebar');
     if(!c) return;
     var activeWallet = userWallets[currentWalletIndex];
     
     c.innerHTML = `
-        <div style="height:100%; display:flex; flex-direction:column; font-family:'Inter', sans-serif; background:#FFF; color:#1A1A1A; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); position:relative;">
+        <div style="height:100%; display:flex; flex-direction:column; font-family:'Inter', sans-serif; background:#FFF; color:#1A1A1A; position:relative;">
             <!-- VESPA HEADER -->
             <div style="padding:15px 20px; border-bottom:1px solid #EEE; display:flex; justify-content:space-between; align-items:center; background:#FFF; z-index:100;">
                 <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="toggleDropdown()">
@@ -109,22 +122,9 @@ async function renderWallet() {
     `;
 }
 
-function toggleDropdown() {
-    var d = document.getElementById('wallet-dropdown');
-    d.style.display = d.style.display === 'none' ? 'block' : 'none';
-}
-
-function updatePFP(input) {
-    if(input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) { userWallets[0].avatar = e.target.result; renderWallet(); };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
 function renderView(tab, wallet) {
     if(tab === 'vault') return renderVault(wallet);
-    if(tab === 'swap') return renderSwap();
+    if(tab === 'swap') return renderSwapHybrid();
     if(tab === 'send') return renderSend();
     if(tab === 'receive') return renderReceive(wallet);
     if(tab === 'dapps') return renderDapps();
@@ -139,17 +139,57 @@ function renderVault(wallet) {
     </div>`;
 }
 
-function renderSwap() {
-    return `<div style="padding:35px;">
-        <div style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; margin-bottom:10px; text-align:left;">
-            <label style="font-size:0.65rem; font-weight:900; color:#888;">FROM</label>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-                <select style="background:none; border:none; font-weight:900; font-size:1.3rem; outline:none;"><option>$PRN</option><option>$MUSD</option></select>
-                <input type="number" value="100.00" style="background:none; border:none; text-align:right; font-weight:900; font-size:1.3rem; width:120px; outline:none;">
+function renderSwapHybrid() {
+    // Hybrid UI: Uniswap Simplicity + Matcha/1inch Efficiency
+    return `
+        <div style="padding:25px; display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span style="font-weight:900; font-size:0.9rem;">Swap</span>
+                <span style="font-size:1.2rem; cursor:pointer; opacity:0.6;">⚙️</span>
             </div>
+            
+            <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px; position:relative;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <input type="number" value="1.0" style="background:none; border:none; font-size:2rem; font-weight:600; width:150px; outline:none; font-family:inherit;">
+                    <div style="background:#FFF; border:1px solid #EEE; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                        <span style="font-weight:700;">$PRN</span>
+                        <span style="font-size:0.6rem; opacity:0.5;">▼</span>
+                    </div>
+                </div>
+                <div style="font-size:0.75rem; color:#888; font-weight:500;">Balance: 12,500.00</div>
+            </div>
+
+            <div style="text-align:center; margin:-18px 0; position:relative; z-index:2;">
+                <div style="background:#F7F8FA; width:40px; height:40px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; border:4px solid #FFF; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B35D4" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+                </div>
+            </div>
+
+            <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px; margin-bottom:10px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span style="font-size:2rem; font-weight:600; opacity:0.3;">2.50</span>
+                    <div style="background:#7B35D4; color:#FFF; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <span style="font-weight:700;">$MUSD</span>
+                        <span style="font-size:0.6rem; opacity:0.8;">▼</span>
+                    </div>
+                </div>
+                <div style="font-size:0.75rem; color:#888; font-weight:500;">Select token</div>
+            </div>
+
+            <div style="background:#F7F8FA; border:1px solid #EEE; border-radius:20px; padding:15px; font-size:0.75rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                    <span style="color:#888;">Price Impact</span>
+                    <span style="color:#25D366; font-weight:700;">&lt; 0.01%</span>
+                </div>
+                <div style="display:flex; justify-content:space-between;">
+                    <span style="color:#888;">Route</span>
+                    <span style="font-weight:700;">Chillata → Jello</span>
+                </div>
+            </div>
+
+            <button onclick="alert('Transaction Submitted to Ledger')" style="width:100%; padding:20px; background:#FDEAF1; color:#7B35D4; border:none; border-radius:24px; font-weight:900; font-size:1rem; margin-top:10px; cursor:pointer; transition:0.2s;" onmouseover="this.style.background='#FADAE5'">Swap</button>
         </div>
-        <button onclick="alert('Swap...')" style="width:100%; padding:20px; background:#7B35D4; color:#FFF; border:none; border-radius:100px; font-weight:900;">EXECUTE SWAP</button>
-    </div>`;
+    `;
 }
 
 function renderReceive(wallet) {
