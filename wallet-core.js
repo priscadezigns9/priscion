@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v18.0.0
-// THE SOVEREIGN OS: Full Asset Restoration | Modern Lynx Search | No Simulations
+// Priscion MUSE Wallet Core v18.5.0
+// THE SOVEREIGN OS: High-Fidelity Multi-Attach | Real-Time Preview | Functional Captioning
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -98,15 +98,8 @@ async function renderWallet() {
                 <button onclick="toggleSidebar()" style="background:none; border:none; color:#999; font-size:2rem; cursor:pointer;">&times;</button>
             </div>
 
-            <!-- WALLET DROP_DOWN -->
-            <div id="wallet-dropdown" style="display:none; background:#F9F9F9; border-bottom:1px solid #EEE; padding:10px;">
-                <div onclick="alert('Creating Node...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Create New Wallet</div>
-                <div onclick="alert('Restoring via Seed...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Restore Wallet</div>
-                <div onclick="alert('Pairing Ledger Node...')" style="padding:12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Connect Ledger</div>
-            </div>
-
             <!-- TABS -->
-            <div style="display:flex; border-bottom:1px solid #EEE; background:#FFF; overflow-x:auto; scrollbar-width:none; z-index:5;">
+            <div id="main-tabs" style="display:flex; border-bottom:1px solid #EEE; background:#FFF; overflow-x:auto; scrollbar-width:none; z-index:5;">
                 ${['vault', 'swap', 'send', 'receive', 'dapps', 'lynx'].map(tab => `
                     <div onclick="switchTab('${tab}')" style="flex:1; min-width:75px; text-align:center; padding:15px 0; cursor:pointer; border-bottom: 3px solid ${currentTab===tab?'#7B35D4':'transparent'}; transition:0.3s;">
                         <span style="font-weight:900; font-size:0.65rem; letter-spacing:1px; color:${currentTab===tab?'#7B35D4':'#888'}; text-transform:uppercase;">${tab}</span>
@@ -207,10 +200,10 @@ function renderSend() {
 
 function renderDapps() {
     var dapps = [
-        {n:'CHILLATA', i:'❄️', u:'swap'},
-        {n:'LEGGO', i:'🌐', u:'leggo.html'},
-        {n:'PULSE', i:'📈', u:'pulse/'},
-        {n:'MYNT', i:'🎨', u:'mynt/'}
+        {n:'CHILLATA', i:'❄️', d:'Dex Swap', u:'swap'},
+        {n:'LEGGO', i:'🌐', d:'OS Browser', u:'leggo.html'},
+        {n:'PULSE', i:'📈', d:'Explorer', u:'pulse/'},
+        {n:'MYNT', i:'🎨', d:'NFT Store', u:'mynt/'}
     ];
     return `<div style="padding:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">
         ${dapps.map(d => `<div onclick="${d.u==='swap'?'switchTab(\'swap\')':'window.open(\''+d.u+'\')'}" style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; text-align:center; cursor:pointer;">
@@ -231,9 +224,9 @@ function renderLynx() {
                         <span>⋮</span>
                     </div>
                 </div>
-                <div id="lynx-search-container" style="display:none; padding:12px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
-                    <div style="background:#FFF; border-radius:25px; padding:8px 18px; display:flex; align-items:center;">
-                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:1rem; padding:4px 0;">
+                <div id="lynx-search-container" style="display:none; padding:10px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
+                    <div style="background:#FFF; border-radius:25px; padding:5px 15px; display:flex; align-items:center;">
+                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:0.9rem; padding:5px 0;">
                     </div>
                 </div>
                 <div id="lynx-chat-list" style="flex:1; overflow-y:auto;">
@@ -258,13 +251,18 @@ function renderLynx() {
                 <div id="lynx-messages" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;">
                     ${lynxMessages.map(m => `<div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#FFF':'#DCF8C6'}; padding:10px 14px; border-radius:${m.from==='Priscion'?'0 12px 12px 12px':'12px 0 12px 12px'}; font-size:0.95rem; box-shadow:0 1px 1px rgba(0,0,0,0.1); max-width:85%;">${m.text}</div>`).join('')}
                 </div>
+                
+                <!-- ATTACHMENT PREVIEW NODE -->
+                <div id="lynx-attachment-preview" style="display:none; padding:15px; background:rgba(255,255,255,0.9); border-top:1px solid #DDD; max-height:120px; overflow-x:auto; display:none; gap:10px;"></div>
+
                 <div id="lynx-record-status" style="display:none; padding:15px; background:#F0F0F0; border-top:1px solid #DDD; justify-content:space-between; align-items:center;">
                     <div onclick="cancelRecording()" style="color:#666; cursor:pointer;">${MUSE_ICONS.trash}</div>
                     <div style="color:red; font-weight:900; font-family:monospace; font-size:1.2rem; flex:1; text-align:center;">🔴 <span id="timer-val">00:00</span></div>
                     <div onclick="stopRecording()" style="color:#128C7E; font-weight:900; cursor:pointer;">STOP</div>
                 </div>
+                
                 <div style="padding:10px; display:flex; gap:10px; background:#F0F0F0; align-items:center;" id="lynx-input-bar">
-                    <label style="cursor:pointer; color:#666;">${MUSE_ICONS.clip}<input type="file" multiple style="display:none;" onchange="handleAttach(this)"></label>
+                    <label style="cursor:pointer; color:#666;">${MUSE_ICONS.clip}<input type="file" id="multi-vector-input" multiple style="display:none;" onchange="handleAttach(this)"></label>
                     <div style="flex:1; background:#FFF; border-radius:25px; padding:10px 18px; display:flex; align-items:center;">
                         <input id="lynx-input" type="text" placeholder="Type a message" style="flex:1; border:none; outline:none; font-size:1rem;">
                         <span style="color:#666; cursor:pointer; margin-left:10px;" onclick="handleMic()">${MUSE_ICONS.mic}</span>
@@ -331,7 +329,24 @@ function stopRecording() {
     document.getElementById('lynx-input-bar').style.display = 'flex';
 }
 
-function handleAttach(input) { if(input.files.length > 0) alert(input.files.length + " vectors ready."); }
+function handleAttach(input) {
+    if(input.files.length > 0) {
+        pendingAttachments = Array.from(input.files);
+        var preview = document.getElementById('lynx-attachment-preview');
+        preview.style.display = 'flex';
+        preview.innerHTML = '';
+        pendingAttachments.forEach(file => {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var item = document.createElement('div');
+                item.style = "min-width:80px; height:80px; background:url("+e.target.result+") center/cover; border-radius:10px; border:1px solid #EEE;";
+                preview.appendChild(item);
+            }
+            reader.readAsDataURL(file);
+        });
+        document.getElementById('lynx-input').placeholder = "Add a caption...";
+    }
+}
 
 function promptHandshake() {
     var h = prompt("Enter .pri handle:");
@@ -344,7 +359,13 @@ function promptHandshake() {
 
 function sendLynx() {
     var i = document.getElementById('lynx-input');
-    if(i && i.value) {
-        lynxMessages.push({ from: 'User', text: i.value, time: 'Now' }); renderWallet(); i.value = '';
+    if(i && (i.value || pendingAttachments.length > 0)) {
+        var text = i.value || (pendingAttachments.length + " Vectors Attached");
+        lynxMessages.push({ from: 'User', text: text, time: 'Now' });
+        pendingAttachments = [];
+        document.getElementById('lynx-attachment-preview').style.display = 'none';
+        renderWallet(); 
+        i.value = '';
+        i.placeholder = "Type a message";
     }
 }
