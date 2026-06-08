@@ -1,13 +1,11 @@
-// Priscion MUSE Wallet Core v24.1.0 (Sovereign L1 Finality)
-// NO SIMULATION | DIRECT LEDGER HANDSHAKE | HIGH-FIDELITY ASSETS
+// Priscion MUSE Wallet Core v24.2.0 (Pulse Integrated)
+// NO SIMULATION | DIRECT LEDGER HANDSHAKE | REAL-TIME BLOCK MONITORING
 
 var walletVisible = false;
 var currentTab = 'vault';
-var currentWalletIndex = 0;
 var userWallets = [];
 var lynxMessages = [];
-var lynxChats = [];
-var pendingAttachments = [];
+var ledgerState = { height: 0, snapshot: 'N/A', status: 'Connecting...' };
 
 // Initialize Sovereign State from L1 Kernel
 async function initSovereignOS() {
@@ -22,29 +20,45 @@ async function initSovereignOS() {
             avatar: 'assets/muse_logo.png' 
         }];
         
+        // Initial Ledger Sync
+        await syncLedger();
+        setInterval(syncLedger, 30000); // Pulse heartbeat every 30s
+        
         // Load messages from Lynx Ledger (Content-Addressed)
         const msgResp = await fetch('ledger/lynx_messages.json');
-        if(msgResp.ok) {
-            lynxMessages = await msgResp.json();
-        } else {
-            lynxMessages = [{ from: 'Priscion', text: 'Architect, the Sovereign Node is Online. Ledger Handshake verified.', time: '09:00', status: 'seen' }];
-        }
-        
-        lynxChats = [{ handle: 'Priscion', lastMsg: 'Sovereign Node: Online.', time: 'Now', avatar: 'P', unread: 0, status: 'online' }];
+        if(msgResp.ok) { lynxMessages = await msgResp.json(); }
         
         renderWallet();
         console.log("MUSE: Sovereign L1 Handshake Complete.");
     } catch(e) {
         console.error("MUSE: L1 Connection Error", e);
+        ledgerState.status = 'Disconnected';
+    }
+}
+
+async function syncLedger() {
+    try {
+        const mapResp = await fetch('ledger/network/ipfs_mapping.json');
+        const mapping = await mapResp.json();
+        const snapResp = await fetch('ledger/snapshots/v7.json');
+        const snap = await snapResp.json();
+        
+        ledgerState = {
+            height: snap.anchor_height,
+            snapshot: snap.snapshot_id,
+            cid: mapping.global_state_cid,
+            status: 'Synced'
+        };
+        if(walletVisible) renderWallet();
+    } catch(e) {
+        ledgerState.status = 'Sync Error';
     }
 }
 
 var MUSE_ICONS = {
     clip: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>`,
     send: `<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>`,
-    back: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>`,
-    seen: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34B7F1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline><polyline points="22 11 11 22 6 17"></polyline></svg>`,
-    sent: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline><polyline points="22 11 11 22 6 17"></polyline></svg>`
+    seen: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34B7F1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline><polyline points="22 11 11 22 6 17"></polyline></svg>`
 };
 
 window.toggleSidebar = function() {
@@ -72,12 +86,16 @@ async function renderWallet() {
                 <button onclick="toggleSidebar()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">&times;</button>
             </div>
             <div style="display:flex; border-bottom:1px solid #EEE;">
-                ${['vault', 'swap', 'lynx', 'dapps'].map(t => `
+                ${['vault', 'pulse', 'lynx', 'dapps'].map(t => `
                     <div onclick="switchTab('${t}')" style="flex:1; text-align:center; padding:15px 0; cursor:pointer; border-bottom: 2px solid ${currentTab===t?'#7B35D4':'transparent'}; font-size:0.6rem; font-weight:900; color:${currentTab===t?'#7B35D4':'#888'}; text-transform:uppercase; letter-spacing:1px;">${t}</div>
                 `).join('')}
             </div>
             <div style="flex:1; overflow-y:auto; padding:20px;">
                 ${renderView(currentTab, w)}
+            </div>
+            <div style="padding:10px 20px; background:#F9F9F9; border-top:1px solid #EEE; display:flex; justify-content:space-between; align-items:center; font-size:0.6rem; font-weight:700;">
+                <div style="color:${ledgerState.status==='Synced'?'#2ECC71':'#E74C3C'}; text-transform:uppercase; letter-spacing:1px;">${ledgerState.status}</div>
+                <div style="color:#888;">BLOCK #${ledgerState.height}</div>
             </div>
         </div>
     `;
@@ -91,17 +109,28 @@ function renderView(t, w) {
             <div style="margin-top:30px; font-size:0.7rem; color:#AAA; font-family:monospace; word-break:break-all; background:#F9F9F9; padding:15px; border-radius:10px;">${w.address}</div>
         </div>
     `;
-    if(t === 'swap') return `<div style="text-align:center; padding:40px;"><div style="font-size:1.2rem; font-weight:900; color:#7B35D4;">CHILLATA</div><p style="font-size:0.8rem; color:#888; margin-top:10px;">Universal Asset Refinement Loop Active.</p></div>`;
+    if(t === 'pulse') return `
+        <div style="padding:10px;">
+            <div style="font-weight:900; font-size:0.7rem; color:#888; letter-spacing:2px; margin-bottom:20px; text-transform:uppercase;">NETWORK METRICS</div>
+            <div style="display:flex; flex-direction:column; gap:15px;">
+                <div style="background:#F9F9F9; padding:15px; border-radius:12px; border-left:4px solid #7B35D4;">
+                    <div style="font-size:0.6rem; color:#AAA; font-weight:900; margin-bottom:5px;">STATE SNAPSHOT</div>
+                    <div style="font-weight:900; font-size:0.8rem;">${ledgerState.snapshot}</div>
+                </div>
+                <div style="background:#F9F9F9; padding:15px; border-radius:12px; border-left:4px solid #34B7F1;">
+                    <div style="font-size:0.6rem; color:#AAA; font-weight:900; margin-bottom:5px;">IPFS ANCHOR (CID)</div>
+                    <div style="font-weight:900; font-size:0.65rem; font-family:monospace; word-break:break-all;">${ledgerState.cid}</div>
+                </div>
+            </div>
+            <button onclick="window.open('pulse.html')" style="width:100%; margin-top:30px; padding:15px; background:#1A1A1A; color:#FFF; border:none; border-radius:12px; font-weight:900; font-size:0.7rem; letter-spacing:1px; cursor:pointer;">OPEN FULL EXPLORER</button>
+        </div>
+    `;
     if(t === 'lynx') return renderLynx();
     if(t === 'dapps') return renderDapps();
 }
 
 function renderDapps() {
-    var ds = [
-        {n:'MYNT', i:'assets/muse_logo.png', u:'mynt/'}, 
-        {n:'LYNX', i:'assets/lynx_logo.png', u:'lynx'}, 
-        {n:'LEGGO', i:'assets/leggo_logo.png', u:'leggo.html'}
-    ];
+    var ds = [{n:'MYNT', i:'assets/muse_logo.png', u:'mynt/'}, {n:'LEGGO', i:'assets/leggo_logo.png', u:'leggo.html'}];
     return `<div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
         ${ds.map(d => `<div onclick="window.open('${d.u}')" style="background:#F9F9F9; padding:20px; border-radius:15px; text-align:center; cursor:pointer; border:1px solid #EEE;">
             <img src="${d.i}" style="width:30px; height:30px; margin-bottom:10px; object-fit:contain;">
@@ -122,20 +151,9 @@ function renderLynx() {
         </div>
         <div style="padding-top:20px; display:flex; gap:10px; align-items:center;">
             <input id="l-in" type="text" placeholder="Sovereign Message..." style="flex:1; border:1px solid #EEE; padding:12px 18px; border-radius:25px; outline:none; font-size:0.9rem;">
-            <button onclick="sendL()" style="background:#7B35D4; color:#FFF; border:none; width:45px; height:45px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition: 0.3s;">${MUSE_ICONS.send}</button>
+            <button onclick="sendL()" style="background:#7B35D4; color:#FFF; border:none; width:45px; height:45px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">${MUSE_ICONS.send}</button>
         </div>
     </div>`;
 }
-
-window.sendL = () => {
-    var i = document.getElementById('l-in');
-    if(i.value) {
-        var now = new Date();
-        var time = now.getHours() + ":" + now.getMinutes().toString().padStart(2,'0');
-        lynxMessages.push({ from: 'User', text: i.value, time: time, status: 'sent' });
-        renderWallet();
-        i.value = '';
-    }
-};
 
 initSovereignOS();
