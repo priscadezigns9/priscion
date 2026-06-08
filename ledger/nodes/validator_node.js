@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 /**
- * PRISCION NEURAL VALIDATOR v1.8.0-PHASE4
+ * PRISCION NEURAL VALIDATOR v1.8.1-P2-HARDENED-PHASE4
  * Phase 4: Decentralized Network Expansion (P2P / Gossip / Rewards)
  */
 class NeuralValidator {
@@ -57,4 +57,4 @@ class NeuralValidator {
 }
 
 module.exports = new NeuralValidator();
-console.log("PHASE 4: Neural Validator v1.8.0 Operational.");
+console.log("PHASE 4: Neural Validator v1.8.1-P2-HARDENED Operational.");
