@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v9.5.0
-// THE SOVEREIGN OS: Lynx (Voice/Attach) | Multi-Wallet (Auth) | Embedded dApps | Live Ledger
+// Priscion MUSE Wallet Core v10.0.0
+// THE SOVEREIGN OS: Lynx Multi-Attach | Multi-Wallet Auth | Embedded dApps | Stability Audit
 
 let walletVisible = false;
 let currentTab = 'vault';
@@ -8,6 +8,7 @@ let currentWalletIndex = 0;
 let isRecording = false;
 let recordTime = 0;
 let recordInterval;
+let pendingAttachments = [];
 
 let userWallets = [
     { handle: '$prisca.pri', address: 'addr_pri1...6k9z_master', balance: '12,500.00', avatar: 'P' }
@@ -80,13 +81,13 @@ async function renderWallet() {
                 </div>
             </div>
 
-            <!-- Wallet Selector / Auth -->
+            <!-- Identity Node -->
             <div onclick="openWalletAuth()" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:15px 20px; border-radius:20px; margin-bottom:25px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <div style="width:32px; height:32px; background:linear-gradient(45deg, #7B35D4, #444); border-radius:12px; display:flex; align-items:center; justify-content:center; color:#FFF; font-weight:900;">${activeWallet.avatar}</div>
                     <div>
                         <div style="font-weight:900; font-size:0.8rem;">${activeWallet.handle}</div>
-                        <div style="font-size:0.55rem; color:${theme.muted}; font-weight:700;">Sovereign Node</div>
+                        <div style="font-size:0.55rem; color:${theme.muted}; font-weight:700;">Architect Node</div>
                     </div>
                 </div>
                 <div style="color:${theme.muted}; opacity:0.5;">${icons.chevron}</div>
@@ -125,16 +126,16 @@ function renderAuth(theme) {
     return `
         <div style="display:grid; gap:12px; padding-top:10px;">
             <button onclick="switchTab('vault')" style="background:none; border:none; color:${theme.accent}; font-weight:900; font-size:0.6rem; text-align:left; cursor:pointer; margin-bottom:10px;">← BACK TO VAULT</button>
-            <div onclick="alert('Creating Wallet...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
+            <div style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
                 <div style="font-weight:900; font-size:0.85rem;">CREATE NEW WALLET</div>
                 <div style="font-size:0.6rem; color:${theme.muted}; margin-top:5px;">Provision a new .pri handle on-chain.</div>
             </div>
-            <div onclick="alert('Restoring...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
+            <div style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
                 <div style="font-weight:900; font-size:0.85rem;">RESTORE WALLET</div>
                 <div style="font-size:0.6rem; color:${theme.muted}; margin-top:5px;">Import using mnemonic seed phrase.</div>
             </div>
-            <div onclick="alert('Connecting Ledger...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
-                <div style="font-weight:900; font-size:0.85rem;">CONNECT HARDWARE</div>
+            <div style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
+                <div style="font-weight:900; font-size:0.85rem;">CONNECT LEDGER</div>
                 <div style="font-size:0.6rem; color:${theme.muted}; margin-top:5px;">Pair with secure hardware security node.</div>
             </div>
         </div>
@@ -142,21 +143,24 @@ function renderAuth(theme) {
 }
 
 function renderVault(ledger, theme, wallet) {
-    const assets = ledger.filter(tx => tx.status === 'SECURED_IN_VAULT');
+    const assets = ledger.filter(tx => tx.status === 'SECURED_IN_VAULT' || tx.status === 'STABLE_AND_VERIFIED');
     return `
         <div style="background:${theme.surface}; padding:30px; border-radius:25px; border:1px solid ${theme.border}; margin-bottom:30px;">
-            <div style="font-size:0.6rem; color:${theme.muted}; font-weight:900; letter-spacing:2px; margin-bottom:10px;">LEDGER RESERVE</div>
+            <div style="font-size:0.6rem; color:${theme.muted}; font-weight:900; letter-spacing:2px; margin-bottom:10px;">RESERVE BALANCE</div>
             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                 <span style="font-size:2.2rem; font-weight:900; font-family:'Playfair Display', serif;">$PRN</span>
                 <span style="font-size:1.8rem; font-weight:900; color:${theme.accent};">${wallet.balance}</span>
             </div>
         </div>
-        <div style="font-size:0.6rem; color:${theme.muted}; font-weight:900; letter-spacing:2px; margin-bottom:15px; text-transform:uppercase;">COLLECTION (.pri)</div>
-        <div style="display:grid; gap:10px;">
+        <div style="font-size:0.6rem; color:${theme.muted}; font-weight:900; letter-spacing:2px; margin-bottom:15px; text-transform:uppercase;">SOVEREIGN ASSETS</div>
+        <div style="display:grid; gap:12px; margin-bottom:20px;">
             ${assets.map(a => `
-                <div style="background:${theme.bg}; border:1px solid ${theme.border}; padding:18px; border-radius:18px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-weight:900; font-size:0.8rem;">${a.asset}</span>
-                    <span style="font-size:0.5rem; color:${theme.accent}; font-weight:900;">ANCHORED</span>
+                <div style="background:${theme.bg}; border:1px solid ${theme.border}; padding:18px; border-radius:18px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="alert('CID: ${a.cid || \"Anchored Handle\"}')">
+                    <div>
+                        <div style="font-weight:900; font-size:0.85rem;">${a.asset || a.handle || \"Global Node\"}</div>
+                        <div style="font-size:0.5rem; color:${theme.muted}; font-weight:700;">${a.status}</div>
+                    </div>
+                    <div style="font-size:0.5rem; color:${theme.accent}; font-weight:900; border:1px solid ${theme.accent}; padding:2px 8px; border-radius:10px;">AUDITED</div>
                 </div>
             `).join('')}
         </div>
@@ -174,19 +178,19 @@ function renderSwap(theme) {
             <div style="display:flex; justify-content:space-between;"><div style="font-size:0.55rem; color:${theme.muted}; font-weight:900;">TO</div><select style="background:none; border:none; color:${theme.accent}; font-weight:900; outline:none;"><option>$MUSD</option><option>$ADA</option></select></div>
             <div style="display:flex; justify-content:space-between; margin-top:10px;"><span style="font-weight:900; font-size:1.4rem;">$MUSD</span><span style="font-weight:900; font-size:1.4rem; opacity:0.3;">250.00</span></div>
         </div>
-        <button onclick="alert('Settling on Chillata...')" style="width:100%; padding:20px; background:${theme.accent}; color:#FFF; border:none; border-radius:100px; font-weight:900; margin-top:30px; cursor:pointer;">EXECUTE SWAP</button>
+        <button onclick="alert('Settling on Chillata Protocol...')" style="width:100%; padding:20px; background:${theme.accent}; color:#FFF; border:none; border-radius:100px; font-weight:900; margin-top:30px; cursor:pointer; text-transform:uppercase; letter-spacing:2px; font-size:0.75rem;">Execute Swap</button>
     `;
 }
 
 function renderSend(theme) {
     return `
         <div style="background:${theme.surface}; padding:25px; border-radius:20px; border:1px solid ${theme.border};">
-            <div style="font-size:0.55rem; color:${theme.muted}; font-weight:900; margin-bottom:15px;">RECIPIENT</div>
+            <div style="font-size:0.55rem; color:${theme.muted}; font-weight:900; margin-bottom:15px;">RECIPIENT NODE</div>
             <input type="text" placeholder="$username.pri" style="width:100%; background:none; border:none; border-bottom:1px solid ${theme.border}; padding:10px 0; font-family:inherit; font-weight:900; color:${theme.text}; outline:none;">
             <div style="font-size:0.55rem; color:${theme.muted}; font-weight:900; margin-top:30px; margin-bottom:15px;">AMOUNT</div>
             <input type="number" placeholder="0.00" style="width:100%; background:none; border:none; color:${theme.text}; font-weight:900; outline:none; font-size:1.8rem;">
         </div>
-        <button onclick="alert('Sent to Ledger')" style="width:100%; padding:20px; background:${theme.text}; color:${theme.bg}; border:none; border-radius:100px; font-weight:900; margin-top:30px; cursor:pointer;">CONFIRM SEND</button>
+        <button onclick="alert('Atomic Send Confirmed')" style="width:100%; padding:20px; background:${theme.text}; color:${theme.bg}; border:none; border-radius:100px; font-weight:900; margin-top:30px; cursor:pointer; text-transform:uppercase; letter-spacing:2px;">Confirm Send</button>
     `;
 }
 
@@ -194,13 +198,13 @@ function renderReceive(theme, wallet) {
     return `
         <div style="text-align:center; padding-top:20px;">
             <div style="background:#FFF; padding:25px; border-radius:30px; display:inline-block; border:1px solid #EEE; margin-bottom:30px;">
-                <div style="width:180px; height:180px; background:#000; border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#FFF;">
-                    <div style="font-size:0.5rem; letter-spacing:2px; margin-bottom:10px;">PRISCION QR</div>
-                    <div style="font-size:3rem;">🔳</div>
+                <div style="width:200px; height:200px; background:#000; border-radius:15px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#FFF;">
+                    <div style="font-size:0.6rem; letter-spacing:3px; margin-bottom:15px; font-weight:900;">PRISCION QR</div>
+                    <div style="font-size:4rem;">🔳</div>
                 </div>
             </div>
-            <h3 style="font-family:'Playfair Display', serif; font-size:1.8rem;">${wallet.handle}</h3>
-            <p style="font-size:0.6rem; color:${theme.muted}; margin-top:10px; word-break:break-all;">${wallet.address}</p>
+            <h3 style="font-family:'Playfair Display', serif; font-size:2rem; margin:0;">${wallet.handle}</h3>
+            <p style="font-size:0.65rem; color:${theme.muted}; margin-top:10px; word-break:break-all; font-weight:700;">${wallet.address}</p>
         </div>
     `;
 }
@@ -209,12 +213,12 @@ function renderDapps(theme) {
     const dapps = [
         {n:'LEGGO', i:icons.lego, d:'OS & Browser', u:'leggo.html'},
         {n:'PULSE', i:'📈', d:'Explorer', u:'pulse/'},
-        {n:'PEANUTS', i:'📊', d:'Analytics', u:'peanuts/'},
+        {n:'PEANUTS', i:'📊', d:'Sovereign Analytics', u:'peanuts/'},
         {n:'MYNT', i:'🎨', d:'NFT Store', u:'mynt/'},
         {n:'CHILLATA', i:'❄️', d:'Dex Swap', u:'chillataswap/'}
     ];
     return `
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding-top:10px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; padding-top:10px;">
             ${dapps.map(d => `
                 <div onclick="embedDapp('${d.u}')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:20px; border-radius:20px; text-align:center; cursor:pointer; transition:0.3s;" onmouseover="this.style.borderColor='${theme.accent}'">
                     <div style="margin-bottom:10px; color:${theme.accent}; display:flex; justify-content:center;">${typeof d.i === 'string' && d.i.includes('<svg') ? d.i : `<span style="font-size:1.5rem;">${d.i}</span>`}</div>
@@ -227,7 +231,7 @@ function renderDapps(theme) {
 
 function embedDapp(url) {
     const content = document.getElementById('wallet-content');
-    content.innerHTML = `<iframe src="${url}" style="width:100%; height:100%; border:none; border-radius:15px; background:#FFF;"></iframe>`;
+    content.innerHTML = `<div style="height:100%; position:relative;"><button onclick="switchTab('dapps')" style="position:absolute; top:-10px; right:0; background:${walletDarkMode?'#FFF':'#000'}; color:${walletDarkMode?'#000':'#FFF'}; border:none; border-radius:10px; font-size:0.5rem; padding:5px 10px; cursor:pointer; z-index:10;">CLOSE</button><iframe src="${url}" style="width:100%; height:100%; border:none; border-radius:15px; background:#FFF;"></iframe></div>`;
 }
 
 function renderLynx(theme) {
@@ -235,23 +239,21 @@ function renderLynx(theme) {
         <div style="display:flex; flex-direction:column; height:100%;">
             <div style="flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
                 <div id="lynx-status-icon" style="font-size:3rem; margin-bottom:15px; transition:0.3s;">🛡️</div>
-                <div style="font-weight:900; font-size:0.8rem; letter-spacing:3px;">LYNX SESSION</div>
-                <div id="record-timer" style="font-size:1.2rem; font-weight:900; margin-top:10px; display:none; color:#FF0000;">00:00</div>
-                <div id="lynx-hint" style="font-size:0.6rem; color:${theme.muted}; margin-top:5px; text-align:center;">Secure Architect Handshake Active.</div>
+                <div style="font-weight:900; font-size:0.8rem; letter-spacing:3px;">LYNX ARCHITECT</div>
+                <div id="record-timer" style="font-size:1.5rem; font-weight:900; margin-top:10px; display:none; color:#FF0000; font-family:monospace;">00:00</div>
+                <div id="lynx-hint" style="font-size:0.6rem; color:${theme.muted}; margin-top:5px; text-align:center; font-weight:700;">Direct Node Handshake: Architect ↔ AI</div>
             </div>
+            <div id="attachment-list" style="display:none; padding:15px; background:${theme.surface}; border:1px solid ${theme.border}; border-radius:15px; margin-bottom:15px; max-height:100px; overflow-y:auto;"></div>
             <div style="border-top:1px solid ${theme.border}; padding-top:20px;">
                 <div style="display:flex; gap:15px; margin-bottom:15px; align-items:center;">
-                    <label style="cursor:pointer; color:${theme.muted};" title="Attach Vector">
+                    <label style="cursor:pointer; color:${theme.muted};" title="Attach Multiple Vectors">
                         ${icons.clip}
-                        <input type="file" style="display:none;" onchange="handleAttachment(this)">
+                        <input type="file" multiple style="display:none;" onchange="handleMultiAttachment(this)">
                     </label>
                     <div onclick="handleMic()" title="Record Vector" style="cursor:pointer; color:${theme.muted}; transition:0.3s;" id="mic-node">${icons.mic}</div>
                 </div>
-                <div id="attachment-preview" style="display:none; background:${theme.surface}; padding:10px; border-radius:10px; margin-bottom:10px; font-size:0.6rem; font-weight:700; border:1px dashed ${theme.accent};">
-                    📎 <span id="file-name"></span>
-                </div>
-                <div style="background:${theme.surface}; border:1px solid ${theme.border}; border-radius:100px; padding:10px 15px; display:flex; gap:12px; align-items:center;">
-                    <input id="lynx-input" type="text" placeholder="Message Architect..." style="flex:1; background:none; border:none; color:${theme.text}; font-size:0.8rem; outline:none;">
+                <div style="background:${theme.surface}; border:1px solid ${theme.border}; border-radius:100px; padding:12px 20px; display:flex; gap:12px; align-items:center;">
+                    <input id="lynx-input" type="text" placeholder="Message Architect..." style="flex:1; background:none; border:none; color:${theme.text}; font-size:0.85rem; outline:none; font-weight:500;">
                     <div onclick="sendLynx()" style="color:${theme.accent}; cursor:pointer;">${icons.send}</div>
                 </div>
             </div>
@@ -269,8 +271,7 @@ function handleMic() {
         isRecording = true;
         mic.style.color = '#FF0000';
         timer.style.display = 'block';
-        status.innerHTML = '🎤';
-        status.style.color = '#FF0000';
+        status.innerHTML = '🔴';
         hint.innerHTML = 'RECORDING VECTOR...';
         recordTime = 0;
         recordInterval = setInterval(() => {
@@ -290,27 +291,35 @@ function stopRecording() {
     const mic = document.getElementById('mic-node');
     const status = document.getElementById('lynx-status-icon');
     const hint = document.getElementById('lynx-hint');
+    const timer = document.getElementById('record-timer');
     mic.style.color = '#888';
     status.innerHTML = '✅';
     status.style.color = '#7B35D4';
-    hint.innerHTML = 'VOICE SIGNAL CAPTURED';
+    hint.innerHTML = 'VOICE SIGNAL CAPTURED ('+timer.innerHTML+')';
 }
 
-function handleAttachment(input) {
-    const preview = document.getElementById('attachment-preview');
-    const name = document.getElementById('file-name');
-    if(input.files && input.files[0]) {
-        preview.style.display = 'block';
-        name.innerHTML = input.files[0].name + " (Comment below)";
+function handleMultiAttachment(input) {
+    const list = document.getElementById('attachment-list');
+    if(input.files.length > 0) {
+        list.style.display = 'block';
+        list.innerHTML = '';
+        pendingAttachments = Array.from(input.files);
+        pendingAttachments.forEach(file => {
+            list.innerHTML += `<div style="font-size:0.6rem; font-weight:700; color:#7B35D4; margin-bottom:5px;">📎 ${file.name}</div>`;
+        });
+        document.getElementById('lynx-input').placeholder = "Comment on these vectors...";
     }
 }
 
 function sendLynx() {
     const i = document.getElementById('lynx-input');
-    if(i && i.value) {
-        alert("Lynx Encrypted: Vector Sent to Ledger.");
+    if(i && (i.value || pendingAttachments.length > 0)) {
+        alert("Lynx Encrypted: [" + pendingAttachments.length + " files + Message] Sent to Architect Node.");
         i.value = '';
-        document.getElementById('attachment-preview').style.display = 'none';
+        i.placeholder = "Message Architect...";
+        pendingAttachments = [];
+        document.getElementById('attachment-list').style.display = 'none';
         if(isRecording) stopRecording();
+        document.getElementById('record-timer').style.display = 'none';
     }
 }
