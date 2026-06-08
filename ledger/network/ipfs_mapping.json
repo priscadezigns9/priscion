@@ -1,1 +1,7 @@
-{ "genesis": "QmPriscionGenesis", "transactions": "QmState" }
+{
+    "genesis": "QmPriscionGenesisAlpha001",
+    "transactions": "QmSovereignLedgerStateV2",
+    "lynx_messages": "QmJelloLayerEncryptedState",
+    "assets": "QmBrandDNARegistry",
+    "kernel": "QmNeuralCoreKernelV2"
+}
