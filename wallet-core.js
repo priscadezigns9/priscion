@@ -152,7 +152,7 @@ function renderDapps() {
         {n:'ATELIA', i:'assets/atelia.webp', u:'ateliagaming/'},
         {n:'DREAMING', i:'assets/dreaming_anime.png', u:'dreaminganime/'},
         {n:'LEGGO', i:'assets/leggo_logo.png', u:'leggo.html'},
-        {n:'PULSE', i:'assets/priscion_logo.png', u:'pulse.html'}
+        {n:'PULSE', i:'assets/pulse_logo.png', u:'pulse.html'}
     ];
     return `<div style="padding:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">${dapps.map(d => `
         <div onclick="${d.u==='swap'?'switchTab(\'swap\')':'window.open(\''+d.u+'\')'}" style="background:#F9F9F9; border:1px solid #EEE; padding:20px; border-radius:20px; text-align:center; cursor:pointer;">
@@ -188,3 +188,4 @@ window.executeSwap = function() {
     alert("Swapping " + amt + " $PRN...");
     setTimeout(() => { alert("Success."); }, 1000);
 };
+
