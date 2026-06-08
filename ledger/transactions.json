@@ -122,5 +122,14 @@
         "to": ".pri",
         "status": "SECURED_IN_VAULT",
         "time": "2026-06-07 18:40"
+    },
+    {
+        "id": "tx_MIG_001",
+        "type": "STORAGE_MIGRATION",
+        "client": "Prisca Designs",
+        "source": "Supabase",
+        "destination": "Priscion Sovereign Ledger",
+        "status": "ANCHORED_TO_BLOCKCHAIN",
+        "time": "2026-06-07 20:05"
     }
 ]
