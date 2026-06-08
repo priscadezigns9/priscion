@@ -1,11 +1,13 @@
 {
     "chain_id": "priscion-sovereign-alpha",
-    "last_checkpoint": "2026-06-08T05:30:00Z",
-    "global_state_cid": "QmPriscionUniversalStateV4",
+    "last_checkpoint": "2026-06-08T06:00:00Z",
+    "global_state_cid": "QmPriscionUniversalStateV5_FINAL",
     "components": {
-        "ledger": "QmLedgerStateV4",
-        "identity": "QmIdentityRegistryV4",
-        "governance": "QmGovernanceRulesV4"
+        "ledger": "QmLedgerStateV5",
+        "identity": "QmIdentityRegistryV5",
+        "governance": "QmGovernanceRulesV5",
+        "assets": "QmAssetRegistrySovereignV5"
     },
-    "protocol": "IPFS-SOVEREIGN-v1.1"
+    "protocol": "IPFS-SOVEREIGN-v1.2",
+    "status": "SOVEREIGN_ALPHA_READY"
 }
