@@ -11,5 +11,6 @@
     "status": "SOVEREIGN_DECOUPLED_FINALITY",
     "blockchain_sync": "SUCCESS",
     "last_handshake": "2026-06-08T20:09:00Z",
-    "anchor_cid": "QmSnapshotV7AnchorSovereignFinality"
+    "anchor_cid": "QmSnapshotV7AnchorSovereignFinality",
+    "last_decoupling_verify": "2026-06-08T22:05:00Z"
 }
