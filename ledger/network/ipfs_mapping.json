@@ -1,6 +1,6 @@
 {
     "chain_id": "priscion-sovereign-alpha",
-    "last_checkpoint": "2026-06-08T19:35:00Z",
+    "last_checkpoint": "2026-06-08T20:05:00Z",
     "global_state_cid": "QmSnapshotV7AnchorSovereignFinality",
     "components": {
         "ledger": "QmLedgerStateV7",
