@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v17.5.0
-// THE SOVEREIGN OS: Functional Lynx Search | Chillata Integration | No Simulations
+// Priscion MUSE Wallet Core v18.0.0
+// THE SOVEREIGN OS: Full Asset Restoration | Modern Lynx Search | No Simulations
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -30,7 +30,6 @@ var lynxChats = [
     { handle: '$vogue.pri', lastMsg: 'Handshake accepted.', time: '18:45', avatar: 'V', unread: 0 }
 ];
 
-// Reference for search results
 var filteredLynxChats = [...lynxChats];
 
 var MUSE_ICONS = {
@@ -79,6 +78,12 @@ async function renderWallet() {
     if(!c) return;
     var activeWallet = userWallets[currentWalletIndex];
     
+    var ledger = [];
+    try {
+        var response = await fetch('ledger/transactions.json');
+        if(response.ok) ledger = await response.json();
+    } catch (e) {}
+
     c.innerHTML = `
         <div style="height:100%; display:flex; flex-direction:column; font-family:'Inter', sans-serif; background:#FFF; color:#1A1A1A; position:relative;">
             <!-- VESPA HEADER -->
@@ -110,7 +115,7 @@ async function renderWallet() {
             </div>
 
             <div id="wallet-content" style="flex:1; overflow-y:auto; position:relative;">
-                ${renderView(currentTab, activeWallet)}
+                ${renderView(currentTab, ledger, activeWallet)}
             </div>
 
             <div id="call-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(7, 94, 84, 0.98); z-index:2000; flex-direction:column; align-items:center; justify-content:center; color:#FFF;">
@@ -125,20 +130,25 @@ async function renderWallet() {
     `;
 }
 
-function renderView(tab, wallet) {
-    if(tab === 'vault') return renderVault(wallet);
+function renderView(tab, ledger, wallet) {
+    if(tab === 'vault') return renderVault(ledger, wallet);
     if(tab === 'swap') return renderSwapHybrid();
     if(tab === 'send') return renderSend();
     if(tab === 'receive') return renderReceive(wallet);
     if(tab === 'dapps') return renderDapps();
     if(tab === 'lynx') return renderLynx();
-    return renderVault(wallet);
+    return renderVault(ledger, wallet);
 }
 
-function renderVault(wallet) {
+function renderVault(ledger, wallet) {
+    var assets = ledger.filter(tx => tx.status === 'SECURED_IN_VAULT');
     return `<div style="padding:35px; text-align:center;">
         <div style="font-size:0.7rem; font-weight:900; color:#888; letter-spacing:4px; margin-bottom:12px;">NET RESERVE</div>
         <div style="font-size:2.8rem; font-weight:900; font-family:'Playfair Display', serif;">$PRN ${wallet.balance}</div>
+        <div style="font-size:0.65rem; font-weight:900; margin-top:50px; text-align:left; letter-spacing:2px; color:#999; text-transform:uppercase; border-bottom:1px solid #EEE; padding-bottom:10px;">Anchored Assets (${assets.length})</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px;">
+            ${assets.map(a => `<div style="background:#FBFBFB; border:1px solid #EEE; padding:22px; border-radius:18px; font-weight:900; font-size:0.8rem;">${a.handle || a.asset}</div>`).join('')}
+        </div>
     </div>`;
 }
 
@@ -149,8 +159,7 @@ function renderSwapHybrid() {
                 <span style="font-weight:900; font-size:0.9rem;">Chillata Swap</span>
                 <span style="font-size:1.2rem; cursor:pointer; opacity:0.6;">⚙️</span>
             </div>
-            
-            <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px; position:relative;">
+            <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                     <input type="number" value="1.0" style="background:none; border:none; font-size:2rem; font-weight:600; width:150px; outline:none;">
                     <div style="background:#FFF; border:1px solid #EEE; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer;">
@@ -159,13 +168,11 @@ function renderSwapHybrid() {
                     </div>
                 </div>
             </div>
-
             <div style="text-align:center; margin:-18px 0; z-index:2; position:relative;">
                 <div style="background:#F7F8FA; width:40px; height:40px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; border:4px solid #FFF; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B35D4" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
                 </div>
             </div>
-
             <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px; margin-bottom:10px;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                     <span style="font-size:2rem; font-weight:600; opacity:0.3;">2.50</span>
@@ -175,7 +182,6 @@ function renderSwapHybrid() {
                     </div>
                 </div>
             </div>
-
             <button onclick="alert('Transaction Submitted')" style="width:100%; padding:20px; background:#FDEAF1; color:#7B35D4; border:none; border-radius:24px; font-weight:900; font-size:1rem; cursor:pointer;">Swap</button>
         </div>
     `;
@@ -189,7 +195,7 @@ function renderReceive(wallet) {
             </div>
             <div style="width:100%; background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE;">
                 <div style="font-size:0.8rem; font-weight:900; word-break:break-all; margin-bottom:20px;">${wallet.address}</div>
-                <button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-weight:900; cursor:pointer;">COPY ADDRESS</button>
+                <button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900; cursor:pointer;">COPY ADDRESS</button>
             </div>
         </div>
     `;
@@ -201,10 +207,10 @@ function renderSend() {
 
 function renderDapps() {
     var dapps = [
-        {n:'CHILLATA', i:'❄️', d:'Dex Swap', u:'swap'},
-        {n:'LEGGO', i:'🌐', d:'OS Browser', u:'leggo.html'},
-        {n:'PULSE', i:'📈', d:'Explorer', u:'pulse/'},
-        {n:'MYNT', i:'🎨', d:'NFT Store', u:'mynt/'}
+        {n:'CHILLATA', i:'❄️', u:'swap'},
+        {n:'LEGGO', i:'🌐', u:'leggo.html'},
+        {n:'PULSE', i:'📈', u:'pulse/'},
+        {n:'MYNT', i:'🎨', u:'mynt/'}
     ];
     return `<div style="padding:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">
         ${dapps.map(d => `<div onclick="${d.u==='swap'?'switchTab(\'swap\')':'window.open(\''+d.u+'\')'}" style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; text-align:center; cursor:pointer;">
@@ -225,9 +231,9 @@ function renderLynx() {
                         <span>⋮</span>
                     </div>
                 </div>
-                <div id="lynx-search-container" style="display:none; padding:10px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
-                    <div style="background:#FFF; border-radius:20px; padding:5px 15px; display:flex; align-items:center;">
-                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:0.9rem; padding:5px 0;">
+                <div id="lynx-search-container" style="display:none; padding:12px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
+                    <div style="background:#FFF; border-radius:25px; padding:8px 18px; display:flex; align-items:center;">
+                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:1rem; padding:4px 0;">
                     </div>
                 </div>
                 <div id="lynx-chat-list" style="flex:1; overflow-y:auto;">
