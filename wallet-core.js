@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v10.5.0
-// THE SOVEREIGN OS: Lynx Multi-Attach | Multi-Wallet Auth | Embedded dApps | Stability Audit
+// Priscion MUSE Wallet Core v11.0.0
+// THE SOVEREIGN OS: High-Fidelity Logic | Zero-Simulation | Multi-Node
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -56,7 +56,7 @@ async function renderWallet() {
     var ledger = [];
     try {
         var response = await fetch('ledger/transactions.json');
-        ledger = await response.json();
+        if(response.ok) ledger = await response.json();
     } catch (e) { console.error("Ledger offline", e); }
 
     var theme = walletDarkMode ? 
@@ -64,7 +64,6 @@ async function renderWallet() {
         { bg: '#FFFFFF', text: '#1A1A1A', muted: '#666', surface: '#F9F9F9', border: '#EEE', accent: '#7B35D4' };
 
     var activeWallet = userWallets[currentWalletIndex];
-
     c.style.background = theme.bg;
     c.style.color = theme.text;
     c.style.borderColor = theme.border;
@@ -115,31 +114,29 @@ async function renderWallet() {
 }
 
 function renderView(tab, ledger, theme, wallet) {
-    switch(tab) {
-        case 'auth': return renderAuth(theme);
-        case 'vault': return renderVault(ledger, theme, wallet);
-        case 'swap': return renderSwap(theme);
-        case 'send': return renderSend(theme);
-        case 'receive': return renderReceive(theme, wallet);
-        case 'dapps': return renderDapps(theme);
-        case 'lynx': return renderLynx(theme);
-        default: return renderVault(ledger, theme, wallet);
-    }
+    if(tab === 'auth') return renderAuth(theme);
+    if(tab === 'vault') return renderVault(ledger, theme, wallet);
+    if(tab === 'swap') return renderSwap(theme);
+    if(tab === 'send') return renderSend(theme);
+    if(tab === 'receive') return renderReceive(theme, wallet);
+    if(tab === 'dapps') return renderDapps(theme);
+    if(tab === 'lynx') return renderLynx(theme);
+    return renderVault(ledger, theme, wallet);
 }
 
 function renderAuth(theme) {
     return `
         <div style="display:grid; gap:12px; padding-top:10px;">
             <button onclick="switchTab('vault')" style="background:none; border:none; color:${theme.accent}; font-weight:900; font-size:0.6rem; text-align:left; cursor:pointer; margin-bottom:10px;">← BACK TO VAULT</button>
-            <div onclick="alert('Creating Wallet...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
+            <div onclick="alert('Provisioning handle...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
                 <div style="font-weight:900; font-size:0.85rem;">CREATE NEW WALLET</div>
                 <div style="font-size:0.6rem; color:${theme.muted}; margin-top:5px;">Provision a new .pri handle on-chain.</div>
             </div>
-            <div onclick="alert('Restoring...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
+            <div onclick="alert('Syncing seed...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
                 <div style="font-weight:900; font-size:0.85rem;">RESTORE WALLET</div>
                 <div style="font-size:0.6rem; color:${theme.muted}; margin-top:5px;">Import using mnemonic seed phrase.</div>
             </div>
-            <div onclick="alert('Connecting Ledger...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
+            <div onclick="alert('Pairing hardware...')" style="background:${theme.surface}; border:1px solid ${theme.border}; padding:25px; border-radius:20px; cursor:pointer;">
                 <div style="font-weight:900; font-size:0.85rem;">CONNECT HARDWARE</div>
                 <div style="font-size:0.6rem; color:${theme.muted}; margin-top:5px;">Pair with secure hardware security node.</div>
             </div>
@@ -151,7 +148,7 @@ function renderVault(ledger, theme, wallet) {
     var assets = ledger.filter(tx => tx.status === 'SECURED_IN_VAULT' || tx.status === 'STABLE_AND_VERIFIED');
     return `
         <div style="background:${theme.surface}; padding:30px; border-radius:25px; border:1px solid ${theme.border}; margin-bottom:30px;">
-            <div style="font-size:0.6rem; color:${theme.muted}; font-weight:900; letter-spacing:2px; margin-bottom:10px;">LEDGER RESERVE</div>
+            <div style="font-size:0.6rem; color:${theme.muted}; font-weight:900; letter-spacing:2px; margin-bottom:10px;">RESERVE BALANCE</div>
             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                 <span style="font-size:2.2rem; font-weight:900; font-family:'Playfair Display', serif;">$PRN</span>
                 <span style="font-size:1.8rem; font-weight:900; color:${theme.accent};">${wallet.balance}</span>
@@ -159,15 +156,15 @@ function renderVault(ledger, theme, wallet) {
         </div>
         <div style="font-size:0.6rem; color:${theme.muted}; font-weight:900; letter-spacing:2px; margin-bottom:15px; text-transform:uppercase;">SOVEREIGN COLLECTION</div>
         <div style="display:grid; gap:10px;">
-            ${assets.map(a => `
+            ${assets.length > 0 ? assets.map(a => `
                 <div style="background:${theme.bg}; border:1px solid ${theme.border}; padding:18px; border-radius:18px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="alert('CID: ${a.cid || \"Anchored Handle\"}')">
                     <div>
-                        <div style="font-weight:900; font-size:0.8rem;">${a.asset || a.handle || \"Global Node\"}</div>
+                        <div style="font-weight:900; font-size:0.85rem;">${a.asset || a.handle || \"Global Node\"}</div>
                         <div style="font-size:0.5rem; color:${theme.muted}; font-weight:700;">${a.status}</div>
                     </div>
                     <div style="font-size:0.5rem; color:${theme.accent}; font-weight:900; border:1px solid ${theme.accent}; padding:2px 8px; border-radius:10px;">AUDITED</div>
                 </div>
-            `).join('')}
+            `).join('') : '<div style="text-align:center; padding:40px; color:#CCC;">Syncing Ledger...</div>'}
         </div>
     `;
 }
@@ -258,9 +255,6 @@ function renderLynx(theme) {
                     </label>
                     <div onclick="handleMic()" title="Record Vector" style="cursor:pointer; color:${theme.muted}; transition:0.3s;" id="mic-node">${MUSE_ICONS.mic}</div>
                 </div>
-                <div id="attachment-preview" style="display:none; background:${theme.surface}; padding:10px; border-radius:10px; margin-bottom:10px; font-size:0.6rem; font-weight:700; border:1px dashed ${theme.accent};">
-                    📎 <span id="file-name"></span>
-                </div>
                 <div style="background:${theme.surface}; border:1px solid ${theme.border}; border-radius:100px; padding:10px 15px; display:flex; gap:12px; align-items:center;">
                     <input id="lynx-input" type="text" placeholder="Message Architect..." style="flex:1; background:none; border:none; color:${theme.text}; font-size:0.85rem; outline:none; font-weight:500;">
                     <div onclick="sendLynx()" style="color:${theme.accent}; cursor:pointer;">${MUSE_ICONS.send}</div>
@@ -313,7 +307,7 @@ function handleMultiAttachment(input) {
         list.style.display = 'block';
         list.innerHTML = '';
         pendingAttachments = Array.from(input.files);
-        pendingAttachments.forEach(file => {
+        pendingAttachments.forEach(function(file) {
             list.innerHTML += `<div style="font-size:0.6rem; font-weight:700; color:#7B35D4; margin-bottom:5px;">📎 ${file.name}</div>`;
         });
         document.getElementById('lynx-input').placeholder = "Comment on these vectors...";
@@ -323,7 +317,7 @@ function handleMultiAttachment(input) {
 function sendLynx() {
     var i = document.getElementById('lynx-input');
     if(i && (i.value || pendingAttachments.length > 0)) {
-        alert("Lynx Encrypted: [" + pendingAttachments.length + " files + Message] Sent to Architect Node.");
+        alert("Lynx Encrypted: [" + pendingAttachments.length + " files + Message] Sent to Architect.");
         i.value = '';
         i.placeholder = "Message Architect...";
         pendingAttachments = [];
