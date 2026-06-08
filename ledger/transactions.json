@@ -131,5 +131,14 @@
         "destination": "Priscion Sovereign Ledger",
         "status": "ANCHORED_TO_BLOCKCHAIN",
         "time": "2026-06-07 20:05"
+    },
+    {
+        "id": "tx_ANCHOR_001",
+        "type": "IDENTITY_ANCHOR",
+        "client": "Prisca Designs",
+        "asset": "Master Catalog",
+        "cid": "bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3jhf3jhf3jhf3jh",
+        "status": "STABLE_AND_VERIFIED",
+        "time": "2026-06-07 20:10"
     }
 ]
