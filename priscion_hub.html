@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Priscion | Architecting Sovereign Reality</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
+    <style>
+        :root { --accent: #7B35D4; --bg: #000; --surface: #0A0A0A; --border: #111; --muted: #666; }
+        * { box-sizing: border-box; }
+        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; overflow-x: hidden; }
+        nav { height: 90px; display: flex; align-items: center; justify-content: space-between; padding: 0 8%; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; }
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-links a { color: #fff; text-decoration: none; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--accent); }
+        .p-logo { height: 35px; cursor: pointer; }
+        
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content { display: none; position: absolute; background: #080808; min-width: 200px; border: 1px solid #222; border-radius: 15px; padding: 15px; top: 30px; left: 0; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .dropdown:hover .dropdown-content { display: block; }
+        .dropdown-content a { display: block; padding: 10px 0; border-bottom: 1px solid #111; margin: 0; }
+        .dropdown-content a:last-child { border-bottom: none; }
+
+        .hero { padding: 150px 8% 100px; text-align: center; }
+        .hero h1 { font-size: clamp(3rem, 10vw, 6rem); font-weight: 900; line-height: 0.9; letter-spacing: -4px; margin: 0; }
+        .hero p { color: var(--muted); font-size: 1.2rem; max-width: 700px; margin: 30px auto; }
+        
+        .cta-btn { background: #fff; color: #000; padding: 20px 45px; border-radius: 100px; text-decoration: none; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; transition: 0.4s; display: inline-block; }
+        .cta-btn:hover { background: var(--accent); color: #fff; transform: scale(1.05); box-shadow: 0 10px 30px rgba(123,53,212,0.4); }
+
+        section { padding: 120px 8%; }
+        .section-header { margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 900; margin: 0; letter-spacing: -1px; }
+
+        .grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 30px; padding: 50px; transition: 0.4s; }
+        .card:hover { border-color: var(--accent); transform: translateY(-10px); }
+        .card h3 { font-size: 1.5rem; margin: 0; font-weight: 900; }
+        .card p { color: var(--muted); font-size: 0.95rem; margin-top: 20px; }
+
+        .sidebar { position: fixed; right: -420px; top: 0; width: 400px; height: 100vh; background: #000; z-index: 2000; border-left: 1px solid var(--border); transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .sidebar.active { right: 0; }
+
+        @media(max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3.5rem; }
+            .sidebar { width: 100%; right: -100%; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <img src="assets/p-logo.png" class="p-logo" onclick="location.href='index.html'">
+        <div class="nav-links">
+            <div class="dropdown">
+                <a href="#">Products ▾</a>
+                
+                <div class="dropdown-content">
+                    <a href="nurasen/">Nurasen</a>
+                    <a href="dpanyard/">dpanyard</a>
+                    <a href="calalloo/">Calalloo</a>
+                    <a href="peanuts/">Peanuts</a>
+                    <a href="gridlock/">Gridlock</a>
+                </div>
+
+            </div>
+            <a href="brands/">Shops</a>
+            <a href="#mission">Mission</a>
+            <a href="whitepaper/">White Paper</a>
+            <a href="leggo.html" style="background:var(--accent); padding:10px 20px; border-radius:10px; color:#fff;">OS</a>
+        </div>
+    </nav>
+
+    <div style="background:var(--accent); color:#fff; padding:15px; text-align:center; font-size:0.7rem; font-weight:900; letter-spacing:3px; text-transform:uppercase; position:fixed; top:90px; width:100%; z-index:999;">SOVEREIGN LAYER 1 TRANSITION IN PROGRESS</div>
+    <div class="hero" style="padding-top:200px;">
+        <h1>Architecting<br>Sovereignty.</h1>
+        <p>The first Layer 1 Neural Ledger bridging high-fidelity Web2 engineering with the deterministic power of Web3.</p>
+        <div style="margin-top:40px; display:flex; gap:20px; justify-content:center;">
+            <a href="leggo.html" class="cta-btn" style="background:var(--accent); color:#fff;">ENTER THE OS</a>
+            <a href="brands/" class="cta-btn">BROWSE SHOPS</a>
+        </div>
+        
+        <div style="margin-top:80px; background:linear-gradient(145deg, #0A0A0A, #111); border:1px solid var(--accent); padding:40px; border-radius:30px; max-width:800px; margin-left:auto; margin-right:auto;">
+            <h3 style="color:var(--accent); font-weight:900; letter-spacing:2px; text-transform:uppercase; font-size:0.8rem;">Sovereign White Paper</h3>
+            <p style="color:#888; font-size:1.1rem; line-height:1.6;">Detailed utility, legal framework, and the $PRN, $MUSD, $NRL economic model.</p>
+            <a href="whitepaper/" class="cta-btn" style="padding:12px 30px; font-size:0.6rem;">READ MANIFESTO</a>
+        </div>
+    </div>
+
+    <section id="mission" style="background:var(--surface);">
+        <div class="section-header">
+            <h2>Our Foundation</h2>
+            <p style="color:var(--accent); font-weight:900; text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; margin-top:10px;">The Way Made Known</p>
+        </div>
+        <div style="max-width:800px; font-size:1.2rem; color:#AAA;">
+            <p>Priscion is built on a spiritual skeleton. <b>The Way Made Known</b> mission focuses on analytical faith, evidence, and the proclamation of the Gospel. To ensure this backbone remains immovable, 10% of all transactions across the ledger are hardcoded to the TWMK Endowment.</p>
+            <div style="margin-top:40px;">
+                <a href="thewaymadeknown/" class="cta-btn" style="background:var(--accent); color:#fff;">PURPOSE</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="section-header">
+            <h2>Ecosystem Services</h2>
+            <p style="color:var(--accent); font-weight:900; text-transform:uppercase; font-size:0.7rem; letter-spacing:2px; margin-top:10px;">High-Fidelity Engineering</p>
+        </div>
+        <div class="grid-cards">
+            <div class="card" onclick="buy('Digital Architecture', '499.00')" style="cursor:pointer;">
+                <h3>Digital Architecture</h3>
+                <p>Full-scale Web2/Web3 infrastructure, identity engineering, and high-performance app development.</p>
+                <button class="cta-btn" style="padding:10px 20px; font-size:0.6rem; margin-top:20px;">ACQUIRE SERVICE</button>
+            </div>
+            <div class="card" onclick="buy('Neural Security', '299.00')" style="cursor:pointer;">
+                <h3>Neural Security</h3>
+                <p>Deep signal inspection, neural firewalling, and sovereign asset protection protocols.</p>
+                <button class="cta-btn" style="padding:10px 20px; font-size:0.6rem; margin-top:20px;">ACQUIRE SERVICE</button>
+            </div>
+            <div class="card" onclick="buy('Legacy Tokenization', '799.00')" style="cursor:pointer;">
+                <h3>Legacy Tokenization</h3>
+                <p>Establishing on-chain heritage, Sovereign Handles, and high-fidelity asset minting.</p>
+                <button class="cta-btn" style="padding:10px 20px; font-size:0.6rem; margin-top:20px;">ACQUIRE SERVICE</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="sidebar" class="sidebar"></div>
+    <script src="wallet-core.js"></script>
+    <div id="google_translate_element" style="position:fixed; bottom:20px; right:20px; z-index:9999;"></div>
+    <script type="text/javascript">function googleTranslateElementInit(){new google.translate.TranslateElement({pageLanguage:"en"},"google_translate_element");}</script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
+
+
+<!-- Force Build Sync eb2335c836a397e5131081fa06c9d3da01fae5fc -->
