@@ -1,123 +1,59 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>SOVSYGNAL | Intelligence Hub</title>
-    <link rel='preconnect' href='https://fonts.googleapis.com'>
-    <link href='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;600;800&display=swap' rel='stylesheet'>
+    <meta charset="UTF-8">
+    <title>PRISCION | Your Digital World</title>
     <style>
-        :root { --primary: #D0021B; --bg: #F9F9F9; --text: #1A1A1A; --accent: #111; --font-heading: 'Playfair Display', serif; --font-body: 'Inter', sans-serif; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; }
-        header { background: #fff; padding: 30px 6%; border-bottom: 3px solid #000; text-align: center; position: sticky; top: 0; z-index: 1000; }
-        header h1 { font-family: var(--font-heading); font-size: 3.5rem; letter-spacing: -2px; line-height: 1; }
-        header h1 a { text-decoration: none; color: black; }
-        header p { text-transform: uppercase; letter-spacing: 6px; font-size: 0.7rem; font-weight: 800; color: #444; margin: 10px 0 20px; }
-        nav { display: flex; justify-content: center; gap: 25px; flex-wrap: wrap; border-top: 1px solid #eee; padding-top: 15px; }
-        nav a { text-decoration: none; color: #000; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        nav a:hover, nav a.active { color: var(--primary); }
-        .main-container { display: grid; grid-template-columns: 1fr 350px; gap: 60px; padding: 40px 6%; max-width: 1500px; margin: 0 auto; }
-        .category-tag { color: var(--primary); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; display: block; }
-        .news-card { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #eee; }
-        .news-card h3 { font-family: var(--font-heading); font-size: 1.8rem; line-height: 1.2; margin-bottom: 10px; }
-        .news-card h3 a { text-decoration: none; color: black; }
-        aside { padding-left: 40px; border-left: 1px solid #eee; }
-        .sidebar-ad { background: #000; color: white; padding: 30px; border-radius: 4px; margin-bottom: 30px; }
-        .sidebar-ad h4 { font-family: var(--font-heading); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
-        .sidebar-ad .btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; display: block; text-align: center; text-decoration: none; }
-        footer { background: #000; color: white; padding: 100px 6%; text-align: center; }
-        footer img { height: 70px; margin-bottom: 40px; }
-        footer p { font-size: 0.7rem; letter-spacing: 2px; opacity: 0.5; }
-        @media (max-width: 1024px) { .main-container { grid-template-columns: 1fr; } aside { border-left: none; padding-left: 0; } }
+        body { margin: 0; background: #000; color: #fff; font-family: 'Inter', sans-serif; }
+        nav { background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: fixed; top: 0; width: 100%; box-sizing: border-box; z-index: 100; border-bottom: 1px solid #111; }
+        .logo { height: 45px; }
+        .nav-icon { height: 30px; cursor: pointer; }
+        .container { max-width: 1200px; margin: 120px auto 40px; padding: 0 20px; text-align: center; }
+        h1 { font-size: 3.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        .subtitle { color: #888; font-size: 1.2rem; max-width: 600px; margin: 0 auto 60px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+        .card { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 40px; border-radius: 24px; text-align: left; transition: 0.3s; cursor: pointer; text-decoration: none; color: inherit; }
+        .card:hover { border-color: #333; transform: translateY(-5px); background: #0f0f0f; }
+        .card img { width: 50px; margin-bottom: 20px; }
+        .card h3 { margin: 0 0 10px; font-size: 1.4rem; }
+        .card p { color: #666; margin: 0; line-height: 1.5; }
     </style>
 </head>
 <body>
-    <header>
-        <h1><a href='index.html'>SOVSYGNAL</a></h1>
-        <p>Global Intelligence Hub for the Sovereign Architect</p>
-        <nav>
-            <a href='index.html'>Headlines</a>
-            <a href='geopolitics.html'>Geopolitics</a>
-            <a href='blockchain.html'>Blockchain</a>
-            <a href='biohacking.html'>Biohacking</a>
-            <a href='markets.html'>Markets</a>
-            <a href='lifestyle.html'>Lifestyle</a>
-            <a href='intelligence.html'>Intelligence</a>
-        </nav>
-    </header>
-    <div class='main-container'>
-        <main>
-        <article class='news-card'>
-            <span class='category-tag'>Geopolitics Pulse</span>
-            <h3><a href='geopolitics.html'>Global Energy Security: US Oil Producers Prepare for High-Fidelity Production Ramp.</a></h3>
-            <div class='source-tag'>Verified Signal: Reuters | <a href='https://www.reuters.com/' target='_blank'>[REFERENCE]</a></div>
-            <p style='font-size: 1.1rem; color: #333;'>Domestic US energy firms are signaling the capacity to significantly increase output, providing a tactical buffer against Middle Eastern supply volatility.</p>
-        </article>
+    <nav>
+        <img src="assets/priscion_logo.png" class="logo" alt="PRISCION">
+        <div style="display: flex; gap: 24px; align-items: center;">
+            <a href="pulse.html" style="color:#888; text-decoration:none;">Explorer</a>
+            <a href="muse.html"><img src="assets/muse_icon.png" class="nav-icon" alt="Wallet"></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Building the Future</h1>
+        <p class="subtitle">A simple, safe, and private world for your digital life. No complicated tech, just a better way to connect.</p>
         
-        <article class='news-card'>
-            <span class='category-tag'>Blockchain Pulse</span>
-            <h3><a href='blockchain.html'>Financial Sovereignty: Trump Jr. Extols Blockchain Virtues at Swiss Business Gathering.</a></h3>
-            <div class='source-tag'>Verified Signal: Reuters | <a href='https://www.reuters.com/world/us/trump-jr-talks-crypto-geopolitics-business-gathering-switzerland-2026-06-04/' target='_blank'>[REFERENCE]</a></div>
-            <p style='font-size: 1.1rem; color: #333;'>Donald Trump Jr. emphasized blockchain as a critical tool for financial independence and geopolitical resilience during a major business summit in Switzerland.</p>
-        </article>
-        
-        <article class='news-card'>
-            <span class='category-tag'>Biohacking Pulse</span>
-            <h3><a href='biohacking.html'>Pediatric Gene Breakthrough: Vertex Reports Sickle Cell Milestones for Children.</a></h3>
-            <div class='source-tag'>Verified Signal: Reuters Health | <a href='https://www.reuters.com/company/crispr-therapeutics-ag/' target='_blank'>[REFERENCE]</a></div>
-            <p style='font-size: 1.1rem; color: #333;'>Clinical results confirm gene therapy effectively prevents painful events in children aged 5-11, marking a high-fidelity victory for regenerative biohacking.</p>
-        </article>
-        
-        <article class='news-card'>
-            <span class='category-tag'>Markets Pulse</span>
-            <h3><a href='markets.html'>S&P 500 Market Resilience: Indices Maintain Record Growth Path in 2026.</a></h3>
-            <div class='source-tag'>Verified Signal: Reuters Markets | <a href='https://www.reuters.com/technology/' target='_blank'>[REFERENCE]</a></div>
-            <p style='font-size: 1.1rem; color: #333;'>Broad market indices remain robust as analysts project continued growth, driven by AI sector performance and stabilized geopolitical signals in the energy corridor.</p>
-        </article>
-        
-        <article class='news-card'>
-            <span class='category-tag'>Lifestyle Pulse</span>
-            <h3><a href='lifestyle.html'>Urban Resiliency Architecture: Lord Norman Foster at Bloomberg CityLab 2026.</a></h3>
-            <div class='source-tag'>Verified Signal: Bloomberg CityLab | <a href='https://www.youtube.com/watch?v=M-naGvf2NUE' target='_blank'>[REFERENCE]</a></div>
-            <p style='font-size: 1.1rem; color: #333;'>Architect Lord Norman Foster outlined strategies for designing resilient, high-fidelity cities that can withstand systemic economic and social disruptions.</p>
-        </article>
-        
-        <article class='news-card'>
-            <span class='category-tag'>Intelligence Pulse</span>
-            <h3><a href='intelligence.html'>Counterintelligence Alert: Pentagon Elevates Threat Assessment to Critical.</a></h3>
-            <div class='source-tag'>Verified Signal: The Nation / Intelligence | <a href='https://www.facebook.com/TheNationThailand/posts/the-pentagons-intelligence-arm-has-reportedly-raised-its-counterintelligence-thr/1431536062333057/' target='_blank'>[REFERENCE]</a></div>
-            <p style='font-size: 1.1rem; color: #333;'>Defense intelligence signals have triggered an elevation in risk assessments as external agents target the metadata and telemetry of military nodes.</p>
-        </article>
-        </main>
-        <aside>
-            <div class='sidebar-ad'>
-                <h4>PRISCION</h4>
-                <p>The sovereign blockchain infrastructure. $PRN anchors the digital economy.</p>
-                <a href='https://priscion.com' class='btn'>Explore Ledger</a>
-            </div>
-            <div class='sidebar-ad' style='background:#fff; color:#000; border:1px solid #000;'>
-                <h4>ORCINOS</h4>
-                <p>Apex intelligence SaaS. Automated digital agency protocols.</p>
-                <a href='https://priscadezigns.org/orcinos/' class='btn' style='background:#000;'>Launch Dashboard</a>
-            </div>
-            <div class='sidebar-ad' style='background:#111; color:white; text-align:center; border:2px solid var(--primary);'>
-                <h4 style='color:var(--primary);'>PUT YOUR ADD HERE</h4>
-                <p style='font-size:1.5rem; font-weight:800; margin-bottom:5px;'>$297/mo</p>
-                <p style='font-size:1.2rem; font-weight:600; margin-bottom:10px; opacity:0.8;'>$2,970/yr</p>
-                <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=priscadezigns9@gmail.com&amount=297.00&currency_code=USD&item_name=SOVSYGNAL%20Sovereign%20Slot%20(Monthly)' class='btn'>Book Monthly</a>
-                <a href='https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=priscadezigns9@gmail.com&amount=2970.00&currency_code=USD&item_name=SOVSYGNAL%20Sovereign%20Slot%20(Yearly)' class='btn' style='margin-top:10px; background:#333; border:1px solid #555;'>Book Yearly</a>
-            </div>
-            <div class='sidebar-ad'>
-                <h4>PRISCA DEZIGNS</h4>
-                <p>High-fidelity web architecture and digital empire engineering.</p>
-                <a href='https://priscadezigns.org' class='btn'>Build Empire</a>
-            </div>
-        </aside>
+        <div class="grid">
+            <a href="muse.html" class="card">
+                <img src="assets/muse_icon.png">
+                <h3>MUSE Wallet</h3>
+                <p>A safe place for your coins and digital art. Easy to use, impossible to lose.</p>
+            </a>
+            <a href="swap.html" class="card">
+                <img src="assets/chillata_icon.png">
+                <h3>CHILLATA Trade</h3>
+                <p>Change your coins quickly and safely without any middlemen.</p>
+            </a>
+            <a href="pulse.html" class="card">
+                <img src="assets/pulse_icon.png">
+                <h3>PULSE Search</h3>
+                <p>See everything happening on the network in real-time.</p>
+            </a>
+            <a href="lynx.html" class="card">
+                <img src="assets/lynx_icon.png">
+                <h3>LYNX Chat</h3>
+                <p>Message your friends in a private, encrypted way that only you can read.</p>
+            </a>
+        </div>
     </div>
-    <footer>
-        <img src='assets/logos/sovereign_footer_logo.jpg' alt='Prisca Dezigns'>
-        <p>&copy; 2026 SOVSYGNAL &middot; PRISCA DEZIGNS EMPIRE MEDIA</p>
-    </footer>
 </body>
 </html>
