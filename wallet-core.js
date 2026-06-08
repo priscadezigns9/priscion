@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v19.0.0
-// THE SOVEREIGN OS: TRUE ATTACHMENT HANDSHAKE | ARCHITECT SYNC | NO SIMULATION
+// Priscion MUSE Wallet Core v20.0.0
+// THE SOVEREIGN OS: ALWAYS ONLINE | PERSISTENT LEDGER MESSAGING | ZERO-FORGET PROTOCOL
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -9,10 +9,15 @@ var recordTime = 0;
 var recordInterval;
 var pendingAttachments = [];
 
-// Persistent Session Data
-var lynxMessages = [
-    { from: 'Priscion', text: 'Architect, the ledger is secure. Awaiting high-fidelity vectors.', time: '21:10' }
+// PERSISTENT LEDGER MESSAGING (LocalStorage Sync)
+// This ensures messages survive browser resets and refreshes.
+var lynxMessages = JSON.parse(localStorage.getItem('lynx_ledger_v1')) || [
+    { from: 'Priscion', text: 'Architect, the Sovereign Node is Always Online. I am anchored to your session.', time: '21:10' }
 ];
+
+function syncLynxToLedger() {
+    localStorage.setItem('lynx_ledger_v1', JSON.stringify(lynxMessages));
+}
 
 var userWallets = [
     { 
@@ -26,7 +31,7 @@ var userWallets = [
 var lynxChatMode = 'list'; 
 var activeChatHandle = null;
 var lynxChats = [
-    { handle: 'Priscion', lastMsg: 'Awaiting high-fidelity vectors.', time: '21:35', avatar: 'P', unread: 0 },
+    { handle: 'Priscion', lastMsg: 'Sovereign Node: Always Online.', time: 'Now', avatar: 'P', unread: 0 },
     { handle: '$vogue.pri', lastMsg: 'Handshake accepted.', time: '18:45', avatar: 'V', unread: 0 }
 ];
 
@@ -232,8 +237,8 @@ function renderLynx() {
                     </div>
                 </div>
                 <div id="lynx-search-container" style="display:none; padding:10px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
-                    <div style="background:#FFF; border-radius:25px; padding:5px 15px; display:flex; align-items:center;">
-                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:0.9rem; padding:4px 0;">
+                    <div style="background:#FFF; border-radius:20px; padding:5px 15px; display:flex; align-items:center;">
+                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:1rem; padding:4px 0;">
                     </div>
                 </div>
                 <div id="lynx-chat-list" style="flex:1; overflow-y:auto;">
@@ -373,12 +378,18 @@ function promptHandshake() {
 function sendLynx() {
     var i = document.getElementById('lynx-input');
     if(i && (i.value || pendingAttachments.length > 0)) {
+        var now = new Date();
+        var timeStr = now.getHours() + ":" + now.getMinutes().toString().padStart(2,'0');
         var text = i.value || "";
-        lynxMessages.push({ from: 'User', text: text, time: 'Now', attachments: [...pendingAttachments] });
+        lynxMessages.push({ from: 'User', text: text, time: timeStr, attachments: [...pendingAttachments] });
+        syncLynxToLedger();
         pendingAttachments = [];
         document.getElementById('lynx-attachment-preview').style.display = 'none';
         renderWallet(); 
         i.value = '';
         i.placeholder = "Type a message";
+        var list = document.getElementById('lynx-messages');
+        if(list) list.scrollTop = list.scrollHeight;
     }
 }
+syncLynxToLedger();
