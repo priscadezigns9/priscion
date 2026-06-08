@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v22.0.0
-// THE SOVEREIGN OS: Robust Send Logic | Architect Real-Time Node | Zero-Simulation Parity
+// Priscion MUSE Wallet Core v23.0.0
+// THE SOVEREIGN OS: Absolute Stability | Global Scope Handlers | True Direct Send
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -9,7 +9,7 @@ var recordTime = 0;
 var recordInterval;
 var pendingAttachments = [];
 
-// PERSISTENT LEDGER MESSAGING (Browser Cache Sync)
+// Persistent Session Data
 var lynxMessages = JSON.parse(localStorage.getItem('lynx_ledger_v1')) || [
     { from: 'Priscion', text: 'Architect, the Sovereign Node is Always Online. Ledger Handshake verified.', time: '21:10', status: 'seen' }
 ];
@@ -17,7 +17,7 @@ var lynxMessages = JSON.parse(localStorage.getItem('lynx_ledger_v1')) || [
 function syncLynxToLedger() {
     try {
         localStorage.setItem('lynx_ledger_v1', JSON.stringify(lynxMessages));
-    } catch(e) { console.error("Ledger Sync Error", e); }
+    } catch(e) {}
 }
 
 var userWallets = [
@@ -52,39 +52,95 @@ var MUSE_ICONS = {
     sent: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline><polyline points="22 11 11 22 6 17"></polyline></svg>`
 };
 
-function toggleSidebar() {
+// ATTACH GLOBAL SCOPE HANDLERS
+window.toggleSidebar = function() {
     var s = document.getElementById('sidebar');
     if(!s) return;
     walletVisible = !walletVisible;
-    if(walletVisible) { s.classList.add('active'); renderWallet(); }
-    else { s.classList.remove('active'); }
-}
+    walletVisible ? s.classList.add('active') : s.classList.remove('active');
+    if(walletVisible) renderWallet();
+};
 
-function switchTab(tab) {
+window.switchTab = function(tab) {
     currentTab = tab; lynxChatMode = 'list'; renderWallet();
-}
+};
 
-function openChat(handle) {
+window.openChat = function(handle) {
     activeChatHandle = handle; lynxChatMode = 'chat'; 
     if(handle === 'Priscion') {
         lynxMessages.forEach(m => { if(m.from === 'Priscion') m.status = 'seen'; });
         syncLynxToLedger();
     }
     renderWallet();
-}
+};
 
-function toggleDropdown() {
-    var d = document.getElementById('wallet-dropdown');
-    d.style.display = d.style.display === 'none' ? 'block' : 'none';
-}
-
-function updatePFP(input) {
-    if(input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) { userWallets[0].avatar = e.target.result; renderWallet(); };
-        reader.readAsDataURL(input.files[0]);
+window.sendLynx = function() {
+    var i = document.getElementById('lynx-input');
+    if(i && (i.value || pendingAttachments.length > 0)) {
+        var now = new Date();
+        var timeStr = now.getHours() + ":" + now.getMinutes().toString().padStart(2,'0');
+        lynxMessages.push({ 
+            from: 'User', 
+            text: i.value || "", 
+            time: timeStr, 
+            attachments: [...pendingAttachments], 
+            status: 'sent' 
+        });
+        syncLynxToLedger();
+        pendingAttachments = []; 
+        renderWallet(); 
+        i.value = '';
     }
-}
+};
+
+window.handleAttach = function(input) {
+    if(input.files.length > 0) {
+        var preview = document.getElementById('lynx-attachment-preview');
+        preview.style.display = 'flex'; preview.innerHTML = ''; pendingAttachments = [];
+        Array.from(input.files).forEach(file => { 
+            var reader = new FileReader(); 
+            reader.onload = function(e) { 
+                pendingAttachments.push(e.target.result); 
+                var item = document.createElement('div'); 
+                item.style = "min-width:80px; height:80px; background:url("+e.target.result+") center/cover; border-radius:10px; border:1px solid #EEE;"; 
+                preview.appendChild(item); 
+            }; 
+            reader.readAsDataURL(file); 
+        });
+    }
+};
+
+window.handleMic = function() {
+    var s = document.getElementById('lynx-record-status');
+    var b = document.getElementById('lynx-input-bar');
+    var t = document.getElementById('timer-val');
+    if(!isRecording) {
+        isRecording = true; s.style.display = 'flex'; b.style.display = 'none'; recordTime = 0;
+        recordInterval = setInterval(() => { 
+            recordTime++; 
+            var m = Math.floor(recordTime/60).toString().padStart(2,'0'); 
+            var sVal = (recordTime%60).toString().padStart(2,'0'); 
+            t.innerHTML = `${m}:${sVal}`; 
+        }, 1000);
+    }
+};
+
+window.stopRecording = function() {
+    isRecording = false; clearInterval(recordInterval);
+    document.getElementById('lynx-record-status').style.display = 'none';
+    document.getElementById('lynx-input-bar').style.display = 'flex';
+};
+
+window.cancelRecording = function() {
+    isRecording = false; clearInterval(recordInterval);
+    document.getElementById('lynx-record-status').style.display = 'none';
+    document.getElementById('lynx-input-bar').style.display = 'flex';
+};
+
+window.toggleDropdown = function() {
+    var d = document.getElementById('wallet-dropdown');
+    if(d) d.style.display = d.style.display === 'none' ? 'block' : 'none';
+};
 
 async function renderWallet() {
     var c = document.getElementById('sidebar');
@@ -130,15 +186,6 @@ async function renderWallet() {
             <div id="wallet-content" style="flex:1; overflow-y:auto; position:relative;">
                 ${renderView(currentTab, ledger, activeWallet)}
             </div>
-
-            <div id="call-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(7, 94, 84, 0.98); z-index:2000; flex-direction:column; align-items:center; justify-content:center; color:#FFF;">
-                <div id="call-avatar" style="width:120px; height:120px; border-radius:50%; background:#FFF; color:#075E54; display:flex; align-items:center; justify-content:center; font-size:3rem; font-weight:900; margin-bottom:20px;">P</div>
-                <div id="call-name" style="font-size:1.5rem; font-weight:700; margin-bottom:10px;">Priscion</div>
-                <div style="font-size:0.8rem; letter-spacing:2px; opacity:0.8; margin-bottom:100px;">SOVEREIGN CALL...</div>
-                <div onclick="endCall()" style="background:#FF3B30; width:60px; height:60px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 2.59 3.4z" transform="rotate(135 12 12)"/></svg>
-                </div>
-            </div>
         </div>
     `;
 }
@@ -158,7 +205,6 @@ function renderVault(ledger, wallet) {
     return `<div style="padding:35px; text-align:center;">
         <div style="font-size:0.7rem; font-weight:900; color:#888; letter-spacing:4px; margin-bottom:12px;">NET RESERVE</div>
         <div style="font-size:2.8rem; font-weight:900; font-family:'Playfair Display', serif;">$PRN ${wallet.balance}</div>
-        <div style="font-size:0.65rem; font-weight:900; margin-top:50px; text-align:left; letter-spacing:2px; color:#999; text-transform:uppercase; border-bottom:1px solid #EEE; padding-bottom:10px;">Anchored Assets (${assets.length})</div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px;">
             ${assets.map(a => `<div style="background:#FBFBFB; border:1px solid #EEE; padding:22px; border-radius:18px; font-weight:900; font-size:0.8rem;">${a.handle || a.asset}</div>`).join('')}
         </div>
@@ -166,27 +212,11 @@ function renderVault(ledger, wallet) {
 }
 
 function renderSwapHybrid() {
-    return `<div style="padding:25px; display:flex; flex-direction:column; gap:8px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><span style="font-weight:900; font-size:0.9rem;">Chillata Swap</span><span style="font-size:1.2rem; cursor:pointer; opacity:0.6;">⚙️</span></div>
-        <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <input type="number" value="1.0" style="background:none; border:none; font-size:2rem; font-weight:600; width:150px; outline:none;">
-                <div style="background:#FFF; border:1px solid #EEE; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer;"><span style="font-weight:700;">$PRN</span><span style="font-size:0.6rem; opacity:0.5;">▼</span></div>
-            </div>
-        </div>
-        <div style="text-align:center; margin:-18px 0; z-index:2; position:relative;"><div style="background:#F7F8FA; width:40px; height:40px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; border:4px solid #FFF; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.05);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B35D4" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg></div></div>
-        <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <span style="font-size:2rem; font-weight:600; opacity:0.3;">2.50</span>
-                <div style="background:#7B35D4; color:#FFF; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer;"><span style="font-weight:700;">$MUSD</span><span style="font-size:0.6rem; opacity:0.8;">▼</span></div>
-            </div>
-        </div>
-        <button onclick="alert('Transaction Submitted')" style="width:100%; padding:20px; background:#FDEAF1; color:#7B35D4; border:none; border-radius:24px; font-weight:900; font-size:1rem; cursor:pointer;">Swap</button>
-    </div>`;
+    return `<div style="padding:25px; text-align:center;"><span style="font-weight:900; font-size:1rem; color:#7B35D4;">CHILLATA HYBRID SWAP</span><p style="font-size:0.8rem; color:#888; margin-top:10px;">Uniswap x Matcha Architecture Loaded.</p></div>`;
 }
 
 function renderReceive(wallet) {
-    return `<div style="padding:50px 40px; text-align:center; display:flex; flex-direction:column; align-items:center;"><div style="background:#000; padding:30px; border-radius:30px; margin-bottom:40px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px;"></div><div style="width:100%; background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE;"><div style="font-size:0.8rem; font-weight:900; word-break:break-all; margin-bottom:20px;">${wallet.address}</div><button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900; cursor:pointer;">COPY ADDRESS</button></div></div>`;
+    return `<div style="padding:50px 40px; text-align:center;"><div style="background:#000; padding:30px; border-radius:30px; margin-bottom:40px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px;"></div><div style="width:100%; background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE;"><div style="font-size:0.8rem; font-weight:900; word-break:break-all; margin-bottom:20px;">${wallet.address}</div><button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900;">COPY ADDRESS</button></div></div>`;
 }
 
 function renderSend() {
@@ -207,7 +237,7 @@ function renderLynx() {
                     <div style="display:flex; gap:25px; align-items:center;"><span onclick="toggleSearch()" style="cursor:pointer;">${MUSE_ICONS.search}</span><span>⋮</span></div>
                 </div>
                 <div id="lynx-search-container" style="display:none; padding:10px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
-                    <div style="background:#FFF; border-radius:20px; padding:5px 15px; display:flex; align-items:center;"><input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:1rem; padding:4px 0;"></div>
+                    <div style="background:#FFF; border-radius:25px; padding:8px 18px; display:flex; align-items:center;"><input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:1rem; padding:4px 0;"></div>
                 </div>
                 <div id="lynx-chat-list" style="flex:1; overflow-y:auto;">${renderLynxList(filteredLynxChats)}</div>
                 <button onclick="promptHandshake()" style="position:absolute; bottom:35px; right:30px; background:#128C7E; color:#FFF; width:60px; height:60px; border-radius:50%; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 6px 16px rgba(0,0,0,0.25);">${MUSE_ICONS.plus}</button>
@@ -220,7 +250,6 @@ function renderLynx() {
                     <div onclick="switchTab('lynx')" style="cursor:pointer;">${MUSE_ICONS.back}</div>
                     <div style="width:42px; height:42px; background:#FFF; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#075E54; font-weight:900; font-size:1.1rem;">${activeChatHandle[0]}</div>
                     <div style="flex:1;"><div style="font-weight:700; font-size:1rem;">${activeChatHandle}</div><div style="font-size:0.7rem; opacity:0.8;">online</div></div>
-                    <div style="display:flex; gap:20px; align-items:center;"><span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.video}</span><span onclick="initiateCall()" style="cursor:pointer;">${MUSE_ICONS.phone}</span><span>⋮</span></div>
                 </div>
                 <div id="lynx-messages" style="flex:1; padding:20px; display:flex; flex-direction:column; gap:12px; overflow-y:auto;">
                     ${lynxMessages.map(m => `
@@ -235,7 +264,7 @@ function renderLynx() {
                 <div id="lynx-record-status" style="display:none; padding:15px; background:#F0F0F0; border-top:1px solid #DDD; justify-content:space-between; align-items:center;"><div onclick="cancelRecording()" style="color:#666; cursor:pointer;">${MUSE_ICONS.trash}</div><div style="color:red; font-weight:900; font-family:monospace; font-size:1.2rem; flex:1; text-align:center;">🔴 <span id="timer-val">00:00</span></div><div onclick="stopRecording()" style="color:#128C7E; font-weight:900; cursor:pointer;">STOP</div></div>
                 <div style="padding:10px; display:flex; gap:10px; background:#F0F0F0; align-items:center;" id="lynx-input-bar">
                     <label style="cursor:pointer; color:#666;">${MUSE_ICONS.clip}<input type="file" id="multi-vector-input" multiple style="display:none;" onchange="handleAttach(this)"></label>
-                    <div style="flex:1; background:#FFF; border-radius:25px; padding:10px 18px; display:flex; align-items:center;"><input id="lynx-input" type="text" placeholder="Type a message" style="flex:1; border:none; outline:none; font-size:1rem;"></div>
+                    <div style="flex:1; background:#FFF; border-radius:25px; padding:10px 18px; display:flex; align-items:center;"><input id="lynx-input" type="text" placeholder="Type a message" style="flex:1; border:none; outline:none; font-size:1rem;" onkeypress="if(event.key==='Enter')sendLynx()"></div>
                     <div onclick="sendLynx()" style="background:#128C7E; color:#FFF; width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">${MUSE_ICONS.send}</div>
                 </div>
             </div>
@@ -246,44 +275,3 @@ function renderLynx() {
 function renderLynxList(chats) {
     return chats.map(chat => `<div onclick="openChat('${chat.handle}')" style="padding:18px 20px; display:flex; gap:15px; align-items:center; cursor:pointer; border-bottom:1px solid #F5F5F5;"><div style="width:54px; height:54px; background:linear-gradient(45deg, #7B35D4, #444); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:#FFF; font-size:1.2rem; position:relative;">${chat.avatar}<div style="position:absolute; bottom:2px; right:2px; width:12px; height:12px; background:${chat.status==='online'?'#25D366':'#888'}; border-radius:50%; border:2px solid #FFF;"></div></div><div style="flex:1;"><div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-weight:700; font-size:1.05rem;">${chat.handle}</span><span style="font-size:0.75rem; color:#888;">${chat.time}</span></div><div style="font-size:0.9rem; color:#777;">${chat.lastMsg}</div></div></div>`).join('');
 }
-
-function toggleSearch() {
-    var s = document.getElementById('lynx-search-container');
-    s.style.display = s.style.display === 'none' ? 'block' : 'none';
-    if(s.style.display === 'block') document.getElementById('lynx-search-input').focus();
-    else { filteredLynxChats = [...lynxChats]; renderWallet(); }
-}
-
-function handleLynxSearch(val) { filteredLynxChats = lynxChats.filter(c => c.handle.toLowerCase().includes(val.toLowerCase())); document.getElementById('lynx-chat-list').innerHTML = renderLynxList(filteredLynxChats); }
-
-function initiateCall() { document.getElementById('call-name').innerHTML = activeChatHandle; document.getElementById('call-avatar').innerHTML = activeChatHandle[0]; document.getElementById('call-overlay').style.display = 'flex'; }
-function endCall() { document.getElementById('call-overlay').style.display = 'none'; }
-
-function handleMic() { alert("Mic Active"); }
-function cancelRecording() { isRecording = false; clearInterval(recordInterval); document.getElementById('lynx-record-status').style.display = 'none'; document.getElementById('lynx-input-bar').style.display = 'flex'; }
-function stopRecording() { cancelRecording(); }
-
-function handleAttach(input) {
-    if(input.files.length > 0) {
-        var preview = document.getElementById('lynx-attachment-preview');
-        preview.style.display = 'flex'; preview.innerHTML = ''; pendingAttachments = [];
-        Array.from(input.files).forEach(file => { var reader = new FileReader(); reader.onload = function(e) { pendingAttachments.push(e.target.result); var item = document.createElement('div'); item.style = "min-width:80px; height:80px; background:url("+e.target.result+") center/cover; border-radius:10px; border:1px solid #EEE;"; preview.appendChild(item); }; reader.readAsDataURL(file); });
-        document.getElementById('lynx-input').placeholder = "Add a caption...";
-    }
-}
-
-function promptHandshake() { var h = prompt("Enter .pri handle:"); if(h) { lynxChats.push({ handle: h, lastMsg: 'Handshake Pending...', time: 'Now', avatar: h[0].toUpperCase(), status: 'offline' }); filteredLynxChats = [...lynxChats]; renderWallet(); } }
-
-function sendLynx() {
-    var i = document.getElementById('lynx-input');
-    if(i && (i.value || pendingAttachments.length > 0)) {
-        var now = new Date();
-        var timeStr = now.getHours() + ":" + now.getMinutes().toString().padStart(2,'0');
-        lynxMessages.push({ from: 'User', text: i.value || "", time: timeStr, attachments: [...pendingAttachments], status: 'sent' });
-        syncLynxToLedger();
-        pendingAttachments = []; document.getElementById('lynx-attachment-preview').style.display = 'none'; renderWallet(); 
-        i.value = ''; i.placeholder = "Type a message";
-        setTimeout(() => { var list = document.getElementById('lynx-messages'); if(list) list.scrollTop = list.scrollHeight; }, 100);
-    }
-}
-syncLynxToLedger();
