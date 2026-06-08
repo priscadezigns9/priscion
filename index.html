@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Priscion | The Sovereign Ledger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --text: #1A1A1A;
+            --muted: #666666;
+            --accent: #7B35D4; --chillata: #FF4D4D; --atelia: #00D2FF; --dreaming: #FF00E5;
+            --border: rgba(0,0,0,0.08);
+            --surface: #F9F9F9;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+
+        nav {
+            height: 90px; padding: 0 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px); z-index: 1000;
+        }
+        .logo { height: 40px; cursor: pointer; }
+        .nav-links { display: flex; gap: 35px; align-items: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--text);
+            font-size: 0.6rem; font-weight: 900; letter-spacing: 2px;
+            text-transform: uppercase; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        .hero { padding: 120px 8% 80px; text-align: center; }
+        .hero h1 { font-family: var(--font-heading); font-size: 5.5rem; line-height: 1; margin-bottom: 20px; letter-spacing: -2px; }
+        .hero p { max-width: 600px; margin: 0 auto 40px; color: var(--muted); font-size: 1.1rem; }
+
+        .section-label { font-size: 0.7rem; font-weight: 900; letter-spacing: 5px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: block; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; padding: 0 8%; margin-bottom: 100px; }
+        .service-card {
+            background: var(--surface); padding: 50px; border-radius: 30px;
+            border: 1px solid var(--border); transition: 0.5s; cursor: pointer;
+            position: relative; overflow: hidden;
+        }
+        .service-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
+        .service-card h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 15px; }
+        .service-card .price { font-weight: 900; font-size: 0.8rem; color: var(--accent); margin-bottom: 25px; letter-spacing: 1px; }
+        .service-card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 30px; }
+
+        .service-details { list-style: none; padding: 0; }
+        .service-details li {
+            padding: 12px 0; border-top: 1px solid var(--border);
+            font-size: 0.75rem; font-weight: 600; color: var(--text);
+            display: flex; justify-content: space-between;
+        }
+
+        .btn {
+            background: #1A1A1A; color: #FFFFFF; padding: 18px 35px; border-radius: 100px;
+            font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+            display: inline-block; transition: 0.4s; border: none; cursor: pointer;
+        }
+        .btn:hover { background: var(--accent); transform: scale(1.05); }
+
+        .sidebar {
+            position: fixed; top: 0; right: -500px; width: 500px; height: 100vh;
+            background: #FFFFFF; border-left: 1px solid var(--border);
+            z-index: 2000; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            visibility: hidden; box-shadow: -20px 0 60px rgba(0,0,0,0.05);
+        }
+        .sidebar.active { right: 0 !important; visibility: visible !important; }
+
+        footer { padding: 80px 8%; border-top: 1px solid var(--border); text-align: center; }
+        .copyright { color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+
+        @media(max-width: 768px) {
+            .sidebar { width: 100%; right: -100%; }
+            nav { padding: 0 5%; }
+            .hero h1 { font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="assets/priscion_logo.png" class="logo" onclick="location.href='index.html'">
+        <div class="nav-links">
+            <a href="whitepaper.html">White Paper</a>
+            <a href="leggo.html">OS</a>
+            <img src="assets/muse_logo.png" id="muse-trigger" style="height:40px; cursor:pointer;" alt="MUSE WALLET">
+        </div>
+    </nav>
+
+    <header class="hero">
+        <span class="section-label">Genesis Node</span>
+        <h1>The Sovereign Ledger.</h1>
+        <p>A decentralized Layer 1 infrastructure for high-fidelity commerce, heritage datasets, and decentralized intelligence.</p>
+        <a href="#services" class="btn">Explore Infrastructure</a>
+    </header>
+
+    <section id="services">
+        <div class="grid">
+            <!-- PULSE -->
+            <div class="service-card" onclick="window.open('pulse/')">
+                <img src="assets/priscion_logo.png" style="height:50px; margin-bottom:20px;">
+                <h3>Pulse Explorer</h3>
+                <div class="price">Network Intelligence</div>
+                <p>Real-time block monitoring and cryptographic finality verification for the Priscion network.</p>
+                <button class="btn" style="margin-top: 30px; width: 100%;">Monitor Chain</button>
+            </div>
+
+            <!-- CHILLATA -->
+            <div class="service-card" onclick="toggleSidebar()">
+                <img src="assets/chillata_logo.png" style="height:50px; margin-bottom:20px;">
+                <h3>Chillata Swap</h3>
+                <div class="price">Hybrid Exchange</div>
+                <p>Seamless cross-chain liquidity and $PRN / $MUSD algorithmic balancing.</p>
+                <button class="btn" style="margin-top: 30px; width: 100%;">Swap Assets</button>
+            </div>
+
+            <!-- ATELIA -->
+            <div class="service-card" onclick="window.open('ateliagaming/')">
+                <img src="assets/atelia.webp" style="height:50px; margin-bottom:20px;">
+                <h3>Atelia Gaming</h3>
+                <div class="price">Gaming Lab</div>
+                <p>High-fidelity PC hardware engineering and metaverse infrastructure for the Broader Empire.</p>
+                <button class="btn" style="margin-top: 30px; width: 100%;">Enter Lab</button>
+            </div>
+
+            <!-- DREAMING -->
+            <div class="service-card" onclick="window.open('dreaminganime/')">
+                <img src="assets/dreaming_anime.png" style="height:50px; margin-bottom:20px;">
+                <h3>Dreaming Anime</h3>
+                <div class="price">Destination Hub</div>
+                <p>The high-fidelity media and content arm feeding the Priscion ecosystem.</p>
+                <button class="btn" style="margin-top: 30px; width: 100%;">Enter Theater</button>
+            </div>
+        </div>
+    </section>
+
+    <div id="sidebar" class="sidebar"></div>
+
+    <footer>
+        <p class="copyright">Priscion Sovereign Ledger &copy; 2026 | Anchored to Eternity</p>
+    </footer>
+
+    <script src="wallet-core.js"></script>
+    <script>
+        document.getElementById('muse-trigger').onclick = function() {
+            if(typeof toggleSidebar === 'function') {
+                toggleSidebar();
+            } else {
+                document.getElementById('sidebar').classList.toggle('active');
+            }
+        };
+    </script>
+</body>
+</html>
