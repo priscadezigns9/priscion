@@ -1,0 +1,14 @@
+{
+    "treasury_id": "PRISCION_MAIN_TREASURY",
+    "assets": {
+        "PRN": "1,100,000,000.00",
+        "MUSD": "0.00",
+        "ATLR": "500,000.00"
+    },
+    "allocations": {
+        "Architect": "1,000,000,000.00",
+        "TWMK_Endowment": "100,000,000.00"
+    },
+    "status": "SOVEREIGN_RESERVE_ACTIVE",
+    "last_audit": "2026-06-08T12:00:00Z"
+}
