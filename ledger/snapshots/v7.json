@@ -10,5 +10,6 @@
     "finalized": true,
     "maintenance_pulse": "2026-06-08T22:55:00Z",
     "block_height": 100,
-    "pulse_time": "2026-06-08T21:47:00Z"
+    "pulse_time": "2026-06-08T21:47:00Z",
+    "finality_state": "anchored"
 }
