@@ -1,5 +1,5 @@
-// Priscion MUSE Wallet Core v17.0.0
-// THE SOVEREIGN OS: High-Fidelity UI | No Simulation | Hybrid Swap Engine
+// Priscion MUSE Wallet Core v17.5.0
+// THE SOVEREIGN OS: Functional Lynx Search | Chillata Integration | No Simulations
 
 var walletVisible = false;
 var currentTab = 'vault';
@@ -29,6 +29,9 @@ var lynxChats = [
     { handle: 'Priscion', lastMsg: 'Architect, the ledger is secure.', time: '21:10', avatar: 'P', unread: 0 },
     { handle: '$vogue.pri', lastMsg: 'Handshake accepted.', time: '18:45', avatar: 'V', unread: 0 }
 ];
+
+// Reference for search results
+var filteredLynxChats = [...lynxChats];
 
 var MUSE_ICONS = {
     clip: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>`,
@@ -140,26 +143,24 @@ function renderVault(wallet) {
 }
 
 function renderSwapHybrid() {
-    // Hybrid UI: Uniswap Simplicity + Matcha/1inch Efficiency
     return `
         <div style="padding:25px; display:flex; flex-direction:column; gap:8px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <span style="font-weight:900; font-size:0.9rem;">Swap</span>
+                <span style="font-weight:900; font-size:0.9rem;">Chillata Swap</span>
                 <span style="font-size:1.2rem; cursor:pointer; opacity:0.6;">⚙️</span>
             </div>
             
             <div style="background:#F7F8FA; border:1px solid #EEE; padding:20px; border-radius:24px; position:relative;">
                 <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                    <input type="number" value="1.0" style="background:none; border:none; font-size:2rem; font-weight:600; width:150px; outline:none; font-family:inherit;">
-                    <div style="background:#FFF; border:1px solid #EEE; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+                    <input type="number" value="1.0" style="background:none; border:none; font-size:2rem; font-weight:600; width:150px; outline:none;">
+                    <div style="background:#FFF; border:1px solid #EEE; padding:6px 12px; border-radius:20px; display:flex; align-items:center; gap:8px; cursor:pointer;">
                         <span style="font-weight:700;">$PRN</span>
                         <span style="font-size:0.6rem; opacity:0.5;">▼</span>
                     </div>
                 </div>
-                <div style="font-size:0.75rem; color:#888; font-weight:500;">Balance: 12,500.00</div>
             </div>
 
-            <div style="text-align:center; margin:-18px 0; position:relative; z-index:2;">
+            <div style="text-align:center; margin:-18px 0; z-index:2; position:relative;">
                 <div style="background:#F7F8FA; width:40px; height:40px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; border:4px solid #FFF; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B35D4" stroke-width="2.5"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
                 </div>
@@ -173,21 +174,9 @@ function renderSwapHybrid() {
                         <span style="font-size:0.6rem; opacity:0.8;">▼</span>
                     </div>
                 </div>
-                <div style="font-size:0.75rem; color:#888; font-weight:500;">Select token</div>
             </div>
 
-            <div style="background:#F7F8FA; border:1px solid #EEE; border-radius:20px; padding:15px; font-size:0.75rem;">
-                <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-                    <span style="color:#888;">Price Impact</span>
-                    <span style="color:#25D366; font-weight:700;">&lt; 0.01%</span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                    <span style="color:#888;">Route</span>
-                    <span style="font-weight:700;">Chillata → Jello</span>
-                </div>
-            </div>
-
-            <button onclick="alert('Transaction Submitted to Ledger')" style="width:100%; padding:20px; background:#FDEAF1; color:#7B35D4; border:none; border-radius:24px; font-weight:900; font-size:1rem; margin-top:10px; cursor:pointer; transition:0.2s;" onmouseover="this.style.background='#FADAE5'">Swap</button>
+            <button onclick="alert('Transaction Submitted')" style="width:100%; padding:20px; background:#FDEAF1; color:#7B35D4; border:none; border-radius:24px; font-weight:900; font-size:1rem; cursor:pointer;">Swap</button>
         </div>
     `;
 }
@@ -196,12 +185,11 @@ function renderReceive(wallet) {
     return `
         <div style="padding:50px 40px; text-align:center; display:flex; flex-direction:column; align-items:center;">
             <div style="background:#000; padding:30px; border-radius:30px; margin-bottom:40px;">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px; border-radius:10px;">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${wallet.address}" style="width:180px;">
             </div>
             <div style="width:100%; background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE;">
-                <div style="font-size:0.6rem; font-weight:900; color:#888; letter-spacing:2px; margin-bottom:12px; text-transform:uppercase;">Wallet Address</div>
-                <div style="font-size:0.8rem; font-weight:900; word-break:break-all; line-height:1.4; margin-bottom:20px;">${wallet.address}</div>
-                <button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-size:0.75rem; font-weight:900; cursor:pointer;">COPY ADDRESS</button>
+                <div style="font-size:0.8rem; font-weight:900; word-break:break-all; margin-bottom:20px;">${wallet.address}</div>
+                <button onclick="navigator.clipboard.writeText('${wallet.address}');alert('Copied')" style="width:100%; background:#1A1A1A; color:#FFF; border:none; padding:15px; border-radius:100px; font-weight:900; cursor:pointer;">COPY ADDRESS</button>
             </div>
         </div>
     `;
@@ -212,10 +200,17 @@ function renderSend() {
 }
 
 function renderDapps() {
-    return `<div style="padding:30px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-        <div onclick="window.open('leggo.html')" style="background:#F9F9F9; border:1px solid #EEE; padding:30px; border-radius:25px; text-align:center; cursor:pointer;">
-            <div style="font-size:2.5rem; margin-bottom:12px;">🌐</div><div style="font-weight:900; font-size:0.75rem;">LEGGO</div>
-        </div>
+    var dapps = [
+        {n:'CHILLATA', i:'❄️', d:'Dex Swap', u:'swap'},
+        {n:'LEGGO', i:'🌐', d:'OS Browser', u:'leggo.html'},
+        {n:'PULSE', i:'📈', d:'Explorer', u:'pulse/'},
+        {n:'MYNT', i:'🎨', d:'NFT Store', u:'mynt/'}
+    ];
+    return `<div style="padding:25px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+        ${dapps.map(d => `<div onclick="${d.u==='swap'?'switchTab(\'swap\')':'window.open(\''+d.u+'\')'}" style="background:#F9F9F9; border:1px solid #EEE; padding:25px; border-radius:20px; text-align:center; cursor:pointer;">
+            <div style="font-size:2rem; margin-bottom:10px;">${d.i}</div>
+            <div style="font-weight:900; font-size:0.7rem;">${d.n}</div>
+        </div>`).join('')}
     </div>`;
 }
 
@@ -225,15 +220,18 @@ function renderLynx() {
             <div style="display:flex; flex-direction:column; height:100%;">
                 <div style="background:#075E54; color:#FFF; padding:18px 25px; display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-weight:700; font-size:1.3rem;">Lynx</span>
-                    <div style="display:flex; gap:25px;"><span>🔍</span><span>⋮</span></div>
+                    <div style="display:flex; gap:25px; align-items:center;">
+                        <span onclick="toggleSearch()" style="cursor:pointer;">${MUSE_ICONS.search}</span>
+                        <span>⋮</span>
+                    </div>
                 </div>
-                <div style="flex:1;">
-                    ${lynxChats.map(chat => `
-                        <div onclick="openChat('${chat.handle}')" style="padding:18px 20px; display:flex; gap:15px; align-items:center; cursor:pointer; border-bottom:1px solid #F5F5F5;">
-                            <div style="width:54px; height:54px; background:linear-gradient(45deg, #7B35D4, #444); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:#FFF; font-size:1.2rem;">${chat.avatar}</div>
-                            <div style="flex:1;"><div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-weight:700; font-size:1.05rem;">${chat.handle}</span><span style="font-size:0.75rem; color:#888;">${chat.time}</span></div><div style="font-size:0.9rem; color:#777;">${chat.lastMsg}</div></div>
-                        </div>
-                    `).join('')}
+                <div id="lynx-search-container" style="display:none; padding:10px 15px; background:#F0F0F0; border-bottom:1px solid #DDD;">
+                    <div style="background:#FFF; border-radius:20px; padding:5px 15px; display:flex; align-items:center;">
+                        <input id="lynx-search-input" type="text" placeholder="Search handles..." oninput="handleLynxSearch(this.value)" style="flex:1; border:none; outline:none; font-size:0.9rem; padding:5px 0;">
+                    </div>
+                </div>
+                <div id="lynx-chat-list" style="flex:1; overflow-y:auto;">
+                    ${renderLynxList(filteredLynxChats)}
                 </div>
                 <button onclick="promptHandshake()" style="position:absolute; bottom:35px; right:30px; background:#128C7E; color:#FFF; width:60px; height:60px; border-radius:50%; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow: 0 6px 16px rgba(0,0,0,0.25);">${MUSE_ICONS.plus}</button>
             </div>
@@ -270,6 +268,27 @@ function renderLynx() {
             </div>
         `;
     }
+}
+
+function renderLynxList(chats) {
+    return chats.map(chat => `
+        <div onclick="openChat('${chat.handle}')" style="padding:18px 20px; display:flex; gap:15px; align-items:center; cursor:pointer; border-bottom:1px solid #F5F5F5;">
+            <div style="width:54px; height:54px; background:linear-gradient(45deg, #7B35D4, #444); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:#FFF; font-size:1.2rem;">${chat.avatar}</div>
+            <div style="flex:1;"><div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span style="font-weight:700; font-size:1.05rem;">${chat.handle}</span><span style="font-size:0.75rem; color:#888;">${chat.time}</span></div><div style="font-size:0.9rem; color:#777;">${chat.lastMsg}</div></div>
+        </div>
+    `).join('');
+}
+
+function toggleSearch() {
+    var s = document.getElementById('lynx-search-container');
+    s.style.display = s.style.display === 'none' ? 'block' : 'none';
+    if(s.style.display === 'block') document.getElementById('lynx-search-input').focus();
+    else { filteredLynxChats = [...lynxChats]; renderWallet(); }
+}
+
+function handleLynxSearch(val) {
+    filteredLynxChats = lynxChats.filter(c => c.handle.toLowerCase().includes(val.toLowerCase()));
+    document.getElementById('lynx-chat-list').innerHTML = renderLynxList(filteredLynxChats);
 }
 
 function initiateCall() {
@@ -310,7 +329,11 @@ function handleAttach(input) { if(input.files.length > 0) alert(input.files.leng
 
 function promptHandshake() {
     var h = prompt("Enter .pri handle:");
-    if(h) { lynxChats.push({ handle: h, lastMsg: 'Handshake Pending...', time: 'Now', avatar: h[0].toUpperCase() }); renderWallet(); }
+    if(h) { 
+        lynxChats.push({ handle: h, lastMsg: 'Handshake Pending...', time: 'Now', avatar: h[0].toUpperCase() });
+        filteredLynxChats = [...lynxChats];
+        renderWallet(); 
+    }
 }
 
 function sendLynx() {
