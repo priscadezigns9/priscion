@@ -2,27 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MUSE | My Digital Home</title>
+    <title>MUSE | Sovereign Wallet</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
-        body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
-        .sidebar-nav { width: 300px; border-right: 1px solid #EEE; background: #FAFAFA; display: flex; flex-direction: column; padding: 40px 0; }
-        .nav-item { padding: 20px 40px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; color: #AAA; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-        .nav-item:hover, .nav-item.active { color: #000; background: #F0F0F0; }
-        .main-stage { flex: 1; padding: 100px; overflow-y: auto; }
-        .card { border: 1px solid #EEE; border-radius: 40px; padding: 60px; margin-bottom: 40px; background: #FFF; transition: 0.3s; }
-        .card:hover { border-color: #000; }
+        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --accent: #7B35D4; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        
+        #splash { position: fixed; inset: 0; background: #FFF; z-index: 10000; display: flex; align-items: center; justify-content: center; transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        #splash.fade { opacity: 0; pointer-events: none; transform: scale(1.1); }
+        .splash-logo { width: 100px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+
+        #auth-gate { position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); z-index: 9000; display: flex; align-items: center; justify-content: center; }
+        .auth-card { background: #FFF; border: 1px solid var(--border); padding: 60px; border-radius: 40px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 40px 100px rgba(0,0,0,0.1); }
+        
+        .sidebar-nav { width: 320px; border-right: 1px solid var(--border); background: #FAFAFA; display: flex; flex-direction: column; padding: 40px 0; }
+        .nav-item { padding: 20px 40px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .nav-item:hover, .nav-item.active { color: var(--text); background: #F0F0F0; }
+        
+        .main-stage { flex: 1; padding: 80px; overflow-y: auto; }
+        .card { border: 1px solid var(--border); border-radius: 40px; padding: 60px; margin-bottom: 40px; background: #FFF; transition: 0.3s; }
         .balance-big { font-size: 5rem; font-weight: 900; letter-spacing: -3px; margin: 20px 0; }
-        .profile-footer { margin-top: auto; padding: 40px; border-top: 1px solid #EEE; display: flex; align-items: center; gap: 20px; cursor: pointer; }
-        .profile-footer img { width: 60px; height: 60px; border-radius: 50%; border: 1px solid #EEE; }
-        .btn-black { background: #000; color: #fff; border: none; padding: 20px 50px; border-radius: 100px; font-weight: 900; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+        
+        .profile-footer { margin-top: auto; padding: 40px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 20px; cursor: pointer; }
+        .profile-footer img { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--border); object-fit: cover; }
+        
+        .btn-black { background: #000; color: #fff; border: none; padding: 20px 50px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; transition: 0.3s; }
         .btn-black:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .messenger-view { height: 600px; display: flex; flex-direction: column; border: 1px solid #EEE; border-radius: 30px; overflow: hidden; }
+        
+        input { width: 100%; padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 20px; outline: none; font-family: inherit; font-weight: 600; }
     </style>
 </head>
 <body>
+
+    <div id="splash">
+        <img src="assets/muse_logo.png" class="splash-logo">
+    </div>
+
+    <div id="auth-gate" style="display:none;">
+        <div class="auth-card">
+            <img src="assets/muse_logo.png" style="width:60px; margin-bottom:30px;">
+            <h2 id="auth-title" style="font-weight:900; margin-bottom:10px;">Security Lock</h2>
+            <p id="auth-desc" style="color:#999; margin-bottom:40px;">Enter your sovereign password to unlock your vault.</p>
+            <div id="auth-form">
+                <input type="password" id="auth-pass" placeholder="Password">
+                <button class="btn-black" onclick="unlock()" style="width:100%;">UNLOCK VAULT</button>
+            </div>
+            <div id="new-auth" style="display:none;">
+                <button class="btn-black" onclick="createNew()" style="width:100%; margin-bottom:15px;">CREATE NEW WALLET</button>
+                <button class="btn-black" style="width:100%; background:#FFF; color:#000; border:1px solid #EEE;">RECOVER / CONNECT</button>
+            </div>
+        </div>
+    </div>
+
     <div class="sidebar-nav">
-        <div style="padding: 0 40px 60px;"><img src="assets/muse_icon.png" style="width: 50px;"></div>
+        <div style="padding: 0 40px 60px;"><img src="assets/muse_logo.png" style="width: 50px;"></div>
         <div class="nav-item active" onclick="show('vault')">Vault</div>
         <div class="nav-item" onclick="show('swap')">Swap</div>
         <div class="nav-item" onclick="show('send')">Send</div>
@@ -31,12 +66,12 @@
         <div class="nav-item" onclick="show('lynx')">Messenger</div>
         
         <div class="profile-footer" onclick="document.getElementById('p-up').click()">
-            <img src="" id="p-img">
+            <img src="assets/priscion_logo.png" id="p-img">
             <div>
-                <div style="font-weight:900;" id="p-handle"></div>
-                <div style="font-size:0.7rem; color:#999;">Manage Profile</div>
+                <div style="font-weight:900;" id="p-handle">$prisca.pri</div>
+                <div style="font-size:0.6rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Manage Profile</div>
             </div>
-            <input type="file" id="p-up" style="display:none;" onchange="updateProfile(this)">
+            <input type="file" id="p-up" style="display:none;">
         </div>
     </div>
 
@@ -46,6 +81,46 @@
 
     <script src="wallet-core.js"></script>
     <script>
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('splash').classList.add('fade');
+                checkAuth();
+            }, 2000);
+        };
+
+        function checkAuth() {
+            const authGate = document.getElementById('auth-gate');
+            if(PRN.state.password) {
+                authGate.style.display = 'flex';
+            } else {
+                document.getElementById('auth-title').innerText = "Welcome to MUSE";
+                document.getElementById('auth-desc').innerText = "Begin your journey into the Sovereign Ledger.";
+                document.getElementById('auth-form').style.display = 'none';
+                document.getElementById('new-auth').style.display = 'block';
+                authGate.style.display = 'flex';
+            }
+        }
+
+        function unlock() {
+            const pass = document.getElementById('auth-pass').value;
+            if(pass === PRN.state.password) {
+                document.getElementById('auth-gate').style.display = 'none';
+                renderView('vault');
+            } else {
+                alert("Incorrect Password.");
+            }
+        }
+
+        function createNew() {
+            const p = prompt("Set your Sovereign Password:");
+            if(p) {
+                PRN.state.password = p;
+                PRN.sync();
+                document.getElementById('auth-gate').style.display = 'none';
+                renderView('vault');
+            }
+        }
+
         function show(tab) {
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             event.currentTarget.classList.add('active');
@@ -58,130 +133,25 @@
                 stage.innerHTML = `
                     <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
                     <div class="card">
-                        <div style="font-weight:900; color:#888; letter-spacing:4px; text-transform:uppercase; font-size:0.8rem;">Available Balance</div>
+                        <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Available Reserve</div>
                         <div class="balance-big">$PRN ${PRN.state.balance.toLocaleString()}</div>
-                        <button class="btn-black" onclick="show('send')">SEND COINS</button>
+                        <button class="btn-black" onclick="show('send')">SEND ASSETS</button>
                     </div>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
                         <div class="card" style="padding:40px;">
-                            <h3 style="font-weight:900; margin-bottom:10px;">Staked Assets</h3>
-                            <p style="color:#999;">${PRN.state.staked.toFixed(2)} $PRN Active</p>
+                            <h3 style="font-weight:900; margin-bottom:10px; letter-spacing:2px; text-transform:uppercase; font-size:0.8rem;">Staked</h3>
+                            <p style="color:#999; font-size:1.1rem;">${PRN.state.staked.toFixed(2)} $PRN Active</p>
                         </div>
                         <div class="card" style="padding:40px;">
-                            <h3 style="font-weight:900; margin-bottom:10px;">Network Status</h3>
-                            <p style="color:#2ECC71; font-weight:900;">Synced (Block 100)</p>
+                            <h3 style="font-weight:900; margin-bottom:10px; letter-spacing:2px; text-transform:uppercase; font-size:0.8rem;">Ledger</h3>
+                            <p style="color:#2ECC71; font-weight:900;">CONNECTED (Block ${PRN.state.block})</p>
                         </div>
                     </div>
                 `;
-            } else if(tab === 'lynx') {
-                stage.innerHTML = `
-                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Messenger.</h1>
-                    <div class="messenger-view">
-                        <div style="flex:1; padding:40px; overflow-y:auto; background:#FAFAFA;" id="m-list"></div>
-                        <div style="padding:30px; background:#FFF; border-top:1px solid #EEE; display:flex; gap:20px;">
-                            <input id="m-in" type="text" placeholder="Type a message..." style="flex:1; padding:20px; border-radius:100px; border:1px solid #EEE; outline:none; font-weight:600;">
-                            <button class="btn-black" onclick="sendMsg()">SEND</button>
-                        </div>
-                    </div>
-                `;
-                renderMessages();
-            } else if(tab === 'swap') {
-                stage.innerHTML = `
-                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Swap.</h1>
-                    <div class="card" style="max-width:500px;">
-                        <div style="margin-bottom:30px;">
-                            <label style="font-weight:900; color:#888; font-size:0.7rem; letter-spacing:2px;">FROM</label>
-                            <input type="number" value="1000" style="width:100%; font-size:2.5rem; font-weight:900; border:none; outline:none; margin-top:10px;">
-                        </div>
-                        <div style="margin-bottom:30px;">
-                            <label style="font-weight:900; color:#888; font-size:0.7rem; letter-spacing:2px;">TO</label>
-                            <div style="font-size:2.5rem; font-weight:900; margin-top:10px;">1,000.00 <span style="color:#CCC;">$MUSD</span></div>
-                        </div>
-                        <button class="btn-black" style="width:100%;">EXECUTE SWAP</button>
-                    </div>
-                `;
-            } else if(tab === 'send') {
-                stage.innerHTML = `
-                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Send.</h1>
-                    <div class="card" style="max-width:500px;">
-                        <input type="text" id="s-to" placeholder="Recipient (.pri/handle)" style="width:100%; padding:20px; border-radius:20px; border:1px solid #EEE; margin-bottom:20px; outline:none; font-weight:700;">
-                        <input type="number" id="s-amt" placeholder="Amount" style="width:100%; padding:20px; border-radius:20px; border:1px solid #EEE; margin-bottom:30px; outline:none; font-weight:700;">
-                        <button class="btn-black" style="width:100%;" onclick="sendCoins()">SEND ASSETS</button>
-                    </div>
-                `;
-            } else if(tab === 'receive') {
-                stage.innerHTML = `
-                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Receive.</h1>
-                    <div class="card" style="text-align:center; max-width:500px;">
-                        <div style="background:#000; padding:40px; border-radius:40px; display:inline-block; margin-bottom:40px;">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${PRN.state.wallet_id}" style="width:250px;">
-                        </div>
-                        <div style="font-weight:900; letter-spacing:1px; word-break:break-all; background:#F9F9F9; padding:20px; border-radius:20px;">${PRN.state.wallet_id}</div>
-                    </div>
-                `;
-            } else if(tab === 'dapps') {
-                stage.innerHTML = `
-                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Dapps.</h1>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:30px;">
-                        ${['MYNT', 'ATELIA', 'DREAMING', 'CALALLOO'].map(a => `
-                            <div class="card" style="text-align:center; padding:40px; cursor:pointer;">
-                                <div style="font-size:3rem; margin-bottom:20px;">${a==='MYNT'?'🎨':a==='ATELIA'?'🎮':a==='DREAMING'?'📽️':'🍲'}</div>
-                                <div style="font-weight:900; letter-spacing:2px;">${a}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }
-        }
-
-        function renderMessages() {
-            const list = document.getElementById('m-list');
-            if(!list) return;
-            list.innerHTML = PRN.state.lynxMessages.map(m => `
-                <div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#EEE':'#000'}; color:${m.from==='Priscion'?'#000':'#FFF'}; padding:20px 30px; border-radius:30px; max-width:70%; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
-                    ${m.text}
-                    <div style="font-size:0.6rem; opacity:0.5; text-align:right; margin-top:10px; font-weight:900;">${m.time}</div>
-                </div>
-            `).join('');
-            list.scrollTop = list.scrollHeight;
-        }
-
-        function sendMsg() {
-            const input = document.getElementById('m-in');
-            if(input.value) {
-                PRN.addLynxMessage(input.value);
-                input.value = '';
-                renderMessages();
-            }
-        }
-
-        function sendCoins() {
-            const to = document.getElementById('s-to').value;
-            const amt = document.getElementById('s-amt').value;
-            if(PRN.sendTransaction(to, amt)) {
-                alert("Anchored!");
-                renderView('vault');
             } else {
-                alert("Failed.");
+                stage.innerHTML = `<h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">${tab.toUpperCase()}.</h1><p style="color:#999;">Initializing sovereign module...</p>`;
             }
         }
-
-        function updateProfile(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    document.getElementById('p-img').src = e.target.result;
-                    PRN.state.avatar = e.target.result;
-                    PRN.save();
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // INIT
-        document.getElementById('p-img').src = PRN.state.avatar;
-        document.getElementById('p-handle').innerText = PRN.state.handle;
-        renderView('vault');
     </script>
 </body>
 </html>
