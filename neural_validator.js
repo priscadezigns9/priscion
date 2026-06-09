@@ -1,2 +1,1 @@
-const NETWORK_LIVELINESS = true;
-function checkConsensus(peers) { return peers.length >= 3; }
+class NeuralValidator { constructor() { this.baseReward = 15.0; this.tithingRate = 0.10; } }
