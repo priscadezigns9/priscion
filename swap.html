@@ -2,53 +2,65 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CHILLATA | DEX</title>
+    <title>CHILLATA | Fast & Fun Trading</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
     <style>
-        body { margin: 0; background: #080808; color: #fff; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .swap-box { width: 440px; background: #121212; border: 1px solid #1a1a1a; border-radius: 24px; padding: 24px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-        .header img { height: 32px; }
-        .input-group { background: #1b1b1b; border-radius: 16px; padding: 16px; margin-bottom: 8px; border: 1px solid transparent; transition: 0.2s; }
-        .input-group:hover { border-color: #333; }
-        .input-group input { background: transparent; border: none; color: #fff; font-size: 1.5rem; width: 100%; outline: none; }
-        .asset-select { background: #2d2d2d; border-radius: 12px; padding: 4px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: bold; }
-        .swap-btn { width: 100%; background: linear-gradient(90deg, #ff4b2b, #ff416c); border: none; padding: 18px; border-radius: 16px; color: #fff; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 16px; }
+        body { margin: 0; background: #7B35D4; color: #fff; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .swap-box { background: #fff; color: #000; padding: 40px; border-radius: 40px; width: 450px; box-shadow: 0 40px 100px rgba(0,0,0,0.3); position: relative; }
+        .pepper-anim { position: absolute; top: -50px; left: 50%; transform: translateX(-50%); width: 100px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -20px); } }
+        
+        .input-group { background: #F5F5F5; padding: 25px; border-radius: 24px; margin-bottom: 10px; }
+        .input-group label { display: block; font-size: 0.7rem; font-weight: 900; color: #999; text-transform: uppercase; margin-bottom: 10px; }
+        .input-row { display: flex; justify-content: space-between; align-items: center; }
+        input { border: none; background: none; font-size: 2rem; font-weight: 900; width: 60%; outline: none; }
+        .token-select { background: #eee; padding: 10px 20px; border-radius: 100px; font-weight: 900; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        
+        .swap-btn { width: 100%; padding: 25px; background: #FF3D00; color: #fff; border: none; border-radius: 24px; font-weight: 900; font-size: 1.2rem; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .swap-btn:hover { background: #D83400; transform: scale(1.02); }
     </style>
 </head>
 <body>
     <div class="swap-box">
-        <div class="header">
-            <img src="assets/chillata_word.png" alt="Chillata">
-            <div style="cursor: pointer;" onclick="location.href='wallet.html'"><img src="assets/muse_icon.png" style="height: 24px;"></div>
-        </div>
+        <img src="assets/chillata_logo.png" class="pepper-anim">
+        <h2 style="text-align:center; margin-top:40px; font-weight:900;">CHILLATA SWAP</h2>
         
         <div class="input-group">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #888; font-size: 0.9rem;">
-                <span>From</span>
-                <span>Balance: 1450.00</span>
-            </div>
-            <div style="display: flex;">
-                <input type="number" placeholder="0.0" value="100">
-                <div class="asset-select">$PRN</div>
+            <label>You Give</label>
+            <div class="input-row">
+                <input type="number" value="100" id="give">
+                <div class="token-select"><img src="assets/priscion_logo.png" style="width:20px"> $PRN</div>
             </div>
         </div>
 
-        <div style="text-align: center; margin: -10px 0; z-index: 2; position: relative;">
-            <div style="background: #1b1b1b; width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; border: 4px solid #121212; cursor: pointer;">↓</div>
+        <div style="text-align:center; margin: -15px 0; position:relative; z-index:10">
+            <button style="background:#fff; border:2px solid #F5F5F5; width:40px; height:40px; border-radius:12px; cursor:pointer">↓</button>
         </div>
 
         <div class="input-group">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px; color: #888; font-size: 0.9rem;">
-                <span>To</span>
-                <span>Balance: 0.00</span>
-            </div>
-            <div style="display: flex;">
-                <input type="number" placeholder="0.0" readonly value="85.5">
-                <div class="asset-select">$MUSD</div>
+            <label>You Get</label>
+            <div class="input-row">
+                <input type="number" value="50" id="get" readonly>
+                <div class="token-select">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atelia.webp" style="width:20px; border-radius:50%"> $ADA
+                </div>
             </div>
         </div>
 
-        <button class="swap-btn">Swap Assets</button>
+        <button class="swap-btn" onclick="handleSwap()">ANCHOR TRADE</button>
     </div>
+
+    <script src="wallet-core.js"></script>
+    <script>
+        function handleSwap() {
+            const amount = document.getElementById('give').value;
+            if(PRN.sendCoins('CHILLATA_LP', amount)) {
+                alert("Swap Successfully Anchored to Cardano Heritage!");
+                location.href = 'wallet-app.html';
+            } else {
+                alert("Insufficient $PRN for this swap.");
+            }
+        }
+    </script>
 </body>
 </html>
