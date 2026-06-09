@@ -2,56 +2,186 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MUSE</title>
+    <title>MUSE | My Digital Home</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
-        body { margin: 0; background: #0A0A0A; color: #fff; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; height: 100vh; }
-        .wallet-nav { padding: 40px; display: flex; align-items: center; justify-content: center; }
-        .tabs { display: flex; gap: 30px; padding: 0 40px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .tab { padding: 15px 0; color: #555; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-        .tab.active { color: #fff; border-bottom: 2px solid #7B35D4; }
-        .content { flex: 1; padding: 40px; }
-        .card { background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 40px; text-align: center; }
-        .bal { font-size: 3rem; font-weight: 900; margin: 20px 0; }
-        .btn { width: 100%; padding: 20px; border-radius: 100px; border: none; background: #7B35D4; color: #fff; font-weight: 900; cursor: pointer; margin-top: 20px; }
-        .handle-box { background: #161616; padding: 15px 25px; border-radius: 12px; display: flex; align-items: center; gap: 10px; margin-top: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        .sidebar-nav { width: 300px; border-right: 1px solid #EEE; background: #FAFAFA; display: flex; flex-direction: column; padding: 40px 0; }
+        .nav-item { padding: 20px 40px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; color: #AAA; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+        .nav-item:hover, .nav-item.active { color: #000; background: #F0F0F0; }
+        .main-stage { flex: 1; padding: 100px; overflow-y: auto; }
+        .card { border: 1px solid #EEE; border-radius: 40px; padding: 60px; margin-bottom: 40px; background: #FFF; transition: 0.3s; }
+        .card:hover { border-color: #000; }
+        .balance-big { font-size: 5rem; font-weight: 900; letter-spacing: -3px; margin: 20px 0; }
+        .profile-footer { margin-top: auto; padding: 40px; border-top: 1px solid #EEE; display: flex; align-items: center; gap: 20px; cursor: pointer; }
+        .profile-footer img { width: 60px; height: 60px; border-radius: 50%; border: 1px solid #EEE; }
+        .btn-black { background: #000; color: #fff; border: none; padding: 20px 50px; border-radius: 100px; font-weight: 900; font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
+        .btn-black:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .messenger-view { height: 600px; display: flex; flex-direction: column; border: 1px solid #EEE; border-radius: 30px; overflow: hidden; }
     </style>
 </head>
 <body>
-    <div class="wallet-nav">
-        <img src="assets/muse_icon.png" style="height: 45px;">
+    <div class="sidebar-nav">
+        <div style="padding: 0 40px 60px;"><img src="assets/muse_icon.png" style="width: 50px;"></div>
+        <div class="nav-item active" onclick="show('vault')">Vault</div>
+        <div class="nav-item" onclick="show('swap')">Swap</div>
+        <div class="nav-item" onclick="show('send')">Send</div>
+        <div class="nav-item" onclick="show('receive')">Receive</div>
+        <div class="nav-item" onclick="show('dapps')">Dapps</div>
+        <div class="nav-item" onclick="show('lynx')">Messenger</div>
+        
+        <div class="profile-footer" onclick="document.getElementById('p-up').click()">
+            <img src="" id="p-img">
+            <div>
+                <div style="font-weight:900;" id="p-handle"></div>
+                <div style="font-size:0.7rem; color:#999;">Manage Profile</div>
+            </div>
+            <input type="file" id="p-up" style="display:none;" onchange="updateProfile(this)">
+        </div>
     </div>
 
-    <div class="tabs">
-        <div class="tab active">Coins</div>
-        <div class="tab" onclick="location.href='swap.html'">Trade</div>
-        <div class="tab" onclick="location.href='mynt.html'">Things</div>
-    </div>
-
-    <div class="content">
-        <div class="card">
-            <small style="color:#555; text-transform:uppercase; letter-spacing:1px; font-weight:900;">Available Balance</small>
-            <div id="bal" class="bal">6,450.00</div>
-            <button class="btn" onclick="send()">SEND COINS</button>
-        </div>
-
-        <div class="handle-box">
-            <img src="assets/priscion_logo.png" style="width:20px;">
-            <span style="font-weight:900; color:#fff;">.pri/prisca</span>
-        </div>
+    <div class="main-stage" id="stage">
+        <!-- Content Injected Here -->
     </div>
 
     <script src="wallet-core.js"></script>
     <script>
-        document.getElementById('bal').innerText = PRN.state.balance.toFixed(2);
-        function send() {
-            const a = prompt("Amount:");
-            const t = prompt("To (.pri/):");
-            if(PRN.sendCoins(t, a)) {
-                alert("Anchored!");
-                location.reload();
+        function show(tab) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            renderView(tab);
+        }
+
+        function renderView(tab) {
+            const stage = document.getElementById('stage');
+            if(tab === 'vault') {
+                stage.innerHTML = `
+                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
+                    <div class="card">
+                        <div style="font-weight:900; color:#888; letter-spacing:4px; text-transform:uppercase; font-size:0.8rem;">Available Balance</div>
+                        <div class="balance-big">$PRN ${PRN.state.balance.toLocaleString()}</div>
+                        <button class="btn-black" onclick="show('send')">SEND COINS</button>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+                        <div class="card" style="padding:40px;">
+                            <h3 style="font-weight:900; margin-bottom:10px;">Staked Assets</h3>
+                            <p style="color:#999;">${PRN.state.staked.toFixed(2)} $PRN Active</p>
+                        </div>
+                        <div class="card" style="padding:40px;">
+                            <h3 style="font-weight:900; margin-bottom:10px;">Network Status</h3>
+                            <p style="color:#2ECC71; font-weight:900;">Synced (Block 100)</p>
+                        </div>
+                    </div>
+                `;
+            } else if(tab === 'lynx') {
+                stage.innerHTML = `
+                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Messenger.</h1>
+                    <div class="messenger-view">
+                        <div style="flex:1; padding:40px; overflow-y:auto; background:#FAFAFA;" id="m-list"></div>
+                        <div style="padding:30px; background:#FFF; border-top:1px solid #EEE; display:flex; gap:20px;">
+                            <input id="m-in" type="text" placeholder="Type a message..." style="flex:1; padding:20px; border-radius:100px; border:1px solid #EEE; outline:none; font-weight:600;">
+                            <button class="btn-black" onclick="sendMsg()">SEND</button>
+                        </div>
+                    </div>
+                `;
+                renderMessages();
+            } else if(tab === 'swap') {
+                stage.innerHTML = `
+                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Swap.</h1>
+                    <div class="card" style="max-width:500px;">
+                        <div style="margin-bottom:30px;">
+                            <label style="font-weight:900; color:#888; font-size:0.7rem; letter-spacing:2px;">FROM</label>
+                            <input type="number" value="1000" style="width:100%; font-size:2.5rem; font-weight:900; border:none; outline:none; margin-top:10px;">
+                        </div>
+                        <div style="margin-bottom:30px;">
+                            <label style="font-weight:900; color:#888; font-size:0.7rem; letter-spacing:2px;">TO</label>
+                            <div style="font-size:2.5rem; font-weight:900; margin-top:10px;">1,000.00 <span style="color:#CCC;">$MUSD</span></div>
+                        </div>
+                        <button class="btn-black" style="width:100%;">EXECUTE SWAP</button>
+                    </div>
+                `;
+            } else if(tab === 'send') {
+                stage.innerHTML = `
+                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Send.</h1>
+                    <div class="card" style="max-width:500px;">
+                        <input type="text" id="s-to" placeholder="Recipient (.pri/handle)" style="width:100%; padding:20px; border-radius:20px; border:1px solid #EEE; margin-bottom:20px; outline:none; font-weight:700;">
+                        <input type="number" id="s-amt" placeholder="Amount" style="width:100%; padding:20px; border-radius:20px; border:1px solid #EEE; margin-bottom:30px; outline:none; font-weight:700;">
+                        <button class="btn-black" style="width:100%;" onclick="sendCoins()">SEND ASSETS</button>
+                    </div>
+                `;
+            } else if(tab === 'receive') {
+                stage.innerHTML = `
+                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Receive.</h1>
+                    <div class="card" style="text-align:center; max-width:500px;">
+                        <div style="background:#000; padding:40px; border-radius:40px; display:inline-block; margin-bottom:40px;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${PRN.state.wallet_id}" style="width:250px;">
+                        </div>
+                        <div style="font-weight:900; letter-spacing:1px; word-break:break-all; background:#F9F9F9; padding:20px; border-radius:20px;">${PRN.state.wallet_id}</div>
+                    </div>
+                `;
+            } else if(tab === 'dapps') {
+                stage.innerHTML = `
+                    <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Dapps.</h1>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:30px;">
+                        ${['MYNT', 'ATELIA', 'DREAMING', 'CALALLOO'].map(a => `
+                            <div class="card" style="text-align:center; padding:40px; cursor:pointer;">
+                                <div style="font-size:3rem; margin-bottom:20px;">${a==='MYNT'?'🎨':a==='ATELIA'?'🎮':a==='DREAMING'?'📽️':'🍲'}</div>
+                                <div style="font-weight:900; letter-spacing:2px;">${a}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
             }
         }
+
+        function renderMessages() {
+            const list = document.getElementById('m-list');
+            if(!list) return;
+            list.innerHTML = PRN.state.lynxMessages.map(m => `
+                <div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#EEE':'#000'}; color:${m.from==='Priscion'?'#000':'#FFF'}; padding:20px 30px; border-radius:30px; max-width:70%; margin-bottom:20px; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                    ${m.text}
+                    <div style="font-size:0.6rem; opacity:0.5; text-align:right; margin-top:10px; font-weight:900;">${m.time}</div>
+                </div>
+            `).join('');
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function sendMsg() {
+            const input = document.getElementById('m-in');
+            if(input.value) {
+                PRN.addLynxMessage(input.value);
+                input.value = '';
+                renderMessages();
+            }
+        }
+
+        function sendCoins() {
+            const to = document.getElementById('s-to').value;
+            const amt = document.getElementById('s-amt').value;
+            if(PRN.sendTransaction(to, amt)) {
+                alert("Anchored!");
+                renderView('vault');
+            } else {
+                alert("Failed.");
+            }
+        }
+
+        function updateProfile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    document.getElementById('p-img').src = e.target.result;
+                    PRN.state.avatar = e.target.result;
+                    PRN.save();
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // INIT
+        document.getElementById('p-img').src = PRN.state.avatar;
+        document.getElementById('p-handle').innerText = PRN.state.handle;
+        renderView('vault');
     </script>
 </body>
 </html>
