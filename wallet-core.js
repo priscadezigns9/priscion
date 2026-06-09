@@ -22,7 +22,7 @@ class PriscionSovereign {
             history: [], 
             handle: this.handle, 
             block: 0,
-            avatar: 'assets/priscion_logo.png',
+            avatar: 'assets/p-logo.png',
             lynxMessages: []
         };
     }
