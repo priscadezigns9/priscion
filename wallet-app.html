@@ -60,10 +60,11 @@
     <div id="app-ui">
         <div class="sidebar">
             <div style="padding: 0 40px 60px;"><img src="assets/muse_logo.png" style="width: 50px;"></div>
-            <div class="nav-item active">Vault</div>
+            <div class="nav-item active" onclick="showLayer('vault')">Vault</div>
             <div class="nav-item">Swap</div>
             <div class="nav-item">Send</div>
             <div class="nav-item">Receive</div>
+            <div class="nav-item" onclick="showLayer('voting')">Mission</div>
             <div class="nav-item">Dapps</div>
             <div class="profile">
                 <img src="assets/p-logo.png">
@@ -73,12 +74,34 @@
                 </div>
             </div>
         </div>
-        <div class="stage">
+        <div id="stage-vault" class="stage">
             <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
             <div class="balance-card">
                 <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Available Reserve</div>
                 <div id="balance" class="balance-big">$PRN 12,500</div>
                 <button class="btn-black" style="width:auto; padding: 20px 60px;">SEND ASSETS</button>
+            </div>
+        </div>
+
+        <!-- Mission/Voting Stage -->
+        <div id="stage-voting" class="stage hidden">
+            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Mission.</h1>
+            <p style="color:var(--muted); margin-bottom:40px; font-weight:900; letter-spacing:2px; text-transform:uppercase; font-size:0.7rem;">Vote for Pre-Approved Charities</p>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
+                <div class="balance-card" style="padding:40px;">
+                    <div style="font-weight:900; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-size:0.6rem; margin-bottom:10px;">Vetted by Architect</div>
+                    <h3 style="font-weight:900; margin-bottom:10px;">Biblical Archaeology</h3>
+                    <p style="margin-bottom:20px; font-size:0.8rem; line-height:1.5;">Supporting primary research and excavations in Israel and the Levant to provide evidence for the faith.</p>
+                    <button class="btn-black" style="font-size:0.7rem; padding:15px;" onclick="castVote('Archaeology')">SIGNAL SUPPORT</button>
+                </div>
+                
+                <div class="balance-card" style="padding:40px;">
+                    <div style="font-weight:900; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-size:0.6rem; margin-bottom:10px;">Vetted by Architect</div>
+                    <h3 style="font-weight:900; margin-bottom:10px;">Global Gospel Outreach</h3>
+                    <p style="margin-bottom:20px; font-size:0.8rem; line-height:1.5;">Direct funding for evidence-based evangelism projects in unreached sovereign territories.</p>
+                    <button class="btn-black" style="font-size:0.7rem; padding:15px;" onclick="castVote('Gospel')">SIGNAL SUPPORT</button>
+                </div>
             </div>
         </div>
     </div>
@@ -112,6 +135,25 @@
         document.getElementById('pass-input').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') unlock();
         });
+
+        function showLayer(layerId) {
+            // Hide all stages
+            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
+            // Remove active class from nav
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            // Show target stage
+            document.getElementById('stage-' + layerId).classList.remove('hidden');
+            // Find nav item by text (Mission/Vault)
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(n => {
+                if(n.innerText.toLowerCase().includes(layerId)) n.classList.add('active');
+            });
+        }
+
+        function castVote(target) {
+            alert("Signal for [" + target + "] captured on the Sovereign Ledger. Your $PRN power has been applied.");
+        }
     </script>
 
 </body>
