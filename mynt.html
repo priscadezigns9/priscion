@@ -1,49 +1,60 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='UTF-8'>
+    <meta charset="UTF-8">
     <title>MYNT | Sovereign NFT Factory</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap">
     <style>
         body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; padding: 60px 8%; }
-        .factory-box { border: 2px dashed #eee; padding: 40px; border-radius: 30px; text-align: center; max-width: 600px; margin: 0 auto; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #eee; margin: 10px 0; }
-        .btn { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; cursor: pointer; margin-top: 20px; }
-        .artifact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 50px; }
-        .artifact { border: 1px solid #eee; border-radius: 20px; padding: 15px; }
-        .artifact img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
+        nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; }
+        .factory-box { border: 1px solid #EEE; padding: 60px; border-radius: 40px; background: #FAFAFA; max-width: 600px; margin: 0 auto; text-align: center; }
+        input { width: 100%; padding: 20px; border-radius: 15px; border: 1px solid #ddd; margin: 15px 0; outline: none; font-size: 1rem; }
+        .btn { width: 100%; background: #000; color: #fff; border: none; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .btn:hover { transform: scale(1.02); }
+        .minted-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 30px; margin-top: 60px; }
+        .nft-card { border: 1px solid #EEE; border-radius: 24px; overflow: hidden; padding-bottom: 20px; }
+        .nft-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
     </style>
 </head>
 <body>
-    <img src='assets/mynt_logo.png' style='height: 50px; margin-bottom: 20px;'>
-    <h1>The NFT Factory</h1>
-    <div class='factory-box'>
-        <h3>Create Artifact</h3>
-        <input type='text' id='art-name' placeholder='Artifact Name'>
-        <input type='text' id='art-url' placeholder='Image URL'>
-        <button class='btn' onclick='anchor()'>Anchor to Ledger</button>
+    <nav>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <img src="assets/mynt_logo.png" style="height: 50px;">
+            <span style="font-weight:900; font-size:1.5rem; letter-spacing:-1px;">MYNT</span>
+        </div>
+        <button onclick="connectWallet()" style="background:#F0F0F0; border:none; padding:12px 25px; border-radius:100px; font-weight:900; cursor:pointer;">CONNECT MUSE</button>
+    </nav>
+
+    <div class="factory-box">
+        <h1 style="font-weight:900; margin-bottom:10px;">The Artifact Factory</h1>
+        <p style="color:#666; margin-bottom:40px;">Anchor your heritage designs directly to the ledger.</p>
+        
+        <input type="text" id="name" placeholder="Artifact Name">
+        <input type="text" id="url" placeholder="Image Link">
+        <button class="btn" onclick="anchor()">ANCHOR TO PRISCION</button>
     </div>
-    <h2>Minted Artifacts</h2>
-    <div id='mints' class='artifact-grid'></div>
-    <script src='wallet-core.js'></script>
+
+    <h2 style="margin-top:80px; font-weight:900;">Anchored Artifacts</h2>
+    <div id="mints" class="minted-grid"></div>
+
+    <script src="wallet-core.js"></script>
     <script>
+        function connectWallet() { alert("MUSE WALLET Connected: .pri/prisca"); }
         function render() {
             const list = document.getElementById('mints');
             list.innerHTML = '';
-            if(window.PRISCION) {
-                PRISCION.getMints().forEach(m => {
-                    list.innerHTML += '<div class="artifact"><img src="'+m.url+'"><div><b>'+m.name+'</b></div></div>';
-                });
-            }
+            PRN.state.mints.forEach(m => {
+                list.innerHTML += `<div class="nft-card"><img src="${m.url}"><div style="padding:20px"><b style="display:block">${m.name}</b><small style="color:#999">ID: ${m.id}</small></div></div>`;
+            });
         }
-        async function anchor() {
-            const name = document.getElementById('art-name').value;
-            const url = document.getElementById('art-url').value;
-            if(!name || !url) return alert('Fill all fields');
-            if(window.PRISCION) {
-                await PRISCION.mint(name, url);
-                render();
-                alert('Artifact anchored!');
-            }
+        function anchor() {
+            const n = document.getElementById('name').value;
+            const u = document.getElementById('url').value;
+            if(!n || !u) return alert("Please fill all fields.");
+            PRN.state.mints.push({id: 'NFT_'+Math.floor(Math.random()*999), name: n, url: u});
+            PRN.save();
+            render();
+            alert("Digital Heritage Anchored Successfully!");
         }
         render();
     </script>
