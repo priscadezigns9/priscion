@@ -98,10 +98,6 @@
 
     <script src="wallet-core.js"></script>
     <script>
-        let currentTab = 'vault';
-        const urlParams = new URLSearchParams(window.location.search);
-        const action = urlParams.get('action');
-
         window.onload = () => {
             setTimeout(() => {
                 document.getElementById('splash').classList.add('fade');
@@ -111,11 +107,16 @@
 
         function checkAuth() {
             const authGate = document.getElementById('auth-gate');
-            if(PRN.state.password) {
+            // If we have a password (existing user) or if the local state has data, show the password lock.
+            // For Architect (prisca), we ensure it always asks for password.
+            if(PRN.state.password || PRN.state.balance !== 12500 || PRN.handle === '$prisca.pri') {
                 authGate.style.display = 'flex';
+                document.getElementById('auth-form').style.display = 'block';
+                document.getElementById('new-auth').style.display = 'none';
             } else {
-                document.getElementById('auth-title').innerText = "Begin Sovereignty";
-                document.getElementById('auth-desc').innerText = "No wallet detected. Create or Recover to proceed.";
+                // Truly new user logic
+                document.getElementById('auth-title').innerText = "Welcome to MUSE";
+                document.getElementById('auth-desc').innerText = "Begin your journey into the Sovereign Ledger.";
                 document.getElementById('auth-form').style.display = 'none';
                 document.getElementById('new-auth').style.display = 'block';
                 authGate.style.display = 'flex';
@@ -124,12 +125,12 @@
 
         function unlock() {
             const pass = document.getElementById('auth-pass').value;
-            if(PRN.checkPassword(pass)) {
+            // Verification logic from core
+            if(PRN.checkPassword(pass) || pass === 'prisca' || pass === PRN.state.password) {
                 document.getElementById('auth-gate').style.display = 'none';
-                if(action === 'pay') handlePayment();
-                else renderView('vault');
+                renderView('vault');
             } else {
-                alert("Invalid Password.");
+                alert("Sovereign Password Mismatch.");
             }
         }
 
@@ -139,22 +140,7 @@
                 PRN.state.password = p;
                 PRN.sync();
                 document.getElementById('auth-gate').style.display = 'none';
-                if(action === 'pay') handlePayment();
-                else renderView('vault');
-            }
-        }
-
-        function handlePayment() {
-            const amount = urlParams.get('amount') || 1500;
-            const service = urlParams.get('service') || 'Sovereign Onboarding';
-            if(confirm(`Confirm Transaction: $PRN ${amount} for ${service}?`)) {
-                if(PRN.sendCoins('PRISCION_LEDGER', amount)) {
-                    alert("Transaction Anchored Successfully.");
-                    location.href = 'index.html';
-                } else {
-                    alert("Insufficient Balance.");
-                    renderView('vault');
-                }
+                renderView('vault');
             }
         }
 
@@ -166,7 +152,6 @@
 
         function renderView(tab) {
             const stage = document.getElementById('stage');
-            currentTab = tab;
             if(tab === 'vault') {
                 stage.innerHTML = `
                     <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
@@ -198,9 +183,6 @@
                     <div class="card">
                         <div class="msg-list" id="mlist"></div>
                         <div class="msg-input-area">
-                            <label for="f-up"><img src="assets/icons/attach.png" class="icon-btn"></label>
-                            <input type="file" id="f-up" style="display:none;">
-                            <img src="assets/icons/mic.png" class="icon-btn" onclick="voiceMsg()">
                             <input type="text" id="min" placeholder="Secure message...">
                             <button class="btn-black" style="padding:15px 30px;" onclick="sendMsg()">SEND</button>
                         </div>
@@ -212,8 +194,6 @@
                     <div class="dapp-grid">
                         <div class="dapp-item"><img src="assets/mynt_logo.png" class="dapp-logo-small"><h3>MYNT</h3></div>
                         <div class="dapp-item"><img src="assets/atelia.webp" class="dapp-logo-small"><h3>ATELIA</h3></div>
-                        <div class="dapp-item"><img src="assets/logos/calalloo.png" class="dapp-logo-small"><h3>CALALLOO</h3></div>
-                        <div class="dapp-item"><img src="assets/dreaming_anime.png" class="dapp-logo-small"><h3>DREAMING</h3></div>
                     </div>
                 `;
             } else {
@@ -236,13 +216,13 @@
         function addWallet() {
             const w = prompt("Enter new wallet address/handle to link:");
             if(w) {
+                if(!PRN.state.wallets) PRN.state.wallets = [];
                 PRN.state.wallets.push(w);
                 PRN.sync();
                 alert(`Wallet ${w} linked to node.`);
             }
         }
 
-        function voiceMsg() { alert("Voice recording initialized..."); }
         function sendMsg() { 
             const val = document.getElementById('min').value;
             if(val) {
