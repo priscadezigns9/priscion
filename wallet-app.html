@@ -2,211 +2,159 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUSE | Sovereign Wallet</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
-        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --accent: #7B35D4; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        
-        /* Layer Control */
-        .layer { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #FFF; transition: opacity 0.5s ease; }
+        :root { --bg: #fff; --text: #000; --accent: #7B35D4; --muted: #AAA; --border: #EEE; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); overflow: hidden; }
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; transition: opacity 0.5s ease; }
         .hidden { display: none !important; }
-        .transparent { opacity: 0; }
-
-        /* Splash */
-        .splash-logo { width: 120px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-
-        /* Auth */
-        .auth-card { text-align: center; max-width: 400px; width: 90%; }
-        h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.5rem; }
-        p { color: var(--muted); margin-bottom: 40px; font-size: 0.9rem; }
-        input { width: 100%; padding: 22px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 20px; outline: none; text-align: center; font-size: 1.1rem; font-weight: 600; background: #F9F9F9; }
-        .btn-black { background: #000; color: #fff; border: none; padding: 22px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-black:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-
+        .logo-box { width: 100px; height: 100px; background: var(--accent); border-radius: 25px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 60px; font-weight: 900; margin-bottom: 30px; }
+        .input-group { width: 85%; max-width: 380px; text-align: center; }
+        input { width: 100%; padding: 20px; border: 1px solid var(--border); border-radius: 12px; font-size: 1rem; text-align: center; margin-bottom: 20px; outline: none; box-sizing: border-box; }
+        input:focus { border-color: var(--accent); }
+        button { background: #000; color: #fff; border: none; padding: 20px; border-radius: 12px; font-weight: 900; cursor: pointer; width: 100%; transition: transform 0.2s; }
+        button:active { transform: scale(0.98); }
+        
         /* App UI */
-        #app-ui { display: none; height: 100vh; width: 100vw; flex-direction: row; align-items: stretch; justify-content: flex-start; background: #FFF; }
-        .sidebar { width: 320px; border-right: 1px solid var(--border); background: #FAFAFA; display: flex; flex-direction: column; padding: 40px 0; }
-        .nav-item { padding: 20px 40px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; }
-        .nav-item.active { color: var(--text); background: #F0F0F0; }
-        .stage { flex: 1; padding: 100px; overflow-y: auto; }
-        .balance-card { border: 1px solid var(--border); border-radius: 40px; padding: 60px; background: #FFF; }
-        .balance-big { font-size: 5rem; font-weight: 900; letter-spacing: -3px; margin: 20px 0; }
-        .profile { margin-top: auto; padding: 40px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 20px; }
-        .profile img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+        #screen-app { flex-direction: row; align-items: stretch; justify-content: flex-start; }
+        .sidebar { width: 280px; border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; background: #FFF; }
+        .main { flex: 1; padding: 80px; overflow-y: auto; background: #FFF; position: relative; }
+        .nav-item { padding: 18px 25px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; font-weight: 700; color: var(--muted); transition: all 0.2s; }
+        .nav-item:hover { color: #000; }
+        .nav-item.active { background: #F5F5F5; color: #000; }
+        
+        .stage { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .card { background: #F9F9F9; padding: 50px; border-radius: 30px; border: 1px solid var(--border); }
+        .balance-label { font-weight: 900; color: var(--muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 3px; margin-bottom: 15px; }
+        .balance-value { font-size: 4.5rem; font-weight: 900; letter-spacing: -2px; }
+
+        /* Browser Overlay */
+        #browser-overlay { position: fixed; inset: 0; background: #FFF; z-index: 10000; display: flex; flex-direction: column; }
+        .browser-toolbar { height: 70px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
     </style>
 </head>
 <body>
 
-    <!-- Splash Layer -->
-    <div id="layer-splash" class="layer">
-        <img src="assets/muse_logo.png" class="splash-logo">
+    <!-- Splash Screen -->
+    <div id="screen-splash" class="screen">
+        <div class="logo-box">P</div>
     </div>
 
-    <!-- Auth Layer -->
-    <div id="layer-auth" class="layer hidden">
-        <div class="auth-card">
-            <img src="assets/muse_logo.png" style="width:60px; margin-bottom:30px;">
-            <h2>Security Lock</h2>
-            <p>Enter your sovereign password to unlock your vault.</p>
+    <!-- Auth Screen -->
+    <div id="screen-auth" class="screen hidden">
+        <div class="logo-box">P</div>
+        <div class="input-group">
+            <h2 style="margin-bottom: 10px; font-weight: 900;">Security Lock</h2>
+            <p style="color: var(--muted); margin-bottom: 40px; font-size: 0.9rem;">Enter your sovereign password to unlock your vault.</p>
             <input type="password" id="pass-input" placeholder="Password" autofocus>
-            <button class="btn-black" onclick="unlock()">UNLOCK VAULT</button>
+            <button onclick="unlock()">UNLOCK VAULT</button>
         </div>
     </div>
 
-    <!-- App Layer -->
-    <div id="app-ui">
+    <!-- Main App Screen -->
+    <div id="screen-app" class="screen hidden">
         <div class="sidebar">
-            <div style="padding: 0 40px 60px;"><img src="assets/muse_logo.png" style="width: 50px;"></div>
-            <div class="nav-item active" onclick="showLayer('vault')">Vault</div>
-            <div class="nav-item">Swap</div>
-            <div class="nav-item">Send</div>
-            <div class="nav-item">Receive</div>
-            <div class="nav-item" onclick="showLayer('voting')">Mission</div>
-            <div class="nav-item" onclick="showLayer('dapps')">Dapps</div>
-            <div class="profile">
-                <img src="assets/p-logo.png">
-                <div>
-                    <div style="font-weight:900;">$prisca.pri</div>
-                    <div style="font-size:0.6rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div>
+            <div style="font-weight: 900; font-size: 1.5rem; margin-bottom: 60px; color: var(--accent); letter-spacing: -1px;">MUSE.</div>
+            <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
+            <div class="nav-item" onclick="showStage('mission', this)">Mission</div>
+            <div class="nav-item" onclick="showStage('dapps', this)">Dapps</div>
+        </div>
+        <div class="main">
+            <!-- Vault Stage -->
+            <div id="stage-vault" class="stage">
+                <h1 style="font-size: 4rem; font-weight: 900; margin-bottom: 10px; letter-spacing: -2px;">Vault.</h1>
+                <p style="color: var(--muted); margin-bottom: 50px; font-weight: 500;">$prisca.pri | Master Architect Account</p>
+                <div class="card">
+                    <div class="balance-label">Total Reserve Balance</div>
+                    <div class="balance-value">$PRN 12,500</div>
+                    <div style="margin-top: 40px; display: flex; gap: 15px;">
+                        <button style="width: auto; padding: 20px 50px;">SEND</button>
+                        <button style="width: auto; padding: 20px 50px; background: #F0F0F0; color: #000;">RECEIVE</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div id="stage-vault" class="stage">
-            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
-            <div class="balance-card">
-                <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Available Reserve</div>
-                <div id="balance" class="balance-big">$PRN 12,500</div>
-                <button class="btn-black" style="width:auto; padding: 20px 60px;">SEND ASSETS</button>
-            </div>
-        </div>
 
-        <!-- Mission/Voting Stage -->
-        <div id="stage-voting" class="stage hidden">
-            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Mission.</h1>
-            <p style="color:var(--muted); margin-bottom:40px; font-weight:900; letter-spacing:2px; text-transform:uppercase; font-size:0.7rem;">Vote for Pre-Approved Charities</p>
-            
-            <div id="proposal-container" style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
-                <!-- Architect: Proposals will be dynamically loaded here once vetted -->
-                <div class="balance-card" style="padding:40px; grid-column: 1 / -1; text-align: center;">
-                    <p style="color:var(--muted); font-size: 0.9rem;">No active proposals. The Architect is currently vetting new charitable projects for the Sovereign Ledger.</p>
+            <!-- Mission Stage -->
+            <div id="stage-mission" class="stage hidden">
+                <h1 style="font-size: 4rem; font-weight: 900; margin-bottom: 60px; letter-spacing: -2px;">Mission.</h1>
+                <div style="padding: 100px; border: 2px dashed #EEE; border-radius: 40px; text-align: center;">
+                    <p style="color: var(--muted); font-weight: 600;">The Architect is currently vetting charitable projects.</p>
                 </div>
             </div>
-        </div>
 
-        <!-- Dapps Stage -->
-        <div id="stage-dapps" class="stage hidden">
-            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Dapps.</h1>
-            <p style="color:var(--muted); margin-bottom:40px; font-weight:900; letter-spacing:2px; text-transform:uppercase; font-size:0.7rem;">Sovereign Explorer</p>
-            
-            <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:20px;">
-                <!-- Dreaming Anime -->
-                <div class="balance-card" style="padding:20px; text-align:center; cursor:pointer; border-radius: 20px;" onclick="openDapp('https://dreaminganime.com', 'dreaminganime.pri')">
-                    <div style="font-weight:900; font-size:0.8rem; margin-bottom:5px;">dreaminganime.pri</div>
-                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900;">MEDIA NODE</div>
-                </div>
-                <!-- Atelia Gaming -->
-                <div class="balance-card" style="padding:20px; text-align:center; cursor:pointer; border-radius: 20px;" onclick="openDapp('https://priscion.com/ateliagaming/', 'atelia.pri')">
-                    <div style="font-weight:900; font-size:0.8rem; margin-bottom:5px;">atelia.pri</div>
-                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900;">GAMING NODE</div>
-                </div>
-                <!-- Couture Gallery -->
-                <div class="balance-card" style="padding:20px; text-align:center; cursor:pointer; border-radius: 20px;" onclick="openDapp('https://priscadezigns.org/couturegallery', 'couture.pri')">
-                    <div style="font-weight:900; font-size:0.8rem; margin-bottom:5px;">couture.pri</div>
-                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900;">FASHION NODE</div>
+            <!-- Dapps Stage -->
+            <div id="stage-dapps" class="stage hidden">
+                <h1 style="font-size: 4rem; font-weight: 900; margin-bottom: 60px; letter-spacing: -2px;">Dapps.</h1>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div class="card" style="padding: 30px; cursor: pointer; text-align: center;" onclick="openBrowser('https://dreaminganime.com', 'dreaminganime.pri')">
+                        <div style="font-weight: 900; margin-bottom: 10px;">dreaminganime.pri</div>
+                        <div style="font-size: 0.7rem; font-weight: 900; color: var(--accent); text-transform: uppercase;">Launch Node</div>
+                    </div>
+                    <div class="card" style="padding: 30px; cursor: pointer; text-align: center;" onclick="openBrowser('https://priscion.com/ateliagaming/', 'atelia.pri')">
+                        <div style="font-weight: 900; margin-bottom: 10px;">atelia.pri</div>
+                        <div style="font-size: 0.7rem; font-weight: 900; color: var(--accent); text-transform: uppercase;">Launch Node</div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Leggo Browser Layer -->
-        <div id="layer-browser" class="layer hidden" style="flex-direction:column; background:#F0F0F0;">
-            <div style="width:100%; height:70px; background:#FFF; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 30px;">
-                <div id="browser-handle" style="font-weight:900; font-size:0.8rem; color:var(--accent); letter-spacing:1px;"></div>
-                <div style="display:flex; gap:20px; align-items:center;">
-                    <div id="btn-affiliate" style="padding:10px 20px; border:1px solid #000; font-weight:900; font-size:0.6rem; border-radius:5px; cursor:pointer;">GENERATE AFFILIATE LINK</div>
-                    <div onclick="closeBrowser()" style="font-weight:900; cursor:pointer; font-size:1.2rem;">✕</div>
-                </div>
+    <!-- Leggo Browser Overlay -->
+    <div id="browser-overlay" class="hidden">
+        <div class="browser-toolbar">
+            <div id="browser-address" style="font-weight: 900; font-size: 0.9rem; color: var(--accent);"></div>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <div style="padding: 10px 20px; background: #000; color: #FFF; font-weight: 900; font-size: 0.7rem; border-radius: 8px; cursor: pointer;">AFFILIATE LINK</div>
+                <div onclick="closeBrowser()" style="font-weight: 900; font-size: 1.5rem; cursor: pointer;">&times;</div>
             </div>
-            <iframe id="browser-frame" style="width:100%; flex:1; border:none; background:#FFF;"></iframe>
         </div>
+        <iframe id="browser-frame" style="width: 100%; flex: 1; border: none;"></iframe>
     </div>
 
     <script>
-        // Sovereign Split Logic
-        function processSovereignSplit(amount, affiliateWallet) {
-            const tithe = amount * 0.10;
-            const commission = amount * 0.10;
-            const businessProfit = amount * 0.80;
-            
-            console.log("Splitting Payment...");
-            console.log("TWMK Tithe (10%): " + tithe + " $PRN");
-            console.log("Affiliate (" + affiliateWallet + "): " + commission + " $PRN");
-            console.log("Business Profit: " + businessProfit + " $PRN");
-            
-            return { tithe, commission, businessProfit };
-        }
-
-        // High-Fidelity Transition Control
+        // Fail-safe transition
         setTimeout(() => {
-            const splash = document.getElementById('layer-splash');
-            const auth = document.getElementById('layer-auth');
-            
-            splash.style.opacity = '0';
-            setTimeout(() => {
-                splash.classList.add('hidden');
-                auth.classList.remove('hidden');
-                document.getElementById('pass-input').focus();
-            }, 500);
+            const splash = document.getElementById('screen-splash');
+            const auth = document.getElementById('screen-auth');
+            splash.classList.add('hidden');
+            auth.classList.remove('hidden');
+            document.getElementById('pass-input').focus();
         }, 2500);
 
         function unlock() {
             const val = document.getElementById('pass-input').value;
-            // Architect Bypass
-            if(val === 'prisca' || val === 'password') {
-                document.getElementById('layer-auth').classList.add('hidden');
-                document.getElementById('app-ui').style.display = 'flex';
+            if(val.toLowerCase() === 'prisca' || val === 'password') {
+                document.getElementById('screen-auth').classList.add('hidden');
+                document.getElementById('screen-app').classList.remove('hidden');
             } else {
-                alert("Incorrect Sovereign Password.");
+                alert("Invalid Sovereign Password.");
             }
         }
 
-        // Enter key support
-        document.getElementById('pass-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') unlock();
-        });
-
-        function showLayer(layerId) {
-            // Hide all stages
+        function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            // Remove active class from nav
+            document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            
-            // Show target stage
-            document.getElementById('stage-' + layerId).classList.remove('hidden');
-            // Find nav item by text (Mission/Vault)
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(n => {
-                if(n.innerText.toLowerCase().includes(layerId)) n.classList.add('active');
-            });
+            el.classList.add('active');
         }
 
-        function castVote(target) {
-            alert("Signal for [" + target + "] captured on the Sovereign Ledger. Your $PRN power has been applied.");
-        }
-
-        function openDapp(url, handle) {
+        function openBrowser(url, handle) {
             document.getElementById('browser-frame').src = url;
-            document.getElementById('browser-handle').innerText = handle;
-            document.getElementById('layer-browser').classList.remove('hidden');
+            document.getElementById('browser-address').innerText = handle;
+            document.getElementById('browser-overlay').classList.remove('hidden');
         }
 
         function closeBrowser() {
-            document.getElementById('layer-browser').classList.add('hidden');
+            document.getElementById('browser-overlay').classList.add('hidden');
             document.getElementById('browser-frame').src = 'about:blank';
         }
-    </script>
 
+        document.getElementById('pass-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') unlock();
+        });
+    </script>
 </body>
 </html>
