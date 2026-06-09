@@ -7,66 +7,182 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg:#fff; --text:#1A1A1A; --muted:#666; --accent:#7B35D4; --border:rgba(0,0,0,0.08); --surface:#F9F9F9; --font-heading:'Playfair Display', serif; --font-body:'Inter', sans-serif; }
-        * { box-sizing:border-box; margin:0; padding:0; }
-        body { font-family:var(--font-body); background:var(--bg); color:var(--text); line-height:1.6; overflow-x:hidden; }
-        nav { height:100px; padding:0 8%; display:flex; flex-direction:column; justify-content:center; align-items:center; border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(255,255,255,0.9); backdrop-filter:blur(20px); z-index:1000; }
-        .logo-center { height:45px; cursor:pointer; margin-bottom:10px; }
-        .nav-links { display:flex; gap:35px; align-items:center; }
-        .nav-links a { text-decoration:none; color:var(--text); font-weight:700; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase; opacity:0.6; }
-        .hero { padding:140px 8% 100px; text-align:center; }
-        .hero h1 { font-family:var(--font-heading); font-size:clamp(3rem,10vw,5.5rem); line-height:0.9; letter-spacing:-2px; margin-bottom:25px; }
-        .hero p { color:var(--muted); font-size:1.1rem; max-width:600px; margin:0 auto 40px; }
-        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:30px; padding:0 8% 100px; max-width:1400px; margin:0 auto; }
-        .card { background:var(--surface); border:1px solid var(--border); padding:45px; border-radius:30px; text-decoration:none; color:inherit; position:relative; }
-        .card h3 { font-family:var(--font-heading); font-size:1.8rem; margin-bottom:15px; }
-        .card p { color:var(--muted); font-size:0.95rem; }
-        .status { position:absolute; top:25px; right:25px; font-size:0.6rem; font-weight:900; letter-spacing:2px; color:var(--accent); border:1px solid var(--accent); padding:4px 12px; border-radius:50px; }
-        .services-section { padding:100px 8%; background:#FAFAFA; border-top:1px solid var(--border); }
-        .service-card { background:#fff; border:1px solid var(--border); padding:50px; border-radius:35px; cursor:pointer; }
-        .price { font-size:2.2rem; font-weight:900; color:var(--accent); margin:25px 0; font-family:var(--font-heading); }
-        .service-details { text-align:left; list-style:none; margin-top:20px; }
-        .service-details li { font-size:0.85rem; color:var(--muted); margin-bottom:8px; display:flex; gap:10px; align-items:center; }
-        .service-details li::before { content:'✓'; color:var(--accent); font-weight:900; }
-        .btn { background:var(--text); color:#fff; padding:16px 35px; border-radius:100px; font-weight:700; font-size:0.75rem; letter-spacing:2px; text-transform:uppercase; text-decoration:none; display:inline-block; border:none; cursor:pointer; }
-        .sidebar { position:fixed; top:0; right:-500px; width:500px; height:100vh; background:#fff; border-left:1px solid var(--border); z-index:2000; transition:0.6s; visibility:hidden; }
-        .sidebar.active { right:0; visibility:visible; }
-        footer { padding:80px 8%; border-top:1px solid var(--border); text-align:center; }
-        .copyright { color:var(--muted); font-size:0.7rem; font-weight:900; letter-spacing:3px; text-transform:uppercase; }
+        :root {
+            --bg: #FFFFFF;
+            --text: #1A1A1A;
+            --muted: #666666;
+            --accent: #7B35D4;
+            --border: rgba(0,0,0,0.08);
+            --surface: #F9F9F9;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+
+        nav {
+            height: 90px; padding: 0 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px); z-index: 1000;
+        }
+        .logo { height: 40px; cursor: pointer; }
+        .nav-links { display: flex; gap: 35px; align-items: center; }
+        .nav-links a {
+            text-decoration: none; color: var(--text);
+            font-weight: 700; font-size: 0.75rem; letter-spacing: 1px;
+            text-transform: uppercase; transition: 0.3s; opacity: 0.8;
+        }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        .hero { padding: 140px 8% 100px; text-align: center; }
+        .hero h1 {
+            font-family: var(--font-heading); font-size: clamp(3rem, 10vw, 5.5rem);
+            line-height: 0.9; letter-spacing: -2px; margin-bottom: 25px;
+        }
+        .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 8% 100px; max-width: 1400px; margin: 0 auto; }
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 45px; border-radius: 30px; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            text-decoration: none; color: inherit; position: relative;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.05); }
+        .card h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
+        .card p { color: var(--muted); font-size: 0.95rem; }
+        .status { position: absolute; top: 25px; right: 25px; font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 50px; }
+
+        .services-section { padding: 100px 8%; background: #FAFAFA; border-top: 1px solid var(--border); }
+        .service-card { background: #fff; border: 1px solid var(--border); padding: 50px; border-radius: 35px; transition: 0.4s; cursor: pointer; }
+        .service-card:hover { border-color: var(--accent); }
+        .service-card h3 { font-family: var(--font-heading); font-size: 1.6rem; }
+        .price { font-size: 2.2rem; font-weight: 900; color: var(--accent); margin: 25px 0; font-family: var(--font-heading); }
+        .service-details { text-align: left; list-style: none; margin-top: 20px; }
+        .service-details li { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; display: flex; gap: 10px; align-items: center; }
+        .service-details li::before { content: '✓'; color: var(--accent); font-weight: 900; }
+
+        .btn {
+            background: var(--text); color: #fff; padding: 16px 35px;
+            border-radius: 100px; font-weight: 700; font-size: 0.75rem;
+            letter-spacing: 2px; text-transform: uppercase; text-decoration: none;
+            display: inline-block; transition: 0.4s; border: none; cursor: pointer;
+        }
+        .btn:hover { background: var(--accent); transform: scale(1.05); }
+
+        .sidebar {
+            position: fixed; top: 0; right: -500px; width: 500px; height: 100vh;
+            background: #FFFFFF; border-left: 1px solid var(--border);
+            z-index: 2000; transition: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            visibility: hidden; box-shadow: -20px 0 60px rgba(0,0,0,0.05);
+        }
+        .sidebar.active { right: 0 !important; visibility: visible !important; }
+
+        footer { padding: 80px 8%; border-top: 1px solid var(--border); text-align: center; }
+        .copyright { color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+
+        @media(max-width: 768px) {
+            .sidebar { width: 100%; right: -100%; }
+            nav { padding: 0 5%; }
+            .hero h1 { font-size: 3.5rem; }
+        }
     </style>
 </head>
 <body>
+
     <nav>
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/p-logo.png" class="logo-center" onclick="location.href='index.html'">
+        <img src="assets/muse_logo.png" class="logo" onclick="location.href='index.html'">
         <div class="nav-links">
             <a href="whitepaper.html">White Paper</a>
             <a href="leggo.html">OS</a>
-            <a href="#" id="muse-trigger">MUSE WALLET</a>
+            <button id="muse-trigger" class="btn" style="padding: 10px 25px; font-size: 0.65rem;">MUSE WALLET</button>
         </div>
     </nav>
+
     <section class="hero">
-        <span style="font-size:0.65rem;font-weight:900;letter-spacing:5px;color:var(--accent);text-transform:uppercase;display:block;margin-bottom:20px;">The Sovereign Ledger</span>
+        <span style="font-size: 0.65rem; font-weight: 900; letter-spacing: 5px; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 20px;">The Sovereign Ledger</span>
         <h1>Architecting<br>Reality.</h1>
         <p>Migrate your brand to the Priscion Blockchain. Secure your legacy with high-fidelity digital architecture and neural identity protocols.</p>
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <a href="leggo.html" class="btn">Enter the OS</a>
+            <a href="whitepaper.html" class="btn" style="background:none; border:1px solid #1A1A1A; color:#1A1A1A;">White Paper</a>
+        </div>
     </section>
+
     <div class="grid">
-        <a href="pulse/" class="card"><span class="status">Live</span><h3>PULSE</h3><p>The official block explorer.</p></a>
-        <a href="wallet-app.html" class="card"><span class="status">Beta</span><h3>MUSE</h3><p>High-fidelity sovereign wallet.</p></a>
-        <a href="swap.html" class="card"><span class="status">Live</span><h3>CHILLATA</h3><p>Sovereign Swap and liquidity engine.</p></a>
-        <a href="mynt/" class="card"><span class="status">Dev</span><h3>MYNT</h3><p>The NFT Factory.</p></a>
+        <a href="pulse/" class="card">
+            <span class="status">Live</span>
+            <h3>PULSE</h3>
+            <p>The official block explorer. Monitor transactions and ledger health in real-time.</p>
+        </a>
+        <a href="muse.html" class="card">
+            <span class="status">Beta</span>
+            <h3>MUSE</h3>
+            <p>High-fidelity sovereign wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
+        </a>
+        <a href="peanuts/" class="card">
+            <span class="status">Live</span>
+            <h3>PEANUTS</h3>
+            <p>Sovereign Analytics. High-fidelity ledger intelligence and real-time watchdog data.</p>
+        </a>
+        <a href="mynt/" class="card">
+            <span class="status">Dev</span>
+            <h3>MYNT</h3>
+            <p>The NFT Factory. Mint sovereign artifacts and high-fidelity legacy assets.</p>
+        </a>
     </div>
+
     <section class="services-section">
-        <div style="max-width:1200px;margin:0 auto;">
-            <h2 style="font-family:var(--font-heading);font-size:3rem;margin:20px 0 60px;">Web3 Migration</h2>
-            <div class="grid" style="padding:0;margin-bottom:0;">
-                <div class="service-card"><h3>Sovereign Onboarding</h3><div class="price">$1,500.00</div><p>Designed for emerging brands and personal nodes looking for immediate entry into the Priscion network.</p><ul class="service-details"><li>Primary .pri handle registration</li><li>Sovereign identity engineering</li><li>MUSE Wallet handshake integration</li></ul><button class="btn" style="margin-top:30px;width:100%;">Acquire Service</button></div>
-                <div class="service-card"><h3>Ledger Migration</h3><div class="price">$7,900.00</div><p>High-fidelity deep-tissue migration for established corporations and heritage datasets.</p><ul class="service-details"><li>Legacy database heritage anchoring</li><li>Custom revenue-tithing smart contracts</li><li>Deep neural security firewalling</li></ul><button class="btn" style="margin-top:30px;width:100%;">Acquire Service</button></div>
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <span style="font-size: 0.65rem; font-weight: 900; letter-spacing: 5px; color: var(--accent); text-transform: uppercase;">Premium Services</span>
+            <h2 style="font-family: var(--font-heading); font-size: 3rem; margin: 20px 0 60px;">Web3 Migration</h2>
+            
+            <div class="grid" style="padding: 0; margin-bottom: 0;">
+                <div class="service-card" onclick="toggleSidebar()">
+                    <h3>Sovereign Onboarding</h3>
+                    <div class="price">$1,500.00</div>
+                    <p>Designed for emerging brands and personal nodes looking for immediate entry into the Priscion network.</p>
+                    <ul class="service-details">
+                        <li>Primary .pri handle registration</li>
+                        <li>Sovereign identity engineering</li>
+                        <li>MUSE Wallet handshake integration</li>
+                    </ul>
+                    <button class="btn" style="margin-top: 30px; width: 100%;">Acquire Service</button>
+                </div>
+                <div class="service-card" onclick="toggleSidebar()">
+                    <h3>Ledger Migration</h3>
+                    <div class="price">$7,900.00</div>
+                    <p>High-fidelity deep-tissue migration for established corporations and heritage datasets.</p>
+                    <ul class="service-details">
+                        <li>Legacy database heritage anchoring</li>
+                        <li>Custom revenue-tithing smart contracts</li>
+                        <li>Deep neural security firewalling</li>
+                    </ul>
+                    <button class="btn" style="margin-top: 30px; width: 100%;">Acquire Service</button>
+                </div>
             </div>
         </div>
     </section>
+
     <div id="sidebar" class="sidebar"></div>
-    <footer><p class="copyright">Priscion Sovereign Ledger &copy; 2026 | Anchored to Eternity</p></footer>
+
+    <footer>
+        <p class="copyright">Priscion Sovereign Ledger &copy; 2026 | Anchored to Eternity</p>
+    </footer>
+
     <script src="wallet-core.js"></script>
-    <script>document.getElementById('muse-trigger').onclick=function(e){e.preventDefault();if(typeof toggleSidebar==='function'){toggleSidebar();}else{document.getElementById('sidebar').classList.toggle('active');}};</script>
+    <script>
+        // Inline toggle to ensure zero-failure
+        document.getElementById('muse-trigger').onclick = function() {
+            if(typeof toggleSidebar === 'function') {
+                toggleSidebar();
+            } else {
+                console.error('Wallet Core not loaded');
+                document.getElementById('sidebar').classList.toggle('active');
+            }
+        };
+    </script>
 </body>
 </html>
