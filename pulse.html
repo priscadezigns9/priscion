@@ -2,58 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PULSE | Sovereign Explorer</title>
+    <title>PULSE</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
         body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; padding: 60px 8%; }
-        nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
-        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 60px; }
-        .stat-card { background: #FAFAFA; border: 1px solid #EEE; padding: 40px; border-radius: 30px; }
-        .stat-card small { text-transform: uppercase; letter-spacing: 2px; color: #999; font-weight: 900; }
-        .stat-card div { font-size: 2.5rem; font-weight: 900; margin-top: 10px; }
+        nav { display: flex; justify-content: center; align-items: center; margin-bottom: 80px; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 60px; }
+        .stat-card { background: #F9F9F9; padding: 30px; border-radius: 24px; border: 1px solid #EEE; }
+        .stat-card small { color: #999; font-weight: 900; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 1px; }
+        .stat-card div { font-size: 2rem; font-weight: 900; margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 20px; color: #999; border-bottom: 2px solid #EEE; }
-        td { padding: 20px; border-bottom: 1px solid #EEE; font-size: 0.9rem; }
-        .cid { color: #7B35D4; font-family: monospace; }
+        td, th { padding: 20px; border-bottom: 1px solid #EEE; text-align: left; font-size: 0.9rem; }
+        th { color: #999; text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem; }
     </style>
 </head>
 <body>
     <nav>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <img src="assets/pulse_logo.png" style="height: 50px;">
-            <span style="font-weight:900; font-size:1.5rem; letter-spacing:-1px;">PULSE</span>
-        </div>
-        <div style="font-weight:900; font-size:0.7rem; letter-spacing:2px; color:#999;">PRISCION NETWORK</div>
+        <img src="assets/pulse_logo.png" style="height: 50px;">
     </nav>
 
-    <h1>Network Heartbeat</h1>
-    
     <div class="stats">
-        <div class="stat-card"><small>Latest Block</small><div>#100</div></div>
-        <div class="stat-card"><small>Chain State</small><div style="color:green">LIVE</div></div>
-        <div class="stat-card"><small>Sovereignty</small><div>100%</div></div>
+        <div class="stat-card"><small>Network State</small><div style="color:green">LIVE</div></div>
+        <div class="stat-card"><small>Block Height</small><div>#100</div></div>
+        <div class="stat-card"><small>Validator</small><div>NEURAL-1</div></div>
     </div>
 
-    <h3>Ledger Activity</h3>
+    <h3>Active Ledger</h3>
     <table>
         <thead>
-            <tr><th>Operation</th><th>Identifier (CID)</th><th>State</th><th>Timestamp</th></tr>
+            <tr><th>Action</th><th>Address</th><th>Status</th><th>Time</th></tr>
         </thead>
-        <tbody id="activity">
-            <!-- Data pulled from real ledger state -->
-        </tbody>
+        <tbody id="log"></tbody>
     </table>
 
     <script src="wallet-core.js"></script>
     <script>
-        function render() {
-            const list = document.getElementById('activity');
-            list.innerHTML = '<tr><td>Block Anchor</td><td class="cid">QmXo...v7f</td><td><b>SUCCESS</b></td><td>Just now</td></tr>';
-            PRN.state.history.forEach(h => {
-                list.innerHTML += `<tr><td>${h.type}</td><td class="cid">QmZ...${Math.floor(Math.random()*1000)}</td><td><b>ANCHORED</b></td><td>${h.date}</td></tr>`;
-            });
+        const log = document.getElementById('log');
+        PRN.state.history.forEach(h => {
+            log.innerHTML += `<tr><td>${h.type}</td><td style="font-family:monospace;">.pri/${h.to}</td><td style="color:green; font-weight:900;">ANCHORED</td><td>Just now</td></tr>`;
+        });
+        if(PRN.state.history.length == 0) {
+            log.innerHTML = '<tr><td colspan="4" style="color:#999; text-align:center; padding:40px;">Waiting for new anchor events...</td></tr>';
         }
-        render();
     </script>
 </body>
 </html>
