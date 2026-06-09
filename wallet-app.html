@@ -88,19 +88,10 @@
             <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Mission.</h1>
             <p style="color:var(--muted); margin-bottom:40px; font-weight:900; letter-spacing:2px; text-transform:uppercase; font-size:0.7rem;">Vote for Pre-Approved Charities</p>
             
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
-                <div class="balance-card" style="padding:40px;">
-                    <div style="font-weight:900; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-size:0.6rem; margin-bottom:10px;">Vetted by Architect</div>
-                    <h3 style="font-weight:900; margin-bottom:10px;">Biblical Archaeology</h3>
-                    <p style="margin-bottom:20px; font-size:0.8rem; line-height:1.5;">Supporting primary research and excavations in Israel and the Levant to provide evidence for the faith.</p>
-                    <button class="btn-black" style="font-size:0.7rem; padding:15px;" onclick="castVote('Archaeology')">SIGNAL SUPPORT</button>
-                </div>
-                
-                <div class="balance-card" style="padding:40px;">
-                    <div style="font-weight:900; color:var(--accent); letter-spacing:2px; text-transform:uppercase; font-size:0.6rem; margin-bottom:10px;">Vetted by Architect</div>
-                    <h3 style="font-weight:900; margin-bottom:10px;">Global Gospel Outreach</h3>
-                    <p style="margin-bottom:20px; font-size:0.8rem; line-height:1.5;">Direct funding for evidence-based evangelism projects in unreached sovereign territories.</p>
-                    <button class="btn-black" style="font-size:0.7rem; padding:15px;" onclick="castVote('Gospel')">SIGNAL SUPPORT</button>
+            <div id="proposal-container" style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
+                <!-- Architect: Proposals will be dynamically loaded here once vetted -->
+                <div class="balance-card" style="padding:40px; grid-column: 1 / -1; text-align: center;">
+                    <p style="color:var(--muted); font-size: 0.9rem;">No active proposals. The Architect is currently vetting new charitable projects for the Sovereign Ledger.</p>
                 </div>
             </div>
         </div>
