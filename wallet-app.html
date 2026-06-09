@@ -65,7 +65,7 @@
             <div class="nav-item">Send</div>
             <div class="nav-item">Receive</div>
             <div class="nav-item" onclick="showLayer('voting')">Mission</div>
-            <div class="nav-item">Dapps</div>
+            <div class="nav-item" onclick="showLayer('dapps')">Dapps</div>
             <div class="profile">
                 <img src="assets/p-logo.png">
                 <div>
@@ -94,6 +94,42 @@
                     <p style="color:var(--muted); font-size: 0.9rem;">No active proposals. The Architect is currently vetting new charitable projects for the Sovereign Ledger.</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Dapps Stage -->
+        <div id="stage-dapps" class="stage hidden">
+            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Dapps.</h1>
+            <p style="color:var(--muted); margin-bottom:40px; font-weight:900; letter-spacing:2px; text-transform:uppercase; font-size:0.7rem;">Sovereign Explorer</p>
+            
+            <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:20px;">
+                <!-- Dreaming Anime -->
+                <div class="balance-card" style="padding:20px; text-align:center; cursor:pointer; border-radius: 20px;" onclick="openDapp('https://dreaminganime.com', 'dreaminganime.pri')">
+                    <div style="font-weight:900; font-size:0.8rem; margin-bottom:5px;">dreaminganime.pri</div>
+                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900;">MEDIA NODE</div>
+                </div>
+                <!-- Atelia Gaming -->
+                <div class="balance-card" style="padding:20px; text-align:center; cursor:pointer; border-radius: 20px;" onclick="openDapp('https://priscion.com/ateliagaming/', 'atelia.pri')">
+                    <div style="font-weight:900; font-size:0.8rem; margin-bottom:5px;">atelia.pri</div>
+                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900;">GAMING NODE</div>
+                </div>
+                <!-- Couture Gallery -->
+                <div class="balance-card" style="padding:20px; text-align:center; cursor:pointer; border-radius: 20px;" onclick="openDapp('https://priscadezigns.org/couturegallery', 'couture.pri')">
+                    <div style="font-weight:900; font-size:0.8rem; margin-bottom:5px;">couture.pri</div>
+                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900;">FASHION NODE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Leggo Browser Layer -->
+        <div id="layer-browser" class="layer hidden" style="flex-direction:column; background:#F0F0F0;">
+            <div style="width:100%; height:70px; background:#FFF; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 30px;">
+                <div id="browser-handle" style="font-weight:900; font-size:0.8rem; color:var(--accent); letter-spacing:1px;"></div>
+                <div style="display:flex; gap:20px; align-items:center;">
+                    <div id="btn-affiliate" style="padding:10px 20px; border:1px solid #000; font-weight:900; font-size:0.6rem; border-radius:5px; cursor:pointer;">GENERATE AFFILIATE LINK</div>
+                    <div onclick="closeBrowser()" style="font-weight:900; cursor:pointer; font-size:1.2rem;">✕</div>
+                </div>
+            </div>
+            <iframe id="browser-frame" style="width:100%; flex:1; border:none; background:#FFF;"></iframe>
         </div>
     </div>
 
@@ -144,6 +180,17 @@
 
         function castVote(target) {
             alert("Signal for [" + target + "] captured on the Sovereign Ledger. Your $PRN power has been applied.");
+        }
+
+        function openDapp(url, handle) {
+            document.getElementById('browser-frame').src = url;
+            document.getElementById('browser-handle').innerText = handle;
+            document.getElementById('layer-browser').classList.remove('hidden');
+        }
+
+        function closeBrowser() {
+            document.getElementById('layer-browser').classList.add('hidden');
+            document.getElementById('browser-frame').src = 'about:blank';
         }
     </script>
 
