@@ -13,6 +13,7 @@
             --text: #1A1A1A;
             --muted: #666666;
             --accent: #7B35D4;
+            --muze-blue: #007AFF; /* High-quality Blue/Lilac shade */
             --border: rgba(0,0,0,0.08);
             --surface: #F9F9F9;
             --font-heading: 'Playfair Display', serif;
@@ -38,11 +39,12 @@
         .nav-links a:hover { color: var(--accent); }
 
         .btn-muze-nav {
-            background: #000; color: #fff; padding: 14px 28px; border-radius: 100px;
+            background: var(--muze-blue); color: #fff; padding: 14px 28px; border-radius: 100px;
             font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
             cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,122,255,0.2);
         }
-        .btn-muze-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+        .btn-muze-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,122,255,0.4); }
 
         .hero {
             padding: 120px 8% 100px; text-align: center;
@@ -56,6 +58,7 @@
 
         .dapp-grid {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 0 8% 100px;
+            max-width: 1200px; margin: 0 auto;
         }
         .dapp-card {
             background: var(--surface); border: 1px solid var(--border); padding: 50px 40px;
@@ -118,7 +121,7 @@
     </nav>
 
     <section class="hero">
-        <img src="assets/p-logo.png" class="p-logo-hero" onclick="location.href='/'" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png" class="p-logo-hero" onclick="location.href='/'">
         <div class="kicker">The Independent Ledger</div>
         <h1>Architecting<br>Reality.</h1>
         <p>Global brand design and high quality digital systems. We build the automatic tools that power the 2026 digital age.</p>
@@ -127,25 +130,25 @@
     <div class="dapp-grid">
         <a href="pulse/" class="dapp-card">
             <span class="status-badge">Live</span>
-            <img src="assets/pulse_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png" class="dapp-logo" style="opacity: 0.5;">
             <h3>PULSE</h3>
             <p>The official block explorer. Monitor transactions and ledger health in real-time.</p>
         </a>
         <a href="muzewallet/" class="dapp-card">
             <span class="status-badge">Beta</span>
-            <img src="assets/muze_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png" class="dapp-logo" style="opacity: 0.5;">
             <h3>MUZE</h3>
             <p>High quality independent wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
         </a>
         <a href="chillata/" class="dapp-card">
             <span class="status-badge">Live</span>
-            <img src="assets/chillata_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png" class="dapp-logo" style="opacity: 0.5;">
             <h3>CHILLATA</h3>
             <p>Independent Swap and liquidity engine. Private asset exchange and liquidity systems.</p>
         </a>
         <a href="mynt/" class="dapp-card">
             <span class="status-badge">Dev</span>
-            <img src="assets/mynt_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png" class="dapp-logo" style="opacity: 0.5;">
             <h3>MYNT</h3>
             <p>The NFT Factory. Minting private digital networks and high quality story artifacts.</p>
         </a>
