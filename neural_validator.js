@@ -1,1 +1,1 @@
-class NeuralValidator { constructor() { this.baseReward = 15.0; this.tithingRate = 0.10; } }
+class NeuralValidator { constructor() { this.baseReward = 15.0; this.tithingRate = 0.10; } calculateReward(f) { return (this.baseReward * f).toFixed(4); } processBlock(b) { const r = this.calculateReward(b.fidelity || 1.0); const t = (r * this.tithingRate).toFixed(4); return { status: 'ANCHORED', reward: r - t, tithe: t, hash: Math.random().toString(36).substring(2) }; } }
