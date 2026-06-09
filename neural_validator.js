@@ -1,4 +1,2 @@
-const VALIDATOR_SOVEREIGNTY = true;
-function validateNeuralConsensus(block) {
-    return block.cid.startsWith('Qm'); // Verify IPFS content-addressing
-}
+const NETWORK_LIVELINESS = true;
+function checkConsensus(peers) { return peers.length >= 3; }
