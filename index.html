@@ -38,10 +38,12 @@
         .nav-links a:hover { color: var(--accent); }
 
         .btn-muze {
-            background: #000; color: #fff; padding: 14px 28px; border-radius: 100px;
+            background: #000; color: #fff !important; padding: 14px 28px; border-radius: 100px;
             font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
             cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+        .btn-muze:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); background: #000; color: #fff; }
 
         .hero {
             padding: 120px 8% 100px; text-align: center;
@@ -54,16 +56,22 @@
         .hero p { max-width: 600px; color: var(--muted); font-size: 1.1rem; margin-bottom: 40px; }
 
         .pillar-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding: 0 8% 100px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; padding: 0 8% 100px;
+            max-width: 1200px; margin: 0 auto;
         }
         .pillar-card {
             background: var(--surface); border: 1px solid var(--border); padding: 50px 40px;
             border-radius: 32px; text-decoration: none; color: inherit; transition: 0.3s;
-            text-align: center;
+            text-align: left; position: relative; overflow: hidden;
         }
         .pillar-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .pillar-card h3 { font-weight: 900; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 15px; text-transform: uppercase; }
-        .pillar-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+        .pillar-card h3 { font-weight: 900; font-size: 1.2rem; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .pillar-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; max-width: 80%; }
+        
+        .pillar-icon { 
+            position: absolute; right: 40px; top: 50%; transform: translateY(-50%); 
+            font-size: 2.5rem; opacity: 0.1; font-weight: 900;
+        }
 
         .services { padding: 100px 8%; background: #000; color: #fff; border-radius: 60px 60px 0 0; }
         .service-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
@@ -102,17 +110,25 @@
     </section>
 
     <div class="pillar-grid">
-        <a href="ateliagaming/" class="pillar-card">
-            <h3>ATELIA GAMING</h3>
-            <p>Gaming Brand. High-performance tech and immersive metaverse systems.</p>
+        <a href="pulse/" class="pillar-card">
+            <h3>Pulse Explorer</h3>
+            <p>The clear record of the network. Verify every transaction and brand move in real-time.</p>
+            <div class="pillar-icon">P</div>
         </a>
-        <a href="couturegallery/" class="pillar-card">
-            <h3>COUTURE GALLERY</h3>
-            <p>Editorial Brand. High-end fashion archives and leather craftsmanship.</p>
+        <a href="chillata/" class="pillar-card">
+            <h3>Chillata Swap</h3>
+            <p>High quality asset exchange. Trade your private assets with zero friction.</p>
+            <div class="pillar-icon">C</div>
         </a>
         <a href="mynt/" class="pillar-card">
-            <h3>MYNT</h3>
-            <p>Commerce Brand. The secure marketplace for signed high quality products.</p>
+            <h3>MYNT Store</h3>
+            <p>Private shop for high quality digital assets and signed brand products.</p>
+            <div class="pillar-icon">M</div>
+        </a>
+        <a href="peanuts/" class="pillar-card">
+            <h3>Peanuts Data</h3>
+            <p>Network intelligence and market data for the independent ecosystem.</p>
+            <div class="pillar-icon">P</div>
         </a>
     </div>
 
