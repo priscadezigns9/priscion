@@ -102,7 +102,7 @@ var lynxChatMode = 'list';
 
 var LOGOS = {
     muse: 'assets/muse_icon.png',
-    lynx: 'https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/pd_icon_512.png',
+    lynx: 'assets/pd_icon_512.png',
     chillata: 'assets/mynt_logo.png'
 };
 
