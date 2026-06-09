@@ -1,5 +1,5 @@
 /**
- * PRISCION MUSE Wallet Core v24.6.1 (Sovereign Hardened)
+ * PRISCION MUSE Wallet Core v24.6.2 (Sovereign Hardened)
  * THE ARCHITECT'S VISION: Unified UI + Sovereign L1 Persistence (Supabase)
  * NO SIMULATION | TRUE DIRECT SEND | LYNX MESSENGER | SWAP | VAULT
  */
@@ -22,9 +22,14 @@ class PriscionSovereign {
             history: [], 
             handle: this.handle, 
             block: 0,
-            avatar: 'https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/p-logo.png',
+            avatar: 'assets/priscion_logo.png',
             lynxMessages: []
         };
+    }
+
+    sync() {
+        localStorage.setItem('muse_session', JSON.stringify(this.state));
+        // In a real app, we would also PUT to Supabase here
     }
 
     async handshake() {
