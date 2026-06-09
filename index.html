@@ -21,7 +21,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-        /* Navigation */
         nav {
             height: 80px; padding: 0 8%;
             display: flex; justify-content: space-between; align-items: center;
@@ -29,46 +28,26 @@
         }
         .nav-logo { height: 24px; cursor: pointer; }
         .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a {
-            text-decoration: none; color: var(--text);
-            font-weight: 700; font-size: 0.65rem; letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        .btn-black {
-            background: #111; color: #fff; padding: 10px 20px;
-            border-radius: 6px; font-weight: 900; font-size: 0.65rem;
-            letter-spacing: 1px; border: none; cursor: pointer; text-transform: uppercase;
-        }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; }
+        .btn-black { background: #111; color: #fff; padding: 10px 20px; border-radius: 6px; font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; border: none; cursor: pointer; text-transform: uppercase; }
 
-        /* Hero */
         .hero { padding: 100px 8% 60px; text-align: center; max-width: 900px; margin: 0 auto; }
         .hero-tag { font-size: 0.6rem; font-weight: 900; letter-spacing: 4px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block; }
-        .hero h1 {
-            font-family: var(--font-heading); font-size: clamp(3.5rem, 10vw, 5.5rem);
-            line-height: 0.85; letter-spacing: -3px; margin-bottom: 25px; font-weight: 900;
-        }
+        .hero h1 { font-family: var(--font-heading); font-size: clamp(3.5rem, 10vw, 5.5rem); line-height: 0.85; letter-spacing: -3px; margin-bottom: 25px; font-weight: 900; }
         .hero p { color: var(--muted); font-size: 1rem; max-width: 500px; margin: 0 auto 40px; font-weight: 400; line-height: 1.5; }
         .hero-btns { display: flex; gap: 15px; justify-content: center; }
-        .btn-hero {
-            padding: 15px 35px; border-radius: 100px; font-weight: 900; font-size: 0.7rem;
-            letter-spacing: 1px; text-transform: uppercase; text-decoration: none; transition: 0.3s;
-        }
+        .btn-hero { padding: 15px 35px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
         .btn-hero.dark { background: #111; color: #fff; }
         .btn-hero.light { background: #fff; color: #111; border: 1px solid #ddd; }
 
-        /* Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 60px 8% 100px; max-width: 1300px; margin: 0 auto; }
-        .card {
-            background: var(--card-bg); padding: 40px; border-radius: 24px; 
-            text-decoration: none; color: inherit; position: relative;
-        }
+        .card { background: var(--card-bg); padding: 40px; border-radius: 24px; text-decoration: none; color: inherit; position: relative; text-align: center; }
         .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
-        .card-logo { height: 22px; }
-        .card-status { font-size: 0.5rem; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); border: 1px solid rgba(123, 53, 212, 0.3); padding: 4px 10px; border-radius: 50px; text-transform: uppercase; }
+        .card-logo { height: 22px; display: block; margin: 0 auto; }
+        .card-status { font-size: 0.5rem; font-weight: 900; letter-spacing: 1.5px; color: var(--accent); border: 1px solid rgba(123, 53, 212, 0.3); padding: 4px 10px; border-radius: 50px; text-transform: uppercase; position: absolute; top: 25px; right: 25px; }
         .card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; font-weight: 900; letter-spacing: -0.5px; }
         .card p { color: var(--muted); font-size: 0.8rem; line-height: 1.6; }
 
-        /* Services */
         .services-area { padding: 100px 8% 120px; border-top: 1px solid #f0f0f0; }
         .services-wrap { max-width: 1100px; margin: 0 auto; }
         .services-tag { font-size: 0.6rem; font-weight: 900; letter-spacing: 3px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block; }
@@ -76,9 +55,8 @@
         
         .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px; }
         .service-card { border: 1px solid #eee; padding: 50px; border-radius: 32px; background: #fff; position: relative; }
-        .service-card::after { content: ''; position: absolute; inset: -1px; border: 1px solid var(--accent); border-radius: 32px; opacity: 0.2; pointer-events: none; }
-        .service-card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; }
-        .price { font-size: 2.2rem; font-weight: 900; color: var(--accent); margin-bottom: 25px; }
+        .service-card h3 { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 700; margin-bottom: 15px; }
+        .price { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 900; color: var(--accent); margin-bottom: 25px; }
         .service-card p { font-size: 0.85rem; color: var(--muted); margin-bottom: 30px; }
         .details { list-style: none; margin-bottom: 40px; }
         .details li { font-size: 0.75rem; color: #444; margin-bottom: 12px; display: flex; gap: 10px; align-items: center; }
@@ -88,8 +66,7 @@
         footer { padding: 60px 8%; text-align: center; border-top: 1px solid #f0f0f0; }
         .footer-text { font-size: 0.6rem; font-weight: 900; letter-spacing: 3px; color: #aaa; text-transform: uppercase; }
 
-        /* Sidebar */
-        .sidebar { position: fixed; top: 0; right: -500px; width: 450px; height: 100vh; background: #fff; border-left: 1px solid #eee; z-index: 2000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -20px 0 60px rgba(0,0,0,0.05); }
+        .sidebar { position: fixed; top: 0; right: -500px; width: 450px; height: 100vh; background: #0A0A0A; border-left: 1px solid rgba(255,255,255,0.1); z-index: 2000; transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: -20px 0 60px rgba(0,0,0,0.5); color: #fff; }
         .sidebar.active { right: 0; }
     </style>
 </head>
@@ -99,6 +76,7 @@
         <img src="assets/priscion_logo.png" class="nav-logo" onclick="location.href='index.html'">
         <div class="nav-links">
             <a href="#">White Paper</a>
+            <a href="pulse.html">Explorer</a>
             <a href="leggo.html">OS</a>
             <button class="btn-black" onclick="toggleSidebar()">Muse Wallet</button>
         </div>
@@ -116,34 +94,26 @@
 
     <div class="grid">
         <a href="pulse.html" class="card">
-            <div class="card-header">
-                <img src="assets/pulse_logo.png" class="card-logo">
-                <span class="card-status">Live</span>
-            </div>
+            <span class="card-status">Live</span>
+            <img src="assets/pulse_logo.png" class="card-logo">
             <h3>PULSE</h3>
             <p>The official block explorer. Monitor transactions and ledger health in real-time.</p>
         </a>
         <a href="muse.html" class="card">
-            <div class="card-header">
-                <img src="assets/muse_icon.png" class="card-logo">
-                <span class="card-status">Beta</span>
-            </div>
+            <span class="card-status">Beta</span>
+            <img src="assets/muse_icon.png" class="card-logo">
             <h3>MUSE</h3>
             <p>High-fidelity sovereign wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
         </a>
         <a href="swap.html" class="card">
-            <div class="card-header">
-                <img src="assets/chillata_logo.png" class="card-logo">
-                <span class="card-status">Live</span>
-            </div>
+            <span class="card-status">Live</span>
+            <img src="assets/chillata_logo.png" class="card-logo">
             <h3>CHILLATA</h3>
             <p>Sovereign Swap. High-fidelity trading and automated liquidity protocols.</p>
         </a>
         <a href="mynt.html" class="card">
-            <div class="card-header">
-                <img src="assets/mynt_logo.png" class="card-logo">
-                <span class="card-status">Dev</span>
-            </div>
+            <span class="card-status">Dev</span>
+            <img src="assets/mynt_logo.png" class="card-logo">
             <h3>MYNT</h3>
             <p>The NFT Factory. Mint sovereign artifacts and high-fidelity legacy assets.</p>
         </a>
@@ -181,19 +151,47 @@
     </section>
 
     <div id="sidebar" class="sidebar">
-        <div id="sidebar-content" style="padding:40px;">
+        <div style="padding: 40px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
-                <img src="assets/muse_icon.png" style="height:30px;">
-                <button onclick="toggleSidebar()" style="background:none; border:none; font-size:1.5rem; cursor:pointer;">×</button>
+                <img src="assets/muse_icon.png" style="height:35px;">
+                <button onclick="toggleSidebar()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">×</button>
             </div>
-            <div style="background:#f9f9f9; padding:40px; border-radius:24px; text-align:center;">
-                <small style="color:#aaa; font-weight:900; letter-spacing:1px; text-transform:uppercase; font-size:0.6rem;">Available Balance</small>
-                <div style="font-size:3rem; font-weight:900; margin:10px 0; letter-spacing:-1px;">6,450.00</div>
-                <button style="width:100%; background:#111; color:#fff; border:none; padding:18px; border-radius:100px; font-weight:900; font-size:0.7rem; letter-spacing:1px; cursor:pointer;">SEND COINS</button>
+            
+            <div style="margin-bottom:30px; display:flex; gap:20px; border-bottom:1px solid #222; padding-bottom:15px;">
+                <span style="font-weight:900; border-bottom:2px solid #7B35D4; padding-bottom:15px;">Coins</span>
+                <span style="color:#555; font-weight:600;">Gallery</span>
+                <span style="color:#555; font-weight:600;">Stats</span>
             </div>
-            <div style="margin-top:30px; display:flex; align-items:center; gap:12px; background:#f5f5f5; padding:15px 25px; border-radius:15px;">
-                <img src="assets/priscion_logo.png" style="width:18px;">
-                <span style="font-weight:900; font-size:0.85rem;">.pri/prisca</span>
+
+            <div style="background:#111; border:1px solid #222; padding:40px; border-radius:24px; text-align:center;">
+                <small style="color:#555; font-weight:900; text-transform:uppercase; letter-spacing:1px; font-size:0.6rem;">Total $PRN Balance</small>
+                <div style="font-size:3rem; font-weight:900; margin:15px 0; letter-spacing:-1px;">6,450.00</div>
+                <div style="display:flex; gap:10px;">
+                    <button style="flex:1; background:#fff; color:#000; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem; cursor:pointer;">SEND</button>
+                    <button style="flex:1; background:transparent; border:1px solid #333; color:#fff; padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem; cursor:pointer;">RECEIVE</button>
+                </div>
+            </div>
+
+            <div style="margin-top:30px; background:#161616; padding:20px; border-radius:15px; border:1px solid #222;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                    <span style="color:#555; font-weight:900; font-size:0.6rem; text-transform:uppercase;">Network Handle</span>
+                    <span style="color:green; font-weight:900; font-size:0.6rem;">ACTIVE</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <img src="assets/priscion_logo.png" style="width:18px;">
+                    <span style="font-weight:900; font-size:1.1rem;">.pri/prisca</span>
+                </div>
+            </div>
+
+            <!-- Root Cause Analysis Feature -->
+            <div style="margin-top:30px; background:#111; border:1px solid #222; padding:20px; border-radius:15px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <span style="color:#555; font-weight:900; font-size:0.6rem; text-transform:uppercase;">Protocol Health</span>
+                    <span style="color:var(--accent); font-weight:900; font-size:0.6rem;">98.4% Accuracy</span>
+                </div>
+                <div style="font-size:0.75rem; color:#888;">
+                    Root cause analysis: Gossip sync 100% stable. Local state anchored to Cardano Heritage block 100.
+                </div>
             </div>
         </div>
     </div>
