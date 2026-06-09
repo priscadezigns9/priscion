@@ -2,97 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MUSE | Friendly Wallet</title>
-    <script src="wallet-core.js"></script>
+    <title>MUSE | Secure Login</title>
     <style>
-        body { margin: 0; background: #0b0b0e; color: #fff; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .screen { width: 100%; height: 100%; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; box-sizing: border-box; }
+        body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        .screen { display: none; flex-direction: column; align-items: center; text-align: center; width: 100%; }
         .screen.active { display: flex; }
-        .logo-anim { width: 120px; animation: pulse-muse 2s infinite; cursor: pointer; }
-        .box { background: #151519; padding: 40px; border-radius: 24px; border: 1px solid #2d2d35; width: 400px; }
-        h1 { margin-top: 0; font-size: 1.8rem; }
-        p { color: #9a9a9a; line-height: 1.6; }
-        .btn { width: 100%; background: #fff; color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: bold; font-size: 1rem; cursor: pointer; margin-bottom: 12px; }
-        .btn-outline { background: transparent; color: #fff; border: 1px solid #444; }
-        input { width: 100%; background: #1c1c21; border: 1px solid #2d2d35; padding: 16px; border-radius: 12px; color: #fff; margin-bottom: 20px; box-sizing: border-box; }
-        .phrase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .phrase-word { background: #1c1c21; padding: 10px; border-radius: 8px; font-size: 0.9rem; border: 1px solid #2d2d35; }
-        @keyframes pulse-muse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
+        .logo-anim { width: 100px; animation: pulse 2s infinite; cursor: pointer; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
+        .box { padding: 40px; width: 350px; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; margin: 20px 0; font-size: 1rem; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #000; color: #fff; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
-    <!-- Screen 1: Splash -->
-    <div id="screen-splash" class="screen active" onclick="showScreen('screen-security')">
+    <div id="splash" class="screen active" onclick="showLogin()">
         <img src="assets/muse_icon.png" class="logo-anim">
-        <p style="margin-top: 20px;">Tap to unlock</p>
+        <p>Tap to unlock MUSE</p>
     </div>
-
-    <!-- Screen 2: Security / Onboarding -->
-    <div id="screen-security" class="screen">
+    <div id="login" class="screen">
         <div class="box">
-            <h1>Welcome to MUSE</h1>
-            <p>Your simple and safe way to keep your digital things.</p>
-            <button class="btn" onclick="showScreen('screen-create')">Create a new wallet</button>
-            <button class="btn btn-outline" onclick="showScreen('screen-restore')">I already have one</button>
-            <button class="btn btn-outline">Connect my Ledger</button>
-            <div style="margin-top: 20px; font-size: 0.8rem; color: #555;">
-                Tip: You can also use a <b>Passkey</b> or <b>FaceID</b> for extra safety.
-            </div>
+            <img src="assets/muse_icon.png" style="width: 60px; margin-bottom: 20px;">
+            <h2>Enter Password</h2>
+            <input type="password" id="pass" placeholder="Password">
+            <button class="btn" onclick="checkPass()">Unlock</button>
         </div>
     </div>
-
-    <!-- Screen 3: Create (The Secret Phrase) -->
-    <div id="screen-create" class="screen">
-        <div class="box">
-            <h1>Your Secret Phrase</h1>
-            <p>Write these 12 words down on paper. Never share them with anyone!</p>
-            <div class="phrase-grid">
-                <div class="phrase-word">1. tree</div>
-                <div class="phrase-word">2. mountain</div>
-                <div class="phrase-word">3. river</div>
-                <div class="phrase-word">4. sky</div>
-                <div class="phrase-word">5. cloud</div>
-                <div class="phrase-word">6. sun</div>
-                <div class="phrase-word">7. ocean</div>
-                <div class="phrase-word">8. forest</div>
-                <div class="phrase-word">9. path</div>
-                <div class="phrase-word">10. stone</div>
-                <div class="phrase-word">11. leaf</div>
-                <div class="phrase-word">12. rain</div>
-            </div>
-            <button class="btn" onclick="showScreen('screen-confirm')">I've written it down</button>
-        </div>
-    </div>
-
-    <!-- Screen 4: Confirm -->
-    <div id="screen-confirm" class="screen">
-        <div class="box">
-            <h1>Just checking...</h1>
-            <p>What was the <b>4th</b> word in your secret phrase?</p>
-            <input type="text" id="confirm-word" placeholder="Type word #4 here">
-            <button class="btn" onclick="finishSetup()">Confirm</button>
-        </div>
-    </div>
-
     <script>
-        function showScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+        function showLogin() { 
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('login').style.display = 'flex';
         }
-
-        function finishSetup() {
-            const word = document.getElementById('confirm-word').value.toLowerCase();
-            if (word === 'sky') {
-                alert("Wallet Created Successfully!");
-                location.href = 'wallet-app.html'; // Go to the actual wallet view
-            } else {
-                alert("That's not the right word. Please check your phrase.");
-            }
+        function checkPass() {
+            location.href = 'wallet-app.html';
         }
     </script>
 </body>
