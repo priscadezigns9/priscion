@@ -4,60 +4,49 @@
     <meta charset="UTF-8">
     <title>MUSE | My Digital Home</title>
     <style>
-        body { margin: 0; background: #0b0b0e; color: #fff; font-family: 'Inter', sans-serif; display: flex; height: 100vh; }
-        .sidebar { width: 260px; background: #151519; border-right: 1px solid #2d2d35; padding: 20px; display: flex; flex-direction: column; }
-        .main { flex: 1; padding: 40px; overflow-y: auto; }
-        .nav-item { padding: 12px 16px; border-radius: 8px; cursor: pointer; margin-bottom: 8px; transition: 0.3s; color: #9a9a9a; display: flex; align-items: center; gap: 10px; }
-        .nav-item:hover { background: #23232b; color: #fff; }
-        .nav-item.active { background: #3b3b45; color: #fff; }
-        .user-profile { margin-top: auto; padding: 20px; background: #1c1c21; border-radius: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .user-profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #333; }
-        .card { background: #1c1c21; border: 1px solid #2d2d35; border-radius: 20px; padding: 30px; margin-bottom: 30px; }
-        .balance { font-size: 3rem; font-weight: bold; margin: 10px 0; }
-        .btn { background: #fff; color: #000; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-        .asset-list { margin-top: 20px; border-top: 1px solid #2d2d35; }
-        .asset-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid #23232b; }
-        .nft-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
-        .nft-item { background: #23232b; border-radius: 12px; overflow: hidden; }
-        .nft-item img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+        body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; display: flex; height: 100vh; }
+        .sidebar { width: 280px; border-right: 1px solid #eee; padding: 30px; display: flex; flex-direction: column; background: #fafafa; }
+        .main { flex: 1; padding: 60px; overflow-y: auto; }
+        .nav-item { padding: 15px 20px; border-radius: 12px; cursor: pointer; margin-bottom: 10px; color: #666; font-weight: 600; }
+        .nav-item.active { background: #eee; color: #000; }
+        .profile { margin-top: auto; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid #eee; padding: 15px; border-radius: 16px; }
+        .profile img { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; }
+        .card { border: 1px solid #eee; border-radius: 24px; padding: 40px; margin-bottom: 30px; }
+        .balance { font-size: 3.5rem; font-weight: 900; margin: 15px 0; letter-spacing: -2px; }
+        .btn { background: #000; color: #fff; border: none; padding: 15px 30px; border-radius: 12px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
     <div class="sidebar">
-        <div style="margin-bottom: 40px;"><img src="assets/muse_icon.png" style="width: 40px;"></div>
-        <div class="nav-item active">My Assets</div>
-        <div class="nav-item">NFT Gallery</div>
-        <div class="nav-item" onclick="location.href='swap.html'">Trade (Swap)</div>
-        <div class="nav-item">Settings</div>
-        
-        <div class="user-profile">
-            <!-- User can choose their picture. Defaulting to a placeholder for now. -->
-            <img src="https://ui-avatars.com/api/?name=Prisca&background=random" alt="Me">
+        <img src="assets/muse_icon.png" style="width: 40px; margin-bottom: 50px;">
+        <div class="nav-item active">My Coins</div>
+        <div class="nav-item">My Things (NFTs)</div>
+        <div class="nav-item" onclick="location.href='swap.html'">Trade</div>
+        <div class="profile" onclick="document.getElementById('p-upload').click()">
+            <img src="https://ui-avatars.com/api/?name=Prisca&background=random" id="p-img">
             <div>
-                <div style="font-weight: bold; font-size: 0.9rem;">Prisca</div>
-                <div style="font-size: 0.7rem; color: #666;">addr1_...m9zk</div>
+                <div style="font-weight: 900; font-size: 0.9rem;">Prisca</div>
+                <div style="font-size: 0.7rem; color: #999;">Update Picture</div>
             </div>
+            <input type="file" id="p-upload" style="display:none;" onchange="updateProfile(this)">
         </div>
     </div>
-
     <div class="main">
-        <h1>Welcome back, Prisca</h1>
+        <h1>Welcome, Prisca</h1>
         <div class="card">
-            <div style="color: #9a9a9a;">Total Coins</div>
-            <div class="balance">6,450.00 <span style="font-size: 1.2rem; font-weight: normal; color: #555;">$PRN</span></div>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn">Send</button>
-                <button class="btn" style="background: transparent; color: #fff; border: 1px solid #444;">Receive</button>
-            </div>
-        </div>
-
-        <h2>My Things</h2>
-        <div class="card nft-grid">
-            <div class="nft-item"><img src="https://picsum.photos/seed/nft1/200" alt="NFT"></div>
-            <div class="nft-item"><img src="https://picsum.photos/seed/nft2/200" alt="NFT"></div>
-            <div class="nft-item"><img src="https://picsum.photos/seed/nft3/200" alt="NFT"></div>
-            <div class="nft-item"><img src="https://picsum.photos/seed/nft4/200" alt="NFT"></div>
+            <div style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.7rem; font-weight: 900; color: #999;">Balance</div>
+            <div class="balance">6,450.00 <span style="font-size: 1.2rem; color: #ccc;">$PRN</span></div>
+            <button class="btn">Send Coins</button>
         </div>
     </div>
+    <script>
+        function updateProfile(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => document.getElementById('p-img').src = e.target.result;
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 </body>
 </html>
