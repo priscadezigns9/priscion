@@ -3,37 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <title>MUSE | Secure Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap">
     <style>
         body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .screen { display: none; flex-direction: column; align-items: center; text-align: center; width: 100%; }
-        .screen.active { display: flex; }
-        .logo-anim { width: 100px; animation: pulse 2s infinite; cursor: pointer; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.8; } }
-        .box { padding: 40px; width: 350px; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #ddd; margin: 20px 0; font-size: 1rem; box-sizing: border-box; }
-        .btn { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #000; color: #fff; font-weight: bold; cursor: pointer; }
+        .login-box { text-align: center; width: 350px; }
+        .logo-anim { width: 100px; animation: pulse 2s infinite; cursor: pointer; margin-bottom: 40px; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.1); opacity: 1; } }
+        input { width: 100%; padding: 20px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 20px; font-size: 1rem; outline: none; text-align: center; }
+        .btn { width: 100%; padding: 20px; border-radius: 100px; border: none; background: #000; color: #fff; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #333; }
     </style>
 </head>
 <body>
-    <div id="splash" class="screen active" onclick="showLogin()">
-        <img src="assets/muse_icon.png" class="logo-anim">
-        <p>Tap to unlock MUSE</p>
+    <div id="splash" class="login-box">
+        <img src="assets/muse_icon.png" class="logo-anim" onclick="showLogin()">
+        <p style="font-weight:900; letter-spacing:1px; color:#999;">TAP TO UNLOCK</p>
     </div>
-    <div id="login" class="screen">
-        <div class="box">
-            <img src="assets/muse_icon.png" style="width: 60px; margin-bottom: 20px;">
-            <h2>Enter Password</h2>
-            <input type="password" id="pass" placeholder="Password">
-            <button class="btn" onclick="checkPass()">Unlock</button>
-        </div>
+
+    <div id="login" class="login-box" style="display:none;">
+        <img src="assets/muse_icon.png" style="width:60px; margin-bottom:30px;">
+        <h2 style="font-weight:900;">Enter Password</h2>
+        <p style="color:#999; margin-bottom:30px;">Secure Access to your Sovereign Wallet</p>
+        <input type="password" id="pass" placeholder="••••••••">
+        <button class="btn" onclick="verify()">UNLOCK WALLET</button>
+        <p id="err" style="color:red; font-size:0.8rem; margin-top:20px; display:none;">Incorrect Password</p>
     </div>
+
+    <script src="wallet-core.js"></script>
     <script>
-        function showLogin() { 
+        function showLogin() {
             document.getElementById('splash').style.display = 'none';
-            document.getElementById('login').style.display = 'flex';
+            document.getElementById('login').style.display = 'block';
         }
-        function checkPass() {
-            location.href = 'wallet-app.html';
+        function verify() {
+            const p = document.getElementById('pass').value;
+            if (PRN.checkPassword(p)) {
+                // Check if this was a payment request
+                const urlParams = new URLSearchParams(window.location.search);
+                if(urlParams.get('action') === 'pay') {
+                    alert('Confirm Transaction: $1,500.00 for Sovereign Onboarding?');
+                    PRN.sendCoins('PRISCION_SERVICES', 1500);
+                    alert('Transaction Anchored!');
+                    location.href = 'index.html';
+                } else {
+                    location.href = 'wallet-app.html';
+                }
+            } else {
+                document.getElementById('err').style.display = 'block';
+            }
         }
     </script>
 </body>
