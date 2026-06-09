@@ -134,6 +134,20 @@
     </div>
 
     <script>
+        // Sovereign Split Logic
+        function processSovereignSplit(amount, affiliateWallet) {
+            const tithe = amount * 0.10;
+            const commission = amount * 0.10;
+            const businessProfit = amount * 0.80;
+            
+            console.log("Splitting Payment...");
+            console.log("TWMK Tithe (10%): " + tithe + " $PRN");
+            console.log("Affiliate (" + affiliateWallet + "): " + commission + " $PRN");
+            console.log("Business Profit: " + businessProfit + " $PRN");
+            
+            return { tithe, commission, businessProfit };
+        }
+
         // High-Fidelity Transition Control
         setTimeout(() => {
             const splash = document.getElementById('layer-splash');
