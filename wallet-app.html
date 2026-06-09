@@ -6,107 +6,109 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
         :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --accent: #7B35D4; }
-        * { box-sizing: border-box; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; }
         
-        /* Splash Screen */
+        /* Splash Layer */
         #splash { 
             position: fixed; inset: 0; background: #FFF; z-index: 10000; 
             display: flex; align-items: center; justify-content: center; 
-            animation: fadeOut 1s forwards 2s;
         }
-        .splash-logo { width: 100px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes fadeOut { to { opacity: 0; pointer-events: none; } }
+        .splash-logo { width: 100px; }
 
-        /* Auth Gate */
+        /* Auth Gate Layer */
         #auth-gate { 
-            position: fixed; inset: 0; background: rgba(255,255,255,0.98); 
-            backdrop-filter: blur(20px); z-index: 9000; 
-            display: flex; align-items: center; justify-content: center; 
+            position: fixed; inset: 0; background: #FFF; z-index: 9000; 
+            display: none; align-items: center; justify-content: center; 
         }
-        .auth-card { background: #FFF; border: 1px solid var(--border); padding: 60px; border-radius: 40px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 40px 100px rgba(0,0,0,0.05); }
+        .auth-card { text-align: center; max-width: 400px; width: 90%; }
         
-        /* Sidebar */
+        /* Main UI (Hidden until auth) */
+        #main-ui { display: none; height: 100vh; flex-direction: row; }
         .sidebar-nav { width: 300px; border-right: 1px solid var(--border); background: #FAFAFA; display: flex; flex-direction: column; padding: 40px 0; }
-        .nav-item { padding: 18px 40px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-        .nav-item:hover, .nav-item.active { color: var(--text); background: #F0F0F0; }
+        .nav-item { padding: 20px 40px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; }
+        .nav-item.active { color: var(--text); background: #F0F0F0; }
         
-        /* Main Area */
-        .main-stage { flex: 1; padding: 100px; overflow-y: auto; display: none; } /* Hidden until auth */
-        .card { border: 1px solid var(--border); border-radius: 40px; padding: 60px; margin-bottom: 40px; background: #FFF; transition: 0.3s; }
+        .main-stage { flex: 1; padding: 100px; overflow-y: auto; }
+        .card { border: 1px solid var(--border); border-radius: 40px; padding: 60px; margin-bottom: 40px; background: #FFF; }
         .balance-big { font-size: 5rem; font-weight: 900; letter-spacing: -3px; margin: 20px 0; }
         
         .profile-footer { margin-top: auto; padding: 40px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 20px; }
-        .profile-footer img { width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--border); object-fit: cover; }
+        .profile-footer img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
         
-        .btn-black { background: #000; color: #fff; border: none; padding: 20px 50px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; }
-        input { width: 100%; padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 20px; outline: none; font-weight: 600; text-align: center; }
+        .btn-black { background: #000; color: #fff; border: none; padding: 20px 50px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; width: 100%; }
+        input { width: 100%; padding: 20px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 20px; outline: none; text-align: center; font-size: 1rem; }
     </style>
 </head>
 <body>
 
+    <!-- Layer 1: Splash -->
     <div id="splash">
         <img src="assets/muse_logo.png" class="splash-logo">
     </div>
 
+    <!-- Layer 2: Auth Gate -->
     <div id="auth-gate">
         <div class="auth-card">
             <img src="assets/muse_logo.png" style="width:60px; margin-bottom:30px;">
             <h2 style="font-weight:900; margin-bottom:10px;">Security Lock</h2>
             <p style="color:#999; margin-bottom:40px;">Enter your password to unlock the $PRN ledger.</p>
-            <input type="password" id="auth-pass" placeholder="••••••••">
-            <button class="btn-black" onclick="unlock()" style="width:100%;">UNLOCK</button>
+            <input type="password" id="auth-pass" placeholder="Password">
+            <button class="btn-black" onclick="unlock()">UNLOCK</button>
         </div>
     </div>
 
-    <div class="sidebar-nav">
-        <div style="padding: 0 40px 60px;"><img src="assets/muse_logo.png" style="width: 50px;"></div>
-        <div class="nav-item active" onclick="show('vault')">Vault</div>
-        <div class="nav-item" onclick="show('swap')">Swap</div>
-        <div class="nav-item" onclick="show('send')">Send</div>
-        <div class="nav-item" onclick="show('receive')">Receive</div>
-        <div class="nav-item" onclick="show('dapps')">Dapps</div>
-        
-        <div class="profile-footer">
-            <img src="assets/p-logo.png">
-            <div>
-                <div style="font-weight:900;">$prisca.pri</div>
-                <div style="font-size:0.6rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div>
+    <!-- Layer 3: Application -->
+    <div id="main-ui">
+        <div class="sidebar-nav">
+            <div style="padding: 0 40px 60px;"><img src="assets/muse_logo.png" style="width: 50px;"></div>
+            <div class="nav-item active">Vault</div>
+            <div class="nav-item">Swap</div>
+            <div class="nav-item">Send</div>
+            <div class="nav-item">Receive</div>
+            <div class="nav-item">Dapps</div>
+            
+            <div class="profile-footer">
+                <img src="assets/p-logo.png">
+                <div>
+                    <div style="font-weight:900;">$prisca.pri</div>
+                    <div style="font-size:0.6rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="main-stage" id="stage">
-        <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
-        <div class="card">
-            <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Available Reserve</div>
-            <div id="bal-display" class="balance-big">$PRN 12,500</div>
-            <button class="btn-black">SEND ASSETS</button>
+        <div class="main-stage">
+            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
+            <div class="card">
+                <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Available Reserve</div>
+                <div id="bal-display" class="balance-big">$PRN 12,500</div>
+                <button class="btn-black" style="width:auto;">SEND ASSETS</button>
+            </div>
         </div>
     </div>
 
     <script src="wallet-core.js"></script>
     <script>
+        // Use JS to control the flow to avoid "blank" CSS states
+        window.onload = () => {
+            console.log("MUSE Initializing...");
+            setTimeout(() => {
+                document.getElementById('splash').style.display = 'none';
+                document.getElementById('auth-gate').style.display = 'flex';
+                console.log("Splash cleared, Auth Gate active.");
+            }, 2500);
+        };
+
         function unlock() {
             const pass = document.getElementById('auth-pass').value;
-            // Architect's master bypass + local check
-            if(pass === 'prisca' || pass === PRN.state.password || PRN.checkPassword(pass)) {
+            // Master bypass for the Architect
+            if(pass === 'prisca' || (window.PRN && PRN.checkPassword(pass))) {
                 document.getElementById('auth-gate').style.display = 'none';
-                document.getElementById('stage').style.display = 'block';
-                document.getElementById('bal-display').innerText = `$PRN ${PRN.state.balance.toLocaleString()}`;
+                document.getElementById('main-ui').style.display = 'flex';
+                if(window.PRN) {
+                    document.getElementById('bal-display').innerText = `$PRN ${PRN.state.balance.toLocaleString()}`;
+                }
             } else {
                 alert("Access Denied.");
-            }
-        }
-
-        function show(tab) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            // Simplified for restoration
-            document.getElementById('stage').innerHTML = `<h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">${tab.charAt(0).toUpperCase() + tab.slice(1)}.</h1><p style="color:#999;">Sovereign module active.</p>`;
-            if(tab === 'vault') {
-                location.reload(); // Quickest way to restore vault view for now
             }
         }
     </script>
