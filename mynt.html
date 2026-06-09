@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>MYNT | Sovereign NFT Factory</title>
+    <style>
+        body { margin: 0; background: #fff; color: #000; font-family: 'Inter', sans-serif; padding: 60px 8%; }
+        .factory-box { border: 2px dashed #eee; padding: 40px; border-radius: 30px; text-align: center; max-width: 600px; margin: 0 auto; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #eee; margin: 10px 0; }
+        .btn { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; cursor: pointer; margin-top: 20px; }
+        .artifact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; margin-top: 50px; }
+        .artifact { border: 1px solid #eee; border-radius: 20px; padding: 15px; }
+        .artifact img { width: 100%; border-radius: 12px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <img src='assets/mynt_logo.png' style='height: 50px; margin-bottom: 20px;'>
+    <h1>The NFT Factory</h1>
+    <div class='factory-box'>
+        <h3>Create Artifact</h3>
+        <input type='text' id='art-name' placeholder='Artifact Name'>
+        <input type='text' id='art-url' placeholder='Image URL'>
+        <button class='btn' onclick='anchor()'>Anchor to Ledger</button>
+    </div>
+    <h2>Minted Artifacts</h2>
+    <div id='mints' class='artifact-grid'></div>
+    <script src='wallet-core.js'></script>
+    <script>
+        function render() {
+            const list = document.getElementById('mints');
+            list.innerHTML = '';
+            if(window.PRISCION) {
+                PRISCION.getMints().forEach(m => {
+                    list.innerHTML += '<div class="artifact"><img src="'+m.url+'"><div><b>'+m.name+'</b></div></div>';
+                });
+            }
+        }
+        async function anchor() {
+            const name = document.getElementById('art-name').value;
+            const url = document.getElementById('art-url').value;
+            if(!name || !url) return alert('Fill all fields');
+            if(window.PRISCION) {
+                await PRISCION.mint(name, url);
+                render();
+                alert('Artifact anchored!');
+            }
+        }
+        render();
+    </script>
+</body>
+</html>
