@@ -37,13 +37,12 @@
         }
         .nav-links a:hover { color: var(--accent); }
 
-        .btn-muze {
-            background: #000; color: #fff !important; padding: 14px 28px; border-radius: 100px;
+        .btn-muze-nav {
+            background: #000; color: #fff; padding: 14px 28px; border-radius: 100px;
             font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
             cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .btn-muze:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); background: #000; color: #fff; }
+        .btn-muze-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
 
         .hero {
             padding: 120px 8% 100px; text-align: center;
@@ -55,38 +54,54 @@
         h1 { font-family: var(--font-heading); font-size: 5rem; line-height: 1.1; margin-bottom: 30px; letter-spacing: -2px; }
         .hero p { max-width: 600px; color: var(--muted); font-size: 1.1rem; margin-bottom: 40px; }
 
-        .pillar-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; padding: 0 8% 100px;
-            max-width: 1200px; margin: 0 auto;
+        .dapp-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 0 8% 100px;
         }
-        .pillar-card {
+        .dapp-card {
             background: var(--surface); border: 1px solid var(--border); padding: 50px 40px;
-            border-radius: 32px; text-decoration: none; color: inherit; transition: 0.3s;
-            text-align: left; position: relative; overflow: hidden;
+            border-radius: 24px; text-decoration: none; color: inherit; transition: 0.3s;
+            position: relative; overflow: hidden;
         }
-        .pillar-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .pillar-card h3 { font-weight: 900; font-size: 1.2rem; letter-spacing: -0.5px; margin-bottom: 10px; }
-        .pillar-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; max-width: 80%; }
-        
-        .pillar-icon { 
-            position: absolute; right: 40px; top: 50%; transform: translateY(-50%); 
-            font-size: 2.5rem; opacity: 0.1; font-weight: 900;
+        .dapp-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .status-badge {
+            position: absolute; top: 30px; right: 30px; font-weight: 900; font-size: 0.6rem;
+            letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
         }
+        .dapp-logo { height: 45px; margin-bottom: 25px; object-fit: contain; }
+        .dapp-card h3 { font-weight: 900; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 15px; text-transform: uppercase; }
+        .dapp-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
 
         .services { padding: 100px 8%; background: #000; color: #fff; border-radius: 60px 60px 0 0; }
-        .service-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
-        .service-card { background: #080808; border: 1px solid #111; padding: 60px; border-radius: 40px; }
-        .service-card h3 { font-weight: 900; font-size: 1rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
-        .service-card .price { font-size: 2rem; font-weight: 300; margin-bottom: 20px; color: var(--accent); }
-        .service-card p { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
+        .service-header { text-align: center; margin-bottom: 80px; }
+        .service-header h2 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 20px; }
+
+        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .service-card {
+            background: #080808; border: 1px solid #111; padding: 60px; border-radius: 40px;
+            transition: 0.3s;
+        }
+        .service-card:hover { border-color: var(--accent); }
+        .service-card h3 { font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
+        .service-card .price { font-size: 2.5rem; font-weight: 300; margin-bottom: 20px; color: var(--accent); }
+        .service-card p { color: #888; margin-bottom: 30px; font-size: 1rem; }
+        .service-list { list-style: none; margin-bottom: 40px; }
+        .service-list li { color: #666; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
+        .service-list li::before { content: '✓'; color: var(--accent); font-weight: bold; }
+
+        .btn-acquire {
+            width: 100%; padding: 20px; background: #fff; color: #000; border: none;
+            border-radius: 100px; font-weight: 900; cursor: pointer; transition: 0.3s;
+            text-decoration: none; display: block; text-align: center;
+        }
+        .btn-acquire:hover { background: var(--accent); color: #fff; }
 
         footer { padding: 80px 8%; text-align: center; border-top: 1px solid var(--border); }
         .copyright { font-weight: 900; font-size: 0.6rem; letter-spacing: 3px; color: #CCC; text-transform: uppercase; }
 
         @media (max-width: 1024px) {
-            .pillar-grid { grid-template-columns: 1fr; }
+            .dapp-grid { grid-template-columns: 1fr; }
             .service-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 3.5rem; }
+            h1 { font-size: 3rem; }
         }
     </style>
 </head>
@@ -94,11 +109,11 @@
 
     <nav>
         <div class="nav-links">
+            <a href="whitepaper/">White Paper</a>
             <a href="pulse/">Explorer</a>
-            <a href="whitepaper/">Whitepaper</a>
         </div>
         <div class="nav-links">
-            <a href="muzewallet/" class="btn-muze">MUZE WALLET</a>
+            <a href="muzewallet/" class="btn-muze-nav">MUZE WALLET</a>
         </div>
     </nav>
 
@@ -109,42 +124,60 @@
         <p>Global brand design and high quality digital systems. We build the automatic tools that power the 2026 digital age.</p>
     </section>
 
-    <div class="pillar-grid">
-        <a href="pulse/" class="pillar-card">
-            <h3>Pulse Explorer</h3>
-            <p>The clear record of the network. Verify every transaction and brand move in real-time.</p>
-            <div class="pillar-icon">P</div>
+    <div class="dapp-grid">
+        <a href="pulse/" class="dapp-card">
+            <span class="status-badge">Live</span>
+            <img src="assets/pulse_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <h3>PULSE</h3>
+            <p>The official block explorer. Monitor transactions and ledger health in real-time.</p>
         </a>
-        <a href="chillata/" class="pillar-card">
-            <h3>Chillata Swap</h3>
-            <p>High quality asset exchange. Trade your private assets with zero friction.</p>
-            <div class="pillar-icon">C</div>
+        <a href="muzewallet/" class="dapp-card">
+            <span class="status-badge">Beta</span>
+            <img src="assets/muze_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <h3>MUZE</h3>
+            <p>High quality independent wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
         </a>
-        <a href="mynt/" class="pillar-card">
-            <h3>MYNT Store</h3>
-            <p>Private shop for high quality digital assets and signed brand products.</p>
-            <div class="pillar-icon">M</div>
+        <a href="chillata/" class="dapp-card">
+            <span class="status-badge">Live</span>
+            <img src="assets/chillata_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <h3>CHILLATA</h3>
+            <p>Independent Swap and liquidity engine. Private asset exchange and liquidity systems.</p>
         </a>
-        <a href="peanuts/" class="pillar-card">
-            <h3>Peanuts Data</h3>
-            <p>Network intelligence and market data for the independent ecosystem.</p>
-            <div class="pillar-icon">P</div>
+        <a href="mynt/" class="dapp-card">
+            <span class="status-badge">Dev</span>
+            <img src="assets/mynt_logo.png" class="dapp-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+            <h3>MYNT</h3>
+            <p>The NFT Factory. Minting private digital networks and high quality story artifacts.</p>
         </a>
     </div>
 
     <section class="services">
+        <div class="service-header">
+            <div class="kicker" style="color: #444;">Ecosystem Integration</div>
+            <h2>Independent Migration</h2>
+        </div>
         <div class="service-grid">
             <div class="service-card">
                 <h3>Private Onboarding</h3>
                 <div class="price">$1,500.00</div>
-                <p>Establishing on-chain identity, .pri handle registration, and MUZE Wallet integration.</p>
-                <a href="muzewallet/" style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer; text-decoration:none; color:#000; display:block; text-align:center;">ACQUIRE</a>
+                <p>Designed for emerging brands and private people looking for immediate entry into the network.</p>
+                <ul class="service-list">
+                    <li>Primary .pri handle registration</li>
+                    <li>Independent identity engineering</li>
+                    <li>MUZE Wallet handshake integration</li>
+                </ul>
+                <a href="muzewallet/" class="btn-acquire">Acquire Service</a>
             </div>
             <div class="service-card">
-                <h3>Network Architecture</h3>
-                <div class="price">$12,000.00</div>
-                <p>Full-spectrum brand design, neural systems, and multi-brand deployment.</p>
-                <a href="muzewallet/" style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer; text-decoration:none; color:#000; display:block; text-align:center;">ACQUIRE</a>
+                <h3>Network Migration</h3>
+                <div class="price">$7,900.00</div>
+                <p>High quality deep-tissue migration for established companies and history datasets.</p>
+                <ul class="service-list">
+                    <li>History anchoring</li>
+                    <li>Custom revenue-tithing smart contracts</li>
+                    <li>Deep neural security systems</li>
+                </ul>
+                <a href="muzewallet/" class="btn-acquire">Acquire Service</a>
             </div>
         </div>
     </section>
