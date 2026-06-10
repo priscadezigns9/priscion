@@ -157,6 +157,10 @@
     </div>
 
     <script>
+        const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const SB_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const sb = supabase.createClient(SB_URL, SB_KEY);
+
         const layers = { splash: 'layer-splash', onboarding: 'layer-onboarding', flow: 'layer-flow', auth: 'layer-auth', app: 'app-ui' };
         let walletState = null;
 
@@ -251,10 +255,13 @@
             return Array.from({length: count}, () => words[Math.floor(Math.random() * words.length)]);
         }
 
-        function finalizeSetup(seedStr) {
+        async function finalizeSetup(seedStr) {
             const pass = document.getElementById('new-pass').value;
             const handle = document.getElementById('seed-handle')?.value || '$user.pri';
             if(!pass) { alert("Password required."); return; }
+            
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            
             walletState = { 
                 handle, 
                 password: pass, 
@@ -262,18 +269,58 @@
                 balance: '1,250.00', 
                 assets: [{icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'}] 
             };
+
+            // Sovereign Ledger Sync
+            try {
+                const { error } = await sb.from('sovereign_ledger').upsert({
+                    handle: handle,
+                    ledger_data: walletState,
+                    updated_at: new Date()
+                });
+                if(error) console.error("Ledger Sync Failed:", error);
+            } catch(e) { console.error(e); }
+
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
-            alert("Vault Activated. Redirecting to Dashboard...");
+            alert("Vault Activated & Anchored to Sovereign Ledger.");
             location.reload();
         }
 
-        function unlock() {
+        async function unlock() {
             if(document.getElementById('pass-input').value === walletState.password) {
+                document.getElementById('loading-overlay').classList.remove('hidden');
+                
+                // Pull latest from Ledger
+                try {
+                    const { data, error } = await sb.from('sovereign_ledger')
+                        .select('ledger_data')
+                        .eq('handle', walletState.handle)
+                        .single();
+                    if(data) {
+                        walletState = data.ledger_data;
+                        localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+                    }
+                } catch(e) {}
+
+                document.getElementById('loading-overlay').classList.add('hidden');
                 document.getElementById(layers.auth).classList.add('hidden');
                 document.getElementById(layers.app).style.display = 'flex';
                 document.getElementById('user-handle').innerText = walletState.handle;
                 document.getElementById('balance').innerText = '$PRN ' + walletState.balance;
+                
+                renderAssets();
             } else alert("Incorrect.");
+        }
+
+        function renderAssets() {
+            const grid = document.getElementById('asset-grid');
+            if(!grid) return;
+            grid.innerHTML = (walletState.assets || []).map(a => `
+                <div class="card" onclick="showStage('card', document.querySelector('.nav-item:nth-child(2)'))">
+                    <div class="card-icon">${a.icon}</div>
+                    <div class="card-label">${a.label}</div>
+                    <div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div>
+                </div>
+            `).join('');
         }
 
         function resetVault() {
