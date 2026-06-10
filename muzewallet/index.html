@@ -43,62 +43,28 @@
         /* Splash */
         .splash-logo { width: 80px; opacity: 0.8; }
 
-        /* Auth/Onboarding Card */
+        /* Onboarding */
         .card-ui { text-align: center; max-width: 400px; width: 100%; }
         h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.5rem; }
         p { color: var(--muted); margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; }
-        
         input { 
             width: 100%; padding: 18px; border-radius: 15px; border: 1px solid var(--border); 
             margin-bottom: 15px; outline: none; text-align: center; font-size: 1rem; 
             font-weight: 600; background: #F9F9F9; 
         }
-        
-        .btn-full { 
-            background: var(--muze-blue); color: #fff; border: none; padding: 20px; 
-            border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; 
-            cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(90, 200, 250, 0.2);
-            margin-bottom: 10px;
-        }
-        .btn-outline {
-            background: #FFF; color: #000; border: 1px solid var(--border); padding: 18px;
-            border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px;
-            cursor: pointer; width: 100%; margin-bottom: 10px;
-        }
+        .btn-full { background: var(--muze-blue); color: #fff; border: none; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(90, 200, 250, 0.2); margin-bottom: 10px; }
+        .btn-outline { background: #FFF; color: #000; border: 1px solid var(--border); padding: 18px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; width: 100%; margin-bottom: 10px; }
 
         /* Main App UI */
-        #app-ui { 
-            display: none; 
-            height: 100vh; 
-            width: 100vw; 
-            flex-direction: row; 
-            background: #FFF; 
-        }
-        
-        .sidebar { 
-            width: 300px; 
-            border-right: 1px solid var(--border); 
-            background: #FAFAFA; 
-            display: flex; 
-            flex-direction: column; 
-            padding: 30px 0; 
-        }
-        
-        .nav-item { 
-            padding: 15px 30px; font-weight: 900; font-size: 0.7rem; 
-            letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; 
-        }
+        #app-ui { display: none; height: 100vh; width: 100vw; flex-direction: row; background: #FFF; }
+        .sidebar { width: 300px; border-right: 1px solid var(--border); background: #FAFAFA; display: flex; flex-direction: column; padding: 30px 0; }
+        .nav-item { padding: 15px 30px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; }
         .nav-item.active { color: var(--text); background: #F0F0F0; }
-        
         .stage { flex: 1; padding: 40px; overflow-y: auto; }
         
-        /* Mobile Overrides */
         @media (max-width: 768px) {
             #app-ui { flex-direction: column; }
-            .sidebar { 
-                width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); 
-                padding: 10px 0; flex-direction: row; justify-content: space-around;
-            }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 10px 0; flex-direction: row; justify-content: space-around; }
             .nav-item { padding: 10px; font-size: 0.6rem; letter-spacing: 0.5px; }
             .sidebar > div:first-child, .profile { display: none; }
             .stage { padding: 25px; }
@@ -107,77 +73,62 @@
 
         .balance-card { border: 1px solid var(--border); border-radius: 30px; padding: 40px; background: #FFF; margin-bottom: 30px; }
         .balance-big { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin: 15px 0; }
-        
-        .profile { 
-            margin-top: auto; padding: 20px 30px; border-top: 1px solid var(--border); 
-            display: flex; align-items: center; gap: 15px; 
-        }
+        .profile { margin-top: auto; padding: 20px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
         .profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+
+        /* Lynx Messenger - Multi-Chat UI */
+        .messenger-container { display: flex; height: 100%; gap: 30px; }
+        .chat-list { width: 280px; border-right: 1px solid var(--border); padding-right: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .chat-view { flex: 1; display: flex; flex-direction: column; height: 100%; max-width: 600px; }
         
-        /* Messenger Style */
-        .messenger-layout { display: flex; flex-direction: column; height: 100%; max-width: 600px; margin: 0 auto; }
-        .chat-header { margin-bottom: 20px; text-align: center; }
-        .lynx-icon-img { height: 50px; margin-bottom: 10px; }
-        .lynx-label { font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
-        
-        .chat-box { 
-            flex: 1; border: 1px solid var(--border); border-radius: 25px; padding: 20px; 
-            background: #FFF; display: flex; flex-direction: column; gap: 12px; 
-            overflow-y: auto; margin-bottom: 15px; 
+        @media (max-width: 900px) {
+            .chat-list { display: none; } /* Hide list on mobile for now, can add toggle later */
+            .messenger-container { justify-content: center; }
         }
+
+        .chat-item { padding: 15px; border-radius: 15px; background: #F9F9F9; display: flex; align-items: center; gap: 12px; cursor: pointer; border: 1px solid transparent; }
+        .chat-item.active { background: #FFF; border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .chat-item img { width: 35px; height: 35px; border-radius: 50%; }
+        .chat-info { flex: 1; overflow: hidden; }
+        .chat-handle { font-weight: 900; font-size: 0.75rem; letter-spacing: 0.5px; }
+        .chat-last { font-size: 0.6rem; color: #AAA; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+
+        .chat-header { padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
+        .chat-header-img { width: 45px; height: 45px; border-radius: 50%; }
+        .chat-box { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; margin-bottom: 15px; padding-right: 10px; }
         .msg { padding: 12px 18px; border-radius: 18px; font-size: 0.85rem; max-width: 85%; line-height: 1.4; }
-        .msg.ai { align-self: flex-start; background: #F0F0F0; color: #000; }
-        .msg.user { align-self: flex-end; background: #000; color: #FFF; }
+        .msg.received { align-self: flex-start; background: #F0F0F0; color: #000; }
+        .msg.sent { align-self: flex-end; background: #000; color: #FFF; }
         .msg-time { text-align: right; font-size: 0.55rem; opacity: 0.5; margin-top: 4px; }
         
-        .chat-input-row { display: flex; gap: 10px; align-items: center; }
-        .chat-input { flex: 1; border: none; padding: 15px; background: #F9F9F9; border-radius: 12px; outline: none; font-size: 0.85rem; }
-        .btn-send { background: #000; color: #FFF; border: none; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
-        .card { background: #FFF; border: 1px solid var(--border); border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; }
-        .card-icon { font-size: 1.5rem; margin-bottom: 8px; }
-        .card-label { font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; }
+        .search-handle-row { background: #F9F9F9; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .search-input { border: none; background: none; outline: none; font-size: 0.7rem; font-weight: 900; flex: 1; text-transform: lowercase; }
     </style>
 </head>
 <body>
 
-    <!-- Splash Layer -->
-    <div id="layer-splash" class="layer">
-        <img src="../assets/muse_logo.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
-    </div>
-
-    <!-- Onboarding Layer -->
+    <!-- Layers -->
+    <div id="layer-splash" class="layer"><img src="../assets/muse_logo.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'"></div>
     <div id="layer-onboarding" class="layer hidden">
         <div class="card-ui">
             <img src="../assets/muse_logo.png" style="width:60px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
             <h2>Sovereign Start</h2>
-            <p>Welcome to MUZE. Your keys, your assets, your identity. Choose how to begin.</p>
             <button class="btn-full" onclick="startFlow('create')">CREATE NEW VAULT</button>
             <button class="btn-outline" onclick="startFlow('recover')">RECOVER WITH SEED</button>
             <button class="btn-outline" onclick="startFlow('ledger')">CONNECT TO LEDGER</button>
         </div>
     </div>
-
-    <!-- Create/Recover/Ledger Flow Layers -->
-    <div id="layer-flow" class="layer hidden">
-        <div id="flow-content" class="card-ui">
-            <!-- Dynamic Content -->
-        </div>
-    </div>
-
-    <!-- Auth Layer -->
+    <div id="layer-flow" class="layer hidden"><div id="flow-content" class="card-ui"></div></div>
     <div id="layer-auth" class="layer hidden">
         <div class="card-ui">
-            <img src="../assets/muse_icon.png" style="width:50px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
+            <img src="../assets/muse_logo.png" style="width:50px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
             <h2>Vault Locked</h2>
-            <p>Enter your sovereign password to unlock your node.</p>
             <input type="password" id="pass-input" placeholder="Password">
             <button class="btn-full" onclick="unlock()">UNLOCK VAULT</button>
         </div>
     </div>
 
-    <!-- App UI Layer -->
+    <!-- App UI -->
     <div id="app-ui">
         <div class="sidebar">
             <div style="padding: 0 30px 40px;"><img src="../assets/muse_logo.png" style="width: 40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'"></div>
@@ -186,13 +137,9 @@
             <div class="nav-item" onclick="showStage('staking', this)">Stake</div>
             <div class="nav-item" onclick="showStage('messenger', this)">Lynx</div>
             <div class="nav-item" onclick="showStage('dapps', this)">Dapps</div>
-            
             <div class="profile">
                 <img src="../assets/pd_icon_512.png" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
-                <div>
-                    <div id="user-handle" style="font-weight:900; font-size:0.8rem;">$prisca.pri</div>
-                    <div style="font-size:0.5rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div>
-                </div>
+                <div><div id="user-handle" style="font-weight:900; font-size:0.8rem;">$prisca.pri</div><div style="font-size:0.5rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div></div>
             </div>
         </div>
         
@@ -201,18 +148,13 @@
             <div class="balance-card">
                 <div style="font-weight:900; color:#AAA; letter-spacing:2px; text-transform:uppercase; font-size:0.6rem; margin-bottom:10px;">Reserve</div>
                 <div id="balance" class="balance-big">$PRN 12,500</div>
-                <div style="display:flex; gap:10px;">
-                    <button class="btn-full" style="width:auto; padding: 15px 30px; background:#000; font-size:0.6rem;">SEND</button>
-                    <button class="btn-outline" style="width:auto; padding: 15px 30px; margin:0; font-size:0.6rem;">RECEIVE</button>
-                </div>
+                <div style="display:flex; gap:10px;"><button class="btn-full" style="width:auto; padding: 15px 30px; background:#000; font-size:0.6rem;">SEND</button><button class="btn-outline" style="width:auto; padding: 15px 30px; margin:0; font-size:0.6rem;">RECEIVE</button></div>
             </div>
-            
             <div style="font-weight:900; letter-spacing:2px; font-size:0.7rem; margin-bottom:20px; color:#999;">ASSETS</div>
-            <div id="asset-grid" class="grid-container">
-                <!-- Handles/NFTs -->
-            </div>
+            <div id="asset-grid" class="grid-container"></div>
         </div>
 
+        <!-- Stages omitted for brevity but preserved in full script below -->
         <div id="stage-swap" class="stage hidden">
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:40px;">
                 <img src="../assets/chillata_logo.png" style="height:40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png'">
@@ -232,24 +174,35 @@
 
         <div id="stage-staking" class="stage hidden">
             <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Staking.</h1>
-            <div class="balance-card">
-                <div style="color:var(--accent); font-size:3rem; font-weight:900;">12.5% <span style="font-size:1rem; color:#AAA;">APY</span></div>
-                <button class="btn-full" style="background:var(--accent); margin-top:20px;">STAKE $PRN</button>
-            </div>
+            <div class="balance-card"><div style="color:var(--accent); font-size:3rem; font-weight:900;">12.5% <span style="font-size:1rem; color:#AAA;">APY</span></div><button class="btn-full" style="background:var(--accent); margin-top:20px;">STAKE $PRN</button></div>
         </div>
 
         <div id="stage-messenger" class="stage hidden">
-            <div class="messenger-layout">
-                <div class="chat-header">
-                    <img src="../assets/lynx_logo.png" class="lynx-icon-img" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png'">
-                    <div class="lynx-label">LYNX ARCHITECT</div>
+            <div class="messenger-container">
+                <div class="chat-list">
+                    <div class="search-handle-row">
+                        <span style="font-size:0.8rem;">🔍</span>
+                        <input type="text" id="search-handle" class="search-input" placeholder="Search handle..." onkeypress="handleSearch(event)">
+                    </div>
+                    <div id="active-chats-list">
+                        <!-- Chat List Items -->
+                    </div>
                 </div>
-                <div id="chat-box" class="chat-box"></div>
-                <div class="chat-input-row">
-                    <input id="lynx-input" type="text" placeholder="Message Architect..." class="chat-input">
-                    <button onclick="sendLynx()" class="btn-send">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                    </button>
+                <div class="chat-view">
+                    <div id="chat-header" class="chat-header">
+                        <img src="../assets/lynx_logo.png" class="chat-header-img" id="header-avatar" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png'">
+                        <div>
+                            <div id="header-handle" style="font-weight:900; font-size:0.85rem; letter-spacing:1px;">LYNX ARCHITECT</div>
+                            <div id="header-status" style="font-size:0.55rem; color:var(--muze-blue); font-weight:900; text-transform:uppercase; margin-top:3px;">Always Online</div>
+                        </div>
+                    </div>
+                    <div id="chat-box" class="chat-box"></div>
+                    <div class="chat-input-row">
+                        <input id="lynx-input" type="text" placeholder="Message..." class="chat-input" onkeypress="if(event.key==='Enter') sendMessage()">
+                        <button onclick="sendMessage()" class="btn-send">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,138 +210,129 @@
         <div id="stage-dapps" class="stage hidden">
             <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Dapps.</h1>
             <div class="grid-container">
-                <div class="card" onclick="window.open('../pulse/')">
-                    <img src="../assets/pulse_logo.png" style="height:30px; margin-bottom:10px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png'">
-                    <div class="card-label">PULSE</div>
-                </div>
-                <div class="card" onclick="window.open('../dreaminganime/')">
-                    <div class="card-icon">🎬</div>
-                    <div class="card-label">DREAMING</div>
-                </div>
+                <div class="card" onclick="window.open('../pulse/')"><img src="../assets/pulse_logo.png" style="height:30px; margin-bottom:10px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png'"><div class="card-label">PULSE</div></div>
+                <div class="card" onclick="window.open('../dreaminganime/')"><div class="card-icon">🎬</div><div class="card-label">DREAMING</div></div>
             </div>
         </div>
     </div>
 
     <script>
-        const splash = document.getElementById('layer-splash');
-        const onboarding = document.getElementById('layer-onboarding');
-        const flowLayer = document.getElementById('layer-flow');
-        const auth = document.getElementById('layer-auth');
-        const app = document.getElementById('app-ui');
-        const flowContent = document.getElementById('flow-content');
-        
+        const layers = { splash: 'layer-splash', onboarding: 'layer-onboarding', flow: 'layer-flow', auth: 'layer-auth', app: 'app-ui' };
         let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
+        let activeChat = '$architect';
+        let conversations = JSON.parse(localStorage.getItem('muze_chats_v1')) || {
+            '$architect': { handle: 'LYNX ARCHITECT', avatar: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png', messages: [{ from: 'received', text: 'Sovereign Node Online. Handshake Verified.', time: '09:00' }] }
+        };
 
         setTimeout(() => {
-            splash.classList.add('hidden');
-            if(!walletState) {
-                onboarding.classList.remove('hidden');
-            } else {
-                auth.classList.remove('hidden');
-            }
+            document.getElementById(layers.splash).classList.add('hidden');
+            if(!walletState) document.getElementById(layers.onboarding).classList.remove('hidden');
+            else document.getElementById(layers.auth).classList.remove('hidden');
         }, 1500);
 
         function startFlow(type) {
-            onboarding.classList.add('hidden');
-            flowLayer.classList.remove('hidden');
-            if(type === 'create') {
-                flowContent.innerHTML = `
-                    <h2>Create Vault</h2>
-                    <p>Enter a secure password to encrypt your local Sovereign Node.</p>
-                    <input type="password" id="new-pass" placeholder="Create Password">
-                    <button class="btn-full" onclick="finalizeSetup('create')">GENERATE VAULT</button>
-                `;
-            } else if(type === 'recover') {
-                flowContent.innerHTML = `
-                    <h2>Recover Vault</h2>
-                    <p>Enter your 24-word Sovereign Seed Phrase.</p>
-                    <input type="text" placeholder="Enter Seed Phrase">
-                    <input type="password" id="new-pass" placeholder="New Password">
-                    <button class="btn-full" onclick="finalizeSetup('recover')">RESTORE VAULT</button>
-                `;
-            } else if(type === 'ledger') {
-                flowContent.innerHTML = `
-                    <h2>Connect Ledger</h2>
-                    <p>Scanning for Sovereign Ledger Nodes via Bluetooth or Secure Link...</p>
-                    <div style="padding:40px; color:var(--muze-blue); font-weight:900;">SEARCHING...</div>
-                    <button class="btn-outline" onclick="finalizeSetup('ledger')">FORCE SYNC (DEV)</button>
-                `;
-            }
+            document.getElementById(layers.onboarding).classList.add('hidden');
+            document.getElementById(layers.flow).classList.remove('hidden');
+            let content = '';
+            if(type==='create') content = `<h2>Create Vault</h2><p>Encrypt your Sovereign Node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
+            if(type==='recover') content = `<h2>Recover</h2><p>Enter 24-word Seed Phrase.</p><input type="text" placeholder="Seed Phrase"><input type="password" id="new-pass" placeholder="New Password"><button class="btn-full" onclick="finalizeSetup('recover')">RESTORE</button>`;
+            if(type==='ledger') content = `<h2>Connect</h2><p>Scanning Sovereign Ledger...</p><div style="padding:20px; color:var(--muze-blue); font-weight:900;">SEARCHING...</div><button class="btn-outline" onclick="finalizeSetup('ledger')">SYNC (DEV)</button>`;
+            document.getElementById('flow-content').innerHTML = content;
         }
 
         function finalizeSetup(type) {
             const pass = document.getElementById('new-pass')?.value || 'password';
-            walletState = { 
-                handle: '$newbie.pri', 
-                password: pass, 
-                balance: '0.00', 
-                assets: [ { icon: '🏷️', label: '$newbie.pri', sub: 'ALPHA' } ] 
-            };
-            if(type === 'ledger') {
-                walletState = { 
-                    handle: '$prisca.pri', 
-                    password: 'password', 
-                    balance: '12,500.00', 
-                    assets: [ 
-                        { icon: '🏷️', label: '$prisca.pri', sub: 'ALPHA' },
-                        { icon: '🏷️', label: '$vogue.pri', sub: 'ALPHA' }
-                    ] 
-                };
-            }
+            walletState = { handle: '$prisca.pri', password: pass, balance: '12,500.00', assets: [{icon:'🏷️',label:'$prisca.pri',sub:'ALPHA'},{icon:'🏷️',label:'$vogue.pri',sub:'ALPHA'}] };
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
             location.reload();
         }
 
         function unlock() {
-            const pass = document.getElementById('pass-input').value;
-            if(pass === walletState.password) {
-                auth.classList.add('hidden');
-                app.style.display = 'flex';
+            if(document.getElementById('pass-input').value === walletState.password) {
+                document.getElementById(layers.auth).classList.add('hidden');
+                document.getElementById(layers.app).style.display = 'flex';
                 initApp();
-            } else {
-                alert("Incorrect Password.");
-            }
+            } else alert("Incorrect.");
         }
 
         function initApp() {
             document.getElementById('user-handle').innerText = walletState.handle;
             document.getElementById('balance').innerText = '$PRN ' + walletState.balance;
-            const grid = document.getElementById('asset-grid');
-            grid.innerHTML = walletState.assets.map(a => `
-                <div class="card">
-                    <div class="card-icon">${a.icon}</div>
-                    <div class="card-label">${a.label}</div>
-                    <div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div>
-                </div>
-            `).join('');
-            renderMessages();
+            document.getElementById('asset-grid').innerHTML = walletState.assets.map(a => `<div class="card" onclick="openChat('${a.label}')"><div class="card-icon">${a.icon}</div><div class="card-label">${a.label}</div><div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div></div>`).join('');
+            renderChatList();
+            renderActiveChat();
         }
 
+        function renderChatList() {
+            const list = document.getElementById('active-chats-list');
+            list.innerHTML = Object.keys(conversations).map(h => {
+                const c = conversations[h];
+                const last = c.messages[c.messages.length-1];
+                return `<div class="chat-item ${h===activeChat?'active':''}" onclick="openChat('${h}')">
+                    <img src="${c.avatar}" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
+                    <div class="chat-info">
+                        <div class="chat-handle">${c.handle}</div>
+                        <div class="chat-last">${last.text}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function openChat(handle) {
+            if(!conversations[handle]) {
+                conversations[handle] = { handle: handle.toUpperCase(), avatar: '../assets/pd_icon_512.png', messages: [{ from: 'received', text: 'Identity anchored. Communication channel established.', time: 'Now' }] };
+                saveChats();
+            }
+            activeChat = handle;
+            showStage('messenger', document.querySelector('.nav-item:nth-child(5)'));
+            renderChatList();
+            renderActiveChat();
+        }
+
+        function renderActiveChat() {
+            const c = conversations[activeChat];
+            document.getElementById('header-avatar').src = c.avatar;
+            document.getElementById('header-handle').innerText = c.handle;
+            document.getElementById('header-status').innerText = (activeChat==='$architect') ? 'Always Online' : 'On-Ledger';
+            const box = document.getElementById('chat-box');
+            box.innerHTML = c.messages.map(m => `<div class="msg ${m.from}">${m.text}<div class="msg-time">${m.time}</div></div>`).join('');
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('lynx-input');
+            const text = input.value.trim();
+            if(!text) return;
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            conversations[activeChat].messages.push({ from: 'sent', text, time });
+            input.value = '';
+            renderActiveChat();
+            renderChatList();
+            saveChats();
+            if(activeChat==='$architect') {
+                setTimeout(() => {
+                    conversations[activeChat].messages.push({ from: 'received', text: 'Signal anchored to $prisca.pri ledger.', time });
+                    renderActiveChat();
+                    renderChatList();
+                    saveChats();
+                }, 800);
+            }
+        }
+
+        function handleSearch(e) {
+            if(e.key === 'Enter') {
+                const handle = document.getElementById('search-handle').value.trim();
+                if(handle) openChat(handle);
+                document.getElementById('search-handle').value = '';
+            }
+        }
+
+        function saveChats() { localStorage.setItem('muze_chats_v1', JSON.stringify(conversations)); }
         function showStage(stage, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
             document.getElementById('stage-' + stage).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
-        }
-
-        let messages = [ { from: 'ai', text: 'Sovereign Node Online. Identity Handshake Verified.', time: '09:00' } ];
-        const chatBox = document.getElementById('chat-box');
-        function renderMessages() {
-            chatBox.innerHTML = messages.map(m => `<div class="msg ${m.from}">${m.text}<div class="msg-time">${m.time}</div></div>`).join('');
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-        function sendLynx() {
-            const input = document.getElementById('lynx-input');
-            const text = input.value.trim();
-            if(!text) return;
-            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            messages.push({ from: 'user', text, time });
-            input.value = '';
-            renderMessages();
-            setTimeout(() => {
-                messages.push({ from: 'ai', text: 'Signal anchored to Ledger.', time });
-                renderMessages();
-            }, 800);
         }
     </script>
 </body>
