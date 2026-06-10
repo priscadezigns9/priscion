@@ -218,14 +218,45 @@
         let walletState = null; let tempSeed = []; let tempPass = "";
         let miningActive = false; let miningInterval = null;
 
+        // SOVEREIGN ENCRYPTION ENGINE
+        async function deriveKey(password, salt) {
+            const encoder = new TextEncoder();
+            const baseKey = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
+            return crypto.subtle.deriveKey(
+                { name: "PBKDF2", salt: encoder.encode(salt), iterations: 100000, hash: "SHA-256" },
+                baseKey, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
+            );
+        }
+
+        async function encryptVault(data, password) {
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const iv = crypto.getRandomValues(new Uint8Array(12));
+            const key = await deriveKey(password, salt);
+            const encodedData = new TextEncoder().encode(JSON.stringify(data));
+            const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, encodedData);
+            return JSON.stringify({
+                salt: btoa(String.fromCharCode(...salt)),
+                iv: btoa(String.fromCharCode(...iv)),
+                ciphertext: btoa(String.fromCharCode(...new Uint8Array(ciphertext)))
+            });
+        }
+
+        async function decryptVault(encryptedStr, password) {
+            try {
+                const { salt, iv, ciphertext } = JSON.parse(encryptedStr);
+                const saltUint8 = new Uint8Array(atob(salt).split("").map(c => c.charCodeAt(0)));
+                const ivUint8 = new Uint8Array(atob(iv).split("").map(c => c.charCodeAt(0)));
+                const cipherUint8 = new Uint8Array(atob(ciphertext).split("").map(c => c.charCodeAt(0)));
+                const key = await deriveKey(password, saltUint8);
+                const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv: ivUint8 }, key, cipherUint8);
+                return JSON.parse(new TextDecoder().decode(decrypted));
+            } catch (e) { return null; }
+        }
+
         window.addEventListener('load', () => setTimeout(() => {
             document.getElementById(layers.splash).classList.add('hidden');
-            const stored = localStorage.getItem('muze_vault_v1');
-            if(stored) { 
-                walletState = JSON.parse(stored); 
-                if(!walletState.miningRewards) walletState.miningRewards = 0;
-                document.getElementById(layers.auth).classList.remove('hidden'); 
-            }
+            const stored = localStorage.getItem('muze_vault_v2');
+            if(stored) document.getElementById(layers.auth).classList.remove('hidden');
             else document.getElementById(layers.onboarding).classList.remove('hidden');
         }, 1500));
 
@@ -273,8 +304,10 @@
         }
 
         async function syncLedger() {
+            if(!walletState) return;
+            const encrypted = await encryptVault(walletState, walletState.password);
+            localStorage.setItem('muze_vault_v2', encrypted);
             try { await sb.from('ledger_state').upsert({ handle: walletState.handle, balance: walletState.balance, ledger_data: walletState }, { onConflict: 'handle' }); } catch(e){}
-            localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
         }
 
         function updateUI() {
@@ -425,17 +458,25 @@
         }
 
         async function unlock() {
-            if(document.getElementById('pass-input').value === walletState.password) {
-                document.getElementById('loading-overlay').classList.remove('hidden');
-                try { const {data} = await sb.from('ledger_state').select('ledger_data').eq('handle', walletState.handle).single(); if(data) walletState = data.ledger_data; } catch(e){}
+            const pass = document.getElementById('pass-input').value;
+            const stored = localStorage.getItem('muze_vault_v2');
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            
+            const decrypted = await decryptVault(stored, pass);
+            if(decrypted) {
+                walletState = decrypted;
+                try { const {data} = await sb.from('ledger_state').select('ledger_data').eq('handle', walletState.handle).single(); if(data) { Object.assign(walletState, data.ledger_data); } } catch(e){}
                 document.getElementById(layers.auth).classList.add('hidden');
                 document.getElementById(layers.app).style.display = 'flex';
                 updateUI();
                 document.getElementById('loading-overlay').classList.add('hidden');
-            } else alert("Wrong password.");
+            } else {
+                document.getElementById('loading-overlay').classList.add('hidden');
+                alert("Incorrect password. Vault remained locked.");
+            }
         }
 
-        function resetVault() { if(confirm("Wipe all data?")) { localStorage.removeItem('muze_vault_v1'); location.reload(); } }
+        function resetVault() { if(confirm("This will permanently wipe your encrypted vault. Continue?")) { localStorage.clear(); location.reload(); } }
         function showStage(s, el) { document.querySelectorAll('.stage').forEach(x=>x.classList.add('hidden')); document.getElementById('stage-'+s).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active'); }
     </script>
 </body>
