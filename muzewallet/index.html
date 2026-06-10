@@ -103,13 +103,13 @@
 
     <!-- Splash Layer -->
     <div id="layer-splash" class="layer">
-        <img src="../assets/pd_icon_512.png" class="splash-logo">
+        <img src="../assets/muse_icon.png" class="splash-logo" onerror="this.src='/assets/muse_icon.png'">
     </div>
 
     <!-- Auth Layer (Locked first) -->
     <div id="layer-auth" class="layer hidden">
         <div class="auth-card">
-            <img src="../assets/pd_icon_512.png" style="width:60px; margin-bottom:30px;">
+            <img src="../assets/muse_icon.png" style="width:60px; margin-bottom:30px;" onerror="this.src='/assets/muse_icon.png'">
             <h2>Vault Locked</h2>
             <p>Enter your sovereign password to unlock.</p>
             <input type="password" id="pass-input" placeholder="Password">
