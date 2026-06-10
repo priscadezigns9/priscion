@@ -1,34 +1,72 @@
-# PRISCION SOVEREIGN BLOCKCHAIN: WHITE PAPER (v1.0)
-**Architecting Reality through High-Fidelity Infrastructure**
+# ArchitectingReality.
 
-## 1. VISION & MISSION
-Priscion is a Layer 1 (L1) Sovereign Blockchain infrastructure designed to bridge Web2 brands into a Web3 decentralized ecosystem. Our mission is "Architecting Reality"—providing a unified, high-fidelity environment where e-commerce, identity, and decentralized finance converge.
+The Priscion Sovereign Ledger (L1) is the high-fidelity infrastructure for the transition from the fragmented Web2 landscape to a unified, independent Web3 reality. This document outlines the protocols, products, and economic systems driving our global migration.
 
-## 2. THE CORE ECOSYSTEM
-The ecosystem is built on four primary pillars:
-*   **MUZE Wallet:** The non-custodial gateway. A handle-anchored vault for identity, assets, and secure communication.
-*   **PULSE Explorer:** The "Sovereign Ledger" search engine. Real-time verification of blocks, transactions, and handles.
-*   **MYNT Storefront:** A decentralized marketplace for high-fidelity assets and NFTs.
-*   **Chillata DEX:** The decentralized exchange layer for liquidity provisioning and token swaps.
+### The Share-to-Earn System
 
-## 3. IDENTITY & ONBOARDING: THE MUSTARD SEED PROTOCOL
-Identity on Priscion is anchored to Sovereign Handles (e.g., `$prisca.pri`). 
-*   **Genesis Mining:** New users claim a "Mustard Seed" airdrop of 1,250 $PRN.
-*   **Security Sequence:** To ensure absolute sovereignty, onboarding follows a strict 4-step protocol:
-    1.  **Vault Locking:** Creation of a secure local password.
-    2.  **Seed Provisioning:** Generation of 12 or 24-word Sovereign Seed phrases.
-    3.  **Random Word Verification:** Mandatory challenge to confirm seed backup.
-    4.  **Handle Anchoring:** Final identity registration on the Sovereign Ledger.
+Our "Share-to-Earn" engine turns the Priscion community into a global marketing force. Users share brand content and service invitations through their unique handle-anchored links. When an interaction leads to a migration or service acquisition, the affiliate earns instant commissions paid in $PRN directly to their MUZE Vault.
 
-## 4. THE TOKEN ECONOMY
-*   **$PRN (Priscion Neural):** The native utility and governance token.
-*   **Sovereign Ledger Sync:** All balances and identities are indexed via a globally persistent ledger (Supabase-backed), ensuring cross-session reliability.
+## 1. Core Infrastructure
 
-## 5. TECHNICAL STANDARDS
-*   **Zero-Animation Mandate:** To preserve professional fidelity, the UI/UX remains static and stable.
-*   **White UI Mandate:** A clean, high-fidelity white aesthetic defines the visual language of all brand nodes.
-*   **Sovereign Seed Standards:** Support for both 12 and 24-word industry-standard mnemonic phrases.
+### MUSE Wallet
 
----
-*Document Version: 24.7.13*
-*Status: Active*
+The MUZE Wallet is the non-custodial gateway to the Priscion ecosystem. It manages high-fidelity identities through **.pri handles** and secures assets in the "Sovereign Enclave."
+
+### NFT-Anchored Spending
+
+The Sovereign Digital Card is a high-fidelity utility NFT. Once purchased in the MINT store, it manifests in the MUZE Wallet, attached to the user's handle. This card enables the real-world spending of $PRN at millions of merchants globally through our BaaS bridge, converting assets instantly on-swipe.
+
+### PULSE Explorer
+
+PULSE is the high-fidelity heartbeat of the network, providing transparent, real-time monitoring of all block production, transaction validation, and ledger health metrics.
+
+### CHILLATA Swap
+
+Chillata is the decentralized liquidity engine, facilitating private, zero-friction asset exchange across the network's internal brand nodes.
+
+### MYNT Store & Factory
+
+The MYNT Store is the primary hub for the Sovereign NFT economy. It allows users to:
+
+- Mint Private Artifacts: Upload documents and images to the Jello Privacy Layer ($JLO) as private NFTs.
+- Mint Public Artifacts: Anchor media and data to the public ledger ($PRN).
+- Sovereign Profiles: Manage a high-fidelity profile attached to your .pri handle, using owned NFTs as profile pictures.
+- NFT Store: Buy, sell, and trade independent artifacts and utility tokens using the MUZE Wallet.
+## 2. Economic Engine
+
+### The Mustard Seed Protocol
+
+To eliminate the "cold start" barrier, Priscion implements the Mustard Seed Protocol. New users can claim their first .pri handle for free through the MUZE Wallet. This initial identity comes with a "Mustard Seed" airdrop of utility $PRN, providing the necessary fuel for their first ledger interactions and enabling them to participate in the Share-to-Earn system immediately.
+
+### Native Assets & Utility
+
+While $PRN is the primary fuel, the ledger hosts native assets designed for specific utility nodes:
+
+- $NRL (NEURAL): The private reserve and governance asset for the entire Network.
+- $JLO: Utility token for the Jello Privacy Layer, required for private NFT interactions.
+- $MUSD: High-fidelity stablecoin pegged to USD and backed by Network service revenue.
+- $ATLR: Gaming utility currency for the Atelia Gaming Lab ecosystem.
+## 3. DeFi & Liquidity Protocols
+
+### CHILLATA: The High-Fidelity DEX
+
+Chillata is the decentralized liquidity engine where all native assets are traded. Acquisition and stability are governed by decentralized protocols:
+
+Swapping: Exchange $PRN for any native asset ($JLO, $NRL, $ATLR, $MUSD) for a 0.3% swap fee.
+
+Yield Provision: Users can anchor assets to Liquidity Pools (e.g., $PRN/$NRL). In exchange for providing this stability, they earn a 0.2% share of all swap fees generated by that pool.
+
+Sovereign Staking: Staking $PRN or $NRL in the MUZE Vault generates a 12.5% APY, paid out in real-time as blocks are validated.
+
+### MYNT Branding & Asset Fidelity
+
+- **Primary Icon/Tile Logo:** `assets/mynt_tile_icon.png` (Source: Google Drive ID 10rT3cv...)
+- **Nav Bar Logo:** `assets/mynt_nav_logo.png` (Source: Google Drive ID 1zGwAPj...)
+- **Mandate:** All brand-specific logos must be stored in the `/assets/` directory and referenced directly to ensure zero-fallback performance and absolute brand isolation.
+
+## 4. Conclusion
+
+Priscion is more than a blockchain; it is a framework for architecting a new reality where data ownership, financial independence, and brand integrity are the default state.
+
+Anchored to Eternity // 2026
+
