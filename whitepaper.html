@@ -12,13 +12,14 @@
             --text: #1A1A1A;
             --muted: #666666;
             --accent: #7B35D4;
+            --muze-blue: #5AC8FA;
             --border: rgba(0,0,0,0.08);
             --surface: #F9F9F9;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
         body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.7; padding: 0 5%; }
 
         nav {
@@ -26,99 +27,79 @@
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border);
         }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
         .logo { height: 35px; cursor: pointer; }
 
         article { max-width: 800px; margin: 80px auto; }
         
         .version { font-size: 0.65rem; font-weight: 900; letter-spacing: 5px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block; }
-        h1 { font-family: var(--font-heading); font-size: clamp(3rem, 8vw, 4.5rem); line-height: 1; margin-bottom: 40px; letter-spacing: -2px; }
+        h1 { font-family: var(--font-heading); font-size: clamp(3rem, 8vw, 4.5rem); line-height: 1.1; margin-bottom: 40px; }
+        h2 { font-family: var(--font-heading); font-size: 2.2rem; margin: 60px 0 25px; border-top: 1px solid var(--border); padding-top: 40px; }
+        h3 { font-size: 1.1rem; font-weight: 900; margin: 40px 0 15px; text-transform: uppercase; letter-spacing: 2px; }
+        p { font-size: 1.1rem; color: #333; margin-bottom: 25px; }
         
-        h2 { font-family: var(--font-heading); font-size: 2.2rem; margin: 60px 0 25px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
-        h3 { font-size: 0.75rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin: 40px 0 15px; color: var(--accent); }
-        
-        p { margin-bottom: 25px; color: var(--text); opacity: 0.9; font-size: 1.05rem; }
-        
-        .token-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 40px 0; }
-        .token-card { background: var(--surface); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
-        .token-card strong { display: block; font-size: 1.5rem; font-family: var(--font-heading); margin-bottom: 10px; color: var(--accent); }
+        .highlight-box { background: var(--surface); border: 1px solid var(--border); padding: 40px; border-radius: 24px; margin: 40px 0; }
+        .highlight-box h4 { font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 15px; }
 
-        .legal-node { border-left: 4px solid var(--accent); padding-left: 25px; margin: 40px 0; }
-        
-        .roadmap { position: relative; padding-left: 30px; border-left: 1px solid var(--border); margin: 60px 0; }
-        .roadmap-item { position: relative; margin-bottom: 40px; }
-        .roadmap-item::before { content: ''; position: absolute; left: -36px; top: 0; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; }
-        .roadmap-item strong { display: block; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
-
-        footer { text-align: center; padding: 100px 0; border-top: 1px solid var(--border); margin-top: 100px; }
+        .btn-cta { background: #000; color: #fff; padding: 20px 40px; border-radius: 100px; text-decoration: none; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; display: inline-block; margin-top: 20px; }
     </style>
 </head>
 <body>
 
     <nav>
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/p-logo.png" class="logo" onclick="location.href='index.html'">
-        <a href="index.html" style="text-decoration:none; font-weight:900; font-size:0.65rem; color:var(--text); letter-spacing:2px; text-transform:uppercase;">Back to Hub</a>
+        <img src="https://priscion.com/assets/priscion_logo.png" class="logo" onclick="location.href='index.html'" onerror="this.src='assets/priscion_logo.png'">
+        <div class="nav-links">
+            <a href="index.html">Hub</a>
+            <a href="pulse/">Explorer</a>
+            <a href="muzewallet/" style="background:var(--muze-blue); color:white; padding:12px 25px; border-radius:100px;">MUSE</a>
+        </div>
     </nav>
 
     <article>
-        <span class="version">Sovereign White Paper v3.0</span>
-        <h1>The Architecture of Eternity.</h1>
-        <p>Priscion is not a blockchain. It is a Sovereign Operating System designed to anchor physical reality and high-fidelity digital legacy to an immutable ledger.</p>
+        <span class="version">Version 3.1 // Independent Reality</span>
+        <h1>Architecting<br>Reality.</h1>
+        <p>The Priscion Sovereign Ledger (L1) is the high-fidelity infrastructure for the transition from the fragmented Web2 landscape to a unified, independent Web3 reality. This document outlines the protocols, products, and economic systems driving our global migration.</p>
 
-        <h2>1. The Economic Model</h2>
-        <p>The Priscion economy is a multi-tier tokenomic structure designed for stability, governance, and utility.</p>
+        <div class="highlight-box">
+            <h4>Affiliate Protocol</h4>
+            <h3>The Share-to-Earn System</h3>
+            <p>Our "Share-to-Earn" engine turns the Priscion community into a global marketing force. Users share brand content and service invitations through their unique handle-anchored links. When an interaction leads to a migration or service acquisition, the affiliate earns instant commissions paid in <strong>$PRN</strong> directly to their MUZE Vault.</p>
+            <a href="https://priscion.com/share-to-earn" class="btn-cta">JOIN THE AFFILIATE ENGINE</a>
+        </div>
+
+        <h2>1. Core Infrastructure</h2>
+        <h3>MUSE Wallet</h3>
+        <p>The MUZE Wallet is the non-custodial gateway to the Priscion ecosystem. It manages high-fidelity identities through **.pri handles** and secures assets in the "Sovereign Enclave."</p>
+
+        <div class="highlight-box" style="background:#000; color:#FFF;">
+            <h4 style="color:var(--muze-blue);">The Sovereign Card</h4>
+            <h3>NFT-Anchored Spending</h3>
+            <p style="color:#CCC;">The Sovereign Digital Card is a high-fidelity utility NFT. Once purchased in the MINT store, it manifests in the MUZE Wallet, attached to the user's handle. This card enables the real-world spending of $PRN at millions of merchants globally through our BaaS bridge, converting assets instantly on-swipe.</p>
+        </div>
+
+        <h3>PULSE Explorer</h3>
+        <p>PULSE is the high-fidelity heartbeat of the network, providing transparent, real-time monitoring of all block production, transaction validation, and ledger health metrics.</p>
+
+        <h3>CHILLATA Swap</h3>
+        <p>Chillata is the decentralized liquidity engine, facilitating private, zero-friction asset exchange across the network's internal brand nodes.</p>
+
+        <h3>MYNT Store</h3>
+        <p>The MYNT Store is the primary manufacturing hub for Network NFTs, including handle registrations, digital artifacts, and the Sovereign Digital Card.</p>
+
+        <h2>2. Economic Engine</h2>
+        <h3>The $PRN Ledger</h3>
+        <p>$PRN is the primary fuel and unit of account for the Priscion Network. It powers transaction fees, service acquisitions, and affiliate rewards.</p>
+
+        <h3>Heritage Preservation</h3>
+        <p>Heritage Preservation refers to the **Cryptographic Anchoring** of legacy business data. When a brand migrates to Priscion, we sign their DNA—founding assets, legal origins, and high-fidelity history—ensuring it remains unalterable on the ledger.</p>
+
+        <h2>3. Conclusion</h2>
+        <p>Priscion is more than a blockchain; it is a framework for architecting a new reality where data ownership, financial independence, and brand integrity are the default state.</p>
         
-        <div class="token-grid">
-            <div class="token-card">
-                <strong>$PRN</strong>
-                <p style="font-size: 0.85rem;">The Sovereign Reserve Asset. Used for ledger settlements, $MUSD minting, and network fees.</p>
-            </div>
-            <div class="token-card">
-                <strong>$NRL (Neural)</strong>
-                <p style="font-size: 0.85rem;">The Agentic Layer Token. Powers AI-to-API handshakes and decentralized intelligence protocols.</p>
-            </div>
-            <div class="token-card">
-                <strong>$MUSD</strong>
-                <p style="font-size: 0.85rem;">The Sovereign Stablecoin. Minted 1:1 only upon receipt of purchase for services or asset backing.</p>
-            </div>
-            <div class="token-card">
-                <strong>$ATLR</strong>
-                <p style="font-size: 0.85rem;">The Gaming Utility Token. The earned currency for the Atelia Gaming Lab ecosystem.</p>
-            </div>
+        <div style="text-align:center; margin-top:80px; border-top:1px solid var(--border); padding-top:40px;">
+            <p style="font-size:0.7rem; font-weight:900; letter-spacing:2px; color:var(--muted); text-transform:uppercase;">Anchored to Eternity // 2026</p>
         </div>
-
-        <h3>The Jello Privacy Layer</h3>
-        <p>Jello is Priscion’s native zero-knowledge privacy protocol. It ensures that while transactions are verified on-chain, the "metadata" of the high-fidelity assets remains encrypted and visible only to the authorized handle ($username.pri).</p>
-
-        <h2>2. Heritage Preservation</h2>
-        <p>Heritage Preservation refers to the **Cryptographic Anchoring** of legacy business data. When a brand migrates to Priscion, we don't just move files; we "sign" their history. This process ensures that 100 years from now, the DNA of the original brand—its founding assets, legal origins, and high-fidelity history—remains verifiable and unalterable on the ledger.</p>
-
-        <h2>3. Global Legal Alignment</h2>
-        <p>Priscion aligns with international digital asset laws through **Sovereign Compliance Nodes**:</p>
-        <div class="legal-node">
-            <p><strong>GDPR/Data Privacy:</strong> Via the Jello Layer, users maintain 100% ownership of their "Right to be Forgotten" by revoking ledger-access keys.</p>
-            <p><strong>AML/KYC:</strong> Anchored via the MUSE Wallet’s Identity Node, ensuring all handles are linked to a verifiable Sovereign DID (Decentralized Identifier).</p>
-            <p><strong>MiCA/Regulatory Frameworks:</strong> $MUSD is strictly a utility-backed stablecoin, ensuring it meets electronic money requirements by only minting upon real-world service acquisition.</p>
-        </div>
-
-        <h2>4. Roadmap: The Sovereign Sprint</h2>
-        <div class="roadmap">
-            <div class="roadmap-item">
-                <strong>Phase 1: Genesis (Q2 2026) - ACTIVE</strong>
-                <p>Launch of priscion.com, MUSE Wallet v14.0, and the Sovereign Name Provisioning protocol.</p>
-            </div>
-            <div class="roadmap-item">
-                <strong>Phase 2: Jello & Lynx (Target: End of Week)</strong>
-                <p>Stabilization of the encrypted messaging layer and the launch of the AI Agentic Layer ($NRL) for automated social deployment.</p>
-            </div>
-            <div class="roadmap-item">
-                <strong>Phase 3: The Imperial Bundle (Q3 2026)</strong>
-                <p>Full integration of Atelia Gaming, Peanuts Analytics, and the MYNT NFT Factory into a single OS bundle.</p>
-            </div>
-        </div>
-
-        <footer>
-            <p style="font-size: 0.7rem; font-weight: 900; letter-spacing: 3px; color: var(--muted);">PRISCION SOVEREIGN LEDGER | ANCHORED TO ETERNITY</p>
-        </footer>
     </article>
 
 </body>
