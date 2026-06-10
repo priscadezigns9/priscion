@@ -49,7 +49,7 @@
         }
 
         .hero-banner {
-            padding: 60px 8%; background: var(--surface); border-bottom: 1px solid var(--border);
+            padding: 80px 8%; background: var(--surface); border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between; gap: 40px;
         }
         .hero-text h1 { font-family: var(--font-heading); font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; }
@@ -100,6 +100,10 @@
         }
 
         .hidden { display: none !important; }
+        
+        footer { padding: 100px 8%; border-top: 1px solid var(--border); text-align: center; background: var(--surface); }
+        footer img { height: 100px; margin-bottom: 20px; }
+        footer p { font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
     </style>
 </head>
 <body>
@@ -173,6 +177,11 @@
         <button class="btn-full" onclick="location.href='../muzewallet/'">OPEN MUZE VAULT</button>
     </div>
 
+    <footer>
+        <img src="https://share.zapia.com/6h0tzrbb1e8o94jesdlbgz" onerror="this.src='../assets/muse_icon.png'">
+        <p>© 2026 MYNT · ARCHITECTING REALITY</p>
+    </footer>
+
     <script>
         let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
         
@@ -194,10 +203,7 @@
 
         function renderGrid() {
             const items = [
-                { id:1, col: 'Sovereign Utility', title: 'Sovereign Digital Card', price: '500', img: '../assets/priscion_card.png' },
-                { id:2, col: 'Heritage Art', title: 'Calalloo Founders Token', price: '1,200', img: '../assets/chillata_logo.png' },
-                { id:3, col: 'Sovereign Handles', title: '$vogue.pri', price: '5,000', img: '../assets/muse_icon.png' },
-                { id:4, col: 'Independent Media', title: 'Dreaming Cinema Pass', price: '800', img: '../assets/pd_icon_512.png' }
+                { id:1, col: 'Sovereign Utility', title: 'Sovereign Digital Card', price: '500', img: '../assets/priscion_card.png' }
             ];
             document.getElementById('nft-grid').innerHTML = items.map(i => `
                 <div class="nft-card">
@@ -242,7 +248,3 @@
     </script>
 </body>
 </html>
-    <footer style="padding: 80px 8%; border-top: 1px solid var(--border); text-align: center; background: var(--surface);">
-        <img src="https://share.zapia.com/6h0tzrbb1e8o94jesdlbgz" style="height: 100px; margin-bottom: 20px;" onerror="this.src='../assets/muse_icon.png'">
-        <p style="font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);">© 2026 MYNT · ARCHITECTING REALITY</p>
-    </footer>
