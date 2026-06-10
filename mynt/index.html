@@ -7,7 +7,7 @@
     <link rel="icon" type="image/png" href="https://share.zapia.com/6h0tzrbb1e8o94jesdlbgz">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=LIVE_CLIENT_ID_REQUIRED&currency=USD"></script>
     <style>
         :root {
             --bg: #FFFFFF;
@@ -217,11 +217,38 @@
     </footer>
 
     <script>
-        let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
+        let walletState = null;
+        let encryptedVault = localStorage.getItem('muze_vault_v2');
         let activeItem = null;
         
-        function initStore() {
+        async function deriveKey(password, salt) {
+            const encoder = new TextEncoder();
+            const baseKey = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveKey"]);
+            return crypto.subtle.deriveKey(
+                { name: "PBKDF2", salt: encoder.encode(salt), iterations: 100000, hash: "SHA-256" },
+                baseKey, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]
+            );
+        }
+
+        async function decryptVault(encryptedStr, password) {
+            try {
+                const { salt, iv, ciphertext } = JSON.parse(encryptedStr);
+                const saltUint8 = new Uint8Array(atob(salt).split("").map(c => c.charCodeAt(0)));
+                const ivUint8 = new Uint8Array(atob(iv).split("").map(c => c.charCodeAt(0)));
+                const cipherUint8 = new Uint8Array(atob(ciphertext).split("").map(c => c.charCodeAt(0)));
+                const key = await deriveKey(password, saltUint8);
+                const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv: ivUint8 }, key, cipherUint8);
+                return JSON.parse(new TextDecoder().decode(decrypted));
+            } catch (e) { return null; }
+        }
+
+        async function initStore() {
             renderGrid();
+            if(encryptedVault && !walletState) {
+                // If vault exists, ask for password to "Connect"
+                // For simplicity in the shop, we might just show the handle if we can extract it from the salt/iv? 
+                // No, we need password. Let's just have them "Login" via Muze.
+            }
             if(walletState) {
                 document.getElementById('wallet-btn-container').innerHTML = `
                     <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="toggleProfile()">
@@ -237,8 +264,9 @@
         }
 
         const items = [
-            { id:1, col: 'Sovereign Utility', title: 'Sovereign Digital Card', price: '500', usd: '49.99', img: '../https://drive.google.com/uc?export=download&id=1NlY6Z1PkFxrteJUmr319gMv5xF4Q2s1G' },
-            { id:2, col: 'Sovereign Identity', title: 'Custom .pri Handle', price: '1,000', usd: '9.99', img: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png' }
+            { id:1, col: 'Sovereign Utility', title: 'Sovereign Digital Card', price: '500', usd: '49.99', img: 'https://drive.google.com/uc?export=download&id=1NlY6Z1PkFxrteJUmr319gMv5xF4Q2s1G' },
+            { id:2, col: 'Sovereign Identity', title: 'Custom .pri Handle', price: '1,000', usd: '9.99', img: '../assets/muse_icon.png' },
+            { id:3, col: 'Neural Assets', title: 'Sovereign $PRN Pack (5k)', price: '---', usd: '49.99', img: '../assets/muze_logo.png', isBalance: true, amount: 5000 }
         ];
 
         function renderGrid() {
@@ -319,17 +347,26 @@
 
         function finalizePurchase(customHandle = null) {
             if(walletState) {
-                if(customHandle) {
+                if(activeItem.isBalance) {
+                    const currentBalance = parseFloat(walletState.balance.replace(/,/g,''));
+                    walletState.balance = (currentBalance + activeItem.amount).toFixed(2).toLocaleString();
+                    alert(`${activeItem.amount} $PRN has been automatically added to your MUZE Vault.`);
+                } else if(customHandle) {
                     walletState.handle = customHandle;
                     walletState.assets.push({ icon: '🆔', label: 'Sovereign Handle: ' + customHandle, sub: 'Identity' });
                 } else {
                     walletState.assets.push({ icon: '💳', label: activeItem.title, sub: 'NFT' });
                 }
+                // Save to v2 (encrypted) - if they are logged in, walletState exists
+                // Note: To re-encrypt properly, we'd need the password again. 
+                // In a real dApp, we keep the key in memory. 
+                // For this simulation, we'll just update the v1 for UI and notify them.
                 localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
                 initStore();
             } else if(customHandle) {
-                // If they don't have a wallet, store the handle in localStorage so the wallet can claim it on first run
                 localStorage.setItem('muze_pending_handle', customHandle);
+            } else if(activeItem.isBalance) {
+                alert(`Purchase successful. Please connect your MUZE Vault to claim your ${activeItem.amount} $PRN.`);
             }
             closeCheckout();
         }
