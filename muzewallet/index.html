@@ -83,7 +83,7 @@
         .nav-item.active { color: var(--text); background: #F0F0F0; }
         
         .stage { flex: 1; padding: 80px; overflow-y: auto; }
-        .balance-card { border: 1px solid var(--border); border-radius: 40px; padding: 60px; background: #FFF; }
+        .balance-card { border: 1px solid var(--border); border-radius: 40px; padding: 60px; background: #FFF; margin-bottom: 40px; }
         .balance-big { font-size: 5rem; font-weight: 900; letter-spacing: -3px; margin: 20px 0; }
         
         .profile { 
@@ -105,6 +105,14 @@
         .chat-input-row { display: flex; gap: 15px; align-items: center; }
         .chat-input { flex: 1; border: none; padding: 18px; background: #F9F9F9; border-radius: 15px; outline: none; font-size: 0.9rem; }
         .btn-send { background: #000; color: #FFF; border: none; width: 55px; height: 55px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* Grid for Vault/Dapps */
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #FFF; border: 1px solid var(--border); border-radius: 25px; padding: 30px; text-align: center; cursor: pointer; }
+        .card:hover { background: #FBFBFB; }
+        .card-icon { font-size: 2rem; margin-bottom: 10px; }
+        .card-label { font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; }
+        .card-sub { font-size: 0.5rem; color: #999; margin-top: 5px; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -129,11 +137,12 @@
     <div id="app-ui">
         <div class="sidebar">
             <div style="padding: 0 40px 60px;"><img src="../assets/pd_icon_512.png" style="width: 50px;"></div>
-            <div class="nav-item" onclick="showStage('vault', this)">Vault</div>
-            <div class="nav-item active" onclick="showStage('messenger', this)">Messenger</div>
-            <div class="nav-item" onclick="showStage('mission', this)">TWMK Mission</div>
+            <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
+            <div class="nav-item" onclick="showStage('swap', this)">Swap</div>
+            <div class="nav-item" onclick="showStage('staking', this)">Staking</div>
+            <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
             <div class="nav-item" onclick="showStage('dapps', this)">Dapps</div>
-            <div class="profile">
+            <div class="profile" onclick="switchWallet()">
                 <img src="../assets/pd_icon_512.png">
                 <div>
                     <div style="font-weight:900;">$prisca.pri</div>
@@ -142,16 +151,68 @@
             </div>
         </div>
         
-        <div id="stage-vault" class="stage hidden">
+        <!-- STAGE: VAULT -->
+        <div id="stage-vault" class="stage">
             <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
             <div class="balance-card">
                 <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Independent Reserve</div>
                 <div id="balance" class="balance-big">$PRN 12,500</div>
-                <button class="btn-unlock" style="width:auto; padding: 20px 60px;">SEND ASSETS</button>
+                <div style="display:flex; gap:15px;">
+                    <button class="btn-unlock" style="width:auto; padding: 20px 40px; background:#000;">SEND</button>
+                    <button class="btn-unlock" style="width:auto; padding: 20px 40px; background:#FFF; color:#000; border:1px solid #EEE;">RECEIVE</button>
+                </div>
+            </div>
+            
+            <div style="font-weight:900; letter-spacing:2px; font-size:0.8rem; margin-bottom:25px; color:#999;">SOVEREIGN ASSETS</div>
+            <div class="grid-container">
+                <div class="card">
+                    <div class="card-icon">🏺</div>
+                    <div class="card-label">Heritage NFT</div>
+                    <div class="card-sub">CL-01 • VERIFIED</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🏷️</div>
+                    <div class="card-label">$prisca.pri</div>
+                    <div class="card-sub">ALPHA HANDLE</div>
+                </div>
             </div>
         </div>
 
-        <div id="stage-messenger" class="stage">
+        <!-- STAGE: SWAP -->
+        <div id="stage-swap" class="stage hidden">
+            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Swap.</h1>
+            <div class="balance-card">
+                <div style="background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE; margin-bottom:20px;">
+                    <div style="font-size:0.6rem; font-weight:900; color:#888;">FROM</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                        <input type="number" value="100" style="background:none; border:none; font-size:2rem; font-weight:900; width:60%; outline:none;">
+                        <div style="background:#FFF; padding:10px 20px; border-radius:100px; font-weight:900; font-size:0.8rem; border:1px solid #EEE;">$PRN</div>
+                    </div>
+                </div>
+                <div style="background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE; margin-bottom:30px;">
+                    <div style="font-size:0.6rem; font-weight:900; color:#888;">TO (EST)</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                        <div style="font-size:2rem; font-weight:900;">100.00</div>
+                        <div style="background:#FFF; padding:10px 20px; border-radius:100px; font-weight:900; font-size:0.8rem; border:1px solid #EEE;">$MUSD</div>
+                    </div>
+                </div>
+                <button class="btn-unlock" style="background:#000;">EXECUTE SWAP</button>
+            </div>
+        </div>
+
+        <!-- STAGE: STAKING -->
+        <div id="stage-staking" class="stage hidden">
+            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Staking.</h1>
+            <div class="balance-card">
+                <div style="color:#AAA; font-size:0.7rem; font-weight:900; letter-spacing:4px; margin-bottom:15px;">ESTIMATED YIELD</div>
+                <div style="font-size:4.5rem; font-weight:900; color:var(--accent);">12.5% <span style="font-size:1.2rem; color:#AAA;">APY</span></div>
+                <p style="color:#666; font-size:0.9rem; margin-top:30px; line-height:1.6; max-width:400px;">Commit your $PRN to secure the Sovereign Ledger and earn passive neural rewards.</p>
+                <button class="btn-unlock" style="background:var(--accent); margin-top:40px;">STAKE $PRN</button>
+            </div>
+        </div>
+
+        <!-- STAGE: MESSENGER -->
+        <div id="stage-messenger" class="stage hidden">
             <div class="messenger-layout">
                 <div class="chat-header">
                     <div class="lynx-icon">🛡️</div>
@@ -170,17 +231,31 @@
             </div>
         </div>
 
-        <div id="stage-mission" class="stage hidden">
-            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Mission.</h1>
-            <div style="padding: 60px; border: 1px solid #EEE; border-radius: 40px; text-align: center;">
-                <p style="color:var(--muted); font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">The Way Made Known</p>
-                <p style="color:var(--muted); font-size: 0.8rem; margin-top: 10px;">10% of all gross sales from the network are routed here.</p>
-            </div>
-        </div>
-
+        <!-- STAGE: DAPPS -->
         <div id="stage-dapps" class="stage hidden">
             <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Dapps.</h1>
-            <p style="color:var(--muted);">Select a brand to view analytics and share affiliate links.</p>
+            <div class="grid-container">
+                <div class="card" onclick="window.open('../pulse/')">
+                    <div class="card-icon">⚡</div>
+                    <div class="card-label">PULSE</div>
+                    <div class="card-sub">LEDGER EXPLORER</div>
+                </div>
+                <div class="card" onclick="window.open('../dreaminganime/')">
+                    <div class="card-icon">🎬</div>
+                    <div class="card-label">DREAMING</div>
+                    <div class="card-sub">MEDIA NODE</div>
+                </div>
+                <div class="card" onclick="window.open('../ateliagaming/')">
+                    <div class="card-icon">🕹️</div>
+                    <div class="card-label">ATELIA</div>
+                    <div class="card-sub">GAMING LAB</div>
+                </div>
+                <div class="card" onclick="switchTab('swap')">
+                    <div class="card-icon">🧊</div>
+                    <div class="card-label">CHILLATA</div>
+                    <div class="card-sub">DEX CORE</div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -241,6 +316,11 @@
         }
 
         lynxInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendLynx(); });
+        function switchWallet() { alert('Switching Sovereign Nodes...'); }
+        function switchTab(t) { 
+            const nav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.toLowerCase() === t.toLowerCase());
+            showStage(t, nav); 
+        }
     </script>
 </body>
 </html>
