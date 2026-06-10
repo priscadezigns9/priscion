@@ -8,17 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --card: #0F0F0F;
-            --text: #FFFFFF;
-            --muted: #666666;
+            --bg: #FFFFFF;
+            --card: #F9F9F9;
+            --text: #000000;
+            --muted: #888888;
             --accent: #7B35D4;
-            --muze-blue: #5AC8FA;
-            --border: rgba(255,255,255,0.05);
-            --neon-glow: 0 0 15px rgba(90, 200, 250, 0.3);
+            --muze-blue: #007AFF;
+            --border: #EEEEEE;
+            --neon-glow: 0 4px 15px rgba(0, 122, 255, 0.1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
         
         body { 
             font-family: 'Inter', sans-serif; 
@@ -26,14 +26,14 @@
             color: var(--text); 
             line-height: 1.6; 
             overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% -20%, #1a1a1a 0%, #050505 100%);
+            background-image: none;
         }
 
         nav {
             height: 80px; padding: 0 5%;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(10px); background: rgba(5,5,5,0.8);
+            backdrop-filter: blur(10px); background: rgba(255,255,255,0.8);
             position: sticky; top: 0; z-index: 1000;
         }
         .logo-box { display: flex; align-items: center; gap: 12px; }
@@ -48,38 +48,38 @@
         }
         .stat-card {
             background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 20px;
-            position: relative; overflow: hidden;
+            position: relative; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.02);
         }
         .stat-card::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--muze-blue), transparent);
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+            background: var(--muze-blue);
         }
         .stat-label { font-size: 0.65rem; font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; display: block; }
         .stat-value { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: var(--text); }
-        .stat-sub { font-size: 0.7rem; color: #00C853; margin-top: 5px; font-weight: 700; }
+        .stat-sub { font-size: 0.7rem; color: #28A745; margin-top: 5px; font-weight: 700; }
 
         /* Main Explorer Stage */
         .explorer-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px; }
-        .feed-container { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 30px; }
+        .feed-container { background: #FFF; border: 1px solid var(--border); border-radius: 24px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         .feed-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
         .feed-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; }
         
         .live-tag { 
             display: flex; align-items: center; gap: 8px; font-size: 0.6rem; font-weight: 900; 
-            text-transform: uppercase; color: var(--muze-blue); background: rgba(90,200,250,0.1); 
-            padding: 5px 12px; border-radius: 100px; border: 1px solid rgba(90,200,250,0.2);
+            text-transform: uppercase; color: var(--muze-blue); background: rgba(0,122,255,0.05); 
+            padding: 5px 12px; border-radius: 100px; border: 1px solid rgba(0,122,255,0.1);
         }
-        .dot { width: 6px; height: 6px; background: var(--muze-blue); border-radius: 50%; box-shadow: var(--neon-glow); }
+        .dot { width: 6px; height: 6px; background: var(--muze-blue); border-radius: 50%; }
 
         .data-row {
             display: flex; align-items: center; justify-content: space-between; padding: 20px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.03);
+            border-bottom: 1px solid #F5F5F5;
         }
         .data-row:last-child { border: none; }
         
         .data-main { display: flex; align-items: center; gap: 15px; }
         .icon-hex { 
-            width: 45px; height: 45px; background: rgba(255,255,255,0.03); border-radius: 12px;
+            width: 45px; height: 45px; background: #F9F9F9; border-radius: 12px;
             display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
             border: 1px solid var(--border);
         }
@@ -98,14 +98,14 @@
         /* Search Glow */
         .search-area { max-width: 800px; margin: 0 auto 60px; position: relative; }
         .search-area input {
-            width: 100%; padding: 25px 40px; background: var(--card); border: 1px solid var(--border);
-            border-radius: 100px; color: white; font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.1rem; outline: none; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            width: 100%; padding: 25px 40px; background: #FFF; border: 1px solid var(--border);
+            border-radius: 100px; color: #000; font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem; outline: none; box-shadow: 0 10px 40px rgba(0,0,0,0.05);
         }
-        .search-area input:focus { border-color: var(--muze-blue); box-shadow: 0 0 20px rgba(90,200,250,0.1); }
+        .search-area input:focus { border-color: var(--muze-blue); box-shadow: 0 0 20px rgba(0,122,255,0.05); }
         .search-btn { position: absolute; right: 30px; top: 50%; transform: translateY(-50%); color: var(--muze-blue); font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; }
 
-        .btn-nav { background: #FFF; color: #000; padding: 10px 25px; border-radius: 100px; text-decoration: none; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; }
+        .btn-nav { background: #000; color: #FFF; padding: 10px 25px; border-radius: 100px; text-decoration: none; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; }
     </style>
 </head>
 <body>
