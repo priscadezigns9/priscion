@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="https://share.zapia.com/6h0tzrbb1e8o94jesdlbgz">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
     <style>
         :root {
             --bg: #FFFFFF;
@@ -84,6 +85,21 @@
             box-shadow: -10px 0 30px rgba(0,0,0,0.05); z-index: 2000; padding: 40px;
             display: none; flex-direction: column;
         }
+
+        /* Checkout Modal */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: #FFF; border-radius: 30px; max-width: 480px; width: 100%; padding: 40px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .modal-header h2 { font-family: var(--font-heading); font-size: 1.8rem; margin: 0; }
+        .close-modal { cursor: pointer; font-size: 1.5rem; font-weight: 900; }
+        
+        .checkout-item { display: flex; gap: 20px; align-items: center; padding: 20px; background: var(--surface); border-radius: 20px; margin-bottom: 30px; }
+        .checkout-img { width: 80px; height: 80px; border-radius: 15px; object-fit: cover; }
+        .checkout-price { font-weight: 900; font-size: 1.2rem; }
+
+        .payment-methods { display: flex; flex-direction: column; gap: 15px; }
+        .payment-btn { width: 100%; padding: 18px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; border: 1px solid var(--border); background: #FFF; cursor: pointer; text-transform: uppercase; }
+        .payment-btn.primary { background: #000; color: #FFF; border: none; }
         .close-profile { position: absolute; top: 20px; left: 20px; cursor: pointer; font-size: 1.5rem; font-weight: 900; }
         .profile-header { text-align: center; margin-bottom: 40px; }
         .profile-pfp { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; background: #EEE; }
@@ -156,6 +172,24 @@
         </div>
     </main>
 
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Checkout</h2>
+                <div class="close-modal" onclick="closeCheckout()">×</div>
+            </div>
+            <div id="checkout-body">
+                <!-- Injected via JS -->
+            </div>
+            <div class="payment-methods">
+                <div id="paypal-btn-container"></div>
+                <button class="payment-btn primary" onclick="payWithPRN()">Pay with $PRN</button>
+            </div>
+            <p style="font-size:0.6rem; color:var(--muted); text-align:center; margin-top:20px;">Securely Anchored to the Neural Ledger. High-Fidelity Guaranteed.</p>
+        </div>
+    </div>
+
     <!-- User Profile Overlay -->
     <div id="profile-overlay" class="profile-overlay">
         <div class="close-profile" onclick="toggleProfile()">×</div>
@@ -184,6 +218,7 @@
 
     <script>
         let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
+        let activeItem = null;
         
         function initStore() {
             renderGrid();
@@ -201,12 +236,13 @@
             }
         }
 
+        const items = [
+            { id:1, col: 'Sovereign Utility', title: 'Sovereign Digital Card', price: '500', usd: '49.99', img: '../assets/priscion_card.png' }
+        ];
+
         function renderGrid() {
-            const items = [
-                { id:1, col: 'Sovereign Utility', title: 'Sovereign Digital Card', price: '500', img: '../assets/priscion_card.png' }
-            ];
             document.getElementById('nft-grid').innerHTML = items.map(i => `
-                <div class="nft-card">
+                <div class="nft-card" onclick="openCheckout(${i.id})">
                     <div class="nft-thumb"><img src="${i.img}" onerror="this.src='../assets/muse_icon.png'"></div>
                     <div class="nft-info">
                         <div class="nft-collection">${i.col}</div>
@@ -218,6 +254,61 @@
                     </div>
                 </div>
             `).join('');
+        }
+
+        function openCheckout(id) {
+            activeItem = items.find(i => i.id === id);
+            document.getElementById('checkout-body').innerHTML = `
+                <div class="checkout-item">
+                    <img src="${activeItem.img}" class="checkout-img" onerror="this.src='../assets/muse_icon.png'">
+                    <div>
+                        <div class="nft-collection">${activeItem.col}</div>
+                        <div class="nft-title" style="margin:0;">${activeItem.title}</div>
+                    </div>
+                    <div class="checkout-price" style="margin-left:auto;">$${activeItem.usd}</div>
+                </div>
+            `;
+            document.getElementById('checkout-modal').style.display = 'flex';
+            
+            // Render PayPal Button
+            document.getElementById('paypal-btn-container').innerHTML = '';
+            paypal.Buttons({
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{ amount: { value: activeItem.usd } }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        alert('Purchase complete! ' + activeItem.title + ' added to your vault.');
+                        finalizePurchase();
+                    });
+                }
+            }).render('#paypal-btn-container');
+        }
+
+        function closeCheckout() { document.getElementById('checkout-modal').style.display = 'none'; }
+
+        function payWithPRN() {
+            if(!walletState) return alert("Connect MUZE Vault first.");
+            const price = parseFloat(activeItem.price.replace(/,/g,''));
+            const balance = parseFloat(walletState.balance.replace(/,/g,''));
+            
+            if(balance < price) return alert("Insufficient $PRN balance.");
+            
+            if(confirm(`Buy ${activeItem.title} for ${activeItem.price} $PRN?`)) {
+                walletState.balance = (balance - price).toLocaleString() + ".00";
+                finalizePurchase();
+            }
+        }
+
+        function finalizePurchase() {
+            if(walletState) {
+                walletState.assets.push({ icon: '💳', label: activeItem.title, sub: 'NFT' });
+                localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+                initStore();
+            }
+            closeCheckout();
         }
 
         function toggleProfile() {
