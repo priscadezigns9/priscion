@@ -301,8 +301,15 @@
             document.getElementById(layers.onboarding).classList.add('hidden');
             document.getElementById(layers.flow).classList.remove('hidden');
             const flow = document.getElementById('flow-content');
+            
             if(type === 'mustard-seed') {
-                flow.innerHTML = `<h2>Mustard Seed</h2><p>Claim your first identity and starting $PRN airdrop.</p><input type="text" id="seed-handle" placeholder="Desired Handle ($name.pri)"><input type="password" id="new-pass" placeholder="Create Vault Password"><button class="btn-full" onclick="finalizeSetup('mustard-seed')">CLAIM AIRDROP</button>`;
+                flow.innerHTML = `
+                    <h2>Claim Seed</h2>
+                    <p>First, secure your new vault with a password.</p>
+                    <input type="password" id="new-pass" placeholder="Create Vault Password">
+                    <p style="font-size:0.7rem; color:var(--muted); margin-top:-10px; margin-bottom:20px;">This password encrypts your keys locally.</p>
+                    <button class="btn-full" onclick="showHandleClaim()">CONTINUE TO IDENTITY</button>
+                `;
             } else if(type === 'create') {
                 flow.innerHTML = `<h2>Create Vault</h2><p>Secure your node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
             } else if(type === 'recover') {
@@ -332,8 +339,22 @@
             `;
         }
 
+        function showHandleClaim() {
+            const pass = document.getElementById('new-pass').value;
+            if(!pass) return alert("Please set a password to secure your vault.");
+            
+            const flow = document.getElementById('flow-content');
+            flow.innerHTML = `
+                <h2>Claim Identity</h2>
+                <p>Choose your unique .pri handle.</p>
+                <input type="text" id="seed-handle" placeholder="$username.pri">
+                <input type="hidden" id="stored-pass" value="${pass}">
+                <button class="btn-full" onclick="finalizeSetup('mustard-seed')">CLAIM $PRN AIRDROP</button>
+            `;
+        }
+
         function finalizeSetup(type) {
-            const pass = document.getElementById('new-pass')?.value || 'password';
+            const pass = document.getElementById('new-pass')?.value || document.getElementById('stored-pass')?.value || 'password';
             let handle = '$prisca.pri';
             let balance = '0.00';
             let assets = [];
