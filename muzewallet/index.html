@@ -87,6 +87,7 @@
             <div style="padding:0 30px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png" style="width:40px;"></div>
             <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
             <div class="nav-item" onclick="showStage('card', this)">Card</div>
+            <div class="nav-item" onclick="showStage('affiliate', this)">Share to Earn</div>
             <div class="nav-item" onclick="openFiatBridge()">Buy $PRN</div>
             <div class="profile">
                 <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png">
@@ -123,6 +124,29 @@
                     <h3 style="font-weight:900; margin-bottom:10px;">Anchor Protocol</h3>
                     <p style="font-size:0.75rem; color:var(--muted); margin-bottom:20px;">Link this artifact to your .pri identity to enable real-world spending via the BaaS bridge.</p>
                     <button id="anchor-btn" class="btn-full" onclick="anchorCard()" style="background:#000;">ANCHOR CARD</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW AFFILIATE STAGE -->
+        <div id="stage-affiliate" class="stage hidden">
+            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:30px;">Share to Earn.</h1>
+            <div class="balance-card">
+                <h3 style="font-weight:900; margin-bottom:10px;">Your Referral Link</h3>
+                <p style="font-size:0.75rem; color:var(--muted); margin-bottom:20px;">Every user who joins via this link and claims a handle earns you 10% commission on their future store activity.</p>
+                <div style="background:#F9F9F9; padding:20px; border-radius:15px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <div id="affiliate-link" style="font-family:monospace; font-size:0.8rem; color:var(--muze-blue); font-weight:700;">https://priscion.com/?ref=$user.pri</div>
+                    <button class="btn-outline" style="width:auto; margin:0; padding:10px 20px;" onclick="copyAffiliateLink()">COPY</button>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div style="text-align:center; padding:20px; border:1px solid var(--border); border-radius:15px;">
+                        <div id="ref-count" style="font-weight:900; font-size:1.5rem;">0</div>
+                        <div style="font-size:0.6rem; font-weight:900; color:var(--muted); text-transform:uppercase;">Network Size</div>
+                    </div>
+                    <div style="text-align:center; padding:20px; border:1px solid var(--border); border-radius:15px;">
+                        <div id="ref-earnings" style="font-weight:900; font-size:1.5rem;">0.00</div>
+                        <div style="font-size:0.6rem; font-weight:900; color:var(--muted); text-transform:uppercase;">Total Earned ($PRN)</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -231,6 +255,9 @@
                 document.getElementById('anchor-btn').style.opacity = "0.5";
             }
 
+            // Affiliate UI Update
+            document.getElementById('affiliate-link').innerText = `https://priscion.com/?ref=${walletState.handle}`;
+            
             document.getElementById('asset-grid').innerHTML = walletState.assets.map(a=>`
                 <div class="card">
                     <div class="card-icon">${a.icon}</div>
@@ -238,6 +265,16 @@
                 </div>
             `).join('');
         }
+
+        function copyAffiliateLink() {
+            const link = document.getElementById('affiliate-link').innerText;
+            navigator.clipboard.writeText(link);
+            alert("Affiliate link copied.");
+        }
+
+        // Capture Referral on Landing
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.has('ref')) localStorage.setItem('muze_ref', urlParams.get('ref'));
 
         function startFlow(type) {
             document.querySelectorAll('.layer').forEach(l => l.classList.add('hidden'));
@@ -288,9 +325,18 @@
 
         function stepHandle() {
             const flow = document.getElementById('flow-content');
-            flow.innerHTML = `<h2>Claim Handle</h2><p>Choose your .pri identity.</p>
-                <input type="text" id="h-input" placeholder="$username.pri">
-                <button class="btn-full" onclick="finalize(tempSeed.join(' '), document.getElementById('h-input').value)">ACTIVATE</button>`;
+            const pending = localStorage.getItem('muze_pending_handle');
+            if(pending) {
+                flow.innerHTML = `<h2>Identity Found</h2><p>You have a pending handle from MYNT.</p>
+                    <div style="font-size:1.5rem; font-weight:900; margin-bottom:20px; color:var(--muze-blue);">${pending}</div>
+                    <button class="btn-full" onclick="finalize(tempSeed.join(' '), '${pending}')">ACTIVATE HANDLE</button>`;
+            } else {
+                flow.innerHTML = `<h2>Claim Identity</h2><p>Choose your .pri handle.</p>
+                    <input type="text" id="h-input" placeholder="$username.pri">
+                    <button class="btn-full" onclick="finalize(tempSeed.join(' '), document.getElementById('h-input').value)">CLAIM MUSTARD SEED (FREE)</button>
+                    <p style="font-size:0.7rem; color:var(--muted); margin: 20px 0;">Looking for a premium or custom handle?</p>
+                    <a href="../mynt/" class="btn-outline" style="text-decoration:none; display:inline-block; width:100%;">BUY CUSTOM HANDLE (MYNT)</a>`;
+            }
         }
 
         function stepRecover() {
@@ -303,8 +349,19 @@
 
         async function finalize(seed, handle, pass = tempPass) {
             document.getElementById('loading-overlay').classList.remove('hidden');
-            walletState = { handle, password: pass, seed, balance: '1,250.00', assets: [{icon:'💳',label:'Sovereign Card',sub:'NFT'}], cardAnchored: false };
+            const referrer = localStorage.getItem('muze_ref') || null;
+            walletState = { 
+                handle, 
+                password: pass, 
+                seed, 
+                balance: '1,250.00', 
+                assets: [{icon:'💳',label:'Sovereign Card',sub:'NFT'}], 
+                cardAnchored: false,
+                referrer: referrer
+            };
             await syncLedger();
+            localStorage.removeItem('muze_ref');
+            localStorage.removeItem('muze_pending_handle');
             location.reload();
         }
 
