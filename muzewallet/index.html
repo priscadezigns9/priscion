@@ -204,9 +204,9 @@
             tempSeed = generateSeed();
             
             flow.innerHTML = `
-                <h2>Mustard Seed</h2>
-                <p>Your 24-word Sovereign Seed. <b>Write it down now.</b> You will be asked to verify it on the next step.</p>
-                <div class="seed-display">
+                <h2>${tempSeed.length}-Word Seed</h2>
+                <p>Your Sovereign Seed. <b>Write it down now.</b> You will be asked to verify it on the next step.</p>
+                <div class="seed-display" style="grid-template-columns: repeat(${tempSeed.length === 24 ? 3 : 2}, 1fr);">
                     ${tempSeed.map((w, i) => `<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
                 </div>
                 <button class="btn-full" onclick="showVerifyStep('${type}')">I HAVE WRITTEN IT DOWN</button>
@@ -215,8 +215,8 @@
 
         function showVerifyStep(type) {
             const flow = document.getElementById('flow-content');
-            const idx1 = Math.floor(Math.random() * 12);
-            const idx2 = Math.floor(Math.random() * 12) + 12;
+            const idx1 = Math.floor(Math.random() * (tempSeed.length / 2));
+            const idx2 = Math.floor(Math.random() * (tempSeed.length / 2)) + (tempSeed.length / 2);
             
             flow.innerHTML = `
                 <h2>Verify Seed</h2>
@@ -246,8 +246,9 @@
         }
 
         function generateSeed() {
-            const words = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "xray"];
-            return Array.from({length: 24}, () => words[Math.floor(Math.random() * words.length)]);
+            const words = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "xray", "apple", "banana", "cherry", "dragon", "eagle", "falcon", "grape", "honey", "iron", "joker", "king", "lemon", "mountain", "night", "ocean", "pearl", "quartz", "river", "silver", "tiger", "umbra", "velvet", "wolf", "xenon", "yellow", "zebra"];
+            const count = Math.random() > 0.5 ? 24 : 12;
+            return Array.from({length: count}, () => words[Math.floor(Math.random() * words.length)]);
         }
 
         function finalizeSetup(seedStr) {
