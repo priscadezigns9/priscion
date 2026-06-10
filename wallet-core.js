@@ -73,4 +73,16 @@ class PriscionSovereign {
     }
 }
 
+PriscionSovereign.prototype.unlock = function(password) {
+    if (this.checkPassword(password)) {
+        console.log("MUSE Sovereign Unlocked.");
+        return true;
+    }
+    return false;
+};
+
+function playStartupAnimation() {
+    console.log('MUSE Startup Sequence Initiated.');
+}
+
 const PRN = new PriscionSovereign();
