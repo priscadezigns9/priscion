@@ -195,33 +195,53 @@
             }
         }
 
+        let tempSeed = [];
+
         function startFlow(type) {
             document.querySelectorAll('.layer').forEach(l => l.classList.add('hidden'));
             document.getElementById(layers.flow).classList.remove('hidden');
             const flow = document.getElementById('flow-content');
-            if(type === 'mustard-seed') {
-                const seed = generateSeed();
-                flow.innerHTML = `
-                    <h2>Mustard Seed</h2>
-                    <p>Your 24-word Sovereign Seed. Write it down and keep it safe. Losing this means losing your vault.</p>
-                    <div class="seed-display">
-                        ${seed.map((w, i) => `<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
-                    </div>
-                    <input type="password" id="new-pass" placeholder="Create Vault Password">
-                    <input type="text" id="seed-handle" placeholder="$username.pri">
-                    <button class="btn-full" onclick="finalizeSetup('${seed.join(' ')}')">ACTIVATE VAULT</button>
-                `;
-            } else if(type === 'create') {
-                const seed = generateSeed();
-                flow.innerHTML = `
-                    <h2>Secure Seed</h2>
-                    <p>Write down these 24 words in order.</p>
-                    <div class="seed-display">
-                        ${seed.map((w, i) => `<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
-                    </div>
-                    <input type="password" id="new-pass" placeholder="Create Vault Password">
-                    <button class="btn-full" onclick="finalizeSetup('${seed.join(' ')}')">GENERATE VAULT</button>
-                `;
+            tempSeed = generateSeed();
+            
+            flow.innerHTML = `
+                <h2>Mustard Seed</h2>
+                <p>Your 24-word Sovereign Seed. <b>Write it down now.</b> You will be asked to verify it on the next step.</p>
+                <div class="seed-display">
+                    ${tempSeed.map((w, i) => `<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
+                </div>
+                <button class="btn-full" onclick="showVerifyStep('${type}')">I HAVE WRITTEN IT DOWN</button>
+            `;
+        }
+
+        function showVerifyStep(type) {
+            const flow = document.getElementById('flow-content');
+            const idx1 = Math.floor(Math.random() * 12);
+            const idx2 = Math.floor(Math.random() * 12) + 12;
+            
+            flow.innerHTML = `
+                <h2>Verify Seed</h2>
+                <p>To ensure security, please confirm two words from your phrase.</p>
+                <div style="text-align:left; margin-bottom:20px;">
+                    <label style="font-size:0.7rem; font-weight:900; color:var(--muted);">WORD #${idx1 + 1}</label>
+                    <input type="text" id="verify-1" placeholder="Type word #${idx1 + 1}" style="text-align:left; padding:15px;">
+                    <label style="font-size:0.7rem; font-weight:900; color:var(--muted);">WORD #${idx2 + 1}</label>
+                    <input type="text" id="verify-2" placeholder="Type word #${idx2 + 1}" style="text-align:left; padding:15px;">
+                </div>
+                <input type="password" id="new-pass" placeholder="Create Vault Password">
+                ${type === 'mustard-seed' ? '<input type="text" id="seed-handle" placeholder="$username.pri">' : ''}
+                <button class="btn-full" onclick="checkVerify('${tempSeed[idx1]}', '${tempSeed[idx2]}')">ACTIVATE VAULT</button>
+                <button class="btn-outline" onclick="startFlow('${type}')">BACK TO SEED</button>
+            `;
+        }
+
+        function checkVerify(word1, word2) {
+            const v1 = document.getElementById('verify-1').value.trim().toLowerCase();
+            const v2 = document.getElementById('verify-2').value.trim().toLowerCase();
+            
+            if(v1 === word1 && v2 === word2) {
+                finalizeSetup(tempSeed.join(' '));
+            } else {
+                alert("Verification failed. Please check your words and try again.");
             }
         }
 
