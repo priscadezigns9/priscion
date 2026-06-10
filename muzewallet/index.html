@@ -12,6 +12,7 @@
             --border: #EEE; 
             --accent: #7B35D4; 
             --muze-blue: #5AC8FA;
+            --chillata: #FF4D4D;
         }
         /* RESET ALL ANIMATIONS AND TRANSITIONS FOR STABILITY */
         * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
@@ -119,13 +120,13 @@
 
     <!-- Splash Layer -->
     <div id="layer-splash" class="layer">
-        <img src="../assets/muse_icon.png" class="splash-logo" onerror="this.src='/assets/muse_icon.png'">
+        <img src="../assets/muse_icon.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
     </div>
 
     <!-- Auth Layer -->
     <div id="layer-auth" class="layer hidden">
         <div class="auth-card">
-            <img src="../assets/muse_icon.png" style="width:60px; margin-bottom:30px;" onerror="this.src='/assets/muse_icon.png'">
+            <img src="../assets/muse_icon.png" style="width:60px; margin-bottom:30px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
             <h2>Vault Locked</h2>
             <p>Enter your sovereign password to unlock.</p>
             <input type="password" id="pass-input" placeholder="Password">
@@ -136,14 +137,14 @@
     <!-- App UI Layer -->
     <div id="app-ui">
         <div class="sidebar">
-            <div style="padding: 0 40px 60px;"><img src="../assets/pd_icon_512.png" style="width: 50px;"></div>
+            <div style="padding: 0 40px 60px;"><img src="../assets/muse_icon.png" style="width: 50px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'"></div>
             <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
             <div class="nav-item" onclick="showStage('swap', this)">Swap</div>
             <div class="nav-item" onclick="showStage('staking', this)">Staking</div>
             <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
             <div class="nav-item" onclick="showStage('dapps', this)">Dapps</div>
             <div class="profile" onclick="switchWallet()">
-                <img src="../assets/pd_icon_512.png">
+                <img src="../assets/pd_icon_512.png" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
                 <div>
                     <div style="font-weight:900;">$prisca.pri</div>
                     <div style="font-size:0.6rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div>
@@ -175,12 +176,25 @@
                     <div class="card-label">$prisca.pri</div>
                     <div class="card-sub">ALPHA HANDLE</div>
                 </div>
+                <div class="card">
+                    <div class="card-icon">🏷️</div>
+                    <div class="card-label">$vogue.pri</div>
+                    <div class="card-sub">ALPHA HANDLE</div>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🎨</div>
+                    <div class="card-label">Dreaming Mimi #001</div>
+                    <div class="card-sub">UTILITY NFT</div>
+                </div>
             </div>
         </div>
 
         <!-- STAGE: SWAP -->
         <div id="stage-swap" class="stage hidden">
-            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Swap.</h1>
+            <div style="display:flex; align-items:center; gap:20px; margin-bottom:60px;">
+                <img src="../assets/chillata_logo.png" style="height:60px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png'">
+                <h1 style="font-size:3.5rem; font-weight:900; margin:0;">Chillata.</h1>
+            </div>
             <div class="balance-card">
                 <div style="background:#F9F9F9; padding:25px; border-radius:20px; border:1px solid #EEE; margin-bottom:20px;">
                     <div style="font-size:0.6rem; font-weight:900; color:#888;">FROM</div>
@@ -196,7 +210,7 @@
                         <div style="background:#FFF; padding:10px 20px; border-radius:100px; font-weight:900; font-size:0.8rem; border:1px solid #EEE;">$MUSD</div>
                     </div>
                 </div>
-                <button class="btn-unlock" style="background:#000;">EXECUTE SWAP</button>
+                <button class="btn-unlock" style="background:var(--chillata);">EXECUTE CHILLATA SWAP</button>
             </div>
         </div>
 
@@ -251,7 +265,7 @@
                     <div class="card-sub">GAMING LAB</div>
                 </div>
                 <div class="card" onclick="switchTab('swap')">
-                    <div class="card-icon">🧊</div>
+                    <img src="../assets/chillata_logo.png" style="height:30px; margin-bottom:10px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png'">
                     <div class="card-label">CHILLATA</div>
                     <div class="card-sub">DEX CORE</div>
                 </div>
@@ -318,8 +332,9 @@
         lynxInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendLynx(); });
         function switchWallet() { alert('Switching Sovereign Nodes...'); }
         function switchTab(t) { 
-            const nav = Array.from(document.querySelectorAll('.nav-item')).find(n => n.innerText.toLowerCase() === t.toLowerCase());
-            showStage(t, nav); 
+            const navItems = Array.from(document.querySelectorAll('.nav-item'));
+            const targetNav = navItems.find(n => n.innerText.toLowerCase() === t.toLowerCase());
+            if(targetNav) showStage(t, targetNav);
         }
     </script>
 </body>
