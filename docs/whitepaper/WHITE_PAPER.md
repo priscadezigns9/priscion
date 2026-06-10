@@ -8,28 +8,25 @@ Our "Share-to-Earn" engine turns the Priscion community into a global marketing 
 
 ## 1. Core Infrastructure
 
-### MUZE Wallet
+### MUSE Wallet
 
-The MUZE Wallet is the non-custodial gateway to the Priscion ecosystem. It enforces a strict **Linear Mustard Seed Sequence** for onboarding:
-1. **Password Creation:** Secure the vault locally.
-2. **Seed Generation:** 12 or 24-word recovery phrase.
-3. **Seed Verification:** Random word check to ensure backup.
-4. **Handle Claim:** Claim a unique .pri identity.
-
-Identity is managed through **.pri handles** and assets are secured in the "Sovereign Enclave."
+The MUZE Wallet is the non-custodial gateway to the Priscion ecosystem. It manages high-fidelity identities through **.pri handles** and secures assets in the "Sovereign Enclave."
 
 ### NFT-Anchored Spending
 
-The Sovereign Digital Card is a high-fidelity utility NFT. Once purchased in the MINT store, it manifests in the MUZE Wallet, attached to the user's handle. This card enables the real-world spending of $PRN at millions of merchants globally through our BaaS bridge, converting assets instantly on-swipe.
+The **Sovereign Digital Card** is a high-fidelity utility NFT that acts as the physical-to-digital bridge for the ecosystem. 
+
+**The Anchor Protocol:**
+1. **Acquisition:** The card is purchased as an NFT in the MYNT Store for a baseline price (e.g., 500 $PRN).
+2. **Anchoring:** To activate the card, the holder must "Anchor" the NFT to their verified **.pri handle** within the MUZE Vault.
+3. **The Bridge (BaaS):** Once anchored, the card connects to our **Banking-as-a-Service (BaaS)** provider. This enables the user to pay for real-world items at any merchant that accepts digital wallets (Apple Pay/Google Pay) or physical cards.
+4. **Liquidity on Swipe:** When a purchase is made, the system performs a real-time swap: **$PRN -> $MUSD (Stablecoin) -> Fiat**. The merchant receives their local currency (e.g., TTD, USD, GBP), while the user's $PRN balance is deducted at the current market rate.
+
+The card itself does not hold a fixed "pre-paid" amount; rather, it provides **Instant Liquidity** for the user's entire $PRN vault balance.
 
 ### PULSE Explorer
 
-PULSE is the high-fidelity heartbeat of the network, providing transparent, real-time monitoring of all block production, transaction validation, and ledger health metrics. 
-
-**Identity-First Discovery:** PULSE prioritizes **Handle-based Exploration**. Users can search the ledger using a Sovereign Handle (e.g., `$prisca.pri`) to immediately view:
-- **Identity Status:** Current verification level and handle ownership.
-- **Sovereign Balance:** Real-time $PRN and native asset holdings.
-- **Transaction History:** A complete, high-fidelity log of all interactions anchored to that identity.
+PULSE is the high-fidelity heartbeat of the network, providing transparent, real-time monitoring of all block production, transaction validation, and ledger health metrics.
 
 ### CHILLATA Swap
 
