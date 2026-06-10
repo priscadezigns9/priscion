@@ -13,9 +13,9 @@
             --accent: #7B35D4; 
             --muze-blue: #5AC8FA;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* RESET ALL ANIMATIONS AND TRANSITIONS FOR STABILITY */
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
         
-        /* Fixed Shaking: Removed fixed height 100vh on body to prevent scroll collisions */
         body { 
             background: var(--bg); 
             color: var(--text); 
