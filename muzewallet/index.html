@@ -122,6 +122,7 @@
         <div class="sidebar">
             <div style="padding: 0 40px 60px;"><img src="../assets/pd_icon_512.png" style="width: 50px;"></div>
             <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
+            <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
             <div class="nav-item" onclick="showStage('mission', this)">TWMK Mission</div>
             <div class="nav-item" onclick="showStage('dapps', this)">Dapps</div>
             <div class="profile">
@@ -139,6 +140,13 @@
                 <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Independent Reserve</div>
                 <div id="balance" class="balance-big">$PRN 12,500</div>
                 <button class="btn-unlock" style="width:auto; padding: 20px 60px;">SEND ASSETS</button>
+            </div>
+        </div>
+
+        <div id="stage-messenger" class="stage hidden">
+            <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Messenger.</h1>
+            <div id="messenger-container" style="max-width:600px;">
+                <!-- Chat will be rendered here -->
             </div>
         </div>
 
@@ -183,6 +191,53 @@
             document.getElementById('stage-' + stage).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
+            if(stage === 'messenger') renderMessenger();
+        }
+
+        const MUSE_ICONS = { 
+            send: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>`,
+            back: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>`
+        };
+
+        let messages = [{ from: 'Priscion', text: 'Architect, the Sovereign Node is Always Online. Ledger Handshake verified.', time: '09:00' }];
+
+        function renderMessenger() {
+            const container = document.getElementById('messenger-container');
+            container.innerHTML = `
+                <div style="display:flex; flex-direction:column; height:500px; background:#FFF; border:1px solid #EEE; border-radius:30px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.02);">
+                    <div style="flex:1; display:flex; flex-direction:column; gap:15px; overflow-y:auto; padding-bottom:20px;" id="chat-box">
+                        ${messages.map(m => `
+                            <div style="align-self:${m.from==='Priscion'?'flex-start':'flex-end'}; background:${m.from==='Priscion'?'#F0F0F0':'#000'}; color:${m.from==='Priscion'?'#000':'#FFF'}; padding:15px 20px; border-radius:20px; font-size:0.85rem; max-width:80%;">
+                                ${m.text}
+                                <div style="text-align:right; font-size:0.6rem; opacity:0.5; margin-top:5px;">${m.time}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="display:flex; gap:15px; border-top:1px solid #EEE; padding-top:20px;">
+                        <input id="lynx-input" type="text" placeholder="Send a message on-ledger..." style="flex:1; border:none; padding:15px; background:#F9F9F9; border-radius:15px; outline:none; font-size:0.9rem;">
+                        <button onclick="sendLynx()" style="background:#000; color:#FFF; border:none; width:50px; height:50px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">${MUSE_ICONS.send}</button>
+                    </div>
+                </div>
+            `;
+            const chatBox = document.getElementById('chat-box');
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendLynx() {
+            const input = document.getElementById('lynx-input');
+            const text = input.value.trim();
+            if(!text) return;
+            const now = new Date();
+            const time = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            messages.push({ from: 'You', text: text, time: time });
+            input.value = '';
+            renderMessenger();
+            
+            // Auto-reply simulation
+            setTimeout(() => {
+                messages.push({ from: 'Priscion', text: 'Signal received. Transaction anchored to $prisca.pri ledger.', time: time });
+                renderMessenger();
+            }, 1000);
         }
     </script>
 </body>
