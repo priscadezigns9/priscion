@@ -44,7 +44,7 @@
         .splash-logo { width: 80px; opacity: 0.8; }
 
         /* Onboarding */
-        .card-ui { text-align: center; max-width: 400px; width: 100%; }
+        .card-ui { text-align: center; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px; }
         h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.5rem; }
         p { color: var(--muted); margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; }
         input { 
@@ -54,6 +54,12 @@
         }
         .btn-full { background: var(--muze-blue); color: #fff; border: none; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(90, 200, 250, 0.2); margin-bottom: 10px; }
         .btn-outline { background: #FFF; color: #000; border: 1px solid var(--border); padding: 18px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; width: 100%; margin-bottom: 10px; }
+
+        /* Seed Grid */
+        .seed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; text-align: left; }
+        .seed-input-container { position: relative; }
+        .seed-number { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.6rem; font-weight: 900; color: #CCC; pointer-events: none; }
+        .seed-word { padding: 12px 10px 12px 30px !important; font-size: 0.75rem !important; margin: 0 !important; text-align: left !important; }
 
         /* Main App UI */
         #app-ui { display: none; height: 100vh; width: 100vw; flex-direction: row; background: #FFF; }
@@ -69,6 +75,7 @@
             .sidebar > div:first-child, .profile { display: none; }
             .stage { padding: 25px; }
             .balance-big { font-size: 3rem !important; }
+            .seed-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         .balance-card { border: 1px solid var(--border); border-radius: 30px; padding: 40px; background: #FFF; margin-bottom: 30px; }
@@ -82,7 +89,7 @@
         .chat-view { flex: 1; display: flex; flex-direction: column; height: 100%; max-width: 600px; }
         
         @media (max-width: 900px) {
-            .chat-list { display: none; } /* Hide list on mobile for now, can add toggle later */
+            .chat-list { display: none; } 
             .messenger-container { justify-content: center; }
         }
 
@@ -154,7 +161,6 @@
             <div id="asset-grid" class="grid-container"></div>
         </div>
 
-        <!-- Stages omitted for brevity but preserved in full script below -->
         <div id="stage-swap" class="stage hidden">
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:40px;">
                 <img src="../assets/chillata_logo.png" style="height:40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png'">
@@ -184,9 +190,7 @@
                         <span style="font-size:0.8rem;">🔍</span>
                         <input type="text" id="search-handle" class="search-input" placeholder="Search handle..." onkeypress="handleSearch(event)">
                     </div>
-                    <div id="active-chats-list">
-                        <!-- Chat List Items -->
-                    </div>
+                    <div id="active-chats-list"></div>
                 </div>
                 <div class="chat-view">
                     <div id="chat-header" class="chat-header">
@@ -233,11 +237,18 @@
         function startFlow(type) {
             document.getElementById(layers.onboarding).classList.add('hidden');
             document.getElementById(layers.flow).classList.remove('hidden');
-            let content = '';
-            if(type==='create') content = `<h2>Create Vault</h2><p>Encrypt your Sovereign Node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
-            if(type==='recover') content = `<h2>Recover</h2><p>Enter 24-word Seed Phrase.</p><input type="text" placeholder="Seed Phrase"><input type="password" id="new-pass" placeholder="New Password"><button class="btn-full" onclick="finalizeSetup('recover')">RESTORE</button>`;
-            if(type==='ledger') content = `<h2>Connect</h2><p>Scanning Sovereign Ledger...</p><div style="padding:20px; color:var(--muze-blue); font-weight:900;">SEARCHING...</div><button class="btn-outline" onclick="finalizeSetup('ledger')">SYNC (DEV)</button>`;
-            document.getElementById('flow-content').innerHTML = content;
+            const flow = document.getElementById('flow-content');
+            if(type==='create') {
+                flow.innerHTML = `<h2>Create Vault</h2><p>Secure your node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
+            } else if(type==='recover') {
+                let seedInputs = '';
+                for(let i=1; i<=24; i++) {
+                    seedInputs += `<div class="seed-input-container"><span class="seed-number">${i}</span><input type="text" class="seed-word" id="word-${i}"></div>`;
+                }
+                flow.innerHTML = `<h2>Recover Vault</h2><p>Enter your 24-word Sovereign Seed.</p><div class="seed-grid">${seedInputs}</div><input type="password" id="new-pass" placeholder="New Password"><button class="btn-full" onclick="finalizeSetup('recover')">RESTORE VAULT</button>`;
+            } else if(type==='ledger') {
+                flow.innerHTML = `<h2>Connect</h2><p>Scanning Ledger...</p><div style="padding:20px; color:var(--muze-blue); font-weight:900;">SEARCHING...</div><button class="btn-outline" onclick="finalizeSetup('ledger')">SYNC (DEV)</button>`;
+            }
         }
 
         function finalizeSetup(type) {
@@ -265,6 +276,7 @@
 
         function renderChatList() {
             const list = document.getElementById('active-chats-list');
+            if(!list) return;
             list.innerHTML = Object.keys(conversations).map(h => {
                 const c = conversations[h];
                 const last = c.messages[c.messages.length-1];
@@ -280,7 +292,7 @@
 
         function openChat(handle) {
             if(!conversations[handle]) {
-                conversations[handle] = { handle: handle.toUpperCase(), avatar: '../assets/pd_icon_512.png', messages: [{ from: 'received', text: 'Identity anchored. Communication channel established.', time: 'Now' }] };
+                conversations[handle] = { handle: handle.toUpperCase(), avatar: '../assets/pd_icon_512.png', messages: [{ from: 'received', text: 'Identity anchored.', time: 'Now' }] };
                 saveChats();
             }
             activeChat = handle;
@@ -291,10 +303,11 @@
 
         function renderActiveChat() {
             const c = conversations[activeChat];
+            const box = document.getElementById('chat-box');
+            if(!box) return;
             document.getElementById('header-avatar').src = c.avatar;
             document.getElementById('header-handle').innerText = c.handle;
             document.getElementById('header-status').innerText = (activeChat==='$architect') ? 'Always Online' : 'On-Ledger';
-            const box = document.getElementById('chat-box');
             box.innerHTML = c.messages.map(m => `<div class="msg ${m.from}">${m.text}<div class="msg-time">${m.time}</div></div>`).join('');
             box.scrollTop = box.scrollHeight;
         }
@@ -319,20 +332,19 @@
             }
         }
 
-        function handleSearch(e) {
-            if(e.key === 'Enter') {
-                const handle = document.getElementById('search-handle').value.trim();
-                if(handle) openChat(handle);
-                document.getElementById('search-handle').value = '';
-            }
-        }
-
         function saveChats() { localStorage.setItem('muze_chats_v1', JSON.stringify(conversations)); }
         function showStage(stage, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
             document.getElementById('stage-' + stage).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
+        }
+        function handleSearch(e) {
+            if(e.key === 'Enter') {
+                const h = document.getElementById('search-handle').value.trim();
+                if(h) openChat(h);
+                document.getElementById('search-handle').value = '';
+            }
         }
     </script>
 </body>
