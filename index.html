@@ -34,6 +34,7 @@
             backdrop-filter: blur(20px); z-index: 1000;
         }
 
+        .nav-logo { display: flex; align-items: center; gap: 15px; }
         .nav-logo img { height: 40px; cursor: pointer; }
 
         .nav-links { display: flex; gap: 40px; align-items: center; }
@@ -42,8 +43,15 @@
             letter-spacing: 2px; text-transform: uppercase; 
         }
 
+        .btn-share-to-earn {
+            background: var(--muze-blue); color: #fff; padding: 12px 24px; border-radius: 100px;
+            font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
+            cursor: pointer; text-decoration: none; display: inline-block;
+            margin-right: 15px;
+        }
+
         .btn-muze-nav {
-            background: var(--muze-blue); color: #fff; padding: 14px 28px; border-radius: 100px;
+            background: #000; color: #fff; padding: 14px 28px; border-radius: 100px;
             font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
             cursor: pointer; text-decoration: none; display: inline-block;
         }
@@ -52,7 +60,7 @@
             padding: 120px 8% 100px; text-align: center;
             display: flex; flex-direction: column; align-items: center;
         }
-        .p-logo-hero { width: 60px; margin-bottom: 40px; }
+        .p-logo-hero { height: 80px; margin-bottom: 40px; }
         
         .kicker { font-weight: 900; font-size: 0.7rem; letter-spacing: 5px; color: var(--muted); text-transform: uppercase; margin-bottom: 20px; }
         h1 { font-family: var(--font-heading); font-size: 5rem; line-height: 1.1; margin-bottom: 30px; letter-spacing: -2px; }
@@ -110,10 +118,10 @@
 
     <nav>
         <div class="nav-logo">
-            <img src="https://share.zapia.com/m0ta6s0yqlqkuv1214muow" alt="Priscion" onclick="location.href='/'">
+            <img src="https://priscion.com/assets/priscion_logo.png" alt="Priscion" onclick="location.href='/'">
         </div>
         <div class="nav-links">
-            <a href="https://priscion.com/share-to-earn">SHARE TO EARN</a>
+            <a href="https://priscion.com/share-to-earn" class="btn-share-to-earn">SHARE TO EARN</a>
             <a href="whitepaper.html">White Paper</a>
             <a href="pulse/">Explorer</a>
             <a href="muzewallet/" class="btn-muze-nav">MUZE WALLET</a>
@@ -121,7 +129,7 @@
     </nav>
 
     <section class="hero">
-        <img src="https://priscion.com/assets/p-logo.png" class="p-logo-hero" alt="Priscion Logo">
+        <img src="https://priscion.com/assets/priscion_logo.png" class="p-logo-hero" alt="Priscion Logo">
         <div class="kicker">The Independent Ledger</div>
         <h1>Architecting<br>Reality.</h1>
         <p>Global brand design and high quality digital systems. We build the automatic tools that power the 2026 digital age.</p>
@@ -186,9 +194,6 @@
     </section>
 
     <section id="signal" style="padding: 80px 8%; background: var(--surface); border-top: 1px solid var(--border);"><div style="max-width: 1200px; margin: 0 auto;"><span style="letter-spacing: 3px; text-transform: uppercase; font-size: 0.7rem; color: var(--accent); font-weight: 900; display: block; margin-bottom: 20px;">Deep Intelligence Signal</span><h2 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 30px;">NVIDIA 'Vera Rubin' <br>Sovereign Infrastructure</h2><div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border: 1px solid var(--border); padding: 40px; border-radius: 24px;"><p style="font-size: 1.1rem; color: var(--text); margin-bottom: 20px;">The production of the 'Vera Rubin' architecture marks the definitive shift toward Sovereign AI Infrastructure. Priscion is integrating these nodes as the primary compute core for our independent digital networks.</p><div style="display: flex; gap: 20px; align-items: center;"><span style="background: var(--muze-blue); color: white; padding: 5px 15px; border-radius: 100px; font-size: 0.7rem; font-weight: 900;">LIVE DEPLOYMENT</span><span style="color: var(--muted); font-size: 0.8rem;">Session ALPHA // 2026.06.10</span></div></div></div></section><footer>
-        <div style="margin-bottom: 40px;">
-            <a href="affiliates/" style="text-decoration: none; background: var(--muze-blue); color: #fff; padding: 15px 30px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; display: inline-block;">BECOME AN AFFILIATE · EARN $PRN</a>
-        </div>
         <p class="copyright">PRISCION &copy; 2026 | ARCHITECTING REALITY</p>
     </footer>
 
