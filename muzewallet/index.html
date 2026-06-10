@@ -83,7 +83,7 @@
         .profile { margin-top: auto; padding: 20px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
         .profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 
-        /* Lynx Messenger - Multi-Chat UI */
+        /* Messenger Style */
         .messenger-container { display: flex; height: 100%; gap: 30px; }
         .chat-list { width: 280px; border-right: 1px solid var(--border); padding-right: 30px; display: flex; flex-direction: column; gap: 15px; }
         .chat-view { flex: 1; display: flex; flex-direction: column; height: 100%; max-width: 600px; }
@@ -237,18 +237,27 @@
         function startFlow(type) {
             document.getElementById(layers.onboarding).classList.add('hidden');
             document.getElementById(layers.flow).classList.remove('hidden');
+            renderRecoveryFlow(24);
+        }
+
+        function renderRecoveryFlow(wordCount) {
             const flow = document.getElementById('flow-content');
-            if(type==='create') {
-                flow.innerHTML = `<h2>Create Vault</h2><p>Secure your node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
-            } else if(type==='recover') {
-                let seedInputs = '';
-                for(let i=1; i<=24; i++) {
-                    seedInputs += `<div class="seed-input-container"><span class="seed-number">${i}</span><input type="text" class="seed-word" id="word-${i}"></div>`;
-                }
-                flow.innerHTML = `<h2>Recover Vault</h2><p>Enter your 24-word Sovereign Seed.</p><div class="seed-grid">${seedInputs}</div><input type="password" id="new-pass" placeholder="New Password"><button class="btn-full" onclick="finalizeSetup('recover')">RESTORE VAULT</button>`;
-            } else if(type==='ledger') {
-                flow.innerHTML = `<h2>Connect</h2><p>Scanning Ledger...</p><div style="padding:20px; color:var(--muze-blue); font-weight:900;">SEARCHING...</div><button class="btn-outline" onclick="finalizeSetup('ledger')">SYNC (DEV)</button>`;
+            let seedInputs = '';
+            for(let i=1; i<=wordCount; i++) {
+                seedInputs += `<div class="seed-input-container"><span class="seed-number">${i}</span><input type="text" class="seed-word" id="word-${i}"></div>`;
             }
+            flow.innerHTML = `
+                <h2>Recover Vault</h2>
+                <p>Enter your ${wordCount}-word Sovereign Seed.</p>
+                <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
+                    <button class="btn-outline" style="width:auto; padding:10px 20px; font-size:0.6rem; ${wordCount===12?'background:#F0F0F0;':''}" onclick="renderRecoveryFlow(12)">12 WORDS</button>
+                    <button class="btn-outline" style="width:auto; padding:10px 20px; font-size:0.6rem; ${wordCount===24?'background:#F0F0F0;':''}" onclick="renderRecoveryFlow(24)">24 WORDS</button>
+                </div>
+                <div class="seed-grid">${seedInputs}</div>
+                <input type="password" id="new-pass" placeholder="New Password">
+                <button class="btn-full" onclick="finalizeSetup('recover')">RESTORE VAULT</button>
+                <button class="btn-outline" onclick="location.reload()">BACK</button>
+            `;
         }
 
         function finalizeSetup(type) {
