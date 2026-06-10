@@ -272,13 +272,24 @@
 
             // Sovereign Ledger Sync
             try {
-                const { error } = await sb.from('sovereign_ledger').upsert({
+                // We sync to 'ledger_state' to match PULSE explorer's query target
+                const { error } = await sb.from('ledger_state').upsert({
                     handle: handle,
+                    balance: '1,250.00',
                     ledger_data: walletState,
                     updated_at: new Date()
-                });
-                if(error) console.error("Ledger Sync Failed:", error);
-            } catch(e) { console.error(e); }
+                }, { onConflict: 'handle' });
+                
+                if(error) {
+                    console.error("Ledger Sync Failed:", error);
+                    // Fallback attempt if table name differs
+                    await sb.from('sovereign_ledger').upsert({
+                        handle: handle,
+                        ledger_data: walletState,
+                        updated_at: new Date()
+                    });
+                }
+            } catch(e) { console.error("Critical Ledger Sync Error:", e); }
 
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
             alert("Vault Activated & Anchored to Sovereign Ledger.");
@@ -289,17 +300,26 @@
             if(document.getElementById('pass-input').value === walletState.password) {
                 document.getElementById('loading-overlay').classList.remove('hidden');
                 
-                // Pull latest from Ledger
+                // Pull latest from Ledger (checking both possible table names for resilience)
                 try {
-                    const { data, error } = await sb.from('sovereign_ledger')
+                    let { data, error } = await sb.from('ledger_state')
                         .select('ledger_data')
                         .eq('handle', walletState.handle)
                         .single();
-                    if(data) {
+                    
+                    if(!data) {
+                        const res = await sb.from('sovereign_ledger')
+                            .select('ledger_data')
+                            .eq('handle', walletState.handle)
+                            .single();
+                        data = res.data;
+                    }
+
+                    if(data && data.ledger_data) {
                         walletState = data.ledger_data;
                         localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
                     }
-                } catch(e) {}
+                } catch(e) { console.error("Ledger Handshake Error:", e); }
 
                 document.getElementById('loading-overlay').classList.add('hidden');
                 document.getElementById(layers.auth).classList.add('hidden');
