@@ -3,98 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Sovereign Wallet v24.7.5</title>
+    <title>MUZE | Sovereign Wallet v24.7.13</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         :root { 
-            --bg: #fff; 
-            --text: #000; 
-            --muted: #AAA; 
-            --border: #EEE; 
-            --accent: #7B35D4; 
-            --muze-blue: #007AFF;
-            --chillata: #FF4D4D;
+            --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #007AFF; --chillata: #FF4D4D;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
-        
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; width: 100vw; height: 100vh; }
-        
         .layer { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #FFF; z-index: 100; padding: 20px; }
         .hidden { display: none !important; }
-
-        /* Splash */
-        .splash-logo { width: 80px; opacity: 0.8; }
-
-        /* Card UI */
         .card-ui { text-align: center; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 30px; border-radius: 30px; border: 1px solid var(--border); background: #FFF; }
         h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.5rem; }
         p { color: var(--muted); margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; }
-        input, select { width: 100%; padding: 18px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 15px; outline: none; text-align: center; font-size: 1rem; font-weight: 600; background: #F9F9F9; }
-        .btn-full { background: var(--muze-blue); color: #fff; border: none; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.1); margin-bottom: 10px; }
+        input, textarea { width: 100%; padding: 18px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 15px; outline: none; text-align: center; font-size: 1rem; font-weight: 600; background: #F9F9F9; }
+        .btn-full { background: var(--muze-blue); color: #fff; border: none; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; margin-bottom: 10px; }
         .btn-outline { background: #FFF; color: #000; border: 1px solid var(--border); padding: 18px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; width: 100%; margin-bottom: 10px; }
-
-        /* Seed Grid */
-        .seed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; text-align: left; }
-        .seed-input-container { position: relative; }
-        .seed-number { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.6rem; font-weight: 900; color: #CCC; pointer-events: none; }
-        .seed-word { padding: 12px 10px 12px 30px !important; font-size: 0.75rem !important; margin: 0 !important; text-align: left !important; }
-        .seed-display { background: #F9F9F9; padding: 20px; border-radius: 15px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        .seed-display { background: #F9F9F9; padding: 20px; border-radius: 15px; border: 1px solid var(--border); display: grid; gap: 10px; margin-bottom: 30px; }
         .word-item { font-size: 0.7rem; font-weight: 900; text-align: left; }
         .word-item span { color: #CCC; margin-right: 5px; }
-
-        /* Sidebar & Layout */
         #app-ui { display: none; height: 100vh; width: 100vw; flex-direction: row; background: #FFF; }
         .sidebar { width: 300px; border-right: 1px solid var(--border); background: #FAFAFA; display: flex; flex-direction: column; padding: 30px 0; }
         .nav-item { padding: 15px 30px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; }
         .nav-item.active { color: var(--text); background: #F0F0F0; }
         .stage { flex: 1; padding: 40px; overflow-y: auto; }
-        
-        @media (max-width: 768px) {
-            #app-ui { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 10px 0; flex-direction: row; justify-content: space-around; }
-            .nav-item { padding: 10px; font-size: 0.6rem; letter-spacing: 0.5px; }
-            .sidebar > div:first-child, .profile { display: none; }
-            .stage { padding: 25px; }
-            .balance-big { font-size: 3rem !important; }
-            .seed-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
         .balance-card { border: 1px solid var(--border); border-radius: 30px; padding: 40px; background: #FFF; margin-bottom: 30px; }
         .balance-big { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin: 15px 0; }
-        .profile { margin-top: auto; padding: 20px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 15px; cursor: pointer; }
-        .profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-
-        /* Asset Grid */
+        .profile { margin-top: auto; padding: 20px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
+        .profile img { width: 40px; height: 40px; border-radius: 50%; }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
         .card { border: 1px solid var(--border); border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; }
         .card-icon { font-size: 2rem; margin-bottom: 10px; }
         .card-label { font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; }
-
-        /* Digital Card */
-        .digital-card { width: 100%; max-width: 400px; height: 250px; border-radius: 24px; background: linear-gradient(135deg, #0A0A0A 0%, #222 100%); box-shadow: 0 15px 35px rgba(0,0,0,0.2); padding: 30px; display: flex; flex-direction: column; justify-content: space-between; color: #FFF; position: relative; overflow: hidden; margin-bottom: 40px; }
-        .card-chip { width: 40px; height: 32px; background: #E5A93B; border-radius: 6px; }
-        .card-number { font-size: 1.4rem; font-weight: 900; letter-spacing: 3px; word-spacing: 5px; font-family: monospace; }
-        .card-holder { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; font-weight: 600; }
-
         .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: #FFF; z-index: 5000; }
         .spinner { width: 40px; height: 40px; border: 4px solid #F3F3F3; border-top: 4px solid var(--muze-blue); border-radius: 50%; animation: spin 1s linear infinite !important; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-
-    <div id="loading-overlay" class="loading-screen hidden">
-        <div class="spinner"></div>
-        <p style="margin-top:20px; font-weight:900; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">Ledger Handshake...</p>
-    </div>
-
-    <!-- Splash Layer -->
-    <div id="layer-splash" class="layer">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png" class="splash-logo" alt="MUZE">
-    </div>
-
-    <!-- Onboarding Layers -->
+    <div id="loading-overlay" class="loading-screen hidden"><div class="spinner"></div><p style="margin-top:20px; font-weight:900; font-size:0.7rem; letter-spacing:2px;">LEDGER HANDSHAKE...</p></div>
+    <div id="layer-splash" class="layer"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png" style="width:80px; opacity:0.8;"></div>
     <div id="layer-onboarding" class="layer hidden">
         <div class="card-ui">
             <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png" style="width:60px; margin-bottom:20px;">
@@ -105,290 +54,139 @@
             <button class="btn-outline" onclick="startFlow('recover')">RECOVER WITH SEED</button>
         </div>
     </div>
-
     <div id="layer-flow" class="layer hidden"><div id="flow-content" class="card-ui"></div></div>
-
     <div id="layer-auth" class="layer hidden">
         <div class="card-ui">
             <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png" style="width:50px; margin-bottom:20px;">
             <h2>Vault Locked</h2>
             <input type="password" id="pass-input" placeholder="Enter Password">
             <button class="btn-full" onclick="unlock()">UNLOCK VAULT</button>
-            <div style="margin-top:20px; font-size:0.6rem; color:var(--muted); cursor:pointer; text-decoration:underline;" onclick="resetVault()">FORGOT PASSWORD / RESET VAULT</div>
+            <div style="margin-top:20px; font-size:0.6rem; color:var(--muted); cursor:pointer; text-decoration:underline;" onclick="resetVault()">RESET VAULT</div>
         </div>
     </div>
-
-    <!-- Main App UI -->
     <div id="app-ui">
         <div class="sidebar">
-            <div style="padding: 0 30px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png" style="width: 40px;"></div>
+            <div style="padding:0 30px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png" style="width:40px;"></div>
             <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
             <div class="nav-item" onclick="showStage('card', this)">Card</div>
-            <div class="nav-item" onclick="showStage('swap', this)">Swap</div>
             <div class="profile">
-                <img id="sidebar-pfp" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png">
-                <div><div id="user-handle" style="font-weight:900; font-size:0.8rem;">$handle.pri</div></div>
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png">
+                <div id="user-handle" style="font-weight:900; font-size:0.8rem;">$handle.pri</div>
             </div>
         </div>
-        
         <div id="stage-vault" class="stage">
             <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:30px;">Vault.</h1>
-            <div class="balance-card">
-                <div id="balance" class="balance-big">$PRN 0.00</div>
-                <button class="btn-full" style="width:auto; padding: 15px 30px; background:#000;">SEND</button>
-            </div>
+            <div class="balance-card"><div id="balance" class="balance-big">$PRN 0.00</div></div>
             <div id="asset-grid" class="grid-container"></div>
         </div>
-
         <div id="stage-card" class="stage hidden">
             <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:30px;">Sovereign Card.</h1>
-            <div class="digital-card">
-                <div class="card-number">•••• •••• •••• 8830</div>
-                <div class="card-holder">USER</div>
-            </div>
-        </div>
-
-        <div id="stage-swap" class="stage hidden">
-            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Swap.</h1>
-            <div class="balance-card">
-                <button class="btn-full" style="background:var(--chillata);">EXECUTE SWAP</button>
+            <div style="width:100%; max-width:400px; height:240px; background:#000; border-radius:20px; padding:30px; color:#fff; display:flex; flex-direction:column; justify-content:space-between;">
+                <div style="font-family:monospace; font-size:1.2rem; letter-spacing:4px;">•••• •••• •••• 8830</div>
+                <div id="card-handle" style="font-weight:900; letter-spacing:2px; text-transform:uppercase;">USER</div>
             </div>
         </div>
     </div>
-
     <script>
         const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
         const SB_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
         const sb = supabase.createClient(SB_URL, SB_KEY);
-
         const layers = { splash: 'layer-splash', onboarding: 'layer-onboarding', flow: 'layer-flow', auth: 'layer-auth', app: 'app-ui' };
-        let walletState = null;
+        let walletState = null; let tempSeed = []; let tempPass = "";
 
-        // EMERGENCY SPLASH KILLER: Force hide splash after 2 seconds no matter what
-        window.addEventListener('load', () => {
-            setTimeout(killSplash, 2000);
-        });
-        
-        // Backup killer
-        setTimeout(killSplash, 4000);
-
-        function killSplash() {
-            const s = document.getElementById(layers.splash);
-            if (s && !s.classList.contains('hidden')) {
-                console.log("Forcing splash hide...");
-                s.classList.add('hidden');
-                initOnboarding();
-            }
-        }
-
-        function initOnboarding() {
-            try {
-                const stored = localStorage.getItem('muze_vault_v1');
-                if (stored && stored !== "[object Object]") {
-                    walletState = JSON.parse(stored);
-                }
-            } catch(e) {
-                console.error("Vault corruption detected. Resetting.");
-                localStorage.removeItem('muze_vault_v1');
-            }
-
-            if(!walletState) {
-                document.getElementById(layers.onboarding).classList.remove('hidden');
-            } else {
-                document.getElementById(layers.auth).classList.remove('hidden');
-            }
-        }
-
-        let tempSeed = [];
+        window.addEventListener('load', () => setTimeout(() => {
+            document.getElementById(layers.splash).classList.add('hidden');
+            const stored = localStorage.getItem('muze_vault_v1');
+            if(stored) { walletState = JSON.parse(stored); document.getElementById(layers.auth).classList.remove('hidden'); }
+            else document.getElementById(layers.onboarding).classList.remove('hidden');
+        }, 1500));
 
         function startFlow(type) {
             document.querySelectorAll('.layer').forEach(l => l.classList.add('hidden'));
             document.getElementById(layers.flow).classList.remove('hidden');
-            const flow = document.getElementById('flow-content');
-            
-            if (type === 'recover') {
-                flow.innerHTML = `
-                    <h2>Recover Vault</h2>
-                    <p>Enter your 12 or 24-word Sovereign Seed phrase to restore your identity.</p>
-                    <textarea id="recover-seed-input" placeholder="Enter your words here, separated by spaces..." 
-                        style="width:100%; height:120px; padding:15px; border-radius:15px; border:1px solid var(--border); margin-bottom:20px; font-family:monospace; font-size:0.8rem;"></textarea>
-                    <input type="password" id="new-pass" placeholder="Create New Vault Password">
-                    <input type="text" id="seed-handle" placeholder="Confirm your $handle.pri">
-                    <button class="btn-full" onclick="handleRecovery()">RESTORE VAULT</button>
-                    <button class="btn-outline" onclick="location.reload()">CANCEL</button>
-                `;
-                return;
-            }
+            if(type === 'recover') return stepRecover();
+            stepPassword(type);
+        }
 
-            tempSeed = generateSeed();
-            flow.innerHTML = `
-                <h2>${tempSeed.length}-Word Seed</h2>
-                <p>Your Sovereign Seed. <b>Write it down now.</b> You will be asked to verify it on the next step.</p>
+        function stepPassword(type) {
+            const flow = document.getElementById('flow-content');
+            flow.innerHTML = `<h2>Set Password</h2><p>Secure your local vault.</p>
+                <input type="password" id="flow-pass" placeholder="Create Password">
+                <button class="btn-full" onclick="savePassAndGoSeed('${type}')">CONTINUE</button>`;
+        }
+
+        function savePassAndGoSeed(type) {
+            tempPass = document.getElementById('flow-pass').value;
+            if(!tempPass) return alert("Password required.");
+            stepSeed(type);
+        }
+
+        function stepSeed(type) {
+            tempSeed = Array.from({length: Math.random() > 0.5 ? 24 : 12}, () => 
+                ["alpha","bravo","charlie","delta","echo","foxtrot","golf","hotel","india","juliet","kilo","lima","mike","november","oscar","papa","quebec","romeo","sierra","tango","uniform","victor","whiskey","xray"][Math.floor(Math.random()*24)]);
+            const flow = document.getElementById('flow-content');
+            flow.innerHTML = `<h2>Your Seed</h2><p>Write these ${tempSeed.length} words down.</p>
                 <div class="seed-display" style="grid-template-columns: repeat(${tempSeed.length === 24 ? 3 : 2}, 1fr);">
-                    ${tempSeed.map((w, i) => `<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
+                    ${tempSeed.map((w,i)=>`<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
                 </div>
-                <button class="btn-full" onclick="showVerifyStep('${type}')">I HAVE WRITTEN IT DOWN</button>
-            `;
+                <button class="btn-full" onclick="stepVerify('${type}')">I HAVE WRITTEN IT DOWN</button>`;
         }
 
-        async function handleRecovery() {
-            const seed = document.getElementById('recover-seed-input').value.trim();
-            const pass = document.getElementById('new-pass').value;
-            const handle = document.getElementById('seed-handle').value.trim();
-            
-            if(!seed || !pass || !handle) { alert("All fields required for recovery."); return; }
-            
-            document.getElementById('loading-overlay').classList.remove('hidden');
-            
-            // Attempt to restore from Ledger
-            try {
-                const { data, error } = await sb.from('ledger_state')
-                    .select('ledger_data')
-                    .eq('handle', handle)
-                    .single();
-                
-                if(data) {
-                    walletState = data.ledger_data;
-                    walletState.password = pass; // Update password
-                } else {
-                    // Manual reconstruction if not in ledger yet
-                    walletState = { 
-                        handle, 
-                        password: pass, 
-                        seed: seed,
-                        balance: '1,250.00', 
-                        assets: [{icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'}] 
-                    };
-                }
-                
-                localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
-                alert("Vault Restored Successfully.");
-                location.reload();
-            } catch(e) {
-                alert("Recovery failed. Check handle and seed.");
-                document.getElementById('loading-overlay').classList.add('hidden');
-            }
-        }
-
-        function showVerifyStep(type) {
+        function stepVerify(type) {
             const flow = document.getElementById('flow-content');
-            const idx1 = Math.floor(Math.random() * (tempSeed.length / 2));
-            const idx2 = Math.floor(Math.random() * (tempSeed.length / 2)) + (tempSeed.length / 2);
-            
-            flow.innerHTML = `
-                <h2>Verify Seed</h2>
-                <p>To ensure security, please confirm two words from your phrase.</p>
-                <div style="text-align:left; margin-bottom:20px;">
-                    <label style="font-size:0.7rem; font-weight:900; color:var(--muted);">WORD #${idx1 + 1}</label>
-                    <input type="text" id="verify-1" placeholder="Type word #${idx1 + 1}" style="text-align:left; padding:15px;">
-                    <label style="font-size:0.7rem; font-weight:900; color:var(--muted);">WORD #${idx2 + 1}</label>
-                    <input type="text" id="verify-2" placeholder="Type word #${idx2 + 1}" style="text-align:left; padding:15px;">
-                </div>
-                <input type="password" id="new-pass" placeholder="Create Vault Password">
-                ${type === 'mustard-seed' ? '<input type="text" id="seed-handle" placeholder="$username.pri">' : ''}
-                <button class="btn-full" onclick="checkVerify('${tempSeed[idx1]}', '${tempSeed[idx2]}')">ACTIVATE VAULT</button>
-                <button class="btn-outline" onclick="startFlow('${type}')">BACK TO SEED</button>
-            `;
+            const idx1 = Math.floor(Math.random() * (tempSeed.length/2));
+            const idx2 = Math.floor(Math.random() * (tempSeed.length/2)) + (tempSeed.length/2);
+            flow.innerHTML = `<h2>Verify Seed</h2><p>Confirm Word #${idx1+1} and #${idx2+1}.</p>
+                <input type="text" id="v1" placeholder="Word #${idx1+1}">
+                <input type="text" id="v2" placeholder="Word #${idx2+1}">
+                <button class="btn-full" onclick="checkVerify('${type}','${tempSeed[idx1]}','${tempSeed[idx2]}')">VERIFY</button>`;
         }
 
-        function checkVerify(word1, word2) {
-            const v1 = document.getElementById('verify-1').value.trim().toLowerCase();
-            const v2 = document.getElementById('verify-2').value.trim().toLowerCase();
-            
-            if(v1 === word1 && v2 === word2) {
-                finalizeSetup(tempSeed.join(' '));
-            } else {
-                alert("Verification failed. Please check your words and try again.");
-            }
+        function checkVerify(type, w1, w2) {
+            if(document.getElementById('v1').value.trim().toLowerCase() === w1 && document.getElementById('v2').value.trim().toLowerCase() === w2) {
+                if(type === 'mustard-seed') stepHandle(); else finalize(tempSeed.join(' '), '$user.pri');
+            } else alert("Invalid words.");
         }
 
-        function generateSeed() {
-            const words = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "xray", "apple", "banana", "cherry", "dragon", "eagle", "falcon", "grape", "honey", "iron", "joker", "king", "lemon", "mountain", "night", "ocean", "pearl", "quartz", "river", "silver", "tiger", "umbra", "velvet", "wolf", "xenon", "yellow", "zebra"];
-            const count = Math.random() > 0.5 ? 24 : 12;
-            return Array.from({length: count}, () => words[Math.floor(Math.random() * words.length)]);
+        function stepHandle() {
+            const flow = document.getElementById('flow-content');
+            flow.innerHTML = `<h2>Claim Handle</h2><p>Choose your .pri identity.</p>
+                <input type="text" id="h-input" placeholder="$username.pri">
+                <button class="btn-full" onclick="finalize(tempSeed.join(' '), document.getElementById('h-input').value)">ACTIVATE</button>`;
         }
 
-        async function finalizeSetup(seedStr) {
-            const pass = document.getElementById('new-pass').value;
-            const handle = document.getElementById('seed-handle')?.value || '$user.pri';
-            if(!pass) { alert("Password required."); return; }
-            
+        function stepRecover() {
+            const flow = document.getElementById('flow-content');
+            flow.innerHTML = `<h2>Recover</h2><textarea id="r-seed" placeholder="Enter seed phrase..."></textarea>
+                <input type="password" id="r-pass" placeholder="New Password">
+                <input type="text" id="r-handle" placeholder="Your $handle.pri">
+                <button class="btn-full" onclick="finalize(document.getElementById('r-seed').value, document.getElementById('r-handle').value, document.getElementById('r-pass').value)">RESTORE</button>`;
+        }
+
+        async function finalize(seed, handle, pass = tempPass) {
             document.getElementById('loading-overlay').classList.remove('hidden');
-            
-            walletState = { 
-                handle, 
-                password: pass, 
-                seed: seedStr,
-                balance: '1,250.00', 
-                assets: [{icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'}] 
-            };
-
-            // Sovereign Ledger Sync
-            try {
-                const { error } = await sb.from('sovereign_ledger').upsert({
-                    handle: handle,
-                    ledger_data: walletState,
-                    updated_at: new Date()
-                });
-                if(error) console.error("Ledger Sync Failed:", error);
-            } catch(e) { console.error(e); }
-
+            walletState = { handle, password: pass, seed, balance: '1,250.00', assets: [{icon:'💳',label:'Sovereign Card',sub:'NFT'}] };
+            try { await sb.from('ledger_state').upsert({ handle, balance: '1,250.00', ledger_data: walletState }, { onConflict: 'handle' }); } catch(e){}
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
-            alert("Vault Activated & Anchored to Sovereign Ledger.");
             location.reload();
         }
 
         async function unlock() {
             if(document.getElementById('pass-input').value === walletState.password) {
                 document.getElementById('loading-overlay').classList.remove('hidden');
-                
-                // Pull latest from Ledger
-                try {
-                    const { data, error } = await sb.from('sovereign_ledger')
-                        .select('ledger_data')
-                        .eq('handle', walletState.handle)
-                        .single();
-                    if(data) {
-                        walletState = data.ledger_data;
-                        localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
-                    }
-                } catch(e) {}
-
-                document.getElementById('loading-overlay').classList.add('hidden');
+                try { const {data} = await sb.from('ledger_state').select('ledger_data').eq('handle', walletState.handle).single(); if(data) walletState = data.ledger_data; } catch(e){}
                 document.getElementById(layers.auth).classList.add('hidden');
                 document.getElementById(layers.app).style.display = 'flex';
                 document.getElementById('user-handle').innerText = walletState.handle;
                 document.getElementById('balance').innerText = '$PRN ' + walletState.balance;
-                
-                renderAssets();
-            } else alert("Incorrect.");
+                document.getElementById('card-handle').innerText = walletState.handle;
+                document.getElementById('asset-grid').innerHTML = walletState.assets.map(a=>`<div class="card"><div class="card-icon">${a.icon}</div><div class="card-label">${a.label}</div></div>`).join('');
+                document.getElementById('loading-overlay').classList.add('hidden');
+            } else alert("Wrong password.");
         }
 
-        function renderAssets() {
-            const grid = document.getElementById('asset-grid');
-            if(!grid) return;
-            grid.innerHTML = (walletState.assets || []).map(a => `
-                <div class="card" onclick="showStage('card', document.querySelector('.nav-item:nth-child(2)'))">
-                    <div class="card-icon">${a.icon}</div>
-                    <div class="card-label">${a.label}</div>
-                    <div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div>
-                </div>
-            `).join('');
-        }
-
-        function resetVault() {
-            if(confirm("DANGER: This will permanently wipe your local vault and seed. Proceed?")) {
-                localStorage.removeItem('muze_vault_v1');
-                location.reload();
-            }
-        }
-
-        function showStage(stage, el) {
-            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            document.getElementById('stage-' + stage).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-        }
+        function resetVault() { if(confirm("Wipe all data?")) { localStorage.removeItem('muze_vault_v1'); location.reload(); } }
+        function showStage(s, el) { document.querySelectorAll('.stage').forEach(x=>x.classList.add('hidden')); document.getElementById('stage-'+s).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); el.classList.add('active'); }
     </script>
 </body>
 </html>
