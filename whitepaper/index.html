@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign Neural Economy | White Paper v1.8 | Priscion</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FDF8F2;
+            --text: #1A1A1A;
+            --muted: #666666;
+            --accent: #7B35D4;
+            --border: rgba(0,0,0,0.1);
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 80px 20px;
+        }
+
+        .paper {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 100px 80px;
+            border-radius: 4px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 40px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: rgba(123, 53, 212, 0.1);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            margin: 80px 0 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--accent);
+            display: block;
+            width: fit-content;
+            color: var(--text);
+        }
+
+        h3 {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            margin: 45px 0 20px;
+            color: var(--accent);
+        }
+
+        p { margin-bottom: 30px; font-size: 1.15rem; color: #333; }
+        
+        ul, ol { margin-bottom: 35px; list-style: none; }
+        li { margin-bottom: 18px; position: relative; padding-left: 30px; font-size: 1.1rem; }
+        ul li::before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 900;
+        }
+
+        .highlight-box {
+            background: #F9F9F9;
+            padding: 45px;
+            border-radius: 16px;
+            margin: 50px 0;
+            border-left: 6px solid var(--accent);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+
+        .stat-card .label { font-size: 0.85rem; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; font-weight: 600; letter-spacing: 0.05em; }
+        .stat-card .value { font-family: var(--font-heading); font-size: 1.8rem; color: var(--accent); font-weight: 900; }
+
+        .footer {
+            margin-top: 120px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--muted);
+            letter-spacing: 0.05em;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .paper { padding: 60px 25px; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <article class="paper">
+        <header>
+            <div class="tag">Sovereign Specification v1.8</div>
+            <h1>The NEURAL Economy: Sovereign Assets & Governance</h1>
+            <p style="color: var(--accent); font-weight: 600; font-size: 1.3rem; margin-top: 10px;">The Digital Skeleton of the Priscion Empire</p>
+            <p style="font-size: 1rem; margin-top: 20px; opacity: 0.8; letter-spacing: 0.02em;">Protocol: <strong>Priscion Sovereign Ledger</strong></p>
+        </header>
+
+        <section>
+            <h2>1. THE TRI-TOKEN ARCHITECTURE</h2>
+            <p>Priscion operates on a rigorous, high-fidelity economic model designed for deterministic business utility and commercial stability.</p>
+            
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="label">Sovereign Utility ($PRN)</div>
+                    <div class="value">Gas & Handles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Stablecoin ($MUSD)</div>
+                    <div class="value">Mustard Settlement</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Neural Reserve ($NRL)</div>
+                    <div class="value">Governance</div>
+                </div>
+            </div>
+
+            <h3>$PRN - The Sovereign Fuel</h3>
+            <p>$PRN is the utility coin required for all network operations. It is used to mint Sovereign Handles ($name.pri), pay for gas, and secure the ledger's nodes.</p>
+            
+            <h3>$MUSD (Mustard) - The Settlement Layer</h3>
+            <p>Mustard is the universal stablecoin for the entire Priscion ecosystem. It provides 1:1 commercial stability for all transactions, protecting users from the volatility of the broader market.</p>
+
+            <h3>Neural ($NRL) - The Governance Core</h3>
+            <p>Neural is a fixed-supply reserve asset (21M cap). It represents institutional governance and captures the collective value of all 20+ Empire brands.</p>
+        </section>
+
+        <section>
+            <h2>2. THE MISSION BACKBONE</h2>
+            <div class="highlight-box">
+                <h3>The 10% TWMK Tithe</h3>
+                <p>To ensure the Empire remains anchored in its spiritual mission, 10% of every transaction, mint fee, and service payment across the ledger is hardcoded to route directly to **The Way Made Known** endowment.</p>
+                <p>This provides a perpetual foundation for analytical faith, historical archaeology, and the proclamation of the Gospel.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. LEGAL FRAMEWORK: SOVEREIGN UTILITY</h2>
+            <p>Priscion is positioned as **Sovereign Utility Infrastructure**. We provide the high-fidelity tools; the user maintains absolute ownership.</p>
+            <ul>
+                <li><strong>Utility Classification:</strong> Assets are classified strictly for network utility (gas, identity, settlement) to meet global regulatory standards (MiCA, SEC utility guidance).</li>
+                <li><strong>Non-Custodial:</strong> The Sovereign Wallet is 100% non-custodial. You hold the keys; you hold the sovereignty.</li>
+                <li><strong>DID Solution:</strong> Sovereign Handles ($name.pri) are Decentralized Identifiers that empower users to own their digital presence.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. THE HYBRID FUNNEL</h2>
+            <p>We bridge the gap between Web2 commerce and Web3 sovereignty:</p>
+            <ol style="list-style: decimal; padding-left: 20px; font-size: 1.15rem;">
+                <li><strong>Entry:</strong> Users engage with high-fidelity Web2 affiliate brands.</li>
+                <li><strong>Incentive:</strong> Users receive a 10% discount when paying with **$PRN** in the Sovereign Wallet.</li>
+                <li><strong>Activation:</strong> Every purchase grants the user a **Free Sovereign Handle ($name.pri)**, anchoring them to the ledger.</li>
+                <li><strong>Scale:</strong> Users transition from "Consumers" to "Sovereign Owners" within the Priscion OS.</li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>5. MEVP-1 SECURITY PROTOCOL</h2>
+            <p>The MUZE Encrypted Vault Protocol (MEVP-1) defines the security standard for the Sovereign Wallet ecosystem. It ensures a 100% Zero-Knowledge architecture.</p>
+            
+            <div class="highlight-box">
+                <h3>Technical Specifications</h3>
+                <ul>
+                    <li><strong>Encryption:</strong> AES-256-GCM (Galois/Counter Mode) for authenticated encryption.</li>
+                    <li><strong>Key Derivation:</strong> PBKDF2 (Password-Based Key Derivation Function 2) with HMAC-SHA256 and 100,000+ iterations.</li>
+                    <li><strong>Client-Side Processing:</strong> All cryptographic operations occur strictly on the user's local machine. The Priscion Network never sees or stores raw passwords or seed phrases.</li>
+                    <li><strong>Persistence:</strong> Encrypted data is stored in <code>localStorage</code> under the <code>muze_vault_v2</code> identifier.</li>
+                </ul>
+            </div>
+            <p>This protocol guarantees that the user remains the sole architect of their digital assets. If the user loses their password or seed phrase, the data is mathematically irrecoverable, preserving the sanctity of true sovereignty.</p>
+        </section>
+
+        <div class="footer">
+            &copy; 2026 PRISCION NEURAL CORE. ALL RIGHTS RESERVED. <br>
+            SOVEREIGN. ANALYTICAL. SECURE. MISSION-DRIVEN.
+        </div>
+    </article>
+
+</body>
+</html>
