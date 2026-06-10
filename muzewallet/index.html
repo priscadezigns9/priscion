@@ -114,6 +114,7 @@
             <h2>Vault Locked</h2>
             <input type="password" id="pass-input" placeholder="Enter Password">
             <button class="btn-full" onclick="unlock()">UNLOCK VAULT</button>
+            <div style="margin-top:20px; font-size:0.6rem; color:var(--muted); cursor:pointer; text-decoration:underline;" onclick="resetVault()">FORGOT PASSWORD / RESET VAULT</div>
         </div>
     </div>
 
@@ -220,6 +221,13 @@
                 document.getElementById('user-handle').innerText = walletState.handle;
                 document.getElementById('balance').innerText = '$PRN ' + walletState.balance;
             } else alert("Incorrect.");
+        }
+
+        function resetVault() {
+            if(confirm("DANGER: This will permanently wipe your local vault and seed. Proceed?")) {
+                localStorage.removeItem('muze_vault_v1');
+                location.reload();
+            }
         }
 
         function showStage(stage, el) {
