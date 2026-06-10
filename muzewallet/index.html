@@ -269,9 +269,22 @@
 
         setTimeout(() => {
             document.getElementById(layers.splash).classList.add('hidden');
-            if(!walletState) document.getElementById(layers.onboarding).classList.remove('hidden');
-            else document.getElementById(layers.auth).classList.remove('hidden');
+            if(!walletState) {
+                document.getElementById(layers.onboarding).classList.remove('hidden');
+            } else {
+                document.getElementById(layers.auth).classList.remove('hidden');
+            }
         }, 1500);
+
+        // Fail-safe: if splash is still visible after 3 seconds, force hide it
+        setTimeout(() => {
+            const splash = document.getElementById(layers.splash);
+            if (splash && !splash.classList.contains('hidden')) {
+                splash.classList.add('hidden');
+                if(!walletState) document.getElementById(layers.onboarding).classList.remove('hidden');
+                else document.getElementById(layers.auth).classList.remove('hidden');
+            }
+        }, 3000);
 
         function startFlow(type) {
             document.getElementById(layers.onboarding).classList.add('hidden');
@@ -359,13 +372,40 @@
         }
 
         function initApp() {
-            document.getElementById('user-handle').innerText = walletState.handle;
-            document.getElementById('balance').innerText = '$PRN ' + walletState.balance;
-            if(!walletState.assets.find(a => a.label === 'Sovereign Card') && walletState.handle === '$prisca.pri') walletState.assets.push({icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'});
-            document.getElementById('asset-grid').innerHTML = walletState.assets.map(a => `<div class="card" onclick="${a.label === 'Sovereign Card' ? "showStage('card', document.querySelector('.nav-item:nth-child(2)'))" : "openChat('" + a.label + "')"}"><div class="card-icon">${a.icon}</div><div class="card-label">${a.label}</div><div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div></div>`).join('');
+            if (!walletState) return;
+            document.getElementById('user-handle').innerText = walletState.handle || '$user.pri';
+            document.getElementById('balance').innerText = '$PRN ' + (walletState.balance || '0.00');
+            
+            if(walletState.assets && !walletState.assets.find(a => a.label === 'Sovereign Card') && walletState.handle === '$prisca.pri') {
+                walletState.assets.push({icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'});
+            }
+            
+            const assetGrid = document.getElementById('asset-grid');
+            if (assetGrid && walletState.assets) {
+                assetGrid.innerHTML = walletState.assets.map(a => `
+                    <div class="card" onclick="${a.label === 'Sovereign Card' ? "showStage('card', document.querySelector('.nav-item:nth-child(2)'))" : "openChat('" + a.label + "')"}">
+                        <div class="card-icon">${a.icon}</div>
+                        <div class="card-label">${a.label}</div>
+                        <div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div>
+                    </div>`).join('');
+            }
+
             document.querySelectorAll('.card-holder').forEach(el => el.innerText = walletState.handle);
-            document.getElementById('history-list').innerHTML = walletState.history.map(h => `<div class="history-item"><div class="history-icon">${h.icon}</div><div class="history-info"><div class="history-type">${h.type}</div><div class="history-time">${h.time}</div></div><div class="history-amt">${h.amt}</div></div>`).join('');
-            renderChatList(); renderActiveChat();
+            
+            const historyList = document.getElementById('history-list');
+            if (historyList && walletState.history) {
+                historyList.innerHTML = walletState.history.map(h => `
+                    <div class="history-item">
+                        <div class="history-icon">${h.icon}</div>
+                        <div class="history-info">
+                            <div class="history-type">${h.type}</div>
+                            <div class="history-time">${h.time}</div>
+                        </div>
+                        <div class="history-amt">${h.amt}</div>
+                    </div>`).join('');
+            }
+            renderChatList(); 
+            renderActiveChat();
         }
 
         function renderChatList() {
