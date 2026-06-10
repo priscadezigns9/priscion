@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUZE | Independent Wallet</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
         :root { 
             --bg: #fff; 
@@ -130,9 +131,18 @@
         .card { border: 1px solid var(--border); border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; }
         .card-icon { font-size: 2rem; margin-bottom: 10px; }
         .card-label { font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; }
+        
+        .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: #FFF; z-index: 5000; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #F3F3F3; border-top: 4px solid var(--muze-blue); border-radius: 50%; animation: spin 1s linear infinite !important; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
+    <div id="loading-overlay" class="loading-screen hidden">
+        <div class="spinner"></div>
+        <p style="margin-top:20px; font-weight:900; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">Syncing with Ledger...</p>
+    </div>
 
     <!-- Layers -->
     <div id="layer-splash" class="layer"><img src="../assets/muse_icon.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'"></div>
@@ -300,6 +310,7 @@
             <div class="grid-container">
                 <div class="card" onclick="window.open('../pulse/')"><img src="../assets/pulse_logo.png" style="height:30px; margin-bottom:10px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png'"><div class="card-label">PULSE</div></div>
                 <div class="card" onclick="window.open('../dreaminganime/')"><div class="card-icon">🎬</div><div class="card-label">DREAMING</div></div>
+                <div class="card" onclick="window.open('../mynt/')"><img src="../assets/p-logo.png" style="height:30px; margin-bottom:10px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png'"><div class="card-label">MYNT</div></div>
             </div>
         </div>
     </div>
@@ -317,6 +328,10 @@
     </div>
 
     <script>
+        const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const SB_KEY = '{{credential:supabase-anon-key}}'; // I will ask user for this or use user profile if available
+        const supabase = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+
         const layers = { splash: 'layer-splash', onboarding: 'layer-onboarding', flow: 'layer-flow', auth: 'layer-auth', app: 'app-ui' };
         let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
         let activeChat = '$architect';
@@ -352,30 +367,9 @@
             }
         }
 
-        function renderRecoveryFlow(wordCount) {
-            const flow = document.getElementById('flow-content');
-            let seedInputs = '';
-            for(let i=1; i<=wordCount; i++) {
-                seedInputs += `<div class="seed-input-container"><span class="seed-number">${i}</span><input type="text" class="seed-word" id="word-${i}"></div>`;
-            }
-            flow.innerHTML = `
-                <h2>Recover Vault</h2>
-                <p>Enter your ${wordCount}-word Sovereign Seed.</p>
-                <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
-                    <button class="btn-outline" style="width:auto; padding:10px 20px; font-size:0.6rem; ${wordCount===12?'background:#F0F0F0;':''}" onclick="renderRecoveryFlow(12)">12 WORDS</button>
-                    <button class="btn-outline" style="width:auto; padding:10px 20px; font-size:0.6rem; ${wordCount===24?'background:#F0F0F0;':''}" onclick="renderRecoveryFlow(24)">24 WORDS</button>
-                </div>
-                <div class="seed-grid">${seedInputs}</div>
-                <input type="password" id="new-pass" placeholder="New Password">
-                <button class="btn-full" onclick="finalizeSetup('recover')">RESTORE VAULT</button>
-                <button class="btn-outline" onclick="location.reload()">BACK</button>
-            `;
-        }
-
         function showHandleClaim() {
             const pass = document.getElementById('new-pass').value;
             if(!pass) return alert("Please set a password to secure your vault.");
-            
             const flow = document.getElementById('flow-content');
             flow.innerHTML = `
                 <h2>Claim Identity</h2>
@@ -386,7 +380,7 @@
             `;
         }
 
-        function finalizeSetup(type) {
+        async function finalizeSetup(type) {
             const pass = document.getElementById('new-pass')?.value || document.getElementById('stored-pass')?.value || 'password';
             let handle = '$prisca.pri';
             let balance = '0.00';
@@ -395,8 +389,18 @@
             if(type === 'mustard-seed') {
                 const requested = document.getElementById('seed-handle').value.trim();
                 handle = requested.startsWith('$') ? requested : '$' + (requested || 'user') + '.pri';
-                balance = '1,250.00'; // Mustard Seed Gift
+                balance = '1,250.00';
                 assets = [{icon:'🌱', label: handle, sub:'MUSTARD SEED'}];
+            } else if (type === 'recover') {
+                // Recovery simulation: check Supabase
+                const seed = document.getElementById('word-1').value; // Just a mock hash source
+                const spk = btoa(seed).substring(0, 16);
+                const { data, error } = await supabase.from('ledger_state').select('*').eq('spk', spk).single();
+                if(data) {
+                    handle = data.handle;
+                    balance = data.balance;
+                    assets = data.assets;
+                }
             } else {
                 handle = '$prisca.pri';
                 balance = '12,500.00';
@@ -405,7 +409,48 @@
 
             walletState = { handle, password: pass, balance, assets };
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+            
+            // On-Chain Persistence Simulation (Push to Ledger)
+            if(supabase) {
+                const spk = btoa(pass).substring(0, 16); // Mock SPK generation
+                await supabase.from('ledger_state').upsert({ spk, handle, balance, assets });
+            }
+            
             location.reload();
+        }
+
+        async function recoverLedger(wordCount) {
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            // Simulation of hashing words to find SPK
+            let seed = ""; for(let i=1;i<=wordCount;i++) seed += document.getElementById('word-'+i).value;
+            const spk = btoa(seed).substring(0, 16);
+            
+            if(supabase) {
+                const { data, error } = await supabase.from('ledger_state').select('*').eq('spk', spk).single();
+                if(data) {
+                    walletState = { handle: data.handle, password: 'restored', balance: data.balance, assets: data.assets };
+                    localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+                    location.reload();
+                    return;
+                }
+            }
+            document.getElementById('loading-overlay').classList.add('hidden');
+            alert("Sovereign Identity not found on-ledger.");
+        }
+
+        function renderRecoveryFlow(wordCount) {
+            const flow = document.getElementById('flow-content');
+            let seedInputs = '';
+            for(let i=1; i<=wordCount; i++) {
+                seedInputs += `<div class="seed-input-container"><span class="seed-number">${i}</span><input type="text" class="seed-word" id="word-${i}"></div>`;
+            }
+            flow.innerHTML = `
+                <h2>Recover Vault</h2>
+                <p>Enter your ${wordCount}-word Sovereign Seed.</p>
+                <div class="seed-grid">${seedInputs}</div>
+                <button class="btn-full" onclick="recoverLedger(${wordCount})">SYNC WITH LEDGER</button>
+                <button class="btn-outline" onclick="location.reload()">BACK</button>
+            `;
         }
 
         function unlock() {
@@ -419,24 +464,17 @@
         function initApp() {
             document.getElementById('user-handle').innerText = walletState.handle;
             document.getElementById('balance').innerText = '$PRN ' + walletState.balance;
-            
-            if(!walletState.assets.find(a => a.label === 'Sovereign Card')) {
-                // Card is an NFT that must be bought, but for Architect we show it
-                if(walletState.handle === '$prisca.pri') {
-                    walletState.assets.push({icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'});
-                }
+            if(!walletState.assets.find(a => a.label === 'Sovereign Card') && walletState.handle === '$prisca.pri') {
+                walletState.assets.push({icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'});
             }
-
             document.getElementById('asset-grid').innerHTML = walletState.assets.map(a => `
                 <div class="card" onclick="${a.label === 'Sovereign Card' ? "showStage('card', document.querySelector('.nav-item:nth-child(2)'))" : "openChat('" + a.label + "')"}">
                     <div class="card-icon">${a.icon}</div>
                     <div class="card-label">${a.label}</div>
                     <div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div>
                 </div>`).join('');
-            
             const holderElements = document.querySelectorAll('.card-holder');
             holderElements.forEach(el => el.innerText = walletState.handle);
-
             renderChatList();
             renderActiveChat();
         }
@@ -521,7 +559,6 @@
             alert(`Redirecting to Secure ${method.toUpperCase()} Portal to purchase $PRN...`);
             hideBuyModal();
         }
-
         function executeSwap() {
             const from = document.getElementById('swap-from-asset').value;
             const to = document.getElementById('swap-to-asset').value;
