@@ -243,20 +243,20 @@
             document.querySelectorAll('.layer').forEach(l => l.classList.add('hidden'));
             document.getElementById(layers.flow).classList.remove('hidden');
             if(type === 'recover') return stepRecover();
-            stepPassword(type);
+            stepSeed(type);
         }
 
         function stepPassword(type) {
             const flow = document.getElementById('flow-content');
             flow.innerHTML = `<h2>Set Password</h2><p>Secure your local vault.</p>
                 <input type="password" id="flow-pass" placeholder="Create Password">
-                <button class="btn-full" onclick="savePassAndGoSeed('${type}')">CONTINUE</button>`;
+                <button class="btn-full" onclick="savePass('${type}')">CONTINUE</button>`;
         }
 
-        function savePassAndGoSeed(type) {
+        function savePass(type) {
             tempPass = document.getElementById('flow-pass').value;
             if(!tempPass) return alert("Password required.");
-            stepSeed(type);
+            if(type === 'mustard-seed') stepHandle(); else finalize(tempSeed.join(' '), '$user.pri');
         }
 
         function stepSeed(type) {
@@ -282,7 +282,7 @@
 
         function checkVerify(type, w1, w2) {
             if(document.getElementById('v1').value.trim().toLowerCase() === w1 && document.getElementById('v2').value.trim().toLowerCase() === w2) {
-                if(type === 'mustard-seed') stepHandle(); else finalize(tempSeed.join(' '), '$user.pri');
+                stepPassword(type);
             } else alert("Invalid words.");
         }
 
