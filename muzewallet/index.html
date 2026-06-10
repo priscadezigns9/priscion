@@ -200,17 +200,49 @@
             document.getElementById(layers.flow).classList.remove('hidden');
             const flow = document.getElementById('flow-content');
             if(type === 'mustard-seed') {
-                flow.innerHTML = `<h2>Claim Handle</h2><input type="password" id="new-pass" placeholder="Vault Password"><input type="text" id="seed-handle" placeholder="$username.pri"><button class="btn-full" onclick="finalizeSetup()">CLAIM</button>`;
+                const seed = generateSeed();
+                flow.innerHTML = `
+                    <h2>Mustard Seed</h2>
+                    <p>Your 24-word Sovereign Seed. Write it down and keep it safe. Losing this means losing your vault.</p>
+                    <div class="seed-display">
+                        ${seed.map((w, i) => `<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
+                    </div>
+                    <input type="password" id="new-pass" placeholder="Create Vault Password">
+                    <input type="text" id="seed-handle" placeholder="$username.pri">
+                    <button class="btn-full" onclick="finalizeSetup('${seed.join(' ')}')">ACTIVATE VAULT</button>
+                `;
             } else if(type === 'create') {
-                flow.innerHTML = `<h2>New Vault</h2><input type="password" id="new-pass" placeholder="Create Password"><button class="btn-full" onclick="finalizeSetup()">GENERATE</button>`;
+                const seed = generateSeed();
+                flow.innerHTML = `
+                    <h2>Secure Seed</h2>
+                    <p>Write down these 24 words in order.</p>
+                    <div class="seed-display">
+                        ${seed.map((w, i) => `<div class="word-item"><span>${i+1}.</span> ${w}</div>`).join('')}
+                    </div>
+                    <input type="password" id="new-pass" placeholder="Create Vault Password">
+                    <button class="btn-full" onclick="finalizeSetup('${seed.join(' ')}')">GENERATE VAULT</button>
+                `;
             }
         }
 
-        function finalizeSetup() {
+        function generateSeed() {
+            const words = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf", "hotel", "india", "juliet", "kilo", "lima", "mike", "november", "oscar", "papa", "quebec", "romeo", "sierra", "tango", "uniform", "victor", "whiskey", "xray"];
+            return Array.from({length: 24}, () => words[Math.floor(Math.random() * words.length)]);
+        }
+
+        function finalizeSetup(seedStr) {
             const pass = document.getElementById('new-pass').value;
             const handle = document.getElementById('seed-handle')?.value || '$user.pri';
-            walletState = { handle, password: pass, balance: '1,250.00', assets: [] };
+            if(!pass) { alert("Password required."); return; }
+            walletState = { 
+                handle, 
+                password: pass, 
+                seed: seedStr,
+                balance: '1,250.00', 
+                assets: [{icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'}] 
+            };
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+            alert("Vault Activated. Redirecting to Dashboard...");
             location.reload();
         }
 
