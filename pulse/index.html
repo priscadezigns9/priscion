@@ -123,8 +123,8 @@
 
     <div class="dashboard">
         <div class="search-area">
-            <input type="text" placeholder="Search Transactions, Blocks, or Sovereign Handles ($handle.pri)...">
-            <div class="search-btn">SEARCH</div>
+            <input type="text" id="search-input" placeholder="Search Transactions, Blocks, or Sovereign Handles ($handle.pri)...">
+            <div class="search-btn" id="search-btn">SEARCH</div>
         </div>
 
         <div class="stats-row">
@@ -176,28 +176,112 @@
     <script>
         const BLOCKFROST_API = "https://cardano-mainnet.blockfrost.io/api/v0";
         const AUTH = { "project_id": "{{credential:blockfrost_api_key}}" };
+        const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const SB_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
 
         async function updateLedger() {
             try {
-                // Latest Block Height
                 const blockRes = await fetch(`${BLOCKFROST_API}/blocks/latest`, { headers: AUTH });
                 const latest = await blockRes.json();
                 
                 document.getElementById('stat-height').innerText = latest.height.toLocaleString();
                 document.getElementById('stat-epoch').innerText = latest.epoch;
 
-                // TXs in this block
                 const txRes = await fetch(`${BLOCKFROST_API}/blocks/${latest.hash}/txs`, { headers: AUTH });
                 const txs = await txRes.json();
 
                 renderBlocks(latest.height);
                 renderTxs(txs);
-
             } catch (e) {
-                console.error("Ledger handshaking error", e);
+                console.error("Ledger handshake error", e);
                 simulateLedger();
             }
         }
+
+        async function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            if(!query) return;
+
+            document.getElementById('tx-feed').innerHTML = '<div style="padding:40px; text-align:center; font-weight:900;">SEARCHING LEDGER...</div>';
+            
+            try {
+                // 1. Check if it's a Sovereign Handle
+                if(query.startsWith('$') || query.endsWith('.pri')) {
+                    const handle = query.startsWith('$') ? query : '$' + query;
+                    const response = await fetch(`${SB_URL}/rest/v1/ledger_state?handle=eq.${handle}&select=*`, {
+                        headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` }
+                    });
+                    const data = await response.json();
+                    if(data && data.length > 0) {
+                        renderSearchResults([{ 
+                            id: data[0].handle, 
+                            meta: "Sovereign Identity Found", 
+                            val: data[0].balance + " $PRN",
+                            sub: "Status: Active"
+                        }]);
+                        return;
+                    }
+                }
+
+                // 2. Check Blockfrost (Transaction)
+                const txRes = await fetch(`${BLOCKFROST_API}/txs/${query}`, { headers: AUTH });
+                if(txRes.ok) {
+                    const tx = await txRes.json();
+                    renderSearchResults([{
+                        id: tx.hash.substring(0,20) + "...",
+                        meta: "Transaction Verified on L1",
+                        val: (parseInt(tx.output_amount[0].quantity) / 1000000).toFixed(2) + " $PRN",
+                        sub: `Block: ${tx.block_height}`
+                    }]);
+                    return;
+                }
+
+                // 3. Check Blockfrost (Address)
+                const addrRes = await fetch(`${BLOCKFROST_API}/addresses/${query}`, { headers: AUTH });
+                if(addrRes.ok) {
+                    const addr = await addrRes.json();
+                    renderSearchResults([{
+                        id: query.substring(0,20) + "...",
+                        meta: "Cardano L1 Address",
+                        val: (parseInt(addr.amount[0].quantity) / 1000000).toFixed(2) + " $PRN",
+                        sub: "Identity Anchored"
+                    }]);
+                    return;
+                }
+
+                document.getElementById('tx-feed').innerHTML = '<div style="padding:40px; text-align:center; font-weight:900; color:red;">NOT FOUND ON LEDGER</div>';
+            } catch (e) {
+                console.error("Search Error", e);
+                document.getElementById('tx-feed').innerHTML = '<div style="padding:40px; text-align:center; font-weight:900; color:red;">HANDSHAKE ERROR</div>';
+            }
+        }
+
+        function renderSearchResults(results) {
+            let html = '<div style="font-weight:900; font-size:0.7rem; color:var(--muze-blue); margin-bottom:20px;">SEARCH RESULTS</div>';
+            results.forEach(res => {
+                html += `
+                    <div class="data-row">
+                        <div class="data-main">
+                            <div class="icon-hex">🔍</div>
+                            <div>
+                                <div class="data-id">${res.id}</div>
+                                <div class="data-meta">${res.meta}</div>
+                            </div>
+                        </div>
+                        <div class="data-val">
+                            <div class="val-big">${res.val}</div>
+                            <div class="val-sub">${res.sub}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('tx-feed').innerHTML = html;
+        }
+
+        document.getElementById('search-input').addEventListener('keypress', (e) => {
+            if(e.key === 'Enter') performSearch();
+        });
+        document.getElementById('search-btn').addEventListener('click', performSearch);
 
         function renderBlocks(height) {
             let html = "";
