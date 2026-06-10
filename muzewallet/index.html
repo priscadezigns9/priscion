@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Independent Wallet</title>
+    <title>MUZE | Sovereign Wallet v24.7.0</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
@@ -16,43 +16,21 @@
             --muze-blue: #5AC8FA;
             --chillata: #FF4D4D;
         }
-        /* RESET ALL ANIMATIONS AND TRANSITIONS FOR STABILITY */
         * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
         
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Inter', sans-serif; 
-            margin: 0;
-            overflow: hidden; 
-            width: 100vw;
-            height: 100vh;
-        }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; width: 100vw; height: 100vh; }
         
-        .layer { 
-            position: fixed; 
-            inset: 0; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            background: #FFF; 
-            z-index: 100; 
-            padding: 20px;
-        }
+        .layer { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #FFF; z-index: 100; padding: 20px; }
         .hidden { display: none !important; }
 
         /* Splash */
         .splash-logo { width: 80px; opacity: 0.8; }
 
-        /* Onboarding */
-        .card-ui { text-align: center; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 20px; }
+        /* Card UI */
+        .card-ui { text-align: center; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 30px; border-radius: 30px; border: 1px solid var(--border); background: #FFF; }
         h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.5rem; }
         p { color: var(--muted); margin-bottom: 30px; font-size: 0.85rem; line-height: 1.5; }
-        input { 
-            width: 100%; padding: 18px; border-radius: 15px; border: 1px solid var(--border); 
-            margin-bottom: 15px; outline: none; text-align: center; font-size: 1rem; 
-            font-weight: 600; background: #F9F9F9; 
-        }
+        input, select { width: 100%; padding: 18px; border-radius: 15px; border: 1px solid var(--border); margin-bottom: 15px; outline: none; text-align: center; font-size: 1rem; font-weight: 600; background: #F9F9F9; }
         .btn-full { background: var(--muze-blue); color: #fff; border: none; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; box-shadow: 0 4px 15px rgba(90, 200, 250, 0.2); margin-bottom: 10px; }
         .btn-outline { background: #FFF; color: #000; border: 1px solid var(--border); padding: 18px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; width: 100%; margin-bottom: 10px; }
 
@@ -61,8 +39,11 @@
         .seed-input-container { position: relative; }
         .seed-number { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 0.6rem; font-weight: 900; color: #CCC; pointer-events: none; }
         .seed-word { padding: 12px 10px 12px 30px !important; font-size: 0.75rem !important; margin: 0 !important; text-align: left !important; }
+        .seed-display { background: #F9F9F9; padding: 20px; border-radius: 15px; border: 1px solid var(--border); display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        .word-item { font-size: 0.7rem; font-weight: 900; text-align: left; }
+        .word-item span { color: #CCC; margin-right: 5px; }
 
-        /* Main App UI */
+        /* Sidebar & Layout */
         #app-ui { display: none; height: 100vh; width: 100vw; flex-direction: row; background: #FFF; }
         .sidebar { width: 300px; border-right: 1px solid var(--border); background: #FAFAFA; display: flex; flex-direction: column; padding: 30px 0; }
         .nav-item { padding: 15px 30px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; }
@@ -81,57 +62,38 @@
 
         .balance-card { border: 1px solid var(--border); border-radius: 30px; padding: 40px; background: #FFF; margin-bottom: 30px; }
         .balance-big { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin: 15px 0; }
-        .profile { margin-top: auto; padding: 20px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
+        .profile { margin-top: auto; padding: 20px 30px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 15px; cursor: pointer; }
         .profile img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 
-        /* Messenger Style */
-        .messenger-container { display: flex; height: 100%; gap: 30px; }
-        .chat-list { width: 280px; border-right: 1px solid var(--border); padding-right: 30px; display: flex; flex-direction: column; gap: 15px; }
-        .chat-view { flex: 1; display: flex; flex-direction: column; height: 100%; max-width: 600px; }
-        
-        @media (max-width: 900px) {
-            .chat-list { display: none; } 
-            .messenger-container { justify-content: center; }
-        }
-
-        .chat-item { padding: 15px; border-radius: 15px; background: #F9F9F9; display: flex; align-items: center; gap: 12px; cursor: pointer; border: 1px solid transparent; }
-        .chat-item.active { background: #FFF; border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
-        .chat-item img { width: 35px; height: 35px; border-radius: 50%; }
-        .chat-info { flex: 1; overflow: hidden; }
-        .chat-handle { font-weight: 900; font-size: 0.75rem; letter-spacing: 0.5px; }
-        .chat-last { font-size: 0.6rem; color: #AAA; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
-
-        .chat-header { padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
-        .chat-header-img { width: 45px; height: 45px; border-radius: 50%; }
-        .chat-box { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; margin-bottom: 15px; padding-right: 10px; }
-        .msg { padding: 12px 18px; border-radius: 18px; font-size: 0.85rem; max-width: 85%; line-height: 1.4; }
-        .msg.received { align-self: flex-start; background: #F0F0F0; color: #000; }
-        .msg.sent { align-self: flex-end; background: #000; color: #FFF; }
-        .msg-time { text-align: right; font-size: 0.55rem; opacity: 0.5; margin-top: 4px; }
-        
-        .search-handle-row { background: #F9F9F9; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-        .search-input { border: none; background: none; outline: none; font-size: 0.7rem; font-weight: 900; flex: 1; text-transform: lowercase; }
-
-        /* Digital Card Style */
-        .digital-card {
-            width: 100%; max-width: 400px; height: 250px; border-radius: 24px;
-            background: linear-gradient(135deg, #0A0A0A 0%, #222 100%);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2); padding: 30px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            color: #FFF; position: relative; overflow: hidden; margin-bottom: 40px;
-        }
-        .card-chip { width: 40px; height: 32px; background: #E5A93B; border-radius: 6px; }
-        .card-number { font-size: 1.4rem; font-weight: 900; letter-spacing: 3px; word-spacing: 5px; font-family: monospace; }
-        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
-        .card-holder { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; font-weight: 600; }
-
-        /* Modal Style */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        /* Asset Grid */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
         .card { border: 1px solid var(--border); border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; }
         .card-icon { font-size: 2rem; margin-bottom: 10px; }
         .card-label { font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; text-transform: uppercase; }
-        
+
+        /* Messenger & DEX Components */
+        .messenger-container { display: flex; height: 100%; gap: 30px; }
+        .chat-list { width: 280px; border-right: 1px solid var(--border); padding-right: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .chat-view { flex: 1; display: flex; flex-direction: column; height: 100%; max-width: 600px; }
+        .msg { padding: 12px 18px; border-radius: 18px; font-size: 0.85rem; max-width: 85%; line-height: 1.4; margin-bottom: 10px; }
+        .msg.received { align-self: flex-start; background: #F0F0F0; color: #000; }
+        .msg.sent { align-self: flex-end; background: #000; color: #FFF; }
+
+        /* History Tab */
+        .history-item { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .history-icon { width: 40px; height: 40px; border-radius: 50%; background: #F9F9F9; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .history-info { flex: 1; margin-left: 15px; }
+        .history-type { font-weight: 900; font-size: 0.8rem; }
+        .history-time { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+        .history-amt { font-weight: 900; font-size: 0.9rem; text-align: right; }
+
+        /* Digital Card */
+        .digital-card { width: 100%; max-width: 400px; height: 250px; border-radius: 24px; background: linear-gradient(135deg, #0A0A0A 0%, #222 100%); box-shadow: 0 15px 35px rgba(0,0,0,0.2); padding: 30px; display: flex; flex-direction: column; justify-content: space-between; color: #FFF; position: relative; overflow: hidden; margin-bottom: 40px; }
+        .card-chip { width: 40px; height: 32px; background: #E5A93B; border-radius: 6px; }
+        .card-number { font-size: 1.4rem; font-weight: 900; letter-spacing: 3px; word-spacing: 5px; font-family: monospace; }
+        .card-holder { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; font-weight: 600; }
+
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; position: fixed; inset: 0; background: #FFF; z-index: 5000; }
         .spinner { width: 40px; height: 40px; border: 4px solid #F3F3F3; border-top: 4px solid var(--muze-blue); border-radius: 50%; animation: spin 1s linear infinite !important; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -141,16 +103,16 @@
 
     <div id="loading-overlay" class="loading-screen hidden">
         <div class="spinner"></div>
-        <p style="margin-top:20px; font-weight:900; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">Syncing with Ledger...</p>
+        <p style="margin-top:20px; font-weight:900; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">Ledger Handshake...</p>
     </div>
 
-    <!-- Layers -->
+    <!-- Onboarding Layers -->
     <div id="layer-splash" class="layer"><img src="../assets/muse_icon.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'"></div>
     <div id="layer-onboarding" class="layer hidden">
         <div class="card-ui">
             <img src="../assets/muse_icon.png" style="width:60px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
-            <h2>Muze Wallet by Priscion</h2>
-            <p>Independent Reality is here.</p>
+            <h2>Muze Wallet</h2>
+            <p>Non-Custodial. Handle-Anchored. Sovereign.</p>
             <button class="btn-full" onclick="startFlow('mustard-seed')">CLAIM MUSTARD SEED (FREE)</button>
             <button class="btn-outline" onclick="startFlow('create')">CREATE NEW VAULT</button>
             <button class="btn-outline" onclick="startFlow('recover')">RECOVER WITH SEED</button>
@@ -162,32 +124,33 @@
         <div class="card-ui">
             <img src="../assets/muse_icon.png" style="width:50px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
             <h2>Vault Locked</h2>
-            <input type="password" id="pass-input" placeholder="Password">
+            <input type="password" id="pass-input" placeholder="Enter Password">
             <button class="btn-full" onclick="unlock()">UNLOCK VAULT</button>
         </div>
     </div>
 
-    <!-- App UI -->
+    <!-- Main App UI -->
     <div id="app-ui">
         <div class="sidebar">
             <div style="padding: 0 30px 40px;"><img src="../assets/muse_icon.png" style="width: 40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'"></div>
             <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
             <div class="nav-item" onclick="showStage('card', this)">Card</div>
             <div class="nav-item" onclick="showStage('swap', this)">Swap</div>
-            <div class="nav-item" onclick="showStage('staking', this)">Stake</div>
+            <div class="nav-item" onclick="showStage('staking', this)">Yield</div>
+            <div class="nav-item" onclick="showStage('history', this)">History</div>
             <div class="nav-item" onclick="showStage('messenger', this)">Lynx</div>
-            <div class="nav-item" onclick="showStage('dapps', this)">Dapps</div>
             <div class="profile" onclick="location.href='../mynt/'">
                 <img id="sidebar-pfp" src="../assets/pd_icon_512.png" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
-                <div><div id="user-handle" style="font-weight:900; font-size:0.8rem;">$prisca.pri</div><div style="font-size:0.5rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div></div>
+                <div><div id="user-handle" style="font-weight:900; font-size:0.8rem;">$handle.pri</div><div style="font-size:0.5rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div></div>
             </div>
         </div>
         
+        <!-- Stages -->
         <div id="stage-vault" class="stage">
             <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:30px;">Vault.</h1>
             <div class="balance-card">
                 <div style="font-weight:900; color:#AAA; letter-spacing:2px; text-transform:uppercase; font-size:0.6rem; margin-bottom:10px;">Reserve</div>
-                <div id="balance" class="balance-big">$PRN 12,500</div>
+                <div id="balance" class="balance-big">$PRN 0.00</div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn-full" style="width:auto; padding: 15px 30px; background:#000; font-size:0.6rem;" onclick="showBuyModal()">BUY $PRN</button>
                     <button class="btn-outline" style="width:auto; padding: 15px 30px; margin:0; font-size:0.6rem;">SEND</button>
@@ -203,141 +166,100 @@
                 <div class="digital-card">
                     <img src="../assets/priscion_card.png" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;" onerror="this.style.display='none'">
                     <div style="z-index:1; display:flex; flex-direction:column; justify-content:space-between; height:100%; width:100%;">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <div class="card-chip"></div>
-                            <img src="../assets/muse_icon.png" style="width:30px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
-                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;"><div class="card-chip"></div><img src="../assets/muse_icon.png" style="width:30px;" onerror="this.src='../assets/muse_icon.png'"></div>
                         <div class="card-number">•••• •••• •••• 8830</div>
-                        <div class="card-footer">
-                            <div class="card-holder">$prisca.pri</div>
-                            <div style="font-size:0.8rem; font-weight:900;">12/28</div>
-                        </div>
+                        <div class="card-footer"><div class="card-holder">USER</div><div style="font-size:0.8rem; font-weight:900;">12/28</div></div>
                     </div>
                 </div>
                 <div style="flex:1; min-width:300px;">
-                    <div style="font-weight:900; font-size:1.1rem; margin-bottom:15px;">Spend limits and controls</div>
-                    <p style="color:#666; font-size:0.85rem; line-height:1.6; margin-bottom:30px;">Directly linked to your **$PRN** reserve. Convert instantly on-swipe with zero exchange fees.</p>
-                    <button class="btn-full" style="width:auto; padding:15px 40px; background:#000;">MANAGE LIMITS</button>
+                    <div style="font-weight:900; font-size:1.1rem; margin-bottom:15px;">Global Spend Bridge</div>
+                    <p style="color:#666; font-size:0.85rem; line-height:1.6; margin-bottom:30px;">Attached to your **$PRN** reserve. Convert instantly on-swipe. zero fees.</p>
+                    <button class="btn-full" style="width:auto; padding:15px 40px; background:#000;">ACTIVATE CARD</button>
                 </div>
             </div>
         </div>
 
         <div id="stage-swap" class="stage hidden">
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:40px;">
-                <img src="../assets/chillata_logo.png" style="height:40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png'">
-                <h1 style="font-size:2.5rem; font-weight:900; margin:0;">Chillata.</h1>
+                <img src="../assets/chillata_logo.png" style="height:40px;" onerror="this.src='../assets/chillata_logo.png'"><h1 style="font-size:2.5rem; font-weight:900; margin:0;">Chillata.</h1>
             </div>
             <div class="balance-card">
                 <div style="background:#F9F9F9; padding:20px; border-radius:15px; border:1px solid #EEE; margin-bottom:10px;">
                     <div style="font-size:0.5rem; font-weight:900; color:#888;">SELL</div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
                         <input type="number" id="swap-from-amt" value="100" style="background:none; border:none; font-size:1.5rem; font-weight:900; width:60%; outline:none; text-align:left; margin:0;">
-                        <select id="swap-from-asset" style="background:#FFF; padding:8px 15px; border-radius:100px; font-weight:900; font-size:0.7rem; border:1px solid #EEE; outline:none; appearance:none;">
-                            <option value="PRN">$PRN</option>
-                            <option value="NRL">$NRL</option>
-                            <option value="ADA">$ADA</option>
-                        </select>
+                        <select id="swap-from-asset" style="background:#FFF; padding:8px 15px; border-radius:100px; font-weight:900; font-size:0.7rem; border:1px solid #EEE; outline:none;"><option value="PRN">$PRN</option><option value="NRL">$NRL</option><option value="ADA">$ADA</option></select>
                     </div>
                 </div>
                 <div style="text-align:center; margin-bottom:10px; font-size:1rem;">↓</div>
                 <div style="background:#F9F9F9; padding:20px; border-radius:15px; border:1px solid #EEE; margin-bottom:20px;">
                     <div style="font-size:0.5rem; font-weight:900; color:#888;">BUY</div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
-                        <input type="number" id="swap-to-amt" value="450" style="background:none; border:none; font-size:1.5rem; font-weight:900; width:60%; outline:none; text-align:left; margin:0;" readonly>
-                        <select id="swap-to-asset" style="background:#FFF; padding:8px 15px; border-radius:100px; font-weight:900; font-size:0.7rem; border:1px solid #EEE; outline:none; appearance:none;">
-                            <option value="NRL">$NRL</option>
-                            <option value="JLO">$JLO</option>
-                            <option value="MUSD">$MUSD</option>
-                            <option value="ATLR">$ATLR</option>
-                            <option value="ADA">$ADA</option>
-                        </select>
+                        <input type="number" value="450" style="background:none; border:none; font-size:1.5rem; font-weight:900; width:60%; outline:none; text-align:left; margin:0;" readonly>
+                        <select id="swap-to-asset" style="background:#FFF; padding:8px 15px; border-radius:100px; font-weight:900; font-size:0.7rem; border:1px solid #EEE; outline:none;"><option value="NRL">$NRL</option><option value="JLO">$JLO</option><option value="ADA">$ADA</option><option value="MUSD">$MUSD</option></select>
                     </div>
-                </div>
-                <div style="display:flex; justify-content:space-between; font-size:0.6rem; font-weight:900; color:#AAA; margin-bottom:20px; padding:0 10px;">
-                    <span>SWAP FEE: 0.3%</span>
-                    <span>SLIPPAGE: 0.1%</span>
                 </div>
                 <button class="btn-full" style="background:var(--chillata);" onclick="executeSwap()">EXECUTE CHILLATA SWAP</button>
             </div>
         </div>
 
         <div id="stage-staking" class="stage hidden">
-            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Yield & Staking.</h1>
+            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Yield.</h1>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
                 <div class="balance-card">
-                    <div style="font-weight:900; font-size:0.6rem; color:#AAA; text-transform:uppercase; margin-bottom:10px;">Sovereign Staking</div>
+                    <div style="font-weight:900; font-size:0.6rem; color:#AAA; text-transform:uppercase; margin-bottom:10px;">Vault Staking</div>
                     <div style="color:var(--accent); font-size:3rem; font-weight:900;">12.5% <span style="font-size:1rem; color:#AAA;">APY</span></div>
                     <button class="btn-full" style="background:var(--accent); margin-top:20px;">STAKE $PRN</button>
                 </div>
                 <div class="balance-card">
-                    <div style="font-weight:900; font-size:0.6rem; color:#AAA; text-transform:uppercase; margin-bottom:10px;">Liquidity Provision</div>
+                    <div style="font-weight:900; font-size:0.6rem; color:#AAA; text-transform:uppercase; margin-bottom:10px;">Liquidity Fee Pool</div>
                     <div style="color:var(--muze-blue); font-size:3rem; font-weight:900;">0.2% <span style="font-size:1rem; color:#AAA;">FEES</span></div>
-                    <button class="btn-full" style="background:var(--muze-blue); margin-top:20px;">PROVIDE LIQUIDITY</button>
+                    <button class="btn-full" style="background:var(--muze-blue); margin-top:20px;">ANCHOR LIQUIDITY</button>
                 </div>
             </div>
+        </div>
+
+        <div id="stage-history" class="stage hidden">
+            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">History.</h1>
+            <div id="history-list"></div>
         </div>
 
         <div id="stage-messenger" class="stage hidden">
             <div class="messenger-container">
-                <div class="chat-list">
-                    <div class="search-handle-row">
-                        <span style="font-size:0.8rem;">🔍</span>
-                        <input type="text" id="search-handle" class="search-input" placeholder="Search handle..." onkeypress="handleSearch(event)">
-                    </div>
-                    <div id="active-chats-list"></div>
-                </div>
+                <div class="chat-list"><div class="search-handle-row">🔍<input type="text" id="search-handle" class="search-input" placeholder="Search..." onkeypress="handleSearch(event)"></div><div id="active-chats-list"></div></div>
                 <div class="chat-view">
-                    <div id="chat-header" class="chat-header">
-                        <img src="../assets/lynx_logo.png" class="chat-header-img" id="header-avatar" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png'">
-                        <div>
-                            <div id="header-handle" style="font-weight:900; font-size:0.85rem; letter-spacing:1px;">LYNX ARCHITECT</div>
-                            <div id="header-status" style="font-size:0.55rem; color:var(--muze-blue); font-weight:900; text-transform:uppercase; margin-top:3px;">Always Online</div>
-                        </div>
-                    </div>
-                    <div id="chat-box" class="chat-box"></div>
-                    <div class="chat-input-row">
-                        <input id="lynx-input" type="text" placeholder="Message..." class="chat-input" onkeypress="if(event.key==='Enter') sendMessage()">
-                        <button onclick="sendMessage()" class="btn-send">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                        </button>
-                    </div>
+                    <div class="chat-header"><img src="../assets/lynx_logo.png" class="chat-header-img" id="header-avatar" onerror="this.src='../assets/lynx_logo.png'"><div><div id="header-handle" style="font-weight:900; font-size:0.85rem;">LYNX ARCHITECT</div><div style="font-size:0.55rem; color:var(--muze-blue); font-weight:900;">Always Online</div></div></div>
+                    <div id="chat-box" class="chat-box" style="flex:1; overflow-y:auto; padding-right:10px; margin-bottom:15px;"></div>
+                    <div style="display:flex; gap:10px;"><input id="lynx-input" type="text" placeholder="Message..." style="flex:1; margin:0;" onkeypress="if(event.key==='Enter') sendMessage()"><button onclick="sendMessage()" class="btn-full" style="width:auto; padding:15px 30px; margin:0;">SEND</button></div>
                 </div>
-            </div>
-        </div>
-
-        <div id="stage-dapps" class="stage hidden">
-            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Dapps.</h1>
-            <div class="grid-container">
-                <div class="card" onclick="window.open('../pulse/')"><img src="../assets/pulse_logo.png" style="height:30px; margin-bottom:10px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png'"><div class="card-label">PULSE</div></div>
-                <div class="card" onclick="window.open('../dreaminganime/')"><div class="card-icon">🎬</div><div class="card-label">DREAMING</div></div>
-                <div class="card" onclick="window.open('../mynt/')"><img src="../assets/p-logo.png" style="height:30px; margin-bottom:10px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png'"><div class="card-label">MYNT</div></div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: BUY $PRN -->
+    <!-- Modals -->
     <div id="modal-buy" class="modal hidden">
-        <div class="card-ui" style="background:#FFF; padding:40px; border-radius:30px;">
-            <h2 style="margin-bottom:20px;">Buy $PRN</h2>
-            <p>Convert your fiat instantly using our approved payment methods.</p>
-            <input type="number" id="buy-amount" placeholder="Amount (USD)" style="margin-bottom:20px;">
-            <button class="btn-full" style="background:#0070ba;" onclick="executeBuy('paypal')">🅿️ PAY WITH PAYPAL</button>
-            <button class="btn-full" style="background:#000;" onclick="executeBuy('card')">💳 CREDIT CARD / PAYONEER</button>
-            <button class="btn-outline" onclick="hideBuyModal()" style="margin-top:10px;">CANCEL</button>
+        <div class="card-ui">
+            <h2>Buy $PRN</h2><p>Acquire on-ledger utility instantly.</p>
+            <input type="number" id="buy-amount" placeholder="USD Amount">
+            <button class="btn-full" style="background:#0070ba;" onclick="executeBuy('paypal')">PAYPAL</button>
+            <button class="btn-full" style="background:#000;" onclick="executeBuy('card')">CREDIT CARD</button>
+            <button class="btn-outline" onclick="hideBuyModal()">CANCEL</button>
         </div>
     </div>
 
     <script>
         const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const SB_KEY = '{{credential:supabase-anon-key}}'; // I will ask user for this or use user profile if available
+        const SB_KEY = '{{credential:supabase-anon-key}}'; 
         const supabase = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
 
         const layers = { splash: 'layer-splash', onboarding: 'layer-onboarding', flow: 'layer-flow', auth: 'layer-auth', app: 'app-ui' };
         let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
         let activeChat = '$architect';
         let conversations = JSON.parse(localStorage.getItem('muze_chats_v1')) || {
-            '$architect': { handle: 'LYNX ARCHITECT', avatar: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png', messages: [{ from: 'received', text: 'Sovereign Node Online. Handshake Verified.', time: '09:00' }] }
+            '$architect': { handle: 'LYNX ARCHITECT', avatar: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png', messages: [{ from: 'received', text: 'Sovereign Node Online.', time: '09:00' }] }
         };
+
+        const WORDS = ["apple", "shield", "mountain", "ocean", "ledger", "bridge", "anchor", "neural", "pulse", "mystic", "matrix", "vision", "cyber", "prism", "ghost", "signal", "node", "vault", "seed", "spirit", "mustard", "echo", "frost", "aura"];
 
         setTimeout(() => {
             document.getElementById(layers.splash).classList.add('hidden');
@@ -349,89 +271,63 @@
             document.getElementById(layers.onboarding).classList.add('hidden');
             document.getElementById(layers.flow).classList.remove('hidden');
             const flow = document.getElementById('flow-content');
-            
             if(type === 'mustard-seed') {
-                flow.innerHTML = `
-                    <h2>Claim Seed</h2>
-                    <p>First, secure your new vault with a password.</p>
-                    <input type="password" id="new-pass" placeholder="Create Vault Password">
-                    <p style="font-size:0.7rem; color:var(--muted); margin-top:-10px; margin-bottom:20px;">This password encrypts your keys locally.</p>
-                    <button class="btn-full" onclick="showHandleClaim()">CONTINUE TO IDENTITY</button>
-                `;
+                flow.innerHTML = `<h2>Claim Seed</h2><p>Secure your vault first.</p><input type="password" id="new-pass" placeholder="Create Vault Password"><button class="btn-full" onclick="showHandleClaim()">CONTINUE</button>`;
             } else if(type === 'create') {
-                flow.innerHTML = `<h2>Create Vault</h2><p>Secure your node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
+                flow.innerHTML = `<h2>New Vault</h2><p>Secure your identity.</p><input type="password" id="new-pass" placeholder="Create Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE VAULT</button>`;
             } else if(type === 'recover') {
                 renderRecoveryFlow(24);
-            } else if(type === 'ledger') {
-                flow.innerHTML = `<h2>Connect</h2><p>Scanning Ledger...</p><div style="padding:20px; color:var(--muze-blue); font-weight:900;">SEARCHING...</div><button class="btn-outline" onclick="finalizeSetup('ledger')">SYNC (DEV)</button>`;
             }
         }
 
         function showHandleClaim() {
             const pass = document.getElementById('new-pass').value;
-            if(!pass) return alert("Please set a password to secure your vault.");
+            if(!pass) return alert("Password required.");
+            const flow = document.getElementById('flow-content');
+            flow.innerHTML = `<h2>Claim Identity</h2><p>Choose your .pri handle.</p><input type="text" id="seed-handle" placeholder="$username.pri"><input type="hidden" id="stored-pass" value="${pass}"><button class="btn-full" onclick="finalizeSetup('mustard-seed')">CLAIM AIRDROP</button>`;
+        }
+
+        function finalizeSetup(type) {
+            const pass = document.getElementById('new-pass')?.value || document.getElementById('stored-pass')?.value || 'password';
+            const handle = document.getElementById('seed-handle')?.value.trim() || '$user.pri';
+            const seed = Array.from({length: 24}, () => WORDS[Math.floor(Math.random() * WORDS.length)]);
+            
             const flow = document.getElementById('flow-content');
             flow.innerHTML = `
-                <h2>Claim Identity</h2>
-                <p>Choose your unique .pri handle.</p>
-                <input type="text" id="seed-handle" placeholder="$username.pri">
-                <input type="hidden" id="stored-pass" value="${pass}">
-                <button class="btn-full" onclick="finalizeSetup('mustard-seed')">CLAIM $PRN AIRDROP</button>
+                <h2>Sovereign Seed</h2>
+                <p>WRITE THIS DOWN. Never share it. It is your only path to recovery.</p>
+                <div class="seed-display">${seed.map((w, i) => `<div class="word-item"><span>${i+1}</span>${w}</div>`).join('')}</div>
+                <button class="btn-full" onclick="saveAndStart('${pass}', '${handle}', '${seed.join(' ')}', '${type}')">I HAVE SAVED MY SEED</button>
             `;
         }
 
-        async function finalizeSetup(type) {
-            const pass = document.getElementById('new-pass')?.value || document.getElementById('stored-pass')?.value || 'password';
-            let handle = '$prisca.pri';
-            let balance = '0.00';
-            let assets = [];
-
-            if(type === 'mustard-seed') {
-                const requested = document.getElementById('seed-handle').value.trim();
-                handle = requested.startsWith('$') ? requested : '$' + (requested || 'user') + '.pri';
-                balance = '1,250.00';
-                assets = [{icon:'🌱', label: handle, sub:'MUSTARD SEED'}];
-            } else if (type === 'recover') {
-                // Recovery simulation: check Supabase
-                const seed = document.getElementById('word-1').value; // Just a mock hash source
-                const spk = btoa(seed).substring(0, 16);
-                const { data, error } = await supabase.from('ledger_state').select('*').eq('spk', spk).single();
-                if(data) {
-                    handle = data.handle;
-                    balance = data.balance;
-                    assets = data.assets;
-                }
-            } else {
-                handle = '$prisca.pri';
-                balance = '12,500.00';
-                assets = [{icon:'🏷️',label:'$prisca.pri',sub:'ALPHA'},{icon:'🏷️',label:'$vogue.pri',sub:'ALPHA'}];
-            }
-
-            walletState = { handle, password: pass, balance, assets };
+        async function saveAndStart(password, handle, seed, type) {
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            const balance = (type === 'mustard-seed') ? '1,250.00' : '0.00';
+            const assets = [{icon: (type==='mustard-seed'?'🌱':'🏷️'), label: handle, sub: 'SOVEREIGN'}];
+            const history = [{type: 'Identity Anchored', time: 'Now', amt: '+'+balance+' $PRN', icon: '🛡️'}];
+            
+            walletState = { handle, password, balance, assets, history, seed };
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
             
-            // On-Chain Persistence Simulation (Push to Ledger)
             if(supabase) {
-                const spk = btoa(pass).substring(0, 16); // Mock SPK generation
-                await supabase.from('ledger_state').upsert({ spk, handle, balance, assets });
+                const spk = btoa(seed).substring(0, 16);
+                await supabase.from('ledger_state').upsert({ spk, handle, balance, assets, history });
             }
-            
             location.reload();
         }
 
         async function recoverLedger(wordCount) {
             document.getElementById('loading-overlay').classList.remove('hidden');
-            // Simulation of hashing words to find SPK
-            let seed = ""; for(let i=1;i<=wordCount;i++) seed += document.getElementById('word-'+i).value;
+            let seed = ""; for(let i=1;i<=wordCount;i++) seed += document.getElementById('word-'+i).value.trim().toLowerCase() + (i===wordCount?'':' ');
             const spk = btoa(seed).substring(0, 16);
             
             if(supabase) {
-                const { data, error } = await supabase.from('ledger_state').select('*').eq('spk', spk).single();
+                const { data } = await supabase.from('ledger_state').select('*').eq('spk', spk).single();
                 if(data) {
-                    walletState = { handle: data.handle, password: 'restored', balance: data.balance, assets: data.assets };
+                    walletState = { handle: data.handle, password: 'restored', balance: data.balance, assets: data.assets, history: data.history, seed };
                     localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
-                    location.reload();
-                    return;
+                    location.reload(); return;
                 }
             }
             document.getElementById('loading-overlay').classList.add('hidden');
@@ -440,17 +336,8 @@
 
         function renderRecoveryFlow(wordCount) {
             const flow = document.getElementById('flow-content');
-            let seedInputs = '';
-            for(let i=1; i<=wordCount; i++) {
-                seedInputs += `<div class="seed-input-container"><span class="seed-number">${i}</span><input type="text" class="seed-word" id="word-${i}"></div>`;
-            }
-            flow.innerHTML = `
-                <h2>Recover Vault</h2>
-                <p>Enter your ${wordCount}-word Sovereign Seed.</p>
-                <div class="seed-grid">${seedInputs}</div>
-                <button class="btn-full" onclick="recoverLedger(${wordCount})">SYNC WITH LEDGER</button>
-                <button class="btn-outline" onclick="location.reload()">BACK</button>
-            `;
+            let seedInputs = ''; for(let i=1; i<=wordCount; i++) seedInputs += `<div class="seed-input-container"><span class="seed-number">${i}</span><input type="text" class="seed-word" id="word-${i}"></div>`;
+            flow.innerHTML = `<h2>Recover Vault</h2><p>Enter your ${wordCount}-word seed.</p><div class="seed-grid">${seedInputs}</div><button class="btn-full" onclick="recoverLedger(${wordCount})">SYNC WITH LEDGER</button><button class="btn-outline" onclick="location.reload()">BACK</button>`;
         }
 
         function unlock() {
@@ -464,107 +351,48 @@
         function initApp() {
             document.getElementById('user-handle').innerText = walletState.handle;
             document.getElementById('balance').innerText = '$PRN ' + walletState.balance;
-            if(!walletState.assets.find(a => a.label === 'Sovereign Card') && walletState.handle === '$prisca.pri') {
-                walletState.assets.push({icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'});
-            }
-            document.getElementById('asset-grid').innerHTML = walletState.assets.map(a => `
-                <div class="card" onclick="${a.label === 'Sovereign Card' ? "showStage('card', document.querySelector('.nav-item:nth-child(2)'))" : "openChat('" + a.label + "')"}">
-                    <div class="card-icon">${a.icon}</div>
-                    <div class="card-label">${a.label}</div>
-                    <div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div>
-                </div>`).join('');
-            const holderElements = document.querySelectorAll('.card-holder');
-            holderElements.forEach(el => el.innerText = walletState.handle);
-            renderChatList();
-            renderActiveChat();
+            if(!walletState.assets.find(a => a.label === 'Sovereign Card') && walletState.handle === '$prisca.pri') walletState.assets.push({icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'});
+            document.getElementById('asset-grid').innerHTML = walletState.assets.map(a => `<div class="card" onclick="${a.label === 'Sovereign Card' ? "showStage('card', document.querySelector('.nav-item:nth-child(2)'))" : "openChat('" + a.label + "')"}"><div class="card-icon">${a.icon}</div><div class="card-label">${a.label}</div><div style="font-size:0.5rem; color:#999; margin-top:5px; font-weight:700;">${a.sub}</div></div>`).join('');
+            document.querySelectorAll('.card-holder').forEach(el => el.innerText = walletState.handle);
+            document.getElementById('history-list').innerHTML = walletState.history.map(h => `<div class="history-item"><div class="history-icon">${h.icon}</div><div class="history-info"><div class="history-type">${h.type}</div><div class="history-time">${h.time}</div></div><div class="history-amt">${h.amt}</div></div>`).join('');
+            renderChatList(); renderActiveChat();
         }
 
         function renderChatList() {
-            const list = document.getElementById('active-chats-list');
-            if(!list) return;
+            const list = document.getElementById('active-chats-list'); if(!list) return;
             list.innerHTML = Object.keys(conversations).map(h => {
-                const c = conversations[h];
-                const last = c.messages[c.messages.length-1];
-                return `<div class="chat-item ${h===activeChat?'active':''}" onclick="openChat('${h}')">
-                    <img src="${c.avatar}" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
-                    <div class="chat-info">
-                        <div class="chat-handle">${c.handle}</div>
-                        <div class="chat-last">${last.text}</div>
-                    </div>
-                </div>`;
+                const c = conversations[h]; const last = c.messages[c.messages.length-1];
+                return `<div class="chat-item ${h===activeChat?'active':''}" onclick="openChat('${h}')"><img src="${c.avatar}" onerror="this.src='../assets/muse_logo.png'"><div class="chat-info"><div class="chat-handle">${c.handle}</div><div class="chat-last">${last.text}</div></div></div>`;
             }).join('');
         }
 
         function openChat(handle) {
-            if(!conversations[handle]) {
-                conversations[handle] = { handle: handle.toUpperCase(), avatar: '../assets/pd_icon_512.png', messages: [{ from: 'received', text: 'Identity anchored.', time: 'Now' }] };
-                saveChats();
-            }
-            activeChat = handle;
-            showStage('messenger', document.querySelector('.nav-item:nth-child(5)'));
-            renderChatList();
-            renderActiveChat();
+            if(!conversations[handle]) { conversations[handle] = { handle: handle.toUpperCase(), avatar: '../assets/pd_icon_512.png', messages: [{ from: 'received', text: 'Handshake complete.', time: 'Now' }] }; saveChats(); }
+            activeChat = handle; showStage('messenger', document.querySelector('.nav-item:nth-child(6)')); renderChatList(); renderActiveChat();
         }
 
         function renderActiveChat() {
-            const c = conversations[activeChat];
-            const box = document.getElementById('chat-box');
-            if(!box) return;
-            document.getElementById('header-avatar').src = c.avatar;
-            document.getElementById('header-handle').innerText = c.handle;
-            document.getElementById('header-status').innerText = (activeChat==='$architect') ? 'Always Online' : 'On-Ledger';
-            box.innerHTML = c.messages.map(m => `<div class="msg ${m.from}">${m.text}<div class="msg-time">${m.time}</div></div>`).join('');
-            box.scrollTop = box.scrollHeight;
+            const c = conversations[activeChat]; const box = document.getElementById('chat-box'); if(!box) return;
+            document.getElementById('header-avatar').src = c.avatar; document.getElementById('header-handle').innerText = c.handle;
+            box.innerHTML = c.messages.map(m => `<div class="msg ${m.from}">${m.text}</div>`).join(''); box.scrollTop = box.scrollHeight;
         }
 
         function sendMessage() {
-            const input = document.getElementById('lynx-input');
-            const text = input.value.trim();
-            if(!text) return;
-            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            conversations[activeChat].messages.push({ from: 'sent', text, time });
-            input.value = '';
-            renderActiveChat();
-            renderChatList();
-            saveChats();
-            if(activeChat==='$architect') {
-                setTimeout(() => {
-                    conversations[activeChat].messages.push({ from: 'received', text: 'Signal anchored to your ledger.', time });
-                    renderActiveChat();
-                    renderChatList();
-                    saveChats();
-                }, 800);
-            }
+            const input = document.getElementById('lynx-input'); const text = input.value.trim(); if(!text) return;
+            conversations[activeChat].messages.push({ from: 'sent', text, time: 'Now' }); input.value = '';
+            renderActiveChat(); renderChatList(); saveChats();
         }
 
         function saveChats() { localStorage.setItem('muze_chats_v1', JSON.stringify(conversations)); }
         function showStage(stage, el) {
-            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            document.getElementById('stage-' + stage).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
+            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden')); document.getElementById('stage-' + stage).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active');
         }
-        function handleSearch(e) {
-            if(e.key === 'Enter') {
-                const h = document.getElementById('search-handle').value.trim();
-                if(h) openChat(h);
-                document.getElementById('search-handle').value = '';
-            }
-        }
+        function handleSearch(e) { if(e.key === 'Enter') { const h = document.getElementById('search-handle').value.trim(); if(h) openChat(h); document.getElementById('search-handle').value = ''; } }
         function showBuyModal() { document.getElementById('modal-buy').classList.remove('hidden'); }
         function hideBuyModal() { document.getElementById('modal-buy').classList.add('hidden'); }
-        function executeBuy(method) {
-            const amt = document.getElementById('buy-amount').value;
-            if(!amt || amt <= 0) return alert("Please enter a valid amount.");
-            alert(`Redirecting to Secure ${method.toUpperCase()} Portal to purchase $PRN...`);
-            hideBuyModal();
-        }
-        function executeSwap() {
-            const from = document.getElementById('swap-from-asset').value;
-            const to = document.getElementById('swap-to-asset').value;
-            const amt = document.getElementById('swap-from-amt').value;
-            alert(`Initiating Sovereign Swap: ${amt} ${from} → ${to}\nFee: 0.3% ($PRN)`);
-        }
+        function executeBuy(method) { alert(`Redirecting to Secure ${method.toUpperCase()} Portal...`); hideBuyModal(); }
+        function executeSwap() { alert(`Initiating Swap via Chillata Protocol...`); }
     </script>
 </body>
 </html>
