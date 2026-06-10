@@ -213,12 +213,42 @@
                     });
                     const data = await response.json();
                     if(data && data.length > 0) {
-                        renderSearchResults([{ 
-                            id: data[0].handle, 
+                        const identity = data[0];
+                        let results = [{ 
+                            id: identity.handle, 
                             meta: "Sovereign Identity Found", 
-                            val: data[0].balance + " $PRN",
+                            val: identity.balance + " $PRN",
                             sub: "Status: Active"
-                        }]);
+                        }];
+
+                        // Fetch transactions for this handle
+                        try {
+                            const txRes = await fetch(`${SB_URL}/rest/v1/ledger_transactions?or=(sender.eq.${handle},receiver.eq.${handle})&order=created_at.desc`, {
+                                headers: { "apikey": SB_KEY, "Authorization": `Bearer ${SB_KEY}` }
+                            });
+                            const txs = await txRes.json();
+                            if(txs && txs.length > 0) {
+                                txs.forEach(t => {
+                                    const isSender = t.sender === handle;
+                                    results.push({
+                                        id: t.tx_hash.substring(0,15) + "...",
+                                        meta: isSender ? `Sent to ${t.receiver}` : `Received from ${t.sender}`,
+                                        val: (isSender ? "-" : "+") + t.amount + " $PRN",
+                                        sub: new Date(t.created_at).toLocaleString()
+                                    });
+                                });
+                            } else {
+                                // Default Genesis transaction if no history found
+                                results.push({
+                                    id: "tx_genesis_mustard",
+                                    meta: "Mustard Seed Airdrop",
+                                    val: "+1,250.00 $PRN",
+                                    sub: "Genesis Settlement"
+                                });
+                            }
+                        } catch(e) { console.error("TX Fetch Error", e); }
+
+                        renderSearchResults(results);
                         return;
                     }
                 }
