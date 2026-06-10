@@ -2,73 +2,130 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MUZE | Sovereign Wallet</title>
+    <title>MUZE | Independent Wallet</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
-        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --accent: #7B35D4; }
+        :root { 
+            --bg: #fff; 
+            --text: #000; 
+            --muted: #AAA; 
+            --border: #EEE; 
+            --accent: #7B35D4; 
+            --muze-blue: #5AC8FA;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        
+        /* Fixed Shaking: Removed fixed height 100vh on body to prevent scroll collisions */
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif; 
+            margin: 0;
+            overflow: hidden; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+        }
         
         /* Layer Control */
-        .layer { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: #FFF; transition: opacity 0.5s ease; z-index: 100; }
+        .layer { 
+            position: fixed; 
+            inset: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: #FFF; 
+            transition: opacity 0.5s ease; 
+            z-index: 100; 
+        }
         .hidden { display: none !important; }
         .transparent { opacity: 0; }
 
-        /* Splash */
-        .splash-logo { width: 120px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        /* Splash - Stabilized Animation */
+        .splash-logo { width: 100px; animation: gentle-fade 2s infinite ease-in-out; }
+        @keyframes gentle-fade { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
-        /* Auth */
+        /* Auth Card */
         .auth-card { text-align: center; max-width: 400px; width: 90%; }
         h2 { font-weight: 900; margin-bottom: 10px; font-size: 1.5rem; }
         p { color: var(--muted); margin-bottom: 40px; font-size: 0.9rem; }
-        input { width: 100%; padding: 22px; border-radius: 18px; border: 1px solid var(--border); margin-bottom: 20px; outline: none; text-align: center; font-size: 1.1rem; font-weight: 600; background: #F9F9F9; }
-        .btn-black { background: #000; color: #fff; border: none; padding: 22px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-black:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        input { 
+            width: 100%; padding: 22px; border-radius: 18px; border: 1px solid var(--border); 
+            margin-bottom: 20px; outline: none; text-align: center; font-size: 1.1rem; 
+            font-weight: 600; background: #F9F9F9; 
+        }
+        .btn-unlock { 
+            background: var(--muze-blue); color: #fff; border: none; padding: 22px; 
+            border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; 
+            cursor: pointer; width: 100%; transition: 0.3s; 
+            box-shadow: 0 4px 15px rgba(90, 200, 250, 0.3);
+        }
+        .btn-unlock:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(90, 200, 250, 0.5); }
 
-        /* App UI */
-        #app-ui { display: none; height: 100vh; width: 100vw; flex-direction: row; align-items: stretch; justify-content: flex-start; background: #FFF; }
-        .sidebar { width: 320px; border-right: 1px solid var(--border); background: #FAFAFA; display: flex; flex-direction: column; padding: 40px 0; }
-        .nav-item { padding: 20px 40px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; }
+        /* Main App UI */
+        #app-ui { 
+            display: none; 
+            height: 100vh; 
+            width: 100vw; 
+            flex-direction: row; 
+            align-items: stretch; 
+            justify-content: flex-start; 
+            background: #FFF; 
+        }
+        .sidebar { 
+            width: 320px; 
+            border-right: 1px solid var(--border); 
+            background: #FAFAFA; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 40px 0; 
+        }
+        .nav-item { 
+            padding: 20px 40px; font-weight: 900; font-size: 0.75rem; 
+            letter-spacing: 2px; color: var(--muted); text-transform: uppercase; cursor: pointer; 
+        }
         .nav-item.active { color: var(--text); background: #F0F0F0; }
-        .stage { flex: 1; padding: 100px; overflow-y: auto; }
+        
+        .stage { flex: 1; padding: 80px; overflow-y: auto; }
         .balance-card { border: 1px solid var(--border); border-radius: 40px; padding: 60px; background: #FFF; }
         .balance-big { font-size: 5rem; font-weight: 900; letter-spacing: -3px; margin: 20px 0; }
-        .profile { margin-top: auto; padding: 40px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 20px; }
-        .profile img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
         
-        /* Browser Overlay */
-        #layer-browser { flex-direction: column; background: #F0F0F0; z-index: 1000; }
-        .browser-toolbar { width: 100%; height: 70px; background: #FFF; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
+        .profile { 
+            margin-top: auto; padding: 40px; border-top: 1px solid var(--border); 
+            display: flex; align-items: center; gap: 20px; 
+        }
+        .profile img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
     <!-- Splash Layer -->
     <div id="layer-splash" class="layer">
-        <img src="/assets/muze_logo.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+        <img src="../assets/pd_icon_512.png" class="splash-logo">
     </div>
 
-    <!-- Auth Layer -->
+    <!-- Auth Layer (Locked first) -->
     <div id="layer-auth" class="layer hidden">
         <div class="auth-card">
-            <img src="/assets/muze_logo.png" style="width:60px; margin-bottom:30px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
-            <h2>Security Lock</h2>
-            <p>Enter your sovereign password to unlock your vault.</p>
-            <input type="password" id="pass-input" placeholder="Password" autofocus>
-            <button class="btn-black" onclick="unlock()">UNLOCK VAULT</button>
+            <img src="../assets/pd_icon_512.png" style="width:60px; margin-bottom:30px;">
+            <h2>Vault Locked</h2>
+            <p>Enter your sovereign password to unlock.</p>
+            <input type="password" id="pass-input" placeholder="Password">
+            <button class="btn-unlock" onclick="unlock()">UNLOCK VAULT</button>
         </div>
     </div>
 
-    <!-- App Layer -->
+    <!-- App UI Layer -->
     <div id="app-ui">
         <div class="sidebar">
-            <div style="padding: 0 40px 60px;"><img src="/assets/muze_logo.png" style="width: 50px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'"></div>
+            <div style="padding: 0 40px 60px;"><img src="../assets/pd_icon_512.png" style="width: 50px;"></div>
             <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
-            <div class="nav-item" onclick="showStage('mission', this)">Mission</div>
+            <div class="nav-item" onclick="showStage('mission', this)">TWMK Mission</div>
             <div class="nav-item" onclick="showStage('dapps', this)">Dapps</div>
             <div class="profile">
-                <img src="/assets/p-logo.png" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
+                <img src="../assets/pd_icon_512.png">
                 <div>
                     <div style="font-weight:900;">$prisca.pri</div>
                     <div style="font-size:0.6rem; color:#999; letter-spacing:1px; text-transform:uppercase; font-weight:900;">Active Node</div>
@@ -76,107 +133,57 @@
             </div>
         </div>
         
-        <!-- Vault Stage -->
         <div id="stage-vault" class="stage">
             <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Vault.</h1>
             <div class="balance-card">
-                <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Available Reserve</div>
+                <div style="font-weight:900; color:#AAA; letter-spacing:4px; text-transform:uppercase; font-size:0.7rem; margin-bottom:20px;">Independent Reserve</div>
                 <div id="balance" class="balance-big">$PRN 12,500</div>
-                <button class="btn-black" style="width:auto; padding: 20px 60px;">SEND ASSETS</button>
+                <button class="btn-unlock" style="width:auto; padding: 20px 60px;">SEND ASSETS</button>
             </div>
         </div>
 
-        <!-- Mission Stage -->
         <div id="stage-mission" class="stage hidden">
             <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Mission.</h1>
-            <div style="padding: 60px; border: 2px dashed #EEE; border-radius: 40px; text-align: center;">
-                <p style="color:var(--muted); font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">No active proposals</p>
-                <p style="color:var(--muted); font-size: 0.8rem; margin-top: 10px;">The Architect is currently vetting charitable projects.</p>
+            <div style="padding: 60px; border: 1px solid #EEE; border-radius: 40px; text-align: center;">
+                <p style="color:var(--muted); font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">The Way Made Known</p>
+                <p style="color:var(--muted); font-size: 0.8rem; margin-top: 10px;">10% of all gross sales from the network are routed here.</p>
             </div>
         </div>
 
-        <!-- Dapps Stage -->
         <div id="stage-dapps" class="stage hidden">
             <h1 style="font-size:3.5rem; font-weight:900; margin-bottom:60px;">Dapps.</h1>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
-                <div class="balance-card" style="padding:40px; cursor:pointer;" onclick="openBrowser('https://dreaminganime.com', 'dreaminganime.pri')">
-                    <div style="font-weight:900; font-size:1.1rem; margin-bottom:5px;">dreaminganime.pri</div>
-                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900; text-transform:uppercase; letter-spacing:1px;">Media Node</div>
-                </div>
-                <div class="balance-card" style="padding:40px; cursor:pointer;" onclick="openBrowser('https://priscion.com/ateliagaming/', 'atelia.pri')">
-                    <div style="font-weight:900; font-size:1.1rem; margin-bottom:5px;">atelia.pri</div>
-                    <div style="font-size:0.6rem; color:var(--accent); font-weight:900; text-transform:uppercase; letter-spacing:1px;">Gaming Node</div>
-                </div>
-            </div>
+            <p style="color:var(--muted);">Select a brand to view analytics and share affiliate links.</p>
         </div>
-    </div>
-
-    <!-- Browser Overlay -->
-    <div id="layer-browser" class="layer hidden">
-        <div class="browser-toolbar">
-            <div id="browser-handle" style="font-weight: 900; font-size: 0.8rem; color: var(--accent); letter-spacing: 1px; text-transform: uppercase;"></div>
-            <div style="display: flex; gap: 20px; align-items: center;">
-                <div id="btn-affiliate" style="padding: 10px 20px; border: 1px solid #000; font-weight: 900; font-size: 0.6rem; border-radius: 5px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">Generate Affiliate Link</div>
-                <div onclick="closeBrowser()" style="font-weight: 900; cursor: pointer; font-size: 1.5rem;">&times;</div>
-            </div>
-        </div>
-        <iframe id="browser-frame" style="width: 100%; flex: 1; border: none; background: #FFF;"></iframe>
     </div>
 
     <script>
-        // High-Fidelity Transition Control
+        // Smooth Splash transition
         setTimeout(() => {
             const splash = document.getElementById('layer-splash');
             const auth = document.getElementById('layer-auth');
-            if(splash && auth) {
-                splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.classList.add('hidden');
-                    auth.classList.remove('hidden');
-                    document.getElementById('pass-input').focus();
-                }, 500);
-            }
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.classList.add('hidden');
+                auth.classList.remove('hidden');
+            }, 500);
         }, 2500);
 
         function unlock() {
-            const val = document.getElementById('pass-input').value;
-            if(val.toLowerCase() === 'prisca' || val === 'password') {
-                document.getElementById('layer-auth').classList.add('hidden');
-                document.getElementById('app-ui').style.display = 'flex';
-            } else {
-                alert("Incorrect Sovereign Password.");
-            }
+            const auth = document.getElementById('layer-auth');
+            const app = document.getElementById('app-ui');
+            auth.style.opacity = '0';
+            setTimeout(() => {
+                auth.classList.add('hidden');
+                app.style.display = 'flex';
+            }, 500);
         }
 
-        function showStage(id, el) {
+        function showStage(stage, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            document.getElementById('stage-' + id).classList.remove('hidden');
+            document.getElementById('stage-' + stage).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
         }
-
-        function openBrowser(url, handle) {
-            document.getElementById('browser-frame').src = url;
-            document.getElementById('browser-handle').innerText = handle;
-            document.getElementById('layer-browser').classList.remove('hidden');
-        }
-
-        function closeBrowser() {
-            document.getElementById('layer-browser').classList.add('hidden');
-            document.getElementById('browser-frame').src = 'about:blank';
-        }
-
-        // Sovereign Split Logic
-        function processSovereignSplit(amount, affiliateWallet) {
-            const tithe = amount * 0.10;
-            const commission = amount * 0.10;
-            const businessProfit = amount * 0.80;
-            return { tithe, commission, businessProfit };
-        }
-
-        document.getElementById('pass-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') unlock();
-        });
     </script>
 </body>
 </html>
