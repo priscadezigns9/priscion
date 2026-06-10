@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MINT | Sovereign NFT Factory</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --text: #1A1A1A;
+            --muted: #666666;
+            --accent: #7B35D4;
+            --muze-blue: #5AC8FA;
+            --jlo: #FFD700;
+            --border: rgba(0,0,0,0.08);
+            --surface: #F9F9F9;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; }
+
+        nav {
+            height: 90px; padding: 0 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: #FFF; position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { height: 35px; cursor: pointer; }
+
+        .mint-container {
+            max-width: 1000px; margin: 80px auto; padding: 0 5%;
+            display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px;
+        }
+
+        .upload-stage {
+            border: 2px dashed var(--border); border-radius: 30px;
+            aspect-ratio: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; background: var(--surface);
+            cursor: pointer; overflow: hidden; position: relative;
+        }
+        .upload-stage:hover { border-color: var(--muze-blue); }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; display: none; }
+
+        .form-stage h1 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 30px; }
+        
+        .form-group { margin-bottom: 30px; }
+        label { display: block; font-weight: 900; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; color: var(--muted); }
+        input, select, textarea {
+            width: 100%; padding: 18px 25px; border-radius: 15px; border: 1px solid var(--border);
+            font-family: var(--font-body); font-size: 0.95rem; outline: none; background: #FFF;
+        }
+
+        .privacy-toggle {
+            display: flex; gap: 10px; margin-bottom: 40px;
+        }
+        .toggle-btn {
+            flex: 1; padding: 18px; border-radius: 15px; border: 1px solid var(--border);
+            text-align: center; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px;
+            cursor: pointer; text-transform: uppercase;
+        }
+        .toggle-btn.active[data-type="public"] { background: var(--text); color: #FFF; border-color: var(--text); }
+        .toggle-btn.active[data-type="private"] { background: var(--jlo); color: #000; border-color: var(--jlo); }
+
+        .mint-cost-card {
+            background: #FAFAFA; border: 1px solid var(--border); border-radius: 20px;
+            padding: 30px; margin-bottom: 40px;
+        }
+        .cost-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; }
+        .cost-total { border-top: 1px solid var(--border); padding-top: 15px; margin-top: 15px; font-weight: 900; font-size: 1.1rem; }
+
+        .btn-mint {
+            background: #000; color: #FFF; border: none; padding: 22px; border-radius: 100px;
+            font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; cursor: pointer; width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="../assets/priscion_logo.png" class="logo" onclick="location.href='index.html'" onerror="this.src='../assets/priscion_logo.png'">
+        <div style="display:flex; gap:30px; align-items:center;">
+            <a href="index.html" style="text-decoration:none; color:var(--text); font-weight:900; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">Store</a>
+            <div id="wallet-status" style="font-weight:900; font-size:0.75rem;">$prisca.pri</div>
+        </div>
+    </nav>
+
+    <div class="mint-container">
+        <div class="upload-stage" onclick="document.getElementById('file-input').click()">
+            <div id="upload-prompt" style="text-align:center;">
+                <div style="font-size:3rem; margin-bottom:10px;">📄</div>
+                <div style="font-weight:900; font-size:0.7rem; letter-spacing:2px;">UPLOAD ARTIFACT</div>
+                <div style="font-size:0.6rem; color:var(--muted); margin-top:5px;">PNG, JPG, PDF (MAX 50MB)</div>
+            </div>
+            <img id="preview" class="preview-img">
+            <input type="file" id="file-input" class="hidden" onchange="handlePreview(this)">
+        </div>
+
+        <div class="form-stage">
+            <h1>Mint Node.</h1>
+            
+            <div class="form-group">
+                <label>ARTIFACT NAME</label>
+                <input type="text" placeholder="e.g. Sovereign Certificate #001">
+            </div>
+
+            <div class="form-group">
+                <label>LEDGER TYPE</label>
+                <div class="privacy-toggle">
+                    <div class="toggle-btn active" data-type="public" onclick="setLedger('public', this)">Public ($PRN)</div>
+                    <div class="toggle-btn" data-type="private" onclick="setLedger('private', this)">Private ($JLO)</div>
+                </div>
+            </div>
+
+            <div class="mint-cost-card">
+                <div class="cost-row"><span>Ledger Fee</span><span id="fee-ledger">100 $PRN</span></div>
+                <div class="cost-row"><span>Storage (Arweave)</span><span id="fee-storage">25 $PRN</span></div>
+                <div id="jlo-row" class="cost-row hidden" style="color:var(--jlo); font-weight:900;"><span>Jello Privacy Layer</span><span>+50 $PRN</span></div>
+                <div class="cost-total"><span>Total Cost</span><span id="total-cost">125 $PRN</span></div>
+            </div>
+
+            <button class="btn-mint" onclick="executeMint()">MINT TO VAULT</button>
+        </div>
+    </div>
+
+    <script>
+        let ledgerType = 'public';
+
+        function handlePreview(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('upload-prompt').style.display = 'none';
+                    const preview = document.getElementById('preview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function setLedger(type, el) {
+            ledgerType = type;
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            el.classList.add('active');
+            
+            const jloRow = document.getElementById('jlo-row');
+            const total = document.getElementById('total-cost');
+            
+            if(type === 'private') {
+                jloRow.classList.remove('hidden');
+                total.innerText = '175 $PRN';
+            } else {
+                jloRow.classList.add('hidden');
+                total.innerText = '125 $PRN';
+            }
+        }
+
+        function executeMint() {
+            let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
+            if(!walletState) return alert("Please connect your MUZE Wallet first.");
+            
+            const cost = ledgerType === 'private' ? 175 : 125;
+            const balance = parseFloat(walletState.balance.replace(/,/g, ''));
+            
+            if(balance < cost) return alert("Insufficient $PRN Reserve.");
+            
+            // Deduct and Save
+            const newBalance = (balance - cost).toLocaleString();
+            walletState.balance = newBalance;
+            
+            // Add NFT to Assets
+            const newNFT = {
+                icon: ledgerType === 'private' ? '🔒' : '🖼️',
+                label: 'Artifact #' + (walletState.assets.length + 1),
+                sub: ledgerType === 'private' ? '$JLO PRIVATE' : '$PRN PUBLIC'
+            };
+            walletState.assets.push(newNFT);
+            
+            localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+            alert("Artifact Minted Successfully! Check your MUZE Vault.");
+            location.href = '../muzewallet/';
+        }
+    </script>
+</body>
+</html>
