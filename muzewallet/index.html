@@ -110,16 +110,32 @@
         
         .search-handle-row { background: #F9F9F9; border-radius: 15px; padding: 10px 15px; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
         .search-input { border: none; background: none; outline: none; font-size: 0.7rem; font-weight: 900; flex: 1; text-transform: lowercase; }
+
+        /* Digital Card Style */
+        .digital-card {
+            width: 100%; max-width: 400px; height: 250px; border-radius: 24px;
+            background: linear-gradient(135deg, #0A0A0A 0%, #222 100%);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); padding: 30px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            color: #FFF; position: relative; overflow: hidden; margin-bottom: 40px;
+        }
+        .card-chip { width: 40px; height: 32px; background: #E5A93B; border-radius: 6px; }
+        .card-number { font-size: 1.4rem; font-weight: 900; letter-spacing: 3px; word-spacing: 5px; font-family: monospace; }
+        .card-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+        .card-holder { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; font-weight: 600; }
+
+        /* Modal Style */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; }
     </style>
 </head>
 <body>
 
     <!-- Layers -->
-    <div id="layer-splash" class="layer"><img src="../assets/muse_icon.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'"></div>
+    <div id="layer-splash" class="layer"><img src="../assets/muse_logo.png" class="splash-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'"></div>
     <div id="layer-onboarding" class="layer hidden">
         <div class="card-ui">
-            <img src="../assets/muse_icon.png" style="width:60px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
-            <h2>Sovereign Start</h2>
+            <img src="../assets/muse_logo.png" style="width:60px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
+            <h2>Muze Wallet by Priscion</h2>
             <button class="btn-full" onclick="startFlow('create')">CREATE NEW VAULT</button>
             <button class="btn-outline" onclick="startFlow('recover')">RECOVER WITH SEED</button>
             <button class="btn-outline" onclick="startFlow('ledger')">CONNECT TO LEDGER</button>
@@ -128,7 +144,7 @@
     <div id="layer-flow" class="layer hidden"><div id="flow-content" class="card-ui"></div></div>
     <div id="layer-auth" class="layer hidden">
         <div class="card-ui">
-            <img src="../assets/muse_icon.png" style="width:50px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'">
+            <img src="../assets/muse_logo.png" style="width:50px; margin-bottom:20px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
             <h2>Vault Locked</h2>
             <input type="password" id="pass-input" placeholder="Password">
             <button class="btn-full" onclick="unlock()">UNLOCK VAULT</button>
@@ -138,8 +154,9 @@
     <!-- App UI -->
     <div id="app-ui">
         <div class="sidebar">
-            <div style="padding: 0 30px 40px;"><img src="../assets/muse_icon.png" style="width: 40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_icon.png'"></div>
+            <div style="padding: 0 30px 40px;"><img src="../assets/muse_logo.png" style="width: 40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'"></div>
             <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
+            <div class="nav-item" onclick="showStage('card', this)">Card</div>
             <div class="nav-item" onclick="showStage('swap', this)">Swap</div>
             <div class="nav-item" onclick="showStage('staking', this)">Stake</div>
             <div class="nav-item" onclick="showStage('messenger', this)">Lynx</div>
@@ -150,15 +167,45 @@
             </div>
         </div>
         
+        <!-- STAGE: VAULT -->
         <div id="stage-vault" class="stage">
             <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:30px;">Vault.</h1>
             <div class="balance-card">
                 <div style="font-weight:900; color:#AAA; letter-spacing:2px; text-transform:uppercase; font-size:0.6rem; margin-bottom:10px;">Reserve</div>
                 <div id="balance" class="balance-big">$PRN 12,500</div>
-                <div style="display:flex; gap:10px;"><button class="btn-full" style="width:auto; padding: 15px 30px; background:#000; font-size:0.6rem;">SEND</button><button class="btn-outline" style="width:auto; padding: 15px 30px; margin:0; font-size:0.6rem;">RECEIVE</button></div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-full" style="width:auto; padding: 15px 30px; background:#000; font-size:0.6rem;" onclick="showBuyModal()">BUY $PRN</button>
+                    <button class="btn-outline" style="width:auto; padding: 15px 30px; margin:0; font-size:0.6rem;">SEND</button>
+                </div>
             </div>
             <div style="font-weight:900; letter-spacing:2px; font-size:0.7rem; margin-bottom:20px; color:#999;">ASSETS</div>
             <div id="asset-grid" class="grid-container"></div>
+        </div>
+
+        <!-- STAGE: CARD -->
+        <div id="stage-card" class="stage hidden">
+            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:30px;">Sovereign Card.</h1>
+            <div style="display:flex; flex-wrap:wrap; gap:40px;">
+                <div class="digital-card">
+                    <img src="../assets/priscion_card.png" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0;" onerror="this.style.display='none'">
+                    <div style="z-index:1; display:flex; flex-direction:column; justify-content:space-between; height:100%; width:100%;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div class="card-chip"></div>
+                            <img src="../assets/muse_logo.png" style="width:30px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muse_logo.png'">
+                        </div>
+                        <div class="card-number">•••• •••• •••• 8830</div>
+                        <div class="card-footer">
+                            <div class="card-holder">$prisca.pri</div>
+                            <div style="font-size:0.8rem; font-weight:900;">12/28</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex:1; min-width:300px;">
+                    <div style="font-weight:900; font-size:1.1rem; margin-bottom:15px;">Spend limits and controls</div>
+                    <p style="color:#666; font-size:0.85rem; line-height:1.6; margin-bottom:30px;">Directly linked to your **$PRN** reserve. Convert instantly on-swipe with zero exchange fees.</p>
+                    <button class="btn-full" style="width:auto; padding:15px 40px; background:#000;">MANAGE LIMITS</button>
+                </div>
+            </div>
         </div>
 
         <div id="stage-swap" class="stage hidden">
@@ -220,6 +267,18 @@
         </div>
     </div>
 
+    <!-- MODAL: BUY $PRN -->
+    <div id="modal-buy" class="modal hidden">
+        <div class="card-ui" style="background:#FFF; padding:40px; border-radius:30px;">
+            <h2 style="margin-bottom:20px;">Buy $PRN</h2>
+            <p>Convert your fiat instantly using our approved payment methods.</p>
+            <input type="number" id="buy-amount" placeholder="Amount (USD)" style="margin-bottom:20px;">
+            <button class="btn-full" style="background:#0070ba;" onclick="executeBuy('paypal')">🅿️ PAY WITH PAYPAY</button>
+            <button class="btn-full" style="background:#000;" onclick="executeBuy('card')">💳 CREDIT CARD / PAYONEER</button>
+            <button class="btn-outline" onclick="hideBuyModal()" style="margin-top:10px;">CANCEL</button>
+        </div>
+    </div>
+
     <script>
         const layers = { splash: 'layer-splash', onboarding: 'layer-onboarding', flow: 'layer-flow', auth: 'layer-auth', app: 'app-ui' };
         let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
@@ -237,8 +296,9 @@
         function startFlow(type) {
             document.getElementById(layers.onboarding).classList.add('hidden');
             document.getElementById(layers.flow).classList.remove('hidden');
+            const flow = document.getElementById('flow-content');
             if(type === 'create') {
-                document.getElementById('flow-content').innerHTML = `<h2>Create Vault</h2><p>Secure your node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
+                flow.innerHTML = `<h2>Create Vault</h2><p>Secure your node.</p><input type="password" id="new-pass" placeholder="Password"><button class="btn-full" onclick="finalizeSetup('create')">GENERATE</button>`;
             } else if(type === 'recover') {
                 renderRecoveryFlow(24);
             } else if(type === 'ledger') {
@@ -311,7 +371,7 @@
                 saveChats();
             }
             activeChat = handle;
-            showStage('messenger', document.querySelector('.nav-item:nth-child(4)'));
+            showStage('messenger', document.querySelector('.nav-item:nth-child(5)'));
             renderChatList();
             renderActiveChat();
         }
@@ -360,6 +420,15 @@
                 if(h) openChat(h);
                 document.getElementById('search-handle').value = '';
             }
+        }
+
+        function showBuyModal() { document.getElementById('modal-buy').classList.remove('hidden'); }
+        function hideBuyModal() { document.getElementById('modal-buy').classList.add('hidden'); }
+        function executeBuy(method) {
+            const amt = document.getElementById('buy-amount').value;
+            if(!amt || amt <= 0) return alert("Please enter a valid amount.");
+            alert(`Redirecting to Secure ${method.toUpperCase()} Portal to purchase $PRN...`);
+            hideBuyModal();
         }
     </script>
 </body>
