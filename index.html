@@ -13,14 +13,16 @@
             --text: #1A1A1A;
             --muted: #666666;
             --accent: #7B35D4;
-            --muze-blue: #5AC8FA; /* The Blue/Lilac shade you described */
+            --muze-blue: #5AC8FA;
             --border: rgba(0,0,0,0.08);
             --surface: #F9F9F9;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        /* RESET ALL ANIMATIONS AND TRANSITIONS FOR STABILITY */
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
+        
         body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
         nav {
@@ -34,23 +36,20 @@
         .nav-links { display: flex; gap: 40px; align-items: center; }
         .nav-links a { 
             text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.75rem; 
-            letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; 
+            letter-spacing: 2px; text-transform: uppercase; 
         }
-        .nav-links a:hover { color: var(--accent); }
 
         .btn-muze-nav {
             background: var(--muze-blue); color: #fff; padding: 14px 28px; border-radius: 100px;
             font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
-            cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block;
-            box-shadow: 0 4px 15px rgba(90, 200, 250, 0.3);
+            cursor: pointer; text-decoration: none; display: inline-block;
         }
-        .btn-muze-nav:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(90, 200, 250, 0.5); }
 
         .hero {
             padding: 120px 8% 100px; text-align: center;
             display: flex; flex-direction: column; align-items: center;
         }
-        .p-logo-hero { width: 60px; margin-bottom: 40px; cursor: pointer; transition: 0.5s; }
+        .p-logo-hero { width: 60px; margin-bottom: 40px; cursor: pointer; }
         
         .kicker { font-weight: 900; font-size: 0.7rem; letter-spacing: 5px; color: var(--muted); text-transform: uppercase; margin-bottom: 20px; }
         h1 { font-family: var(--font-heading); font-size: 5rem; line-height: 1.1; margin-bottom: 30px; letter-spacing: -2px; }
@@ -62,10 +61,10 @@
         }
         .dapp-card {
             background: var(--surface); border: 1px solid var(--border); padding: 50px 40px;
-            border-radius: 24px; text-decoration: none; color: inherit; transition: 0.3s;
+            border-radius: 24px; text-decoration: none; color: inherit;
             position: relative; overflow: hidden;
         }
-        .dapp-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        /* REMOVED HOVER TRANSFORMS TO STOP JUMPING */
         .status-badge {
             position: absolute; top: 30px; right: 30px; font-weight: 900; font-size: 0.6rem;
             letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
@@ -81,9 +80,7 @@
         .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
         .service-card {
             background: #080808; border: 1px solid #111; padding: 60px; border-radius: 40px;
-            transition: 0.3s;
         }
-        .service-card:hover { border-color: var(--accent); }
         .service-card h3 { font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
         .service-card .price { font-size: 2.5rem; font-weight: 300; margin-bottom: 20px; color: var(--accent); }
         .service-card p { color: #888; margin-bottom: 30px; font-size: 1rem; }
@@ -93,10 +90,9 @@
 
         .btn-acquire {
             width: 100%; padding: 20px; background: #fff; color: #000; border: none;
-            border-radius: 100px; font-weight: 900; cursor: pointer; transition: 0.3s;
+            border-radius: 100px; font-weight: 900; cursor: pointer;
             text-decoration: none; display: block; text-align: center;
         }
-        .btn-acquire:hover { background: var(--accent); color: #fff; }
 
         footer { padding: 80px 8%; text-align: center; border-top: 1px solid var(--border); }
         .copyright { font-weight: 900; font-size: 0.6rem; letter-spacing: 3px; color: #CCC; text-transform: uppercase; }
@@ -121,7 +117,7 @@
     </nav>
 
     <section class="hero">
-        <img src="assets/p-logo.png" class="p-logo-hero" onclick="location.href='/'">
+        <img src="assets/pd_icon_512.png" class="p-logo-hero" onclick="location.href='/'">
         <div class="kicker">The Independent Ledger</div>
         <h1>Architecting<br>Reality.</h1>
         <p>Global brand design and high quality digital systems. We build the automatic tools that power the 2026 digital age.</p>
@@ -130,25 +126,25 @@
     <div class="dapp-grid">
         <a href="pulse/" class="dapp-card">
             <span class="status-badge">Live</span>
-            <img src="assets/pulse_logo.png" class="dapp-logo" onerror="this.src='/assets/pd_icon_512.png'">
+            <img src="assets/pd_icon_512.png" class="dapp-logo">
             <h3>PULSE</h3>
             <p>The official block explorer. Monitor transactions and ledger health in real-time.</p>
         </a>
         <a href="muzewallet/" class="dapp-card">
             <span class="status-badge">Beta</span>
-            <img src="assets/muze_logo.png" class="dapp-logo" onerror="this.src='/assets/pd_icon_512.png'">
+            <img src="assets/pd_icon_512.png" class="dapp-logo">
             <h3>MUZE</h3>
             <p>High quality independent wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
         </a>
         <a href="chillata/" class="dapp-card">
             <span class="status-badge">Live</span>
-            <img src="assets/chillata_logo.png" class="dapp-logo" onerror="this.src='/assets/pd_icon_512.png'">
+            <img src="assets/pd_icon_512.png" class="dapp-logo">
             <h3>CHILLATA</h3>
             <p>Independent Swap and liquidity engine. Private asset exchange and liquidity systems.</p>
         </a>
         <a href="mynt/" class="dapp-card">
             <span class="status-badge">Dev</span>
-            <img src="assets/mynt_logo.png" class="dapp-logo" onerror="this.src='/assets/pd_icon_512.png'">
+            <img src="assets/pd_icon_512.png" class="dapp-logo">
             <h3>MYNT</h3>
             <p>The NFT Factory. Minting private digital networks and high quality story artifacts.</p>
         </a>
