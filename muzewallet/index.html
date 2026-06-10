@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Sovereign Wallet v24.7.0</title>
+    <title>MUZE | Sovereign Wallet v24.7.2</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <style>
@@ -181,7 +181,7 @@
 
         <div id="stage-swap" class="stage hidden">
             <div style="display:flex; align-items:center; gap:15px; margin-bottom:40px;">
-                <img src="../assets/chillata_logo.png" style="height:40px;" onerror="this.src='../assets/chillata_logo.png'"><h1 style="font-size:2.5rem; font-weight:900; margin:0;">Chillata.</h1>
+                <img src="../assets/chillata_logo.png" style="height:40px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png'"><h1 style="font-size:2.5rem; font-weight:900; margin:0;">Chillata.</h1>
             </div>
             <div class="balance-card">
                 <div style="background:#F9F9F9; padding:20px; border-radius:15px; border:1px solid #EEE; margin-bottom:10px;">
@@ -249,8 +249,14 @@
 
     <script>
         const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const SB_KEY = '{{credential:supabase-anon-key}}'; 
-        const supabase = window.supabase ? window.supabase.createClient(SB_URL, SB_KEY) : null;
+        const SB_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR'; // Fixed publishable key for public client sync
+        
+        let supabase = null;
+        try {
+            if(window.supabase && SB_KEY) {
+                supabase = window.supabase.createClient(SB_URL, SB_KEY);
+            }
+        } catch(e) { console.error("Sovereign sync offline", e); }
 
         const layers = { splash: 'layer-splash', onboarding: 'layer-onboarding', flow: 'layer-flow', auth: 'layer-auth', app: 'app-ui' };
         let walletState = JSON.parse(localStorage.getItem('muze_vault_v1'));
@@ -311,8 +317,10 @@
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
             
             if(supabase) {
-                const spk = btoa(seed).substring(0, 16);
-                await supabase.from('ledger_state').upsert({ spk, handle, balance, assets, history });
+                try {
+                    const spk = btoa(seed).substring(0, 16);
+                    await supabase.from('ledger_state').upsert({ spk, handle, balance, assets, history });
+                } catch(e) { console.error("Database sync failed, operating in offline ledger mode."); }
             }
             location.reload();
         }
@@ -323,12 +331,14 @@
             const spk = btoa(seed).substring(0, 16);
             
             if(supabase) {
-                const { data } = await supabase.from('ledger_state').select('*').eq('spk', spk).single();
-                if(data) {
-                    walletState = { handle: data.handle, password: 'restored', balance: data.balance, assets: data.assets, history: data.history, seed };
-                    localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
-                    location.reload(); return;
-                }
+                try {
+                    const { data } = await supabase.from('ledger_state').select('*').eq('spk', spk).single();
+                    if(data) {
+                        walletState = { handle: data.handle, password: 'restored', balance: data.balance, assets: data.assets, history: data.history, seed };
+                        localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+                        location.reload(); return;
+                    }
+                } catch(e) { console.error("Sovereign sync offline."); }
             }
             document.getElementById('loading-overlay').classList.add('hidden');
             alert("Sovereign Identity not found on-ledger.");
