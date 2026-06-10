@@ -218,20 +218,51 @@
                 <h1 style="font-size:2.5rem; font-weight:900; margin:0;">Chillata.</h1>
             </div>
             <div class="balance-card">
-                <div style="background:#F9F9F9; padding:20px; border-radius:15px; border:1px solid #EEE; margin-bottom:15px;">
-                    <div style="font-size:0.5rem; font-weight:900; color:#888;">FROM</div>
+                <div style="background:#F9F9F9; padding:20px; border-radius:15px; border:1px solid #EEE; margin-bottom:10px;">
+                    <div style="font-size:0.5rem; font-weight:900; color:#888;">SELL</div>
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
-                        <input type="number" value="100" style="background:none; border:none; font-size:1.5rem; font-weight:900; width:60%; outline:none; text-align:left; margin:0;">
-                        <div style="background:#FFF; padding:8px 15px; border-radius:100px; font-weight:900; font-size:0.7rem; border:1px solid #EEE;">$PRN</div>
+                        <input type="number" id="swap-from-amt" value="100" style="background:none; border:none; font-size:1.5rem; font-weight:900; width:60%; outline:none; text-align:left; margin:0;">
+                        <select id="swap-from-asset" style="background:#FFF; padding:8px 15px; border-radius:100px; font-weight:900; font-size:0.7rem; border:1px solid #EEE; outline:none; appearance:none;">
+                            <option value="PRN">$PRN</option>
+                            <option value="NRL">$NRL</option>
+                        </select>
                     </div>
                 </div>
-                <button class="btn-full" style="background:var(--chillata);">EXECUTE CHILLATA SWAP</button>
+                <div style="text-align:center; margin-bottom:10px; font-size:1rem;">↓</div>
+                <div style="background:#F9F9F9; padding:20px; border-radius:15px; border:1px solid #EEE; margin-bottom:20px;">
+                    <div style="font-size:0.5rem; font-weight:900; color:#888;">BUY</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+                        <input type="number" id="swap-to-amt" value="450" style="background:none; border:none; font-size:1.5rem; font-weight:900; width:60%; outline:none; text-align:left; margin:0;" readonly>
+                        <select id="swap-to-asset" style="background:#FFF; padding:8px 15px; border-radius:100px; font-weight:900; font-size:0.7rem; border:1px solid #EEE; outline:none; appearance:none;">
+                            <option value="NRL">$NRL</option>
+                            <option value="JLO">$JLO</option>
+                            <option value="MUSD">$MUSD</option>
+                            <option value="ATLR">$ATLR</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.6rem; font-weight:900; color:#AAA; margin-bottom:20px; padding:0 10px;">
+                    <span>SWAP FEE: 0.3%</span>
+                    <span>SLIPPAGE: 0.1%</span>
+                </div>
+                <button class="btn-full" style="background:var(--chillata);" onclick="executeSwap()">EXECUTE CHILLATA SWAP</button>
             </div>
         </div>
 
         <div id="stage-staking" class="stage hidden">
-            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Staking.</h1>
-            <div class="balance-card"><div style="color:var(--accent); font-size:3rem; font-weight:900;">12.5% <span style="font-size:1rem; color:#AAA;">APY</span></div><button class="btn-full" style="background:var(--accent); margin-top:20px;">STAKE $PRN</button></div>
+            <h1 style="font-size:2.5rem; font-weight:900; margin-bottom:40px;">Yield & Staking.</h1>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:30px;">
+                <div class="balance-card">
+                    <div style="font-weight:900; font-size:0.6rem; color:#AAA; text-transform:uppercase; margin-bottom:10px;">Sovereign Staking</div>
+                    <div style="color:var(--accent); font-size:3rem; font-weight:900;">12.5% <span style="font-size:1rem; color:#AAA;">APY</span></div>
+                    <button class="btn-full" style="background:var(--accent); margin-top:20px;">STAKE $PRN</button>
+                </div>
+                <div class="balance-card">
+                    <div style="font-weight:900; font-size:0.6rem; color:#AAA; text-transform:uppercase; margin-bottom:10px;">Liquidity Provision</div>
+                    <div style="color:var(--muze-blue); font-size:3rem; font-weight:900;">0.2% <span style="font-size:1rem; color:#AAA;">FEES</span></div>
+                    <button class="btn-full" style="background:var(--muze-blue); margin-top:20px;">PROVIDE LIQUIDITY</button>
+                </div>
+            </div>
         </div>
 
         <div id="stage-messenger" class="stage hidden">
@@ -487,6 +518,13 @@
             if(!amt || amt <= 0) return alert("Please enter a valid amount.");
             alert(`Redirecting to Secure ${method.toUpperCase()} Portal to purchase $PRN...`);
             hideBuyModal();
+        }
+
+        function executeSwap() {
+            const from = document.getElementById('swap-from-asset').value;
+            const to = document.getElementById('swap-to-asset').value;
+            const amt = document.getElementById('swap-from-amt').value;
+            alert(`Initiating Sovereign Swap: ${amt} ${from} → ${to}\nFee: 0.3% ($PRN)`);
         }
     </script>
 </body>
