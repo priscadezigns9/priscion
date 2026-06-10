@@ -8,9 +8,15 @@ Our "Share-to-Earn" engine turns the Priscion community into a global marketing 
 
 ## 1. Core Infrastructure
 
-### MUSE Wallet
+### MUZE Wallet
 
-The MUZE Wallet is the non-custodial gateway to the Priscion ecosystem. It manages high-fidelity identities through **.pri handles** and secures assets in the "Sovereign Enclave."
+The MUZE Wallet is the non-custodial gateway to the Priscion ecosystem. It enforces a strict **Linear Mustard Seed Sequence** for onboarding:
+1. **Password Creation:** Secure the vault locally.
+2. **Seed Generation:** 12 or 24-word recovery phrase.
+3. **Seed Verification:** Random word check to ensure backup.
+4. **Handle Claim:** Claim a unique .pri identity.
+
+Identity is managed through **.pri handles** and assets are secured in the "Sovereign Enclave."
 
 ### NFT-Anchored Spending
 
@@ -18,7 +24,12 @@ The Sovereign Digital Card is a high-fidelity utility NFT. Once purchased in the
 
 ### PULSE Explorer
 
-PULSE is the high-fidelity heartbeat of the network, providing transparent, real-time monitoring of all block production, transaction validation, and ledger health metrics.
+PULSE is the high-fidelity heartbeat of the network, providing transparent, real-time monitoring of all block production, transaction validation, and ledger health metrics. 
+
+**Identity-First Discovery:** PULSE prioritizes **Handle-based Exploration**. Users can search the ledger using a Sovereign Handle (e.g., `$prisca.pri`) to immediately view:
+- **Identity Status:** Current verification level and handle ownership.
+- **Sovereign Balance:** Real-time $PRN and native asset holdings.
+- **Transaction History:** A complete, high-fidelity log of all interactions anchored to that identity.
 
 ### CHILLATA Swap
 
