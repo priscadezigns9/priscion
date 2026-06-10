@@ -205,8 +205,22 @@
             document.querySelectorAll('.layer').forEach(l => l.classList.add('hidden'));
             document.getElementById(layers.flow).classList.remove('hidden');
             const flow = document.getElementById('flow-content');
-            tempSeed = generateSeed();
             
+            if (type === 'recover') {
+                flow.innerHTML = `
+                    <h2>Recover Vault</h2>
+                    <p>Enter your 12 or 24-word Sovereign Seed phrase to restore your identity.</p>
+                    <textarea id="recover-seed-input" placeholder="Enter your words here, separated by spaces..." 
+                        style="width:100%; height:120px; padding:15px; border-radius:15px; border:1px solid var(--border); margin-bottom:20px; font-family:monospace; font-size:0.8rem;"></textarea>
+                    <input type="password" id="new-pass" placeholder="Create New Vault Password">
+                    <input type="text" id="seed-handle" placeholder="Confirm your $handle.pri">
+                    <button class="btn-full" onclick="handleRecovery()">RESTORE VAULT</button>
+                    <button class="btn-outline" onclick="location.reload()">CANCEL</button>
+                `;
+                return;
+            }
+
+            tempSeed = generateSeed();
             flow.innerHTML = `
                 <h2>${tempSeed.length}-Word Seed</h2>
                 <p>Your Sovereign Seed. <b>Write it down now.</b> You will be asked to verify it on the next step.</p>
@@ -215,6 +229,45 @@
                 </div>
                 <button class="btn-full" onclick="showVerifyStep('${type}')">I HAVE WRITTEN IT DOWN</button>
             `;
+        }
+
+        async function handleRecovery() {
+            const seed = document.getElementById('recover-seed-input').value.trim();
+            const pass = document.getElementById('new-pass').value;
+            const handle = document.getElementById('seed-handle').value.trim();
+            
+            if(!seed || !pass || !handle) { alert("All fields required for recovery."); return; }
+            
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            
+            // Attempt to restore from Ledger
+            try {
+                const { data, error } = await sb.from('ledger_state')
+                    .select('ledger_data')
+                    .eq('handle', handle)
+                    .single();
+                
+                if(data) {
+                    walletState = data.ledger_data;
+                    walletState.password = pass; // Update password
+                } else {
+                    // Manual reconstruction if not in ledger yet
+                    walletState = { 
+                        handle, 
+                        password: pass, 
+                        seed: seed,
+                        balance: '1,250.00', 
+                        assets: [{icon:'💳', label:'Sovereign Card', sub:'NFT UTILITY'}] 
+                    };
+                }
+                
+                localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
+                alert("Vault Restored Successfully.");
+                location.reload();
+            } catch(e) {
+                alert("Recovery failed. Check handle and seed.");
+                document.getElementById('loading-overlay').classList.add('hidden');
+            }
         }
 
         function showVerifyStep(type) {
@@ -272,24 +325,13 @@
 
             // Sovereign Ledger Sync
             try {
-                // We sync to 'ledger_state' to match PULSE explorer's query target
-                const { error } = await sb.from('ledger_state').upsert({
+                const { error } = await sb.from('sovereign_ledger').upsert({
                     handle: handle,
-                    balance: '1,250.00',
                     ledger_data: walletState,
                     updated_at: new Date()
-                }, { onConflict: 'handle' });
-                
-                if(error) {
-                    console.error("Ledger Sync Failed:", error);
-                    // Fallback attempt if table name differs
-                    await sb.from('sovereign_ledger').upsert({
-                        handle: handle,
-                        ledger_data: walletState,
-                        updated_at: new Date()
-                    });
-                }
-            } catch(e) { console.error("Critical Ledger Sync Error:", e); }
+                });
+                if(error) console.error("Ledger Sync Failed:", error);
+            } catch(e) { console.error(e); }
 
             localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
             alert("Vault Activated & Anchored to Sovereign Ledger.");
@@ -300,26 +342,17 @@
             if(document.getElementById('pass-input').value === walletState.password) {
                 document.getElementById('loading-overlay').classList.remove('hidden');
                 
-                // Pull latest from Ledger (checking both possible table names for resilience)
+                // Pull latest from Ledger
                 try {
-                    let { data, error } = await sb.from('ledger_state')
+                    const { data, error } = await sb.from('sovereign_ledger')
                         .select('ledger_data')
                         .eq('handle', walletState.handle)
                         .single();
-                    
-                    if(!data) {
-                        const res = await sb.from('sovereign_ledger')
-                            .select('ledger_data')
-                            .eq('handle', walletState.handle)
-                            .single();
-                        data = res.data;
-                    }
-
-                    if(data && data.ledger_data) {
+                    if(data) {
                         walletState = data.ledger_data;
                         localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
                     }
-                } catch(e) { console.error("Ledger Handshake Error:", e); }
+                } catch(e) {}
 
                 document.getElementById('loading-overlay').classList.add('hidden');
                 document.getElementById(layers.auth).classList.add('hidden');
