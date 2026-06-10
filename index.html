@@ -14,28 +14,26 @@
 
     <!-- OG Tags -->
     <meta property="og:title" content="Priscion | Sovereign AI Architecture" />
-    <meta property="og:description" content="Dominate your niche with 20 elite-tier AI prompts designed for brand dominance and digital excellence." />
-    <meta property="og:image" content="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/priscion_logo.png" />
+    <meta property="og:description" content="Dominate your niche with elite-tier AI systems designed for brand dominance and sovereign excellence." />
+    <meta property="og:image" content="https://share.zapia.com/m0ta6s0yqlqkuv1214muow" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://priscadezigns.org/" />
+    <meta property="og:url" content="https://priscion.com/" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #FDF8F2;
-            --text: #1A1A1A;
-            --muted: #666666;
+            --bg: #fff;
+            --text: #000;
+            --muted: #666;
             --accent: #7B35D4;
-            --primary: #7B35D4;
-            --primary-light: #B06AFF;
-            --primary-dim: rgba(123, 53, 212, 0.1);
-            --border: rgba(0,0,0,0.1);
+            --muze-blue: #007AFF;
+            --border: #EEE;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
-            --card-bg: rgba(255,255,255,0.4);
+            --card-bg: #FFF;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; }
         html { scroll-behavior: smooth; }
         body {
             font-family: var(--font-body);
@@ -45,618 +43,191 @@
         }
 
         header {
-            padding: 20px 6%;
+            padding: 30px 6%;
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
-            background: var(--bg);
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
         }
 
         .logo {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            font-weight: 700;
+            display: flex;
+            align-items: center;
             text-decoration: none;
             color: inherit;
         }
-
-        .logo span { color: var(--accent); }
+        
+        .logo img { height: 40px; width: auto; }
 
         nav { display: flex; align-items: center; }
         nav a {
-            margin-left: 24px;
+            margin-left: 30px;
             text-decoration: none;
             color: inherit;
-            font-size: 0.85rem;
-            font-weight: 600;
-            opacity: 0.7;
-            transition: opacity 0.2s;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.6;
         }
 
         nav a:hover { opacity: 1; color: var(--accent); }
 
-        .section { padding: 100px 6%; }
+        .section { padding: 120px 6%; }
         .container { max-width: 1200px; margin: 0 auto; }
 
         .hero {
-            padding: 140px 6% 100px;
+            padding: 180px 6% 120px;
             text-align: center;
         }
 
         .hero h1 {
             font-family: var(--font-heading);
-            font-size: clamp(3rem, 8vw, 6rem);
-            margin-bottom: 24px;
-            line-height: 0.9;
-            letter-spacing: -2px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            font-size: clamp(3rem, 10vw, 7rem);
+            margin-bottom: 30px;
+            line-height: 0.85;
+            letter-spacing: -3px;
         }
 
-        .hero h1 span {
-            color: var(--accent);
+        .hero h1 span { color: var(--accent); }
+
+        .cta-btn {
+            background: #000;
+            color: #fff;
+            padding: 24px 50px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             display: inline-block;
-            animation: float 6s ease-in-out infinite;
+            margin: 20px 10px;
+        }
+        
+        .cta-outline {
+            background: none;
+            border: 1px solid var(--border);
+            color: #000;
         }
 
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .scan-box {
-            background: #1A1A1A;
-            color: white;
-            padding: 40px;
-            border-radius: 24px;
-            max-width: 600px;
-            margin: 40px auto;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            opacity: 0;
-            transform: scale(0.95);
-            animation: fadeInUpScale 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards;
-        }
-
-        @keyframes fadeInUpScale {
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Grid */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            align-items: stretch;
         }
 
         .card {
-            padding: 32px;
+            padding: 40px;
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 24px;
-            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border-radius: 30px;
             text-decoration: none;
             color: inherit;
-            position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
         }
 
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .card:hover::after {
-            left: 100%;
-        }
-
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
-        .reveal-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Fallback for no-js or observer failure */
-        .no-js .reveal-on-scroll,
-        .reveal-on-scroll.fallback {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .card:hover {
-            background: white;
-            border-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
-        }
-
-        .card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 15px; }
-        .card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 20px; }
-        .card .price { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 20px; display: block; }
-        .card ul { list-style: none; margin-bottom: 30px; }
-        .card ul li { margin-bottom: 10px; font-size: 0.9rem; opacity: 0.8; }
-        .card ul li::before { content: "✦ "; color: var(--accent); }
-
-        /* Payment Section */
-        .payment-methods { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin-top: 40px; }
-        .payment-card { 
-            text-align: center; 
-            padding: 30px; 
-            border: 1px solid var(--border); 
-            border-radius: 20px; 
-            min-width: 200px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .payment-card:hover { border-color: var(--accent); transform: scale(1.02); }
-        .payment-card h3 { margin-bottom: 5px; font-family: var(--font-heading); }
-        .payment-card p { color: var(--muted); font-size: 0.9rem; }
-
-        /* Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-        }
-        .modal-overlay.open { display: flex; }
-        .modal {
-            background: white;
-            padding: 40px;
-            border-radius: 24px;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-        }
-        .modal-close {
-            position: absolute;
-            top: 20px; right: 20px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: #999;
-        }
-        .modal-tabs {
-            display: flex;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 25px;
-        }
-        .modal-tab {
-            padding: 10px 20px;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #666;
-            background: none;
-            border: none;
-            outline: none;
-        }
-        .modal-tab.active {
-            color: var(--accent);
-            border-bottom-color: var(--accent);
-        }
-        .pay-detail { display: none; }
-        .pay-detail.open { display: block; }
+        .card:hover { border-color: var(--accent); }
+        .card h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
+        .card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 30px; }
         
-        .modal-copy-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            margin-left: 10px;
+        .badge {
+            background: var(--muze-blue);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 100px;
+            font-size: 0.6rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+            width: fit-content;
         }
 
-        /* Footer */
         footer {
-            padding: 80px 6%;
+            padding: 100px 6%;
             border-top: 1px solid var(--border);
             text-align: center;
         }
 
         .copyright {
             color: var(--muted);
-            font-size: 0.8rem;
-            letter-spacing: 1px;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
             text-transform: uppercase;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            header { padding: 20px 4%; }
-            nav { display: none; }
-            .hero { padding: 100px 4% 60px; }
+            margin-top: 40px;
         }
     </style>
-
 </head>
 <body>
 
     <header>
         <a href="/" class="logo">
-            <img src="/logos/PRISCION_nav_logo_2026.png" onerror="this.src='/logos/PRISCION_nav_logo_2026.png'" alt="Priscion" style="height: 85px; width: auto;">
+            <img src="https://share.zapia.com/m0ta6s0yqlqkuv1214muow" alt="Priscion">
         </a>
-        <div class="nav-social" style="display: inline-flex; gap: 12px; align-items: center; margin-left: 10px;">
-            <a href="https://facebook.com/priscilla.narine" target="_blank" style="text-decoration: none; color: var(--text); opacity: 0.7; font-weight: 800; font-size: 0.8rem;">Facebook</a>
-            <a href="https://www.instagram.com/prisca.adaa/" target="_blank" style="text-decoration: none; color: var(--text); opacity: 0.7; font-weight: 800; font-size: 0.8rem;">Instagram</a>
-            <a href="https://www.threads.net/@prisca.adaa" target="_blank" style="text-decoration: none; color: var(--text); opacity: 0.7; font-weight: 800; font-size: 0.8rem;">Threads</a>
-        </div>
         <nav>
-            <a href="/services.html">Services</a><a href="/ai-studio.html" style="color: var(--accent); font-weight: 800;">AI Studio</a>
-            <a href="/brands/">Affiliate Brands</a>
-            <a href="https://thewaymadeknown.com">NGO Charity</a>
-            <a href="/prisca-dezigns/blog/">Editorial</a>
-            <a href="/clients/">Client Registry</a>
-            <a href="#alacarte">À La Carte</a>
-            </nav>
+            <a href="/muzewallet/">Wallet</a>
+            <a href="/mynt/">Marketplace</a>
+            <a href="/pulse/">Explorer</a>
+            <a href="https://wa.me/447576505652">Connect</a>
+        </nav>
     </header>
 
-    <!-- Signal Banner -->
-    <div id="signal-banner" style="background: var(--accent); color: white; text-align: center; padding: 12px; font-size: 0.85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">
-        Latest Insight: <a href="/prisca-dezigns/blog/agentic-web-systems-2026/" style="color: white; text-decoration: underline; margin-left: 10px;">Agentic Web Design — The 2026 Shift</a>
-    </div>
-
     <main>
-        <!-- Hero Section -->
         <section class="hero">
             <div class="container">
-                <h1>Global Identity <span>Design</span>.</h1>
-                
-                <div class="scan-box">
-                    <h2>Alpha Scan</h2>
-                    <p>Detect the Signal Gaps in your brand design with our Brand Analysis.</p>
-                    <a href="/scan/" class="btn btn-primary" style="background: var(--accent); color: white; padding: 20px 60px; font-size: 1.5rem; width: 100%; display: block; border-radius: 12px; margin-bottom: 15px;">FREE BRAND SCAN</a>
-                    <p style="margin-top: 15px; font-size: 0.8rem; opacity: 0.5;">Brand Check powered by NEURAL ($NRL), the foundational economy of the AI Agency.</p>
-                </div>
-
-                <div class="cta-group">
-                    <a href="/brands/" class="btn btn-outline">Explore The Network</a>
-                    <a href="https://thewaymadeknown.com" class="btn btn-outline" style="border-color: var(--accent); color: var(--accent);">Support NGO</a>
-                    <a href="https://wa.me/447576505652?text=Hi%20Priscion!%20I'd%20like%20to%20discuss%20a%20project." class="btn btn-outline">WhatsApp Us ↗</a>
+                <div class="badge">The Migration Hub</div>
+                <h1>Sovereign AI <span>Architecture</span>.</h1>
+                <p style="max-width: 600px; margin: 0 auto 40px; color: var(--muted); font-size: 1.1rem;">Architecting the transition from fragmented Web2 landscapes to unified, independent Web3 realities.</p>
+                <div class="cta-row">
+                    <a href="/muzewallet/" class="cta-btn">Claim Identity</a>
+                    <a href="/mynt/" class="cta-btn cta-outline">Explore Products</a>
                 </div>
             </div>
         </section>
 
-        <!-- Services Section -->
-        <section id="pricing" class="section reveal-on-scroll">
+        <section class="section">
             <div class="container">
-                <div class="section-header">
-                    <h2>Design & Growth Plans</h2>
-                    <p>Professional plans built to help your business succeed and grow.</p>
-                </div>
                 <div class="grid">
                     <div class="card">
-                        <h3>Essential Branding</h3>
-                        <span class="price">$1,500 / setup</span>
-                        <p>Everything you need to look professional and establish your brand.</p>
-                        <ul>
-                            <li>Professional Logo Pack</li>
-                            
-                            <li>Brand Style Guide</li>
-                            <li>SEO (How people find you on the internet)</li>
-                        </ul>
-                        <a href="javascript:void(0)" onclick="openPayModal('Essential Branding', '$1,500')" class="btn btn-outline">Get Started</a>
-                    </div>
-                    <div class="card" style="border-color: var(--accent);">
-                        <h3>Growth Ecosystem</h3>
-                        <span class="price">$4,500 / setup</span>
-                        <p>A full plan for branding, your website, and growth.</p>
-                        <ul>
-                            <li>Complete Brand Identity</li>
-                            <li>AI-Powered Custom Website</li>
-                            <li>Advanced User Experience</li>
-                            <li>Monthly Website Review</li>
-                        </ul>
-                        <a href="javascript:void(0)" onclick="openPayModal('Growth Ecosystem', '$4,500')" class="btn btn-primary">Select Plan</a>
+                        <div class="badge">L1 Infrastructure</div>
+                        <h3>The Sovereign Ledger</h3>
+                        <p>High-fidelity infrastructure for the transition from Web2 to Web3. Transparent, secure, and independent.</p>
+                        <a href="/pulse/" style="font-weight: 900; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); text-decoration: none;">View Explorer →</a>
                     </div>
                     <div class="card">
-                        <h3>Custom AI Solutions</h3>
-                        <span class="price">$10,000+ / setup</span>
-                        <p>Build custom AI tools and automated assistants for your business.</p>
-                        <ul>
-                            <li>Custom AI Assistants</li>
-                            <li>Automated Sales Systems</li>
-                            <li>Smart Data Management</li>
-                            <li>Full Business Automation</li>
-                        </ul>
-                        <a href="https://wa.me/447576505652" class="btn btn-outline">Contact for Quote</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Featured Products Section -->
-        <section id="products" class="section reveal-on-scroll" style="background: var(--primary-dim);">
-            <div class="container">
-                <div class="section-header">
-                    <h2 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 10px;">One-Off Projects</h2>
-                    <p>Individual solutions for websites, apps, and data projects.</p>
-                </div>
-                <div class="grid">
-                    <div class="card">
-                        <img src="https://share.zapia.com/6h0tzrbb1e8o94jesdlbgz" onerror="this.src='assets/muse_icon.png'" style="height: 90px; width: 90px; margin-bottom: 20px;">
+                        <div class="badge" style="background: #000;">Digital Commerce</div>
                         <h3>MYNT Store</h3>
-                        <p>The Sovereign NFT Marketplace for independent artifacts.</p>
-                        <a href="mynt/" class="btn btn-outline" style="margin-top: auto;">Visit MYNT →</a>
+                        <p>The premier marketplace for Sovereign Artifacts and Utility NFTs. Shop the ecosystem with $PRN.</p>
+                        <a href="/mynt/" style="font-weight: 900; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); text-decoration: none;">Launch Store →</a>
                     </div>
                     <div class="card">
-                        <h3>Karjov</h3>
-                        <p>Fast solutions for your technical needs.</p>
-                        <a href="/karjov/" class="btn btn-outline" style="margin-top: auto;">Visit Karjov →</a>
-                    </div>
-                    <div class="card">
-                        <h3>Rowcell</h3>
-                        <p>Organize your data with ease.</p>
-                        <a href="/rowcell/" class="btn btn-outline" style="margin-top: auto;">Visit Rowcell →</a>
-                    </div>
-                    <div class="card">
-                        <h3>Velloq</h3>
-                        <p>Speed up your workflow today.</p>
-                        <a href="/velloq/" class="btn btn-outline" style="margin-top: auto;">Visit Velloq →</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-
-        
-
-        <!-- À La Carte Section -->
-
-        <section id="alacarte" class="section reveal-on-scroll" style="background: rgba(255,255,255,0.2);">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Individual Services</h2>
-                    <p>Add-on services to boost your brand whenever you need them.</p>
-                </div>
-                <div class="grid">
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3>High-End Logo Kit</h3>
-                            <span class="price">$50</span>
-                            <p>A professional logo suite with perfect text and sharp graphics using our best smart tools.</p>
-                        </div>
-                        <button onclick="openPayModal('High-End Logo Kit', '50')" class="btn btn-primary" style="margin-top: 20px; padding: 12px; font-size: 0.85rem; width: 100%;">Order Kit</button>
-                    </div>
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3>Cinematic Reveal</h3>
-                            <span class="price">$50</span>
-                            <p>A movie-quality video to introduce your brand with high-end visual effects.</p>
-                        </div>
-                        <button onclick="openPayModal('Cinematic Reveal', '50')" class="btn btn-primary" style="margin-top: 20px; padding: 12px; font-size: 0.85rem; width: 100%;">Order Video</button>
-                    </div>
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3>Smart Social Reels</h3>
-                            <span class="price">$1,200/mo</span>
-                            <p>Automatic high-quality video content for your social media growth.</p>
-                        </div>
-                        <button onclick="openPayModal('Smart Social Reels', ',200')" class="btn btn-primary" style="margin-top: 20px; padding: 12px; font-size: 0.85rem; width: 100%;">Subscribe</button>
-                    </div>
-
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3>Brand Check-up</h3>
-                            <span class="price">$750</span>
-                            <p>A professional review of your brand with tips for improvement.</p>
-                        </div>
-                        <button onclick="openPayModal('Brand Check-up', '$750')" class="btn btn-primary" style="margin-top: 20px; padding: 12px; font-size: 0.85rem; width: 100%;">Get Started</button>
-                    </div>
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3>Content Template</h3>
-                            <span class="price">$950</span>
-                            <p>A custom master template for all your social media and blogs.</p>
-                        </div>
-                        <button onclick="openPayModal('Content Template', '$950')" class="btn btn-primary" style="margin-top: 20px; padding: 12px; font-size: 0.85rem; width: 100%;">Get Started</button>
-                    </div>
-                    <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
-                        <div>
-                            <h3>3D Video Intro</h3>
-                            <span class="price">$450</span>
-                            <p>A stunning 4K 3D animation of your logo or product.</p>
-                        </div>
-                        <button onclick="openPayModal('3D Video Intro', '$450')" class="btn btn-primary" style="margin-top: 20px; padding: 12px; font-size: 0.85rem; width: 100%;">Get Started</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Payment Section -->
-        <section id="payment" class="section reveal-on-scroll">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Seamless Payment</h2>
-                    <p>Secure global payments for smart tools.</p>
-                </div>
-                <div class="payment-methods">
-                    <div class="payment-card" onclick="openPayModal('International', 'PayPal')">
-                        <h3>PayPal</h3>
-                        <p>Instant · Secure · Global</p>
-                        <p style="margin-top: 10px; font-size: 0.75rem; color: var(--accent);">Pay with Balance or Card</p>
-                    </div>
-                    <div class="payment-card" onclick="openPayModal('Crypto Payment', 'Web3')">
-                        <h3>Crypto</h3>
-                        <p>USDT / ETH / BTC</p>
-                        <p style="margin-top: 10px; font-size: 0.75rem; color: var(--accent);">Direct Wallet Transfer</p>
-                    </div>
-                    <div class="payment-card" onclick="openPayModal('Bank Transfer', 'US ACH/Wire')">
-                        <h3>Bank Transfer</h3>
-                        <p>US Accounts (Citibank)</p>
-                        <p style="margin-top: 10px; font-size: 0.75rem; color: var(--accent);">Local & International SWIFT</p>
+                        <div class="badge" style="background: var(--muze-blue);">Identity</div>
+                        <h3>MUZE Vault</h3>
+                        <p>Non-custodial gateway to the Priscion ecosystem. Secure your .pri handle and manage your assets.</p>
+                        <a href="/muzewallet/" style="font-weight: 900; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); text-decoration: none;">Open Vault →</a>
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <!-- Payment Modal -->
-    <div class="modal-overlay" id="payModal">
-      <div class="modal">
-        <span class="modal-close" onclick="closePayModal()">✕</span>
-        <div class="modal-tabs">
-          <button class="modal-tab active" onclick="togglePay('bank', this)">Bank</button>
-          <button class="modal-tab" onclick="togglePay('eth', this)">Crypto</button>
-          <button class="modal-tab" onclick="togglePay('intl', this)">PayPal</button>
-        </div>
-        <h3 id="modal-plan-name" style="font-size: 1.1rem; margin-bottom: 20px; color: #111;">Service Payment</h3>
-        
-        <!-- Bank Detail -->
-        <div id="pay-bank" class="pay-detail open">
-          <div style="background:#f0f7ff; padding:15px; border-radius:12px; border:1px solid #d0e4ff; margin-bottom: 15px;">
-            <p style="font-size:0.75rem; font-weight:700; color:#0056b3; margin-bottom:8px; text-transform: uppercase;">Citibank (US Payoneer)</p>
-            <div style="font-family:monospace; font-size:0.8rem; color:#333; line-height: 1.6;">
-              <p><strong>Beneficiary:</strong> Priscion</p>
-              <p><strong>Bank:</strong> Citibank, N.A.</p>
-              <p><strong>Routing (ABA):</strong> 031100209</p>
-              <p><strong>Account:</strong> 70580060002427728</p>
-              <p><strong>Type:</strong> Checking</p>
-            </div>
-          </div>
-          <p style="font-size:0.75rem; color:#666;">Ref: <span id="auto-ref-bank" style="font-weight:700; color:var(--accent);">[REF]</span></p>
-        </div>
-
-        <!-- Crypto Detail -->
-        <div id="pay-eth" class="pay-detail">
-          <p style="font-size:0.8rem;color:#666;margin-bottom:12px;">Payment via USDT / ETH / BTC (ERC-20)</p>
-          <div style="background:#f8f9fa;padding:15px;border-radius:12px;border:1px solid #eee;word-break:break-all;font-family:monospace;font-size:0.8rem; position: relative;">
-            <span id="eth-addr">0xcef857e82c306b3d0f2db080e7794f4bb376049e</span>
-            <button class="modal-copy-btn" onclick="copyAddr('eth-addr', event)">Copy</button>
-          </div>
-          <p style="font-size:0.75rem;color:#999;margin-top:10px;">Ref: <span id="auto-ref-eth" style="font-weight:700; color:var(--accent);">[REF]</span></p>
-        </div>
-
-        <!-- PayPal Detail -->
-        <div id="pay-intl" class="pay-detail">
-          <a id="paypal-dynamic-link" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=priscadezigns9@gmail.com&item_name=Service+Payment&currency_code=USD" class="btn btn-primary" style="display:block; text-align:center; margin-bottom:15px; width: 100%;">Proceed to PayPal</a>
-          <p style="font-size:0.75rem;color:#666;">Please include the reference ID in the payment note.</p>
-          <p style="font-size:0.75rem;color:#999;margin-top:10px;">Ref: <span id="auto-ref-intl" style="font-weight:700; color:var(--accent);">[REF]</span></p>
-        </div>
-      </div>
-    </div>
-
-
     <footer>
-        <img src="/logos/PRISCION_nav_logo_2026.png" alt="Priscion" style="height: 70px; width: auto; margin-bottom: 20px;">
-        
-        <div class="social-links" style="margin-bottom: 30px;">
-            <a href="https://facebook.com/priscilla.narine" target="_blank">Facebook</a>
-            <a href="https://www.instagram.com/prisca.adaa/" target="_blank">Instagram</a>
-            <a href="https://www.threads.net/@prisca.adaa" target="_blank">Threads</a>
+        <img src="https://share.zapia.com/m0ta6s0yqlqkuv1214muow" alt="Priscion" style="height: 40px;">
+        <div style="margin-top: 40px; display: flex; justify-content: center; gap: 30px;">
+            <a href="https://facebook.com/priscilla.narine" style="text-decoration: none; color: #000; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px;">FACEBOOK</a>
+            <a href="https://www.instagram.com/prisca.adaa/" style="text-decoration: none; color: #000; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px;">INSTAGRAM</a>
+            <a href="https://www.threads.net/@prisca.adaa" style="text-decoration: none; color: #000; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px;">THREADS</a>
         </div>
-
-        <p class="copyright">© 2026 PRISCION · SOVEREIGN AI ARCHITECTURE</p>
+        <p class="copyright">© 2026 PRISCION · ARCHITECTING REALITY</p>
     </footer>
 
-    <!-- Ebook Slide-Up Panel -->
-<div id="ebookPanel" style="position:fixed; bottom:0; right:24px; width:320px; background:var(--bg,#FDF8F2); border:1px solid rgba(123,53,212,0.3); border-bottom:none; border-radius:16px 16px 0 0; box-shadow:0 -8px 32px rgba(0,0,0,0.15); z-index:1500; transform:translateY(100%); transition:transform 0.4s ease; padding:24px;">
-  <button onclick="document.getElementById('ebookPanel').style.transform='translateY(100%)'" style="position:absolute;top:12px;right:12px;background:none;border:none;cursor:pointer;font-size:18px;color:#666;">✕</button>
-  <div style="text-align:center;">
-    <div style="margin-bottom:12px;"><img src="/logos/PRISCION_nav_logo_2026.png" style="height: 50px;"></div>
-    <h3 style="font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--text,#1A1A1A);margin-bottom:6px;">The Brand Blueprint</h3>
-    <p style="font-size:0.82rem;color:#666;margin-bottom:16px;">The best way to build your brand — simple tools and smart advice.</p>
-    <a href="#" style="display:block;background:#7B35D4;color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:0.9rem;text-decoration:none;margin-bottom:8px;">Get the Guide →</a>
-    <p style="font-size:0.75rem;color:#999;">Free. Instant download.</p>
-  </div>
-</div>
-
-<script>
-function openPayModal(plan, price) {
-  var el = document.getElementById('modal-plan-name');
-  if (el) el.textContent = plan + (price ? ' — ' + price : '');
-  var modal = document.getElementById('payModal');
-  if (modal) { modal.classList.add('open'); document.body.style.overflow = 'hidden'; }
-  var ref = 'PD-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-  ['bank','eth','intl'].forEach(function(k){ var el2=document.getElementById('auto-ref-'+k); if(el2) el2.textContent=ref; });
-
-  // Private: Update PayPal link dynamically for A La Carte
-  var paypalLink = document.getElementById('paypal-dynamic-link');
-  if (paypalLink && price) {
-      var cleanPrice = price.replace(/[$,]/g, '');
-      if (!isNaN(cleanPrice) && cleanPrice > 0) {
-          var encodedPlan = encodeURIComponent(plan + ' [REF: ' + ref + ']');
-          paypalLink.href = 'https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=priscadezigns9@gmail.com&item_name=' + encodedPlan + '&amount=' + cleanPrice + '&currency_code=USD';
-      }
-  }
-}
-
-function closePayModal() {
-  var modal = document.getElementById('payModal');
-  if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
-}
-
-function togglePay(tab, btn) {
-  document.querySelectorAll('.pay-detail').forEach(function(d){ d.classList.remove('open'); });
-  document.querySelectorAll('.modal-tab').forEach(function(b){ b.classList.remove('active'); });
-  var el=document.getElementById('pay-'+tab); if(el) el.classList.add('open');
-  if(btn) btn.classList.add('active');
-  else {
-      var ab=document.querySelector('.modal-tab[onclick*="' + tab + '"]'); if(ab) ab.classList.add('active');
-  }
-}
-
-function copyAddr(id, ev) {
-  var el=document.getElementById(id);
-  if(el) navigator.clipboard.writeText(el.textContent).then(function(){
-    var btn=ev?ev.target:null;
-    if(btn){var orig=btn.textContent;btn.textContent='Copied!';setTimeout(function(){btn.textContent=orig;},1800);}
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const observerOptions = { threshold: 0.1 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) { entry.target.classList.add('visible'); }
-        });
-    }, observerOptions);
-    document.querySelectorAll('.reveal-on-scroll').forEach(el => { observer.observe(el); });
-
-    var mo = document.getElementById('payModal');
-    if (mo) mo.addEventListener('click', function(e) { if (e.target === mo) closePayModal(); });
-
-    setTimeout(function() {
-        var panel = document.getElementById('ebookPanel');
-        if (panel) panel.style.transform = 'translateY(0)';
-    }, 4000);
-});
-</script>
-</body></html>
-
-
-
-
-
-
-
-
+</body>
+</html>
