@@ -18,7 +18,9 @@
         .sidebar {
             width: 280px; height: 100vh; background: var(--surface); border-right: 1px solid var(--border);
             padding: 40px 20px; display: flex; flex-direction: column; gap: 5px;
+            transition: transform 0.3s ease !important;
         }
+        .sidebar.collapsed { transform: translateX(-100%); }
         .nav-item {
             padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.8rem;
             color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px;
@@ -86,14 +88,20 @@
         .handle-badge { background: var(--surface); color: var(--muted); padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; }
         .handle-badge.owned { background: var(--muze-blue); color: #fff; }
 
-        /* Priscion Digital Card */
+        /* Card Display */
         .card-display {
-            width: 100%; max-width: 600px; aspect-ratio: 1.6;
-            background: #000; border-radius: 30px; overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; max-width: 500px; aspect-ratio: 1.6 / 1;
+            background: #000; border-radius: 24px; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
             margin: 0 auto;
+            position: relative;
         }
-        .card-display img { width: 100%; height: 100%; object-fit: contain; background: #000; }
+        .card-display img { width: 100%; height: 100%; object-fit: cover; }
+        .card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none;
+        }
 
         /* STAGE: dAPPS */
         .stage-dapps-container { height: calc(100vh - 180px); display: flex; flex-direction: column; }
@@ -105,6 +113,18 @@
         .dapp-card h4 { font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .back-to-dapps { margin-bottom: 20px; font-weight: 900; font-size: 0.7rem; cursor: pointer; display: none; align-items: center; gap: 10px; color: var(--muze-blue); }
 
+        /* GOD MODE HUD (Architect Only) */
+        .god-hud {
+            position: fixed; top: 20px; right: 20px; z-index: 10000;
+            display: none; flex-direction: column; gap: 10px;
+            background: rgba(0,0,0,0.9); padding: 20px; border-radius: 20px;
+            border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(123, 53, 212, 0.4);
+            color: #fff; font-family: 'Inter', sans-serif; min-width: 200px;
+        }
+        .god-hud h5 { font-weight: 900; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 10px; }
+        .god-stat { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; }
+        .god-stat span { color: var(--muze-blue); }
+        .god-btn { background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 900; font-size: 0.6rem; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -211,18 +231,6 @@
             <div class="stage-dapps-container">
                 <div id="dapp-browser-back" class="back-to-dapps" onclick="closeDApp()">← BACK TO dAPPS</div>
                 <div id="dapp-main-grid" class="dapp-grid">
-                    <div class="dapp-card" onclick="openDApp('../pulse/')">
-                        <img src="https://priscion.com/assets/pulse_logo.png">
-                        <h4>PULSE</h4>
-                    </div>
-                    <div class="dapp-card" onclick="openDApp('../chillata/')">
-                        <img src="https://priscion.com/assets/chillata_logo.png">
-                        <h4>CHILLATA</h4>
-                    </div>
-                    <div class="dapp-card" onclick="openDApp('../mynt/')">
-                        <img src="https://priscion.com/assets/mynt_logo.png">
-                        <h4>MYNT</h4>
-                    </div>
                     <div class="dapp-card" onclick="openDApp('../leggo.html')">
                         <img src="https://priscion.com/assets/leggo_logo.png">
                         <h4>LEGGO</h4>
@@ -236,11 +244,23 @@
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Digital Asset Card</h2>
-            <div class="card-display">
-                <img src="https://priscion.com/assets/card.png" onerror="this.src='https://placehold.co/600x400/000000/FFFFFF?text=ASSET+CARD'">
+            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Priscion Digital Card</h2>
+            <div class="card-display" onclick="document.getElementById('god-hud').style.display='flex'">
+                <img src="https://priscion.com/assets/card.jpg">
+                <div class="card-overlay"></div>
             </div>
+            <p style="color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 30px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">The ultimate signal of autonomy.</p>
         </div>
+    </div>
+
+    <!-- GOD MODE INTERFACE -->
+    <div id="god-hud" class="god-hud">
+        <h5>Architect HUD</h5>
+        <div class="god-stat">Node Status: <span>Live</span></div>
+        <div class="god-stat">Ledger Sync: <span>100%</span></div>
+        <div class="god-stat">Admin Level: <span>God</span></div>
+        <button class="god-btn" onclick="alert('Anchoring Global Signal...')">Force Global Sync</button>
+        <button class="god-btn" style="background:#333" onclick="toggleGodMode()">Dismiss HUD</button>
     </div>
 
     <script>
@@ -272,6 +292,11 @@
             const btn = document.getElementById('dev-toggle');
             btn.innerText = isDevMode ? "GOD MODE" : "USER MODE";
             btn.style.background = isDevMode ? "#7B35D4" : "#000";
+            document.getElementById('god-hud').style.display = isDevMode ? 'flex' : 'none';
+        }
+
+        function toggleGodMode() {
+            document.getElementById('god-hud').style.display = 'none';
         }
 
         function showStage(id, el) {
@@ -305,6 +330,13 @@
                 </div>
             `).join('');
         }
+
+        /* HUD Trigger */
+        window.addEventListener('keydown', (e) => {
+            if(e.ctrlKey && e.shiftKey && e.key === 'G') {
+                document.getElementById('god-hud').style.display = 'flex';
+            }
+        });
 
         renderHandles();
     </script>
