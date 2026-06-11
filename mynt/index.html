@@ -272,7 +272,7 @@
         function renderGrid() {
             document.getElementById('nft-grid').innerHTML = items.map(i => `
                 <div class="nft-card" onclick="openCheckout(${i.id})">
-                    <div class="nft-thumb"><img src="${i.img}" onerror="this.src='../assets/muse_icon.png'"></div>
+                    <div class="nft-thumb" style="aspect-ratio: 1.58 / 1; height: auto;"><img src="${i.img}" style="height: 100%; width: 100%; object-fit: cover;" onerror="this.src='../assets/muze_icon_logo.png'"></div>
                     <div class="nft-info">
                         <div class="nft-collection">${i.col}</div>
                         <div class="nft-title">${i.title}</div>
