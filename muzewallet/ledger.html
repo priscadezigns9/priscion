@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUZE | Ledger Connect</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <style>
+        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 40px; text-align: center; }
+        .muze-logo { height: 60px; margin-bottom: 40px; }
+        h2 { font-weight: 900; font-size: 1.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        .ledger-box { background: #F9F9F9; border: 1px solid var(--border); width: 100%; max-width: 400px; padding: 60px; border-radius: 40px; margin-bottom: 40px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .pulse { width: 15px; height: 15px; background: #000; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(2); opacity: 0; } 100% { transform: scale(1); opacity: 0; } }
+        .btn-outline { background: #fff; color: #000; border: 1px solid var(--border); padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 300px; }
+        p { color: var(--muted); font-size: 0.8rem; max-width: 400px; margin-bottom: 10px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <img src="../assets/muze_icon_logo.png" class="muze-logo">
+    <h2>Hardware Connection.</h2>
+    <div class="ledger-box">
+        <div class="pulse"></div>
+        <p style="font-weight: 900; color: #000; letter-spacing: 1px;">Searching for Ledger...</p>
+        <p>Ensure your device is connected and the Cardano app is open.</p>
+    </div>
+    <button class="btn-outline" onclick="location.href='index.html'">CANCEL</button>
+</body>
+</html>
