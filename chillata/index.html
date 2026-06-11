@@ -8,16 +8,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0A0A0A;
-            --text: #FFFFFF;
-            --muted: #888888;
+            --bg: #FFFFFF;
+            --text: #000000;
+            --muted: #666666;
             --accent: #7B35D4;
             --gold: #D4AF37;
-            --border: rgba(255,255,255,0.1);
-            --surface: #111111;
+            --border: rgba(0,0,0,0.1);
+            --surface: #F9F9F9;
             --font-main: 'Inter', -apple-system, sans-serif;
             --font-heading: 'Playfair Display', serif;
-            --green: #00ff41;
+            --green: #28a745;
             --red: #ff3131;
         }
 
@@ -34,7 +34,7 @@
             padding: 20px 40px;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border);
-            background: rgba(10,10,10,0.8); backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
             z-index: 100;
         }
 
@@ -59,14 +59,14 @@
         #marketChart { width: 100%; height: 100%; }
 
         .trade-col { background: var(--surface); padding: 40px; border-left: 1px solid var(--border); }
-        .input-wrap { background: #000; border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .input-wrap input { background: transparent; border: none; color: #fff; font-size: 1.5rem; font-weight: 900; width: 60%; outline: none; }
+        .input-wrap { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .input-wrap input { background: transparent; border: none; color: #000; font-size: 1.5rem; font-weight: 900; width: 60%; outline: none; }
         .input-wrap img { width: 32px; height: 32px; border-radius: 50%; }
 
         .btn-confirm {
-            width: 100%; background: var(--accent); color: #fff; border: none; padding: 25px;
+            width: 100%; background: #000; color: #fff; border: none; padding: 25px;
             border-radius: 20px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
-            cursor: pointer; margin-top: 20px; box-shadow: 0 10px 30px rgba(123, 53, 212, 0.3);
+            cursor: pointer; margin-top: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         footer {
@@ -81,16 +81,16 @@
 
         /* Asset List Styling */
         .asset-row {
-            background: rgba(255,255,255,0.03); 
+            background: #fff; 
             padding: 15px; 
             border-radius: 12px; 
             display: flex; 
             align-items: center; 
             gap: 12px;
-            border: 1px solid transparent;
+            border: 1px solid var(--border);
             transition: all 0.2s;
         }
-        .asset-row:hover { border-color: var(--border); background: rgba(255,255,255,0.05); }
+        .asset-row:hover { border-color: var(--accent); background: #fff; }
         .asset-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
         .asset-meta { flex: 1; }
         .asset-symbol { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; }
