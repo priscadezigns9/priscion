@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Sovereign Wallet</title>
+    <title>MUZE | Sovereign User Console</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
         :root { 
-            --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #5AC8FA; --accent: #7B35D4;
+            --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F9F9F9;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
 
         .hidden { display: none !important; }
+        .layer { position: fixed; inset: 0; background: #fff; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+
+        /* Onboarding */
+        .mustard-tree-svg { width: 120px; height: 120px; margin-bottom: 30px; }
+        .tree-path { stroke: var(--muze-blue); stroke-width: 2; fill: none; }
+        
+        h2 { font-weight: 900; font-size: 1.8rem; letter-spacing: -1px; margin-bottom: 10px; }
+        .layer p { color: var(--muted); font-size: 0.9rem; max-width: 320px; margin-bottom: 40px; line-height: 1.5; }
+        
+        .btn-full { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 300px; margin-bottom: 12px; }
+        .btn-outline { background: #fff; color: #000; border: 1px solid var(--border); padding: 16px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; width: 100%; max-width: 300px; margin-bottom: 12px; }
 
         /* Sidebar Navigation */
         .sidebar {
-            width: 280px; height: 100vh; background: #F9F9F9; border-right: 1px solid var(--border);
+            width: 280px; height: 100vh; background: var(--surface); border-right: 1px solid var(--border);
             padding: 40px 20px; display: flex; flex-direction: column; gap: 10px;
         }
-        .sidebar-logo { display: none; }
+        .sidebar-logo { width: 40px; margin-bottom: 40px; margin-left: 10px; display: none; }
         
         .nav-item {
             padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.85rem;
@@ -29,66 +40,87 @@
         .nav-item:hover:not(.active) { color: var(--text); }
 
         /* Main Content */
-        .content { flex: 1; height: 100vh; padding: 60px 80px; overflow-y: auto; }
+        .content { flex: 1; height: 100vh; padding: 60px 80px; overflow-y: auto; position: relative; }
         
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
         .user-pill {
-            background: #F9F9F9; border: 1px solid var(--border); padding: 8px 20px; border-radius: 100px;
+            background: var(--surface); border: 1px solid var(--border); padding: 8px 20px; border-radius: 100px;
             display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px;
         }
-        .user-pill img { height: 16px; opacity: 0.5; }
 
-        /* Stages */
-        .stage { }
-        
         /* Vault / Vespr Style */
-        .balance-card { margin-bottom: 60px; }
+        .balance-card { margin-bottom: 40px; text-align: center; }
         .balance-label { font-weight: 900; font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; }
-        .balance-value { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; }
+        .balance-value { font-size: 4rem; font-weight: 900; letter-spacing: -3px; }
 
-        .asset-list { display: flex; flex-direction: column; gap: 15px; }
+        .action-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
+        .action-btn {
+            background: #000; color: #fff; width: 60px; height: 60px; border-radius: 20px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 0.6rem; font-weight: 900; gap: 5px; text-transform: uppercase;
+        }
+        .action-btn.alt { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+        .asset-list { display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: 0 auto; }
         .asset-item {
             background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 20px;
             display: flex; justify-content: space-between; align-items: center;
         }
         .asset-info { display: flex; align-items: center; gap: 20px; }
-        .asset-icon { width: 45px; height: 45px; background: #F9F9F9; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; }
+        .asset-icon { width: 45px; height: 45px; background: var(--surface); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; }
         .asset-name { font-weight: 900; font-size: 1rem; }
         .asset-amount { font-weight: 900; font-size: 1.1rem; text-align: right; }
         .asset-sub { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+
+        /* Messenger */
+        .messenger-stage { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; height: calc(100vh - 200px); }
+        .messenger-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+        .messenger-header img { height: 30px; }
+        .chat-feed { flex: 1; overflow-y: auto; padding: 20px 0; display: flex; flex-direction: column; gap: 20px; }
+        .chat-bubble { max-width: 70%; padding: 15px 20px; border-radius: 20px; font-size: 0.9rem; line-height: 1.4; }
+        .chat-bubble.in { background: var(--surface); align-self: flex-start; border-bottom-left-radius: 5px; }
+        .chat-bubble.out { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
+        .chat-input-area { margin-top: 20px; display: flex; gap: 10px; }
+        .chat-input { flex: 1; padding: 15px 25px; border-radius: 100px; border: 1px solid var(--border); outline: none; background: var(--surface); font-weight: 600; }
+
+        /* dApps */
+        .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .dapp-card { background: #fff; border: 1px solid var(--border); padding: 30px; border-radius: 24px; text-align: center; text-decoration: none; color: inherit; }
+        .dapp-card img { height: 40px; margin-bottom: 15px; }
+        .dapp-card h4 { font-weight: 900; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Sovereign Card */
         .card-display {
             width: 100%; max-width: 600px; aspect-ratio: 1.6;
             background: #000; border-radius: 30px; overflow: hidden;
             box-shadow: 0 30px 60px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);
+            margin: 0 auto;
         }
         .card-display img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* Handles Gallery */
-        .handles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-        .handle-card {
-            background: #fff; border: 1px solid var(--border); padding: 30px; border-radius: 24px;
-            text-align: center;
-        }
-        .handle-card h4 { font-weight: 900; font-size: 1.1rem; margin-bottom: 10px; }
-        .handle-badge { background: #F9F9F9; color: var(--muted); padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; }
-        .handle-badge.owned { background: var(--muze-blue); color: #fff; }
-
-        /* Messenger Placeholder */
-        .messenger-view { height: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--muted); }
-        .messenger-view img { height: 60px; opacity: 0.1; margin-bottom: 20px; }
 
     </style>
 </head>
 <body>
 
+    <!-- LAYER: ENTRANCE -->
+    <div id="layer-entrance" class="layer">
+        <svg class="mustard-tree-svg" viewBox="0 0 500 500" preserveAspectRatio="xMinYMax meet">
+            <path class="tree-path" d="M20,480 C40,400 80,350 120,300 C160,250 200,200 250,150 M120,300 C180,280 250,290 300,240 M120,330 C80,280 50,220 70,150 M250,150 C300,120 350,150 400,100 M250,150 C220,100 180,50 150,80" />
+            <circle cx="20" cy="480" r="10" fill="var(--muze-blue)" />
+        </svg>
+        <h2>The Mustard Seed.</h2>
+        <p>Architecting your independent digital identity. Claims your free handle or connect your secure vault.</p>
+        <button class="btn-full" onclick="bypassEntrance()">CREATE NEW VAULT</button>
+        <button class="btn-outline" onclick="bypassEntrance()">RECOVER WITH SEED</button>
+        <button class="btn-outline" onclick="bypassEntrance()">CONNECT TO LEDGER</button>
+    </div>
+
     <div class="sidebar">
-        <img src="https://priscion.com/assets/muze_logo.png" class="sidebar-logo">
+        <div style="padding:10px 10px 40px;"><img src="https://priscion.com/assets/muze_icon_logo.png" style="height:35px;"></div>
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
-        <div class="nav-item" onclick="showStage('card', this)">Sovereign Card</div>
-        <div class="nav-item" onclick="showStage('handles', this)">Handles</div>
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
+        <div class="nav-item" onclick="showStage('dapps', this)">dApp Explorer</div>
+        <div class="nav-item" onclick="showStage('card', this)">Sovereign Card</div>
     </div>
 
     <div class="content">
@@ -101,8 +133,15 @@
         <!-- STAGE: VAULT -->
         <div id="stage-vault" class="stage">
             <div class="balance-card">
-                <div class="balance-label">Total Sovereign Balance</div>
+                <div class="balance-label">Sovereign Balance</div>
                 <div class="balance-value">0.0 ADA</div>
+            </div>
+
+            <div class="action-bar">
+                <div class="action-btn"><span>↑</span>SEND</div>
+                <div class="action-btn"><span>↓</span>RECV</div>
+                <div class="action-btn alt"><span>⇆</span>SWAP</div>
+                <div class="action-btn alt"><span>⚡</span>STAKE</div>
             </div>
 
             <div class="asset-list">
@@ -126,51 +165,57 @@
                     </div>
                     <div class="asset-amount">0.00</div>
                 </div>
-                <div class="asset-item">
-                    <div class="asset-info">
-                        <div class="asset-icon" style="background: var(--accent); color: #fff;">N</div>
-                        <div>
-                            <div class="asset-name">Neural Core</div>
-                            <div class="asset-sub">$NRL</div>
-                        </div>
-                    </div>
-                    <div class="asset-amount">0.00</div>
-                </div>
+            </div>
+        </div>
+
+        <!-- STAGE: MESSENGER -->
+        <div id="stage-messenger" class="stage messenger-stage hidden">
+            <div class="messenger-header">
+                <img src="https://priscion.com/assets/lynx_logo.png">
+                <h3 style="font-weight: 900; letter-spacing: 1px;">LYNX MESSENGER</h3>
+            </div>
+            <div class="chat-feed">
+                <div class="chat-bubble in">Welcome to Lynx. Secure, encrypted profile-to-profile messaging is now active.</div>
+                <div class="chat-bubble out">Ready to architect the future.</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" placeholder="Neural message...">
+                <button class="btn-full" style="width: auto; padding: 15px 30px; margin: 0;">SEND</button>
+            </div>
+        </div>
+
+        <!-- STAGE: dAPPS -->
+        <div id="stage-dapps" class="stage hidden">
+            <h2 style="margin-bottom: 40px; font-weight: 900;">Network dApps</h2>
+            <div class="dapp-grid">
+                <a href="../pulse/" class="dapp-card">
+                    <img src="https://priscion.com/assets/pulse_logo.png">
+                    <h4>PULSE</h4>
+                </a>
+                <a href="../chillata/" class="dapp-card">
+                    <img src="https://priscion.com/assets/chillata_logo.png">
+                    <h4>CHILLATA</h4>
+                </a>
+                <a href="../mynt/" class="dapp-card">
+                    <img src="https://priscion.com/assets/mynt_logo.png">
+                    <h4>MYNT</h4>
+                </a>
             </div>
         </div>
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900;">Sovereign Digital Card</h2>
+            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Sovereign Digital Card</h2>
             <div class="card-display">
-                <img src="https://priscion.com/assets/card.png" onerror="this.src='https://via.placeholder.com/600x400/000/fff?text=Sovereign+Card'">
-            </div>
-            <p style="margin-top: 30px; color: var(--muted); font-size: 0.9rem; max-width: 500px;">
-                The high-fidelity anchor of your identity. Your card is unique and verifiable across the Priscion network.
-            </p>
-        </div>
-
-        <!-- STAGE: HANDLES -->
-        <div id="stage-handles" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900;">My Handles</h2>
-            <div class="handles-grid" id="handles-grid">
-                <!-- Handles rendered by JS -->
-            </div>
-        </div>
-
-        <!-- STAGE: MESSENGER -->
-        <div id="stage-messenger" class="stage hidden">
-            <div class="messenger-view">
-                <p style="font-weight: 900; letter-spacing: 2px; text-transform: uppercase; font-size: 0.7rem;">Neural Messenger Integration Pending</p>
+                <img src="https://priscion.com/assets/card.png">
             </div>
         </div>
     </div>
 
     <script>
-        // For users, we only show their anchored handles. Since this is a static demo, we'll show a placeholder.
-        const userHandles = [
-            { name: "user.pri", owned: true }
-        ];
+        function bypassEntrance() {
+            document.getElementById('layer-entrance').classList.add('hidden');
+        }
 
         function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
@@ -178,19 +223,6 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
         }
-
-        function renderHandles() {
-            const grid = document.getElementById('handles-grid');
-            grid.innerHTML = userHandles.map(h => `
-                <div class="handle-card">
-                    <h4>${h.name}</h4>
-                    <span class="handle-badge ${h.owned ? 'owned' : ''}">${h.owned ? 'ANCHORED' : 'PENDING'}</span>
-                </div>
-            `).join('');
-        }
-
-        // Init
-        renderHandles();
     </script>
 </body>
 </html>
