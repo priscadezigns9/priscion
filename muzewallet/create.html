@@ -35,6 +35,14 @@
         <div class="seed-word"><span>11</span> LEGACY</div>
         <div class="seed-word"><span>12</span> MISSION</div>
     </div>
-    <button class="btn-full" onclick="location.href='index.html'">I HAVE SAVED THEM</button>
+    <button class="btn-full" onclick="finalizeCreation()">I HAVE SAVED THEM</button>
+
+    <script>
+        function finalizeCreation() {
+            localStorage.setItem('muze_authenticated', 'true');
+            localStorage.setItem('muze_vault_status', 'active');
+            location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
