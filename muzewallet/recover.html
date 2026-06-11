@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUZE | Recover Vault</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <style>
+        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 40px; text-align: center; }
+        .muze-logo { height: 60px; margin-bottom: 40px; }
+        h2 { font-weight: 900; font-size: 1.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        textarea { width: 100%; max-width: 500px; height: 120px; background: #F9F9F9; border: 1px solid var(--border); border-radius: 20px; padding: 20px; font-family: 'Inter', sans-serif; font-size: 0.9rem; margin-bottom: 30px; outline: none; }
+        .btn-full { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 300px; }
+        p { color: var(--muted); font-size: 0.8rem; max-width: 400px; margin-bottom: 20px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <img src="../assets/muze_icon_logo.png" class="muze-logo">
+    <h2>Enter Recovery Seed.</h2>
+    <p>Type your 12 or 24-word recovery phrase to restore access to your vault.</p>
+    <textarea placeholder="word1 word2 word3..."></textarea>
+    <button class="btn-full" onclick="location.href='index.html'">RESTORE VAULT</button>
+</body>
+</html>
