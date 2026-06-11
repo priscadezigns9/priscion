@@ -244,11 +244,16 @@
 
         async function initStore() {
             renderGrid();
-            if(encryptedVault && !walletState) {
-                // If vault exists, ask for password to "Connect"
-                // For simplicity in the shop, we might just show the handle if we can extract it from the salt/iv? 
-                // No, we need password. Let's just have them "Login" via Muze.
+            
+            // AUTOMATIC HANDSHAKE: If inside MUZE (iframe) or if vault exists in storage
+            if(!walletState) {
+                const v1 = localStorage.getItem('muze_vault_v1');
+                if(v1) {
+                    walletState = JSON.parse(v1);
+                    console.log("Neural Handshake: MUZE Vault detected and connected.");
+                }
             }
+
             if(walletState) {
                 document.getElementById('wallet-btn-container').innerHTML = `
                     <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="toggleProfile()">
@@ -272,7 +277,7 @@
         function renderGrid() {
             document.getElementById('nft-grid').innerHTML = items.map(i => `
                 <div class="nft-card" onclick="openCheckout(${i.id})">
-                    <div class="nft-thumb" style="aspect-ratio: 1.58 / 1; height: auto;"><img src="${i.img}" style="height: 100%; width: 100%; object-fit: cover;" onerror="this.src='../assets/muze_icon_logo.png'"></div>
+                    <div class="nft-thumb"><img src="${i.img}" onerror="this.src='../assets/muse_icon.png'"></div>
                     <div class="nft-info">
                         <div class="nft-collection">${i.col}</div>
                         <div class="nft-title">${i.title}</div>
@@ -303,6 +308,7 @@
                     <div>
                         <div class="nft-collection">${activeItem.col}</div>
                         <div class="nft-title" style="margin:0;">${activeItem.title}</div>
+                        <div style="font-size:0.6rem; font-weight:900; color:var(--muze-blue); margin-top:5px; text-transform:uppercase;">Network Processing Fee: $PRN 2.5</div>
                     </div>
                     <div class="checkout-price" style="margin-left:auto;">$${activeItem.usd}</div>
                     ${inputField}
