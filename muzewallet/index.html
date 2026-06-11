@@ -294,12 +294,26 @@
                 <div class="card-overlay"></div>
             </div>
             <p style="color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 30px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">A bridge to real-world autonomy.</p>
+            <button class="btn-outline" style="width:100%; margin-top:20px; border-color:#FF3B30; color:#FF3B30;" onclick="logout()">LOCK VAULT</button>
         </div>
     </div>
 
     <div class="secret-trigger" onclick="location.href='vault.html'"></div>
 
     <script>
+        function logout() {
+            localStorage.removeItem('muze_authenticated');
+            location.reload();
+        }
+
+        // AUTHENTICATION PERSISTENCE
+        window.addEventListener('DOMContentLoaded', () => {
+            const auth = localStorage.getItem('muze_authenticated');
+            if (auth === 'true') {
+                bypassEntrance();
+            }
+        });
+
         function bypassEntrance() {
             document.getElementById('layer-entrance').classList.add('hidden');
         }
