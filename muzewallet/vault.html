@@ -19,7 +19,7 @@
             width: 280px; height: 100vh; background: #F9F9F9; border-right: 1px solid var(--border);
             padding: 40px 20px; display: flex; flex-direction: column; gap: 10px;
         }
-        .sidebar-logo { width: 40px; margin-bottom: 40px; margin-left: 10px; }
+        .sidebar-logo { display: none; }
         
         .nav-item {
             padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.85rem;
@@ -36,7 +36,6 @@
             background: #F9F9F9; border: 1px solid var(--border); padding: 8px 20px; border-radius: 100px;
             display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px;
         }
-        .user-pill img { height: 16px; opacity: 0.5; }
 
         .dev-toggle {
             position: fixed; top: 40px; right: 40px; z-index: 2000;
@@ -102,7 +101,6 @@
     <div class="content">
         <div class="top-bar">
             <div class="user-pill">
-                <img src="https://priscion.com/assets/muze_logo.png">
                 <span id="display-handle">prisca.pri</span>
             </div>
         </div>
@@ -170,7 +168,6 @@
         <!-- STAGE: MESSENGER -->
         <div id="stage-messenger" class="stage hidden">
             <div class="messenger-view">
-                <img src="https://priscion.com/assets/muze_logo.png">
                 <p style="font-weight: 900; letter-spacing: 2px; text-transform: uppercase; font-size: 0.7rem;">Neural Messenger Integration Pending</p>
             </div>
         </div>
