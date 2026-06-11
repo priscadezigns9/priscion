@@ -28,7 +28,7 @@
             font-family: var(--font-main); overflow: hidden; 
         }
 
-        .app { height: 100%; display: grid; grid-template-rows: auto 1fr auto; }
+        .app { height: 100%; display: grid; grid-template-rows: auto 1fr auto; padding-bottom: 70px; position: relative; }
 
         header {
             padding: 20px 40px;
@@ -66,10 +66,10 @@
         .btn-confirm {
             width: 100%; background: #000; color: #fff; border: none; padding: 25px;
             border-radius: 20px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
-            cursor: pointer; margin-top: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer; margin-top: 20px; margin-bottom: 80px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        footer {
+        footer { position: absolute; bottom: 0; left: 0; right: 0; z-index: 100;
             padding: 20px 40px;
             display: flex; justify-content: center; gap: 40px;
             border-top: 1px solid var(--border);
@@ -113,22 +113,22 @@
 
         <div class="terminal">
             <div class="col" style="padding:40px; border-right:1px solid var(--border); overflow-y: auto;">
-                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:3px; margin-bottom:30px;">Procyon Assets</h3>
+                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:3px; margin-bottom:30px;">Priscion Assets</h3>
                 
                 <div style="display:flex; flex-direction:column; gap:12px;">
                     <!-- PRN -->
                     <div class="asset-row">
-                        <img src="https://priscion.com/assets/prn.jpg">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">PRN</div>
-                            <div class="asset-name">Procyon Utility</div>
+                            <div class="asset-name">Priscion Utility</div>
                         </div>
                         <div class="asset-price">$1.02</div>
                     </div>
 
                     <!-- NRL -->
                     <div class="asset-row">
-                        <img src="https://priscion.com/assets/nrl.jpg">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">NRL</div>
                             <div class="asset-name">Neural Reserve</div>
@@ -138,7 +138,7 @@
 
                     <!-- ATLR -->
                     <div class="asset-row">
-                        <img src="https://priscion.com/assets/atlr.jpg">
+                        <img src="https://priscion.chttps://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">ATLR</div>
                             <div class="asset-name">Atelia Gaming</div>
@@ -148,10 +148,10 @@
 
                     <!-- MUSD -->
                     <div class="asset-row">
-                        <img src="https://priscion.com/assets/musd.jpg">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">MUSD</div>
-                            <div class="asset-name">Procyon Stable</div>
+                            <div class="asset-name">Priscion Stable</div>
                         </div>
                         <div class="asset-price">$1.00</div>
                     </div>
@@ -180,13 +180,13 @@
                 <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Exchange</h3>
                 <div class="input-wrap">
                     <input type="text" value="100.00">
-                    <img src="https://priscion.com/assets/prn.jpg">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
                 </div>
                 <div style="text-align:center; margin-bottom:15px; color:var(--accent);">⬇</div>
                 
                 <div class="input-wrap">
                     <input type="text" value="120.45" readonly>
-                    <img src="https://priscion.com/assets/nrl.jpg">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
                 </div>
                 <button class="btn-confirm" onclick="executeSwap()">Execute Chillata Swap</button>
             </div>
@@ -197,7 +197,7 @@
             <div style="text-align:center; max-width:400px;">
                 <div style="width:80px; height:80px; background:#34C759; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 30px; font-size:2rem; color:#fff;">✓</div>
                 <h2 style="font-family:var(--font-heading); font-size:2rem; margin-bottom:15px;">Transaction Securely Anchored</h2>
-                <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">Your Chillata Swap has been executed and verified on the Procyon Ledger.</p>
+                <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">Your Chillata Swap has been executed and verified on the Priscion Ledger.</p>
                 <button class="btn-confirm" onclick="location.reload()">BACK TO EXCHANGE</button>
             </div>
         </div>
@@ -206,6 +206,7 @@
             <a href="exchange.html" class="nav-link active">Exchange</a>
             <a href="vault.html" class="nav-link">Vault</a>
             <a href="auth.html" class="nav-link">Identity</a>
+            <a href="#" class="nav-link" onclick="alert('Opening Priscion Staking Laboratory... Mining $PRN, $NRL, $ATLR, $JLO enabled.')">Stake</a>
             <a href="../index.html" class="nav-link">Hub</a>
         </footer>
     </div>
