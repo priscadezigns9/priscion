@@ -68,6 +68,7 @@
         }
         .asset-info { display: flex; align-items: center; gap: 20px; }
         .asset-icon { width: 45px; height: 45px; background: var(--surface); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; }
+        .asset-img { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
         .asset-name { font-weight: 900; font-size: 1rem; }
         .asset-amount { font-weight: 900; font-size: 1.1rem; text-align: right; }
         .asset-sub { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
@@ -151,7 +152,7 @@
             <div class="asset-list">
                 <div class="asset-item">
                     <div class="asset-info">
-                        <div class="asset-icon" style="color: #0033AD;">₳</div>
+                        <div class="asset-icon" style="color: #0033AD; font-weight: 900;">₳</div>
                         <div>
                             <div class="asset-name">Cardano</div>
                             <div class="asset-sub">ADA</div>
@@ -161,10 +162,30 @@
                 </div>
                 <div class="asset-item">
                     <div class="asset-info">
-                        <div class="asset-icon" style="background: #000; color: #fff;">$</div>
+                        <img src="https://priscion.com/assets/prn.jpg" class="asset-img">
                         <div>
-                            <div class="asset-name">PRN</div>
+                            <div class="asset-name">Independent Utility</div>
                             <div class="asset-sub">$PRN</div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">0.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="https://priscion.com/assets/nrl.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Neural Reserve</div>
+                            <div class="asset-sub">$NRL</div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">0.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="https://priscion.com/assets/atlr.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Atelia Gaming</div>
+                            <div class="asset-sub">$ATLR</div>
                         </div>
                     </div>
                     <div class="asset-amount">0.00</div>
@@ -206,7 +227,7 @@
                         <h4>MYNT</h4>
                     </div>
                     <div class="dapp-card" onclick="openDApp('../leggo.html')">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png">
+                        <img src="https://priscion.com/assets/leggo_logo.png">
                         <h4>LEGGO</h4>
                     </div>
                 </div>
