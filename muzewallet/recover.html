@@ -23,9 +23,17 @@
     <button class="btn-full" onclick="finalizeRecovery()">RESTORE VAULT</button>
 
     <script>
+        const bip39Words = ["architect", "reality", "sovereign", "neural", "ledger", "autonomy", "precision", "signal", "independent", "vault", "legacy", "mission"]; // Simplified BIP39 mock
+        
         function finalizeRecovery() {
-            const seed = document.querySelector('textarea').value.trim();
+            const seed = document.querySelector('textarea').value.trim().toLowerCase();
             if(!seed) return alert("Please enter your recovery seed.");
+            
+            const words = seed.split(/\s+/);
+            if(words.length !== 12 && words.length !== 15 && words.length !== 24) {
+                return alert("Invalid Seed: Recovery phrases must be 12, 15, or 24 words.");
+            }
+
             localStorage.setItem('muze_authenticated', 'true');
             localStorage.setItem('muze_vault_status', 'restored');
             location.href = 'index.html';
