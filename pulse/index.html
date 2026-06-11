@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PULSE | Sovereign Ledger Explorer</title>
+    <title>PULSE | Independent Ledger Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -123,7 +123,7 @@
 
     <div class="dashboard">
         <div class="search-area">
-            <input type="text" id="search-input" placeholder="Search Transactions, Blocks, or Sovereign Handles ($handle.pri)...">
+            <input type="text" id="search-input" placeholder="Search Transactions, Blocks, or Independent Handles ($handle.pri)...">
             <div class="search-btn" id="search-btn">SEARCH</div>
         </div>
 
@@ -131,7 +131,7 @@
             <div class="stat-card">
                 <span class="stat-label">Ledger Height</span>
                 <div class="stat-value" id="stat-height">---</div>
-                <div class="stat-sub">↑ Real-time Sync</div>
+                <div class="stat-sub">↑ SYNCED LIVE</div>
             </div>
             <div class="stat-card">
                 <span class="stat-label">Active Epoch</span>
@@ -141,7 +141,7 @@
             <div class="stat-card">
                 <span class="stat-label">Network Status</span>
                 <div class="stat-value" style="color:var(--muze-blue);">Stable</div>
-                <div class="stat-sub">Sovereign Nodes Online</div>
+                <div class="stat-sub">Independent Nodes Online</div>
             </div>
             <div class="stat-card">
                 <span class="stat-label">Settlement Fuel</span>
@@ -154,7 +154,7 @@
             <div class="feed-container">
                 <div class="feed-header">
                     <div class="feed-title">Recent Transactions</div>
-                    <div class="live-tag">Verified</div>
+                    <div class="live-tag">LIVE</div>
                 </div>
                 <div id="tx-feed">
                     <!-- Dynamic TX Feed -->
@@ -205,7 +205,7 @@
             document.getElementById('tx-feed').innerHTML = '<div style="padding:40px; text-align:center; font-weight:900;">SEARCHING LEDGER...</div>';
             
             try {
-                // 1. Check if it's a Sovereign Handle
+                // 1. Check if it's a Independent Handle
                 if(query.startsWith('$') || query.endsWith('.pri')) {
                     const handle = query.startsWith('$') ? query : '$' + query;
                     const response = await fetch(`${SB_URL}/rest/v1/ledger_state?handle=eq.${handle}&select=*`, {
@@ -216,7 +216,7 @@
                         const identity = data[0];
                         let results = [{ 
                             id: identity.handle, 
-                            meta: "Sovereign Identity Found", 
+                            meta: "Independent Identity Found", 
                             val: identity.balance + " $PRN",
                             sub: "Status: Active"
                         }];
@@ -259,7 +259,7 @@
                     const tx = await txRes.json();
                     renderSearchResults([{
                         id: tx.hash.substring(0,20) + "...",
-                        meta: "Transaction Verified on L1",
+                        meta: "Transaction LIVE on L1",
                         val: (parseInt(tx.output_amount[0].quantity) / 1000000).toFixed(2) + " $PRN",
                         sub: `Block: ${tx.block_height}`
                     }]);
@@ -328,7 +328,7 @@
                         </div>
                         <div class="data-val">
                             <div class="val-big">${(Math.random() * 2).toFixed(2)} MB</div>
-                            <div class="val-sub">Sovereign Node</div>
+                            <div class="val-sub">Independent Node</div>
                         </div>
                     </div>
                 `;
@@ -348,12 +348,12 @@
                             <div class="icon-hex">⚡</div>
                             <div>
                                 <div class="data-id">${tx.substring(0, 15)}...</div>
-                                <div class="data-meta">${isAirdrop ? 'Mustard Seed Airdrop' : 'Sovereign Transaction'}</div>
+                                <div class="data-meta">${isAirdrop ? 'Mustard Seed Airdrop' : 'Independent Transaction'}</div>
                             </div>
                         </div>
                         <div class="data-val">
                             <div class="val-big" style="color: ${isAirdrop ? '#00C853' : 'var(--muze-blue)'}">${isAirdrop ? '+1,250' : '850'} $PRN</div>
-                            <div class="val-sub">Verified</div>
+                            <div class="val-sub">LIVE</div>
                         </div>
                     </div>
                 `;
