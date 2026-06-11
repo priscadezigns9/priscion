@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MYNT | Independent NFT Marketplace</title>
+    <title>MYNT | Procyon NFT Marketplace</title>
     <link rel="icon" type="image/png" href="https://share.zapia.com/6h0tzrbb1e8o94jesdlbgz">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
@@ -139,15 +139,15 @@
 
     <div class="hero-banner">
         <div class="hero-text">
-            <h1>Independent<br>Artifacts.</h1>
-            <p>The primary manufacturing hub for Independent NFTs. Buy, sell, and trade high-fidelity digital assets on the Priscion Ledger.</p>
+            <h1>Procyon<br>Artifacts.</h1>
+            <p>The primary manufacturing hub for Procyon NFTs. Buy, sell, and trade high-fidelity digital assets on the Procyon Ledger.</p>
         </div>
         <div class="featured-nft" style="width:300px;">
             <div class="nft-card" style="transform: rotate(3deg);">
                 <div class="nft-thumb"><img src="../card.png"></div>
                 <div class="nft-info">
-                    <div class="nft-collection">Independent Utility</div>
-                    <div class="nft-title">Independent Digital Card #001</div>
+                    <div class="nft-collection">Procyon Utility</div>
+                    <div class="nft-title">Procyon Digital Card #001</div>
                     <div class="nft-price-row">
                         <div class="price-label">Price</div>
                         <div class="price-val">$PRN 500</div>
@@ -269,9 +269,9 @@
         }
 
         const items = [
-            { id:1, col: 'Independent Utility', title: 'Independent Digital Card', price: '500', usd: '49.99', img: '../card.png' },
-            { id:2, col: 'Independent Identity', title: 'Custom .pri Handle', price: '1,000', usd: '9.99', img: '../assets/muze_icon_logo.png' },
-            { id:3, col: 'Neural Assets', title: 'Independent $PRN Pack (5k)', price: '---', usd: '49.99', img: '../assets/muze_logo.png', isBalance: true, amount: 5000 }
+            { id:1, col: 'Procyon Utility', title: 'Procyon Digital Card', price: '500', usd: '49.99', img: '../card.png' },
+            { id:2, col: 'Procyon Identity', title: 'Custom .pri Handle', price: '1,000', usd: '9.99', img: '../assets/muze_icon_logo.png' },
+            { id:3, col: 'Neural Assets', title: 'Procyon $PRN Pack (5k)', price: '---', usd: '49.99', img: '../assets/muze_logo.png', isBalance: true, amount: 5000 }
         ];
 
         function renderGrid() {
@@ -359,7 +359,7 @@
                     alert(`${activeItem.amount} $PRN has been automatically added to your MUZE Vault.`);
                 } else if(customHandle) {
                     walletState.handle = customHandle;
-                    walletState.assets.push({ icon: '🆔', label: 'Independent Handle: ' + customHandle, sub: 'Identity' });
+                    walletState.assets.push({ icon: '🆔', label: 'Procyon Handle: ' + customHandle, sub: 'Identity' });
                 } else {
                     walletState.assets.push({ icon: '💳', label: activeItem.title, sub: 'NFT' });
                 }
@@ -398,7 +398,7 @@
         function setAsPFP(icon) {
             // Logic to convert emoji/icon to PFP if it were a real image
             // For now, we simulate the update
-            alert("This NFT asset is now set as your Independent Profile Picture.");
+            alert("This NFT asset is now set as your Procyon Profile Picture.");
         }
 
         initStore();
