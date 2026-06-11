@@ -83,6 +83,7 @@
         .chat-bubble.out { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
         .chat-input-area { margin-top: 20px; display: flex; gap: 10px; }
         .chat-input { flex: 1; padding: 15px 25px; border-radius: 100px; border: 1px solid var(--border); outline: none; background: var(--surface); font-weight: 600; }
+        .chat-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--muted); display: flex; align-items: center; justify-content: center; padding: 0 5px; }
 
         /* STAGE: dAPPS */
         .stage-dapps-container { height: calc(100vh - 180px); display: flex; flex-direction: column; }
@@ -227,6 +228,8 @@
                 <div class="chat-bubble out">Ready to architect the future.</div>
             </div>
             <div class="chat-input-area">
+                <button class="chat-btn">📎</button>
+                <button class="chat-btn">🎙️</button>
                 <input type="text" class="chat-input" placeholder="Neural message...">
                 <button class="btn-full" style="width: auto; padding: 15px 30px; margin: 0;">SEND</button>
             </div>
