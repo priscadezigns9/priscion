@@ -148,7 +148,7 @@
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Explorer</div>
-        <div class="nav-item" onclick="showStage('card', this)">Priscion Digital Card</div>
+        <div class="nav-item" onclick="showStage('card', this)">Procyon Digital Card</div>
     </div>
 
     <div class="content">
@@ -247,7 +247,7 @@
                 <div id="card-connect-overlay" class="card-connect-overlay">
                     <img src="../assets/leggo_logo.png">
                     <h3>CONNECT VAULT</h3>
-                    <p>This dApp is requesting access to your Priscion Digital Card.</p>
+                    <p>This dApp is requesting access to your Procyon Digital Card.</p>
                     <div style="display:flex; gap:10px;">
                         <button class="btn-full" style="width:140px; padding:12px; font-size:0.6rem;" onclick="confirmConnect()">APPROVE</button>
                         <button class="btn-outline" style="width:140px; padding:12px; font-size:0.6rem;" onclick="cancelConnect()">CANCEL</button>
@@ -288,13 +288,20 @@
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Procyon Elite Card</h2>
+            <h2 style="margin-bottom: 20px; font-weight: 900; text-align: center;">Procyon Digital Card</h2>
             <div class="card-display">
                 <img src="../assets/card.png">
                 <div class="card-overlay"></div>
             </div>
-            <p style="color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 30px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">A bridge to real-world autonomy.</p>
-            <button class="btn-outline" style="width:100%; margin-top:20px; border-color:#FF3B30; color:#FF3B30;" onclick="logout()">LOCK VAULT</button>
+
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-bottom: 20px;">Primary Anchors (.pri)</h3>
+                <div id="handle-gallery" class="asset-list" style="max-height: 250px; overflow-y: auto; padding-right: 10px;">
+                    <!-- Handles injected via JS -->
+                </div>
+            </div>
+
+            <button class="btn-outline" style="width:100%; margin-top:40px; border-color:#FF3B30; color:#FF3B30;" onclick="logout()">LOCK VAULT</button>
         </div>
     </div>
 
@@ -315,7 +322,11 @@
         });
 
         function bypassEntrance() {
-            document.getElementById('layer-entrance').classList.add('hidden');
+            const entrance = document.getElementById('layer-entrance');
+            if(entrance) entrance.style.display = 'none';
+            const activeHandle = handles.find(h => h.active).name;
+            const handleDisplay = document.getElementById('display-handle');
+            if(handleDisplay) handleDisplay.innerText = activeHandle;
         }
 
         function showStage(id, el) {
@@ -385,19 +396,82 @@
             }
         }
 
+        const handles = [
+            { name: "prisca.pri", active: true },
+            { name: "pricey.pri", active: false },
+            { name: "calalloo.pri", active: false },
+            { name: "ateliagaming.pri", active: false }
+        ];
+
+        function renderHandles() {
+            const gallery = document.getElementById('handle-gallery');
+            if(!gallery) return;
+            gallery.innerHTML = '';
+            handles.forEach(h => {
+                const item = document.createElement('div');
+                item.className = 'asset-item';
+                item.style.cursor = 'pointer';
+                item.onclick = () => toggleHandle(h.name);
+                item.innerHTML = `
+                    <div class="asset-info">
+                        <div class="asset-icon" style="background: ${h.active ? '#000' : 'var(--surface)'}; color: ${h.active ? '#fff' : 'var(--text)'}; font-size: 0.6rem;">.pri</div>
+                        <div>
+                            <div class="asset-name">${h.name}</div>
+                            <div class="asset-sub">${h.active ? 'PRIMARY ANCHOR' : 'ANCHOR'}</div>
+                        </div>
+                    </div>
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: ${h.active ? '#34C759' : 'var(--border)'};"></div>
+                `;
+                gallery.appendChild(item);
+            });
+        }
+
+        function toggleHandle(name) {
+            handles.forEach(h => h.active = (h.name === name));
+            const activeHandle = handles.find(h => h.active).name;
+            const handleDisplay = document.getElementById('display-handle');
+            if(handleDisplay) handleDisplay.innerText = activeHandle;
+            renderHandles();
+        }
+
         function sendNeuralMessage() {
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
             if(text) {
-                const feed = document.querySelector('.chat-feed');
-                const bubble = document.createElement('div');
-                bubble.className = 'chat-bubble out';
-                bubble.innerText = text;
-                feed.appendChild(bubble);
-                feed.scrollTop = feed.scrollHeight;
+                appendBubble(text, 'out');
                 input.value = '';
+                
+                // Simulate Neural Intelligence
+                setTimeout(() => {
+                    neuralResponse(text);
+                }, 1000);
             }
         }
+
+        function appendBubble(text, type) {
+            const feed = document.querySelector('.chat-feed');
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-bubble ' + type;
+            bubble.innerText = text;
+            feed.appendChild(bubble);
+            feed.scrollTop = feed.scrollHeight;
+        }
+
+        function neuralResponse(userText) {
+            let response = "Neural link established. Architecting your request...";
+            if(userText.toLowerCase().includes("status")) response = "All Procyon systems operational. Ledger synchronized.";
+            if(userText.toLowerCase().includes("balance")) response = "Current vault balance: 1,000 ADA, 5,000 PRN.";
+            
+            appendBubble(response, 'in');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const auth = localStorage.getItem('muze_authenticated');
+            if (auth === 'true') {
+                bypassEntrance();
+            }
+            renderHandles();
+        });
     </script>
 </body>
 </html>
