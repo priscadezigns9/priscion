@@ -31,67 +31,71 @@
         .app { height: 100%; display: grid; grid-template-rows: auto 1fr auto; }
 
         header {
-            padding: 12px 4%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--surface);
+            padding: 20px 40px;
+            display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border);
+            background: rgba(10,10,10,0.8); backdrop-filter: blur(20px);
             z-index: 100;
         }
-        .logo img { height: 40px; border-radius: 50%; border: 1px solid var(--accent); }
-        .ticker-tape {
-            font-size: 0.65rem;
-            font-weight: 800;
-            display: flex;
-            gap: 25px;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .up { color: var(--green); }
-        .down { color: var(--red); }
+
+        .logo img { height: 30px; }
+
+        .ticker-tape { display: flex; gap: 30px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; color: var(--muted); }
+        .ticker-tape b.up { color: var(--green); }
+        .ticker-tape b.down { color: var(--red); }
 
         .terminal {
-            display: grid;
-            grid-template-columns: 240px 1fr 300px;
-            gap: 1px;
-            background: var(--border);
+            display: grid; grid-template-columns: 320px 1fr 320px;
             overflow: hidden;
         }
 
-        .col { background: var(--bg); display: flex; flex-direction: column; overflow: hidden; }
+        .col { display: flex; flex-direction: column; overflow: hidden; }
 
-        .chart-header { padding: 20px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-end; }
-        .chart-title { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; }
-        .price-now { font-size: 1.4rem; font-weight: 900; font-family: monospace; }
+        .chart-header { padding: 30px 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .chart-title { font-family: var(--font-heading); font-size: 1.8rem; }
+        .price-now { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; }
 
-        .chart-container { flex: 1; position: relative; background: #000; padding: 10px; }
-        canvas { width: 100%; height: 100%; }
+        .chart-container { flex: 1; padding: 0 40px 40px; position: relative; }
+        #marketChart { width: 100%; height: 100%; }
 
-        .trade-col { padding: 20px; background: var(--surface); }
-        .input-wrap { background: #000; border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; padding: 15px; margin-bottom: 15px; }
-        .input-wrap input { flex: 1; border: none; background: transparent; font-size: 1.1rem; font-weight: 700; outline: none; color: #fff; }
-        .input-wrap img { width: 24px; height: 24px; border-radius: 50%; margin-left: 10px; }
+        .trade-col { background: var(--surface); padding: 40px; border-left: 1px solid var(--border); }
+        .input-wrap { background: #000; border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .input-wrap input { background: transparent; border: none; color: #fff; font-size: 1.5rem; font-weight: 900; width: 60%; outline: none; }
+        .input-wrap img { width: 32px; height: 32px; border-radius: 50%; }
 
         .btn-confirm {
-            width: 100%; padding: 20px; border-radius: 12px; border: none; font-weight: 900; font-size: 0.85rem; 
-            text-transform: uppercase; letter-spacing: 2px; cursor: pointer; background: var(--accent); color: white;
+            width: 100%; background: var(--accent); color: #fff; border: none; padding: 25px;
+            border-radius: 20px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; margin-top: 20px; box-shadow: 0 10px 30px rgba(123, 53, 212, 0.3);
         }
 
         footer {
-            background: var(--surface);
+            padding: 20px 40px;
+            display: flex; justify-content: center; gap: 40px;
             border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            height: 70px;
+            background: var(--surface);
         }
-        .nav-link { 
-            font-size: 0.6rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; 
-            color: var(--muted); text-decoration: none;
-        }
+
+        .nav-link { text-decoration: none; color: var(--muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
         .nav-link.active { color: var(--accent); }
+
+        /* Asset List Styling */
+        .asset-row {
+            background: rgba(255,255,255,0.03); 
+            padding: 15px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .asset-row:hover { border-color: var(--border); background: rgba(255,255,255,0.05); }
+        .asset-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+        .asset-meta { flex: 1; }
+        .asset-symbol { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; }
+        .asset-name { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; }
+        .asset-price { text-align: right; font-weight: 800; font-size: 0.8rem; }
 
     </style>
 </head>
@@ -99,7 +103,7 @@
 
     <div class="app">
         <header>
-            <div class="logo"><img src="https://drive.google.com/uc?export=view&id=1D4We-G4I_M3cjBKyPHbVTa9W5abinD8v"></div>
+            <div class="logo"><img src="https://priscion.com/assets/chillata_logo.png"></div>
             <div class="ticker-tape">
                 <span>PRN/MUSD: <b class="up">1.0245 +12%</b></span>
                 <span>ATLR/PRN: <b class="down">0.0450 -2%</b></span>
@@ -108,42 +112,58 @@
         </header>
 
         <div class="terminal">
-            <div class="col" style="padding:20px; border-right:1px solid var(--border);">
-                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Asset List</h3>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://priscion.com/assets/prn.jpg" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;"></div><div style="font-size:0.6rem; color:var(--muted);">.02</div></div>
+            <div class="col" style="padding:40px; border-right:1px solid var(--border); overflow-y: auto;">
+                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:3px; margin-bottom:30px;">Independent Assets</h3>
+                
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <!-- PRN -->
+                    <div class="asset-row">
+                        <img src="https://priscion.com/assets/prn.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">PRN</div>
+                            <div class="asset-name">Independent Utility</div>
+                        </div>
+                        <div class="asset-price">$1.02</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://priscion.com/assets/nrl.jpg" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;"></div><div style="font-size:0.6rem; color:var(--muted);">/bin/bash.85</div></div>
+
+                    <!-- NRL -->
+                    <div class="asset-row">
+                        <img src="https://priscion.com/assets/nrl.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">NRL</div>
+                            <div class="asset-name">Neural Reserve</div>
+                        </div>
+                        <div class="asset-price">$42.85</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://priscion.com/assets/atlr.jpg" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;"></div><div style="font-size:0.6rem; color:var(--muted);">/bin/bash.04</div></div>
+
+                    <!-- ATLR -->
+                    <div class="asset-row">
+                        <img src="https://priscion.com/assets/atlr.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">ATLR</div>
+                            <div class="asset-name">Atelia Gaming</div>
+                        </div>
+                        <div class="asset-price">$0.04</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://priscion.com/assets/musd.jpg" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;"></div><div style="font-size:0.6rem; color:var(--muted);">.00</div></div>
+
+                    <!-- MUSD -->
+                    <div class="asset-row">
+                        <img src="https://priscion.com/assets/musd.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">MUSD</div>
+                            <div class="asset-name">Independent Stable</div>
+                        </div>
+                        <div class="asset-price">$1.00</div>
                     </div>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://priscion.com/assets/jlo.jpg" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;"></div><div style="font-size:0.6rem; color:var(--muted);">.00</div></div>
-                    </div>
-                </div></div>
-                    </div>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://drive.google.com/uc?export=view&id=1RJfigGY8p5kg0-4WV8_DExrDd4Hj2mtz" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;">$MUSD</div><div style="font-size:0.6rem; color:var(--muted);">$1.00</div></div>
-                    </div>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://priscion.com/assets/atlr.jpg" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;">$ATLR</div><div style="font-size:0.6rem; color:var(--muted);">$0.04</div></div>
-                    </div>
-                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px; display:flex; align-items:center; gap:12px;">
-                        <img src="https://priscion.com/assets/jlo.jpg" style="width:24px; border-radius:50%;">
-                        <div><div style="font-weight:800; font-size:0.75rem;">$JLO</div><div style="font-size:0.6rem; color:var(--muted);">$1.00</div></div>
+
+                    <!-- JLO -->
+                    <div class="asset-row">
+                        <img src="https://priscion.com/assets/jlo.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">JLO</div>
+                            <div class="asset-name">Joint Ledger Ops</div>
+                        </div>
+                        <div class="asset-price">$1.00</div>
                     </div>
                 </div>
             </div>
@@ -166,10 +186,7 @@
                 
                 <div class="input-wrap">
                     <input type="text" value="120.45" readonly>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-weight:800; font-size:0.8rem;"></span>
-                        <img src="https://priscion.com/assets/nrl.jpg" style="width:24px; border-radius:50%;">
-                    </div>
+                    <img src="https://priscion.com/assets/nrl.jpg">
                 </div>
                 <button class="btn-confirm" onclick="alert('Anchoring Transaction to Ledger...')">Execute Chillata Swap</button>
             </div>
