@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUZE | Create Vault</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <style>
+        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 40px; text-align: center; }
+        .muze-logo { height: 60px; margin-bottom: 40px; }
+        h2 { font-weight: 900; font-size: 1.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        .seed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 500px; margin-bottom: 40px; }
+        .seed-word { background: #F9F9F9; border: 1px solid var(--border); padding: 15px; border-radius: 12px; font-size: 0.8rem; font-weight: 900; color: #000; display: flex; align-items: center; gap: 10px; }
+        .seed-word span { color: var(--muted); font-size: 0.6rem; width: 20px; text-align: left; }
+        .btn-full { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 300px; }
+        p { color: var(--muted); font-size: 0.8rem; max-width: 400px; margin-bottom: 30px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <img src="../assets/muze_icon_logo.png" class="muze-logo">
+    <h2>Secure your Recovery Seed.</h2>
+    <p>Write these 12 words down on a physical piece of paper and store it in a secure location. Never share it with anyone.</p>
+    <div class="seed-grid">
+        <div class="seed-word"><span>01</span> ARCHITECT</div>
+        <div class="seed-word"><span>02</span> REALITY</div>
+        <div class="seed-word"><span>03</span> SOVEREIGN</div>
+        <div class="seed-word"><span>04</span> NEURAL</div>
+        <div class="seed-word"><span>05</span> LEDGER</div>
+        <div class="seed-word"><span>06</span> AUTONOMY</div>
+        <div class="seed-word"><span>07</span> PRECISION</div>
+        <div class="seed-word"><span>08</span> SIGNAL</div>
+        <div class="seed-word"><span>09</span> INDEPENDENT</div>
+        <div class="seed-word"><span>10</span> VAULT</div>
+        <div class="seed-word"><span>11</span> LEGACY</div>
+        <div class="seed-word"><span>12</span> MISSION</div>
+    </div>
+    <button class="btn-full" onclick="location.href='index.html'">I HAVE SAVED THEM</button>
+</body>
+</html>
