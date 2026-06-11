@@ -96,12 +96,18 @@
 
         /* Card Display */
         .card-display {
-            width: 100%; max-width: 600px; aspect-ratio: 1.6;
-            background: #000; border-radius: 30px; overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);
+            width: 100%; max-width: 500px; aspect-ratio: 1.6 / 1;
+            background: #000; border-radius: 24px; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
             margin: 0 auto;
+            position: relative;
         }
-        .card-display img { width: 100%; height: 100%; object-fit: contain; background: #000; }
+        .card-display img { width: 100%; height: 100%; object-fit: cover; }
+        .card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 60%);
+            pointer-events: none;
+        }
 
     </style>
 </head>
@@ -239,10 +245,12 @@
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Digital Asset Card</h2>
+            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Priscion Digital Card</h2>
             <div class="card-display">
-                <img src="https://priscion.com/assets/card.png" onerror="this.src='https://placehold.co/600x400/000000/FFFFFF?text=ASSET+CARD'">
+                <img src="https://priscion.com/assets/card.jpg">
+                <div class="card-overlay"></div>
             </div>
+            <p style="color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 30px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">The ultimate signal of autonomy.</p>
         </div>
     </div>
 
