@@ -83,20 +83,24 @@
         .chat-input-area { margin-top: 20px; display: flex; gap: 10px; }
         .chat-input { flex: 1; padding: 15px 25px; border-radius: 100px; border: 1px solid var(--border); outline: none; background: var(--surface); font-weight: 600; }
 
-        /* dApps */
-        .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .dapp-card { background: #fff; border: 1px solid var(--border); padding: 30px; border-radius: 24px; text-align: center; text-decoration: none; color: inherit; }
+        /* STAGE: dAPPS */
+        .stage-dapps-container { height: calc(100vh - 180px); display: flex; flex-direction: column; }
+        .dapp-iframe-wrapper { flex: 1; border: 1px solid var(--border); border-radius: 24px; overflow: hidden; background: var(--surface); display: none; }
+        .dapp-iframe-wrapper iframe { width: 100%; height: 100%; border: none; }
+        .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .dapp-card { background: #fff; border: 1px solid var(--border); padding: 30px; border-radius: 24px; text-align: center; cursor: pointer; text-decoration: none; color: inherit; position: relative; }
         .dapp-card img { height: 40px; margin-bottom: 15px; }
-        .dapp-card h4 { font-weight: 900; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .dapp-card h4 { font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        .back-to-dapps { margin-bottom: 20px; font-weight: 900; font-size: 0.7rem; cursor: pointer; display: none; align-items: center; gap: 10px; color: var(--muze-blue); }
 
-        /* Sovereign Card */
+        /* Card Display */
         .card-display {
             width: 100%; max-width: 600px; aspect-ratio: 1.6;
             background: #000; border-radius: 30px; overflow: hidden;
             box-shadow: 0 30px 60px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);
             margin: 0 auto;
         }
-        .card-display img { width: 100%; height: 100%; object-fit: cover; }
+        .card-display img { width: 100%; height: 100%; object-fit: contain; background: #000; }
 
     </style>
 </head>
@@ -186,28 +190,37 @@
 
         <!-- STAGE: dAPPS -->
         <div id="stage-dapps" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900;">Network dApps</h2>
-            <div class="dapp-grid">
-                <a href="../pulse/" class="dapp-card">
-                    <img src="https://priscion.com/assets/pulse_logo.png">
-                    <h4>PULSE</h4>
-                </a>
-                <a href="../chillata/" class="dapp-card">
-                    <img src="https://priscion.com/assets/chillata_logo.png">
-                    <h4>CHILLATA</h4>
-                </a>
-                <a href="../mynt/" class="dapp-card">
-                    <img src="https://priscion.com/assets/mynt_logo.png">
-                    <h4>MYNT</h4>
-                </a>
+            <div class="stage-dapps-container">
+                <div id="dapp-browser-back" class="back-to-dapps" onclick="closeDApp()">← BACK TO dAPPS</div>
+                <div id="dapp-main-grid" class="dapp-grid">
+                    <div class="dapp-card" onclick="openDApp('../pulse/')">
+                        <img src="https://priscion.com/assets/pulse_logo.png">
+                        <h4>PULSE</h4>
+                    </div>
+                    <div class="dapp-card" onclick="openDApp('../chillata/')">
+                        <img src="https://priscion.com/assets/chillata_logo.png">
+                        <h4>CHILLATA</h4>
+                    </div>
+                    <div class="dapp-card" onclick="openDApp('../mynt/')">
+                        <img src="https://priscion.com/assets/mynt_logo.png">
+                        <h4>MYNT</h4>
+                    </div>
+                    <div class="dapp-card" onclick="openDApp('https://google.com')">
+                        <div style="font-size: 2rem; margin-bottom:10px;">🔍</div>
+                        <h4>LEGO SEARCH</h4>
+                    </div>
+                </div>
+                <div id="dapp-iframe-wrapper" class="dapp-iframe-wrapper">
+                    <iframe id="dapp-frame" src=""></iframe>
+                </div>
             </div>
         </div>
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Sovereign Digital Card</h2>
+            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Digital Asset Card</h2>
             <div class="card-display">
-                <img src="https://priscion.com/assets/card.png">
+                <img src="https://priscion.com/assets/card.png" onerror="this.src='https://placehold.co/600x400/000000/FFFFFF?text=ASSET+CARD'">
             </div>
         </div>
     </div>
@@ -222,6 +235,21 @@
             document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
+            if(id !== 'dapps') closeDApp();
+        }
+
+        function openDApp(url) {
+            document.getElementById('dapp-main-grid').style.display = 'none';
+            document.getElementById('dapp-iframe-wrapper').style.display = 'block';
+            document.getElementById('dapp-browser-back').style.display = 'flex';
+            document.getElementById('dapp-frame').src = url;
+        }
+
+        function closeDApp() {
+            document.getElementById('dapp-main-grid').style.display = 'grid';
+            document.getElementById('dapp-iframe-wrapper').style.display = 'none';
+            document.getElementById('dapp-browser-back').style.display = 'none';
+            document.getElementById('dapp-frame').src = '';
         }
     </script>
 </body>
