@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share-to-Earn | Priscion Engine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --text: #1A1A1A;
+            --muted: #666666;
+            --accent: #7B35D4;
+            --muze-blue: #5AC8FA;
+            --border: rgba(0,0,0,0.08);
+            --surface: #F9F9F9;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        /* ZERO ANIMATION STABILITY */
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
+        
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+        nav {
+            height: 90px; padding: 0 8%;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px); z-index: 1000;
+        }
+        .logo { height: 35px; cursor: pointer; }
+
+        .hero {
+            padding: 100px 8% 60px; text-align: center;
+            max-width: 900px; margin: 0 auto;
+        }
+        .kicker { font-size: 0.7rem; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+        h1 { font-family: var(--font-heading); font-size: clamp(3rem, 8vw, 4.5rem); line-height: 1.1; margin-bottom: 30px; }
+        p { font-size: 1.1rem; color: var(--muted); margin-bottom: 40px; line-height: 1.7; }
+
+        .generator-box {
+            background: var(--surface); border: 1px solid var(--border);
+            padding: 50px; border-radius: 30px; text-align: left;
+            margin-bottom: 80px;
+        }
+        label { display: block; font-weight: 900; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; color: var(--text); }
+        .input-group { display: flex; gap: 15px; margin-bottom: 30px; }
+        input { 
+            flex: 1; padding: 20px 30px; border-radius: 100px; border: 1px solid var(--border); 
+            font-family: var(--font-body); font-weight: 600; font-size: 1rem; outline: none;
+            background: #FFF;
+        }
+        .btn-generate {
+            background: #000; color: #FFF; border: none; padding: 20px 40px; border-radius: 100px;
+            font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer;
+        }
+
+        .result-box {
+            padding: 30px; border-radius: 20px; background: #FFF; border: 1px solid var(--border);
+            display: none; align-items: center; justify-content: space-between; gap: 20px;
+        }
+        .link-text { font-family: monospace; font-size: 0.9rem; color: var(--muze-blue); font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+        .btn-copy { background: var(--surface); border: 1px solid var(--border); padding: 10px 20px; border-radius: 100px; font-weight: 900; font-size: 0.6rem; cursor: pointer; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-bottom: 100px; }
+        .stat-card { padding: 30px; border: 1px solid var(--border); border-radius: 24px; text-align: center; }
+        .stat-val { font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 5px; }
+        .stat-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+
+        footer { padding: 80px 8%; text-align: center; border-top: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <img src="../assets/priscion_logo.png" class="logo" onclick="location.href='../index.html'" onerror="this.src='../assets/priscion_logo.png'">
+        <div style="display:flex; gap:30px; align-items:center;">
+            <a href="../whitepaper.html" style="text-decoration:none; color:var(--text); font-weight:900; font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;">Whitepaper</a>
+            <a href="../muzewallet/" style="text-decoration:none; background:var(--muze-blue); color:#fff; padding:12px 25px; border-radius:100px; font-weight:900; font-size:0.7rem; letter-spacing:2px;">MUSE</a>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <div class="kicker">Affiliate Protocol</div>
+        <h1>The Share-to-Earn<br>Engine.</h1>
+        <p>Turn your network into a high-fidelity revenue stream. Share the Priscion vision, onboard legacy brands, and earn <strong>$PRN</strong> instant commissions directly to your MUZE vault.</p>
+
+        <div class="generator-box">
+            <label>ENTER YOUR .PRI HANDLE</label>
+            <div class="input-group">
+                <input type="text" id="handle-input" placeholder="$username.pri">
+                <button class="btn-generate" onclick="generateLink()">GENERATE LINK</button>
+            </div>
+            <div id="result" class="result-box">
+                <div class="link-text" id="referral-link"></div>
+                <button class="btn-copy" onclick="copyLink()">COPY LINK</button>
+            </div>
+            
+            <div style="margin-top:40px; padding-top:40px; border-top:1px solid var(--border); text-align:center;">
+                <p style="font-size:0.85rem; color:var(--muted); margin-bottom:20px;">Don't have a handle yet? You need a <strong>.pri</strong> identity to receive commissions.</p>
+                <a href="../muzewallet/" class="btn-generate" style="background:var(--muze-blue); text-decoration:none; display:inline-block;">GET YOUR HANDLE</a>
+            </div>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card"><div class="stat-val">10%</div><div class="stat-label">INSTANT COMMISSION</div></div>
+            <div class="stat-card"><div class="stat-val">500+</div><div class="stat-label">BRANDS MIGRATING</div></div>
+            <div class="stat-card"><div class="stat-val">$PRN</div><div class="stat-label">SETTLEMENT ASSET</div></div>
+        </div>
+    </div>
+
+    <footer>
+        <p style="font-size:0.7rem; font-weight:900; letter-spacing:2px; color:var(--muted); text-transform:uppercase;">Priscion Affiliate Node // 2026</p>
+    </footer>
+
+    <script>
+        function generateLink() {
+            const handle = document.getElementById('handle-input').value.trim();
+            if(!handle) return alert("Please enter your handle.");
+            const link = `https://priscion.com/join?ref=${handle.startsWith('$') ? handle : '$' + handle}`;
+            document.getElementById('referral-link').innerText = link;
+            document.getElementById('result').style.display = 'flex';
+        }
+
+        function copyLink() {
+            const link = document.getElementById('referral-link').innerText;
+            navigator.clipboard.writeText(link);
+            alert("Referral link copied to clipboard.");
+        }
+    </script>
+</body>
+</html>
