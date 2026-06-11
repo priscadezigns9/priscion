@@ -131,7 +131,7 @@
             <div class="stat-card">
                 <span class="stat-label">Ledger Height</span>
                 <div class="stat-value" id="stat-height">---</div>
-                <div class="stat-sub">↑ SYNCED LIVE</div>
+                <div class="stat-sub">↑ Real-time Sync</div>
             </div>
             <div class="stat-card">
                 <span class="stat-label">Active Epoch</span>
@@ -154,7 +154,7 @@
             <div class="feed-container">
                 <div class="feed-header">
                     <div class="feed-title">Recent Transactions</div>
-                    <div class="live-tag">LIVE</div>
+                    <div class="live-tag">Verified</div>
                 </div>
                 <div id="tx-feed">
                     <!-- Dynamic TX Feed -->
@@ -259,7 +259,7 @@
                     const tx = await txRes.json();
                     renderSearchResults([{
                         id: tx.hash.substring(0,20) + "...",
-                        meta: "Transaction LIVE on L1",
+                        meta: "Transaction Verified on L1",
                         val: (parseInt(tx.output_amount[0].quantity) / 1000000).toFixed(2) + " $PRN",
                         sub: `Block: ${tx.block_height}`
                     }]);
@@ -353,7 +353,7 @@
                         </div>
                         <div class="data-val">
                             <div class="val-big" style="color: ${isAirdrop ? '#00C853' : 'var(--muze-blue)'}">${isAirdrop ? '+1,250' : '850'} $PRN</div>
-                            <div class="val-sub">LIVE</div>
+                            <div class="val-sub">Verified</div>
                         </div>
                     </div>
                 `;
