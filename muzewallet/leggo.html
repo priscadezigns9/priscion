@@ -24,17 +24,12 @@
         .browser-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #fff; position: relative; }
         
         .search-container { text-align: center; max-width: 600px; width: 100%; padding: 40px; }
-        .leggo-logo { font-size: 3rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .leggo-logo img { height: 60px; }
+        .leggo-logo { font-size: 3rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .leggo-logo img { height: 120px; border-radius: 24px; }
 
         .search-input-wrap { position: relative; margin-bottom: 40px; }
         .search-input { width: 100%; padding: 20px 30px; border-radius: 100px; border: 1px solid var(--border); font-size: 1.1rem; font-weight: 600; outline: none; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .search-input:focus { border-color: var(--muze-blue); }
-
-        .quick-links { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
-        .quick-item { display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; color: inherit; cursor: pointer; }
-        .quick-icon { width: 50px; height: 50px; background: #F9F9F9; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border: 1px solid var(--border); }
-        .quick-name { font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
 
         iframe { border: none; width: 100%; height: 100%; display: none; }
     </style>
@@ -56,28 +51,11 @@
     <div class="browser-content">
         <div id="home-view" class="search-container">
             <div class="leggo-logo">
+                <img src="https://priscion.com/assets/leggo_logo.png">
                 <span>LEGGO</span>
             </div>
             <div class="search-input-wrap">
                 <input type="text" class="search-input" placeholder="Search the Independent Web..." onkeydown="handleSearch(event)">
-            </div>
-            <div class="quick-links">
-                <div class="quick-item" onclick="navigate('https://amazon.com')">
-                    <div class="quick-icon">📦</div>
-                    <div class="quick-name">Amazon</div>
-                </div>
-                <div class="quick-item" onclick="navigate('https://vogue.com')">
-                    <div class="quick-icon">👗</div>
-                    <div class="quick-name">Vogue</div>
-                </div>
-                <div class="quick-item" onclick="navigate('https://dior.com')">
-                    <div class="quick-icon">👜</div>
-                    <div class="quick-name">Dior</div>
-                </div>
-                <div class="quick-item" onclick="navigate('https://google.com')">
-                    <div class="quick-icon">🔍</div>
-                    <div class="quick-name">Search</div>
-                </div>
             </div>
         </div>
         <iframe id="browser-frame" src=""></iframe>
