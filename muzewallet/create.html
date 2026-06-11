@@ -15,33 +15,69 @@
         .seed-word span { color: var(--muted); font-size: 0.6rem; width: 20px; text-align: left; }
         .btn-full { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 300px; }
         p { color: var(--muted); font-size: 0.8rem; max-width: 400px; margin-bottom: 30px; line-height: 1.6; }
+        .hidden { display: none !important; }
+        input { width: 100%; max-width: 300px; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: #F9F9F9; margin-bottom: 15px; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center; }
     </style>
 </head>
 <body>
     <img src="../assets/muze_icon_logo.png" class="muze-logo">
-    <h2>Secure your Recovery Seed.</h2>
-    <p>Write these 12 words down on a physical piece of paper and store it in a secure location. Never share it with anyone.</p>
-    <div class="seed-grid">
-        <div class="seed-word"><span>01</span> ARCHITECT</div>
-        <div class="seed-word"><span>02</span> REALITY</div>
-        <div class="seed-word"><span>03</span> SOVEREIGN</div>
-        <div class="seed-word"><span>04</span> NEURAL</div>
-        <div class="seed-word"><span>05</span> LEDGER</div>
-        <div class="seed-word"><span>06</span> AUTONOMY</div>
-        <div class="seed-word"><span>07</span> PRECISION</div>
-        <div class="seed-word"><span>08</span> SIGNAL</div>
-        <div class="seed-word"><span>09</span> INDEPENDENT</div>
-        <div class="seed-word"><span>10</span> VAULT</div>
-        <div class="seed-word"><span>11</span> LEGACY</div>
-        <div class="seed-word"><span>12</span> MISSION</div>
+
+    <!-- STEP 1: Display Seed -->
+    <div id="step-display">
+        <h2>Secure your Recovery Seed.</h2>
+        <p>Write these 12 words down on a physical piece of paper and store it in a secure location. Never share it with anyone.</p>
+        <div class="seed-grid">
+            <div class="seed-word"><span>01</span> ARCHITECT</div>
+            <div class="seed-word"><span>02</span> REALITY</div>
+            <div class="seed-word"><span>03</span> SOVEREIGN</div>
+            <div class="seed-word"><span>04</span> NEURAL</div>
+            <div class="seed-word"><span>05</span> LEDGER</div>
+            <div class="seed-word"><span>06</span> AUTONOMY</div>
+            <div class="seed-word"><span>07</span> PRECISION</div>
+            <div class="seed-word"><span>08</span> SIGNAL</div>
+            <div class="seed-word"><span>09</span> INDEPENDENT</div>
+            <div class="seed-word"><span>10</span> VAULT</div>
+            <div class="seed-word"><span>11</span> LEGACY</div>
+            <div class="seed-word"><span>12</span> MISSION</div>
+        </div>
+        <button class="btn-full" onclick="showVerification()">I HAVE SAVED THEM</button>
     </div>
-    <button class="btn-full" onclick="finalizeCreation()">I HAVE SAVED THEM</button>
+
+    <!-- STEP 2: Verify Seed -->
+    <div id="step-verify" class="hidden">
+        <h2>Verify your Seed.</h2>
+        <p>Please enter the following words from your recovery phrase to confirm you've saved them correctly.</p>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="font-size: 0.7rem; font-weight: 900; color: var(--muted); display: block; margin-bottom: 10px;">WORD #03</label>
+            <input type="text" id="verify-3" placeholder="Enter word #3">
+        </div>
+
+        <div style="margin-bottom: 30px;">
+            <label style="font-size: 0.7rem; font-weight: 900; color: var(--muted); display: block; margin-bottom: 10px;">WORD #07</label>
+            <input type="text" id="verify-7" placeholder="Enter word #7">
+        </div>
+
+        <button class="btn-full" onclick="validateVerification()">CONFIRM & PROCEED</button>
+        <p style="margin-top: 20px; cursor: pointer; text-decoration: underline;" onclick="location.reload()">Back to seed</p>
+    </div>
 
     <script>
-        function finalizeCreation() {
-            localStorage.setItem('muze_authenticated', 'true');
-            localStorage.setItem('muze_vault_status', 'active');
-            location.href = 'index.html';
+        function showVerification() {
+            document.getElementById('step-display').classList.add('hidden');
+            document.getElementById('step-verify').classList.remove('hidden');
+        }
+
+        function validateVerification() {
+            const word3 = document.getElementById('verify-3').value.trim().toUpperCase();
+            const word7 = document.getElementById('verify-7').value.trim().toUpperCase();
+
+            if (word3 === 'SOVEREIGN' && word7 === 'PRECISION') {
+                location.href = 'password.html';
+            } else {
+                alert("Incorrect words. Please verify your seed and try again.");
+                location.reload();
+            }
         }
     </script>
 </body>
