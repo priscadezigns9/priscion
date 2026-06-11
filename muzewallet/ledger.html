@@ -28,24 +28,53 @@
     <button id="ledger-btn" class="btn-outline" onclick="location.href='index.html'">CANCEL</button>
 
     <script>
-        // Real-time logic: Search for 3 seconds then connect
-        setTimeout(() => {
+        async function connectLedger() {
             const statusText = document.getElementById('ledger-status-text');
             const statusIcon = document.getElementById('ledger-status-icon');
             const btn = document.getElementById('ledger-btn');
-            
-            statusIcon.style.animation = 'none';
-            statusIcon.style.background = '#34C759'; // Success Green
-            statusText.innerText = 'LEDGER CONNECTED';
-            btn.innerText = 'ENTER VAULT';
-            btn.classList.remove('btn-outline');
-            btn.classList.add('btn-full');
-            btn.onclick = () => {
-                localStorage.setItem('muze_authenticated', 'true');
-                localStorage.setItem('muze_vault_status', 'ledger');
-                location.href = 'index.html';
-            };
-        }, 3000);
+
+            try {
+                // Request WebHID device access
+                if (!navigator.hid) {
+                    throw new Error("WebHID not supported in this browser.");
+                }
+
+                statusText.innerText = 'WAITING FOR INPUT...';
+                
+                // This triggers the browser's native device picker
+                const devices = await navigator.hid.requestDevice({
+                    filters: [
+                        { vendorId: 0x2c97 } // Ledger Vendor ID
+                    ]
+                });
+
+                if (devices.length > 0) {
+                    statusIcon.style.animation = 'none';
+                    statusIcon.style.background = '#34C759'; // Success Green
+                    statusText.innerText = 'LEDGER CONNECTED';
+                    btn.innerText = 'ENTER VAULT';
+                    btn.classList.remove('btn-outline');
+                    btn.classList.add('btn-full');
+                    btn.onclick = () => {
+                        localStorage.setItem('muze_authenticated', 'true');
+                        localStorage.setItem('muze_vault_status', 'ledger');
+                        location.href = 'index.html';
+                    };
+                } else {
+                    statusText.innerText = 'NO DEVICE SELECTED';
+                }
+            } catch (err) {
+                console.error(err);
+                statusText.innerText = 'CONNECTION FAILED';
+                setTimeout(() => {
+                    statusText.innerText = 'SEARCHING FOR LEDGER...';
+                    connectLedger(); // Retry
+                }, 3000);
+            }
+        }
+
+        // Initialize connection attempt
+        connectLedger();
     </script>
 </body>
 </html>
