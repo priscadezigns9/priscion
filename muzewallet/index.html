@@ -239,7 +239,7 @@
                     <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"></path><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"></path></svg>
                 </button>
                 <input type="text" id="chat-input" class="chat-input" placeholder="Neural message..." onkeypress="if(event.key === 'Enter') sendNeuralMessage()">
-                <button class="btn-full" style="width: auto; padding: 15px 30px; margin: 0;" onclick="sendNeuralMessage()">SEND</button>
+                <button class="btn-full" style="width: auto; padding: 15px 30px; margin: 0; position: relative; z-index: 100;" onclick="sendNeuralMessage()">SEND</button>
             </div>
         </div>
 
