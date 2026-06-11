@@ -59,7 +59,8 @@
             display: flex; justify-content: space-between; align-items: center;
         }
         .asset-info { display: flex; align-items: center; gap: 20px; }
-        .asset-icon { width: 45px; height: 45px; background: var(--surface); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; }
+        .asset-icon { width: 45px; height: 45px; background: var(--surface); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .asset-icon img { width: 100%; height: 100%; object-fit: cover; }
         .asset-name { font-weight: 900; font-size: 1rem; }
         .asset-amount { font-weight: 900; font-size: 1.1rem; text-align: right; }
         .asset-sub { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
@@ -116,7 +117,7 @@
         <div class="nav-item" onclick="showStage('handles', this)">Handle Registry</div>
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Explorer</div>
-        <div class="nav-item" onclick="showStage('card', this)">Sovereign Card</div>
+        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
     </div>
 
     <div class="content">
@@ -143,7 +144,7 @@
             <div class="asset-list">
                 <div class="asset-item">
                     <div class="asset-info">
-                        <div class="asset-icon" style="color: #0033AD;">₳</div>
+                        <div class="asset-icon" style="background: #0033AD; color: #fff; font-weight: 900;">₳</div>
                         <div>
                             <div class="asset-name">Cardano</div>
                             <div class="asset-sub">ADA</div>
@@ -153,10 +154,20 @@
                 </div>
                 <div class="asset-item">
                     <div class="asset-info">
-                        <div class="asset-icon" style="background: #000; color: #fff;">$</div>
+                        <div class="asset-icon"><img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/priscion_primary_small.jpg"></div>
                         <div>
-                            <div class="asset-name">Sovereign PRN</div>
+                            <div class="asset-name">Neural PRN</div>
                             <div class="asset-sub">$PRN</div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">0.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <div class="asset-icon"><img src="https://drive.google.com/uc?export=view&id=1RJfigGY8p5kg0-4WV8_DExrDd4Hj2mtz"></div>
+                        <div>
+                            <div class="asset-name">Mustard Stable</div>
+                            <div class="asset-sub">$MUSD</div>
                         </div>
                     </div>
                     <div class="asset-amount">0.00</div>
@@ -202,9 +213,9 @@
                         <img src="https://priscion.com/assets/mynt_logo.png">
                         <h4>MYNT</h4>
                     </div>
-                    <div class="dapp-card" onclick="openDApp('https://google.com')">
-                        <div style="font-size: 2rem; margin-bottom:10px;">🔍</div>
-                        <h4>LEGO SEARCH</h4>
+                    <div class="dapp-card" onclick="openDApp('leggo.html')">
+                        <img src="https://priscion.com/assets/muze_icon_logo.png">
+                        <h4>LEGGO</h4>
                     </div>
                 </div>
                 <div id="dapp-iframe-wrapper" class="dapp-iframe-wrapper">
@@ -215,9 +226,9 @@
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Digital Asset Card</h2>
+            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Digital Card</h2>
             <div class="card-display">
-                <img src="https://priscion.com/assets/card.png" onerror="this.src='https://placehold.co/600x400/000000/FFFFFF?text=ASSET+CARD'">
+                <img src="https://priscion.com/assets/card.png">
             </div>
         </div>
     </div>
@@ -239,11 +250,22 @@
             { name: "theescapist.pri", owned: true },
             { name: "thetechscouthq.pri", owned: true },
             { name: "quietluxury.pri", owned: true },
-            { name: "thesovereignsignal.pri", owned: true },
             { name: "primelandnetwork.pri", owned: true },
             { name: "dior.pri", owned: true },
             { name: "vogue.pri", owned: true },
-            { name: "amazon.pri", owned: true }
+            { name: "amazon.pri", owned: true },
+            { name: "chanel.pri", owned: true },
+            { name: "gucci.pri", owned: true },
+            { name: "rolex.pri", owned: true },
+            { name: "louisvuitton.pri", owned: true },
+            { name: "prada.pri", owned: true },
+            { name: "hermes.pri", owned: true },
+            { name: "cartier.pri", owned: true },
+            { name: "tiffany.pri", owned: true },
+            { name: "ferrari.pri", owned: true },
+            { name: "lamborghini.pri", owned: true },
+            { name: "bentley.pri", owned: true },
+            { name: "porsche.pri", owned: true }
         ];
 
         function toggleDevMode() {
