@@ -94,6 +94,18 @@
         .dapp-card h4 { font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .back-to-dapps { margin-bottom: 20px; font-weight: 900; font-size: 0.7rem; cursor: pointer; display: none; align-items: center; gap: 10px; color: var(--muze-blue); }
 
+        /* Unified Card Connect Overlay */
+        .card-connect-overlay {
+            position: absolute; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.3s ease !important;
+            padding: 20px;
+        }
+        .card-connect-overlay.active { opacity: 1; pointer-events: all; }
+        .card-connect-overlay img { width: 150px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .card-connect-overlay h3 { font-weight: 900; font-size: 0.9rem; margin-bottom: 10px; }
+        .card-connect-overlay p { font-size: 0.7rem; color: var(--muted); margin-bottom: 25px; }
+
         /* Card Display */
         .card-display {
             width: 100%; max-width: 500px; aspect-ratio: 1.6 / 1;
@@ -109,6 +121,11 @@
             pointer-events: none;
         }
 
+        /* Secret God Mode Trigger */
+        .secret-trigger {
+            position: fixed; bottom: 0; right: 0; width: 40px; height: 40px;
+            z-index: 9999; cursor: crosshair;
+        }
     </style>
 </head>
 <body>
@@ -151,8 +168,8 @@
             <div class="action-bar">
                 <div class="action-btn"><span>↑</span>SEND</div>
                 <div class="action-btn"><span>↓</span>RECV</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../chillata/')"><span>⇆</span>SWAP</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../chillata/')"><span>⚡</span>STAKE</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../leggo.html')"><span>⇆</span>SWAP</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../leggo.html')"><span>⚡</span>STAKE</div>
             </div>
 
             <div class="asset-list">
@@ -217,21 +234,20 @@
 
         <!-- STAGE: dAPPS -->
         <div id="stage-dapps" class="stage hidden">
-            <div class="stage-dapps-container">
+            <div class="stage-dapps-container" style="position: relative;">
                 <div id="dapp-browser-back" class="back-to-dapps" onclick="closeDApp()">← BACK TO dAPPS</div>
+                
+                <div id="card-connect-overlay" class="card-connect-overlay">
+                    <img src="https://priscion.com/assets/card.jpg">
+                    <h3>CONNECT VAULT</h3>
+                    <p>This dApp is requesting access to your Priscion Digital Card.</p>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-full" style="width:140px; padding:12px; font-size:0.6rem;" onclick="confirmConnect()">APPROVE</button>
+                        <button class="btn-outline" style="width:140px; padding:12px; font-size:0.6rem;" onclick="cancelConnect()">CANCEL</button>
+                    </div>
+                </div>
+
                 <div id="dapp-main-grid" class="dapp-grid">
-                    <div class="dapp-card" onclick="openDApp('../pulse/')">
-                        <img src="https://priscion.com/assets/pulse_logo.png">
-                        <h4>PULSE</h4>
-                    </div>
-                    <div class="dapp-card" onclick="openDApp('../chillata/')">
-                        <img src="https://priscion.com/assets/chillata_logo.png">
-                        <h4>CHILLATA</h4>
-                    </div>
-                    <div class="dapp-card" onclick="openDApp('../mynt/')">
-                        <img src="https://priscion.com/assets/mynt_logo.png">
-                        <h4>MYNT</h4>
-                    </div>
                     <div class="dapp-card" onclick="openDApp('../leggo.html')">
                         <img src="https://priscion.com/assets/leggo_logo.png">
                         <h4>LEGGO</h4>
@@ -254,6 +270,8 @@
         </div>
     </div>
 
+    <div class="secret-trigger" onclick="location.href='vault.html'"></div>
+
     <script>
         function bypassEntrance() {
             document.getElementById('layer-entrance').classList.add('hidden');
@@ -267,11 +285,24 @@
             if(id !== 'dapps') closeDApp();
         }
 
+        let pendingDAppUrl = '';
+
         function openDApp(url) {
+            pendingDAppUrl = url;
+            document.getElementById('card-connect-overlay').classList.add('active');
+        }
+
+        function confirmConnect() {
+            document.getElementById('card-connect-overlay').classList.remove('active');
             document.getElementById('dapp-main-grid').style.display = 'none';
             document.getElementById('dapp-iframe-wrapper').style.display = 'block';
             document.getElementById('dapp-browser-back').style.display = 'flex';
-            document.getElementById('dapp-frame').src = url;
+            document.getElementById('dapp-frame').src = pendingDAppUrl;
+        }
+
+        function cancelConnect() {
+            document.getElementById('card-connect-overlay').classList.remove('active');
+            pendingDAppUrl = '';
         }
 
         function closeDApp() {
