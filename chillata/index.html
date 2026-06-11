@@ -113,7 +113,7 @@
 
         <div class="terminal">
             <div class="col" style="padding:40px; border-right:1px solid var(--border); overflow-y: auto;">
-                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:3px; margin-bottom:30px;">Independent Assets</h3>
+                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:3px; margin-bottom:30px;">Procyon Assets</h3>
                 
                 <div style="display:flex; flex-direction:column; gap:12px;">
                     <!-- PRN -->
@@ -121,7 +121,7 @@
                         <img src="https://priscion.com/assets/prn.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">PRN</div>
-                            <div class="asset-name">Independent Utility</div>
+                            <div class="asset-name">Procyon Utility</div>
                         </div>
                         <div class="asset-price">$1.02</div>
                     </div>
@@ -151,7 +151,7 @@
                         <img src="https://priscion.com/assets/musd.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">MUSD</div>
-                            <div class="asset-name">Independent Stable</div>
+                            <div class="asset-name">Procyon Stable</div>
                         </div>
                         <div class="asset-price">$1.00</div>
                     </div>
@@ -188,7 +188,17 @@
                     <input type="text" value="120.45" readonly>
                     <img src="https://priscion.com/assets/nrl.jpg">
                 </div>
-                <button class="btn-confirm" onclick="alert('Anchoring Transaction to Ledger...')">Execute Chillata Swap</button>
+                <button class="btn-confirm" onclick="executeSwap()">Execute Chillata Swap</button>
+            </div>
+        </div>
+
+        <!-- TRANSACTION SUCCESS MODAL -->
+        <div id="swap-modal" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.95); z-index:1000; align-items:center; justify-content:center; padding:40px;">
+            <div style="text-align:center; max-width:400px;">
+                <div style="width:80px; height:80px; background:#34C759; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 30px; font-size:2rem; color:#fff;">✓</div>
+                <h2 style="font-family:var(--font-heading); font-size:2rem; margin-bottom:15px;">Transaction Securely Anchored</h2>
+                <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">Your Chillata Swap has been executed and verified on the Procyon Ledger.</p>
+                <button class="btn-confirm" onclick="location.reload()">BACK TO EXCHANGE</button>
             </div>
         </div>
 
@@ -201,6 +211,10 @@
     </div>
 
     <script>
+        function executeSwap() {
+            document.getElementById('swap-modal').style.display = 'flex';
+        }
+
         const canvas = document.getElementById('marketChart');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight; }
