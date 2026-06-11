@@ -148,7 +148,7 @@
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Explorer</div>
-        <div class="nav-item" onclick="showStage('card', this)">Procyon Digital Card</div>
+        <div class="nav-item" onclick="showStage('card', this)">Priscion Digital Card</div>
     </div>
 
     <div class="content">
@@ -222,6 +222,9 @@
                 <img src="../assets/lynx_logo.png">
                 <h3 style="font-weight: 900; letter-spacing: 1px;">LYNX MESSENGER</h3>
             </div>
+            <div style="padding: 10px 0; border-bottom: 1px solid var(--border);"> 
+                <input type="text" id="messenger-search" placeholder="Search handles..." style="width:100%; padding:10px 15px; border-radius:100px; border:1px solid var(--border); font-size:0.7rem; font-weight:600;" onkeypress="if(event.key === 'Enter') searchHandle()"> 
+            </div>
             <div class="chat-feed">
                 <div class="chat-bubble in">Welcome to Lynx. Secure, encrypted profile-to-profile messaging is now active.</div>
                 <div class="chat-bubble out">Ready to architect the future.</div>
@@ -247,7 +250,7 @@
                 <div id="card-connect-overlay" class="card-connect-overlay">
                     <img src="../assets/leggo_logo.png">
                     <h3>CONNECT VAULT</h3>
-                    <p>This dApp is requesting access to your Procyon Digital Card.</p>
+                    <p>This dApp is requesting access to your Priscion Digital Card.</p>
                     <div style="display:flex; gap:10px;">
                         <button class="btn-full" style="width:140px; padding:12px; font-size:0.6rem;" onclick="confirmConnect()">APPROVE</button>
                         <button class="btn-outline" style="width:140px; padding:12px; font-size:0.6rem;" onclick="cancelConnect()">CANCEL</button>
@@ -288,7 +291,7 @@
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 20px; font-weight: 900; text-align: center;">Procyon Digital Card</h2>
+            <h2 style="margin-bottom: 20px; font-weight: 900; text-align: center;">Priscion Digital Card</h2>
             <div class="card-display">
                 <img src="../assets/card.png">
                 <div class="card-overlay"></div>
@@ -434,6 +437,16 @@
             renderHandles();
         }
 
+        function searchHandle() { 
+            const query = document.getElementById("messenger-search").value.trim().toLowerCase(); 
+            if(!query) return; 
+            appendBubble("System: Searching for handle @" + query + " on Priscion Ledger...", "in"); 
+            setTimeout(() => { 
+                appendBubble("System: Handle @" + query + " found. Secure neural channel established.", "in"); 
+            }, 1500); 
+            document.getElementById("messenger-search").value = ""; 
+        } 
+
         function sendNeuralMessage() {
             const input = document.getElementById('chat-input');
             const text = input.value.trim();
@@ -459,7 +472,7 @@
 
         function neuralResponse(userText) {
             let response = "Neural link established. Architecting your request...";
-            if(userText.toLowerCase().includes("status")) response = "All Procyon systems operational. Ledger synchronized.";
+            if(userText.toLowerCase().includes("status")) response = "All Priscion systems operational. Ledger synchronized.";
             if(userText.toLowerCase().includes("balance")) response = "Current vault balance: 1,000 ADA, 5,000 PRN.";
             
             appendBubble(response, 'in');
