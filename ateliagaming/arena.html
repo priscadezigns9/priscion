@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelia Arena | Tactical War Room</title>
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Bangers&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #D32F2F;
+            --orange: #FF6B00;
+            --white: #FFFFFF;
+            --black: #050505;
+            --cyber: #00ffff;
+        }
+        body, html {
+            margin: 0; padding: 0; font-family: 'Inter', sans-serif;
+            background-color: var(--black); color: var(--white);
+            min-height: 100vh; overflow-x: hidden;
+        }
+
+        /* 3D Kinetic Background */
+        .bg-wrap {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at center, #1a0a0a 0%, #000 100%);
+        }
+        .wireframe-grid {
+            position: fixed; inset: 0; z-index: -1;
+            background-image: linear-gradient(rgba(0,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.02) 1px, transparent 1px);
+            background-size: 100px 100px; transform: perspective(1000px) rotateX(70deg) translateY(-300px);
+            animation: moveGrid 20s linear infinite;
+        }
+        @keyframes moveGrid { from { background-position: 0 0; } to { background-position: 0 1000px; } }
+
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--cyber);
+            backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;
+        }
+        .logo-img { height: 40px; filter: drop-shadow(0 0 10px var(--cyber)); }
+
+        .war-room-header { padding: 80px 10% 40px; text-align: center; position: relative; }
+        .war-room-header h1 { font-family: 'Bangers'; font-size: 8rem; margin: 0; letter-spacing: 10px; color: transparent; -webkit-text-stroke: 2px var(--cyber); }
+        .war-room-header p { font-family: 'Russo One'; color: var(--red); letter-spacing: 5px; font-size: 1.2rem; }
+
+        .arena-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px; padding: 40px 10%; perspective: 1500px;
+        }
+
+        .protocol-card {
+            background: rgba(0,0,0,0.8); border: 1px solid rgba(0,255,255,0.1);
+            padding: 0; position: relative; overflow: hidden;
+            transition: 0.5s; transform-style: preserve-3d; border-radius: 4px;
+            text-decoration: none; color: white;
+        }
+        .protocol-card:hover { 
+            transform: translateZ(50px) rotateX(5deg); 
+            border-color: var(--cyber); box-shadow: 0 0 50px rgba(0,255,255,0.2);
+        }
+        
+        .card-visual { height: 250px; position: relative; overflow: hidden; }
+        .card-visual img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: 0.5s; }
+        .protocol-card:hover .card-visual img { opacity: 1; transform: scale(1.1); }
+        
+        .card-body { padding: 30px; border-top: 1px solid rgba(0,255,255,0.2); background: linear-gradient(180deg, rgba(0,255,255,0.05) 0%, transparent 100%); }
+        .card-body h3 { font-family: 'Bangers'; font-size: 2.5rem; margin: 0; letter-spacing: 2px; }
+        .card-body p { color: #888; font-size: 0.9rem; line-height: 1.6; margin: 15px 0; }
+
+        .rank-tag { position: absolute; top: 20px; right: 20px; padding: 5px 15px; background: var(--cyber); color: black; font-family: 'Russo One'; font-size: 0.7rem; font-weight: 900; }
+
+        .status-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+        .launch-btn { font-family: 'Russo One'; font-size: 0.8rem; color: var(--cyber); border-bottom: 2px solid var(--cyber); padding-bottom: 2px; }
+
+        /* HUD Stats */
+        .hud-stats { 
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+            display: flex; gap: 40px; background: rgba(0,0,0,0.8); border: 1px solid var(--cyber);
+            padding: 15px 40px; border-radius: 50px; backdrop-filter: blur(10px);
+            z-index: 2000; box-shadow: 0 0 30px rgba(0,255,255,0.3);
+        }
+        .hud-item { text-align: center; }
+        .hud-label { font-family: 'Russo One'; font-size: 0.6rem; color: #666; margin-bottom: 2px; }
+        .hud-val { font-family: 'Bangers'; font-size: 1.2rem; color: var(--white); }
+
+        @media (max-width: 900px) {
+            .war-room-header h1 { font-size: 4rem; }
+            .arena-grid { grid-template-columns: 1fr; }
+            .hud-stats { width: 90%; gap: 15px; padding: 15px 20px; border-radius: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-wrap"></div>
+    <div class="wireframe-grid"></div>
+
+    <nav>
+        <a href="index.html"><img src="https://priscadezigns.org/logos/atelier-gaming.png" class="logo-img" alt="Atelia Logo"></a>
+        <a href="game.html" style="color:var(--cyber); font-family:'Russo One'; text-decoration:none; font-size:0.7rem;">ACCESS HUB</a>
+    </nav>
+
+    <div class="war-room-header">
+        <h1>THE ARENA</h1>
+        <p>ELITE TACTICAL INTERFACE · V3.0</p>
+    </div>
+
+    <div class="arena-grid">
+        
+        <a href="nexus.html" class="protocol-card">
+            <div class="rank-tag">OPERATIVE</div>
+            <div class="card-visual"><img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=80"></div>
+            <div class="card-body">
+                <h3>NEURAL NEXUS PRO</h3>
+                <p>High-fidelity data harvesting protocol built on the Phaser v3 engine. Intercept systemic nodes and secure the ledger.</p>
+                <div class="status-footer"><span class="launch-btn">INITIALIZE PROTOCOL</span></div>
+            </div>
+        </a>
+
+        <a href="defense.html" class="protocol-card">
+            <div class="rank-tag">STRATEGIST</div>
+            <div class="card-visual"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200&q=80"></div>
+            <div class="card-body">
+                <h3>NEURAL DEFENSE PRO</h3>
+                <p>Protect the Core. Deploy autonomous Vanguard units to repel virus attacks in this high-end TD simulator.</p>
+                <div class="status-footer"><span class="launch-btn">DEPLOY UNITS</span></div>
+            </div>
+        </a>
+
+        <a href="duel.html" class="protocol-card">
+            <div class="rank-tag">ELITE</div>
+            <div class="card-visual"><img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&q=80"></div>
+            <div class="card-body">
+                <h3>VANGUARD DUEL</h3>
+                <p>Advanced combat protocol. Tactical 1v1 battle mechanics against high-level corruption entities.</p>
+                <div class="status-footer"><span class="launch-btn">ENTER BATTLE</span></div>
+            </div>
+        </a>
+
+        <a href="forge.html" class="protocol-card">
+            <div class="rank-tag">ARCHITECT</div>
+            <div class="card-visual"><img src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=1200&q=80"></div>
+            <div class="card-body">
+                <h3>SOVEREIGN FORGE PRO</h3>
+                <p>Step into autonomous evolution. Architect unknown high-fidelity entities through neural stream processing.</p>
+                <div class="status-footer"><span class="launch-btn">IGNITE FORGE</span></div>
+            </div>
+        </a>
+
+        <a href="scout.html" class="protocol-card">
+            <div class="rank-tag">SCOUT</div>
+            <div class="card-visual"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80"></div>
+            <div class="card-body">
+                <h3>SCOUT INTERCEPTOR</h3>
+                <p>High-speed Tech Scout HQ defense unit. Pilot elite drones to protect the ledger from anomalous corruption.</p>
+                <div class="status-footer"><span class="launch-btn">DEPLOY SCOUT</span></div>
+            </div>
+        </a>
+
+        <a href="phaser.html" class="protocol-card">
+            <div class="rank-tag">ENGINE</div>
+            <div class="card-visual"><img src="https://images.unsplash.com/photo-1614728263952-84ea256f9679?w=1200&q=80"></div>
+            <div class="card-body">
+                <h3>PHASER COSMIC RUN</h3>
+                <p>High-fidelity physics engine protocol. Experience sub-millisecond response and advanced spatial vectoring.</p>
+                <div class="status-footer"><span class="launch-btn">LAUNCH ENGINE</span></div>
+            </div>
+        </a>
+
+        <a href="runner.html" class="protocol-card">
+            <div class="rank-tag">VANGUARD</div>
+            <div class="card-visual"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1200&q=80"></div>
+            <div class="card-body">
+                <h3>GALACTIC RUNNER</h3>
+                <p>The original high-speed neural chase. Navigate orbital fields and secure data nodes in classic pro mode.</p>
+                <div class="status-footer"><span class="launch-btn">INITIATE RUN</span></div>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="hud-stats">
+        <div class="hud-item"><div class="hud-label">BLOCK</div><div class="hud-val">13529973</div></div>
+        <div class="hud-item"><div class="hud-label">PRESTIGE</div><div class="hud-val" id="hud-atlr">0 ATLR</div></div>
+        <div class="hud-item"><div class="hud-label">OPERATIVE</div><div class="hud-val">ACTIVE</div></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/ateliagaming/js/atelia_supabase.js"></script>
+    <script>
+        Atelia.auth.onAuthStateChange(async (e, session) => {
+            if (session?.user) {
+                const p = await Atelia.arena.getProfile(session.user.id);
+                document.getElementById('hud-atlr').innerText = (p.atlr_prestige || 0) + ' ATLR';
+            }
+        });
+    </script>
+</body>
+</html>
