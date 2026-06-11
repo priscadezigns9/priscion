@@ -20,6 +20,16 @@
     <h2>Enter Recovery Seed.</h2>
     <p>Type your 12 or 24-word recovery phrase to restore access to your vault.</p>
     <textarea placeholder="word1 word2 word3..."></textarea>
-    <button class="btn-full" onclick="location.href='index.html'">RESTORE VAULT</button>
+    <button class="btn-full" onclick="finalizeRecovery()">RESTORE VAULT</button>
+
+    <script>
+        function finalizeRecovery() {
+            const seed = document.querySelector('textarea').value.trim();
+            if(!seed) return alert("Please enter your recovery seed.");
+            localStorage.setItem('muze_authenticated', 'true');
+            localStorage.setItem('muze_vault_status', 'restored');
+            location.href = 'index.html';
+        }
+    </script>
 </body>
 </html>
