@@ -16,8 +16,7 @@
         .layer { position: fixed; inset: 0; background: #fff; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
 
         /* Onboarding */
-        .mustard-tree-svg { width: 120px; height: 120px; margin-bottom: 30px; }
-        .tree-path { stroke: var(--muze-blue); stroke-width: 2; fill: none; }
+        .muze-entrance-logo { height: 80px; margin-bottom: 40px; }
         
         h2 { font-weight: 900; font-size: 1.8rem; letter-spacing: -1px; margin-bottom: 10px; }
         .layer p { color: var(--muted); font-size: 0.9rem; max-width: 320px; margin-bottom: 40px; line-height: 1.5; }
@@ -136,12 +135,9 @@
 
     <!-- LAYER: ENTRANCE -->
     <div id="layer-entrance" class="layer">
-        <svg class="mustard-tree-svg" viewBox="0 0 500 500" preserveAspectRatio="xMinYMax meet">
-            <path class="tree-path" d="M20,480 C40,400 80,350 120,300 C160,250 200,200 250,150 M120,300 C180,280 250,290 300,240 M120,330 C80,280 50,220 70,150 M250,150 C300,120 350,150 400,100 M250,150 C220,100 180,50 150,80" />
-            <circle cx="20" cy="480" r="10" fill="var(--muze-blue)" />
-        </svg>
-        <h2>The Mustard Seed.</h2>
-        <p>Architecting your independent digital identity. Claims your free handle or connect your secure vault.</p>
+        <img src="../assets/muze_logo.png" class="muze-entrance-logo">
+        <h2>MUZE Wallet.</h2>
+        <p>Architecting your independent digital identity. Claim your free handle or connect your secure vault.</p>
         <button class="btn-full" onclick="bypassEntrance()">CREATE NEW VAULT</button>
         <button class="btn-outline" onclick="bypassEntrance()">RECOVER WITH SEED</button>
         <button class="btn-outline" onclick="bypassEntrance()">CONNECT TO LEDGER</button>
