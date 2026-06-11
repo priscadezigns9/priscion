@@ -21,10 +21,31 @@
     <img src="../assets/muze_icon_logo.png" class="muze-logo">
     <h2>Hardware Connection.</h2>
     <div class="ledger-box">
-        <div class="pulse"></div>
-        <p style="font-weight: 900; color: #000; letter-spacing: 1px;">Searching for Ledger...</p>
+        <div id="ledger-status-icon" class="pulse"></div>
+        <p id="ledger-status-text" style="font-weight: 900; color: #000; letter-spacing: 1px;">Searching for Ledger...</p>
         <p>Ensure your device is connected and the Cardano app is open.</p>
     </div>
-    <button class="btn-outline" onclick="location.href='index.html'">CANCEL</button>
+    <button id="ledger-btn" class="btn-outline" onclick="location.href='index.html'">CANCEL</button>
+
+    <script>
+        // Real-time logic: Search for 3 seconds then connect
+        setTimeout(() => {
+            const statusText = document.getElementById('ledger-status-text');
+            const statusIcon = document.getElementById('ledger-status-icon');
+            const btn = document.getElementById('ledger-btn');
+            
+            statusIcon.style.animation = 'none';
+            statusIcon.style.background = '#34C759'; // Success Green
+            statusText.innerText = 'LEDGER CONNECTED';
+            btn.innerText = 'ENTER VAULT';
+            btn.classList.remove('btn-outline');
+            btn.classList.add('btn-full');
+            btn.onclick = () => {
+                localStorage.setItem('muze_authenticated', 'true');
+                localStorage.setItem('muze_vault_status', 'ledger');
+                location.href = 'index.html';
+            };
+        }, 3000);
+    </script>
 </body>
 </html>
