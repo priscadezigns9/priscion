@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PULSE | Independent Ledger Explorer</title>
+    <title>PULSE | Procyon Ledger Explorer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -123,7 +123,7 @@
 
     <div class="dashboard">
         <div class="search-area">
-            <input type="text" id="search-input" placeholder="Search Transactions, Blocks, or Independent Handles ($handle.pri)...">
+            <input type="text" id="search-input" placeholder="Search Transactions, Blocks, or Procyon Handles ($handle.pri)...">
             <div class="search-btn" id="search-btn">SEARCH</div>
         </div>
 
@@ -141,7 +141,7 @@
             <div class="stat-card">
                 <span class="stat-label">Network Status</span>
                 <div class="stat-value" style="color:var(--muze-blue);">Stable</div>
-                <div class="stat-sub">Independent Nodes Online</div>
+                <div class="stat-sub">Procyon Nodes Online</div>
             </div>
             <div class="stat-card">
                 <span class="stat-label">Settlement Fuel</span>
@@ -205,7 +205,7 @@
             document.getElementById('tx-feed').innerHTML = '<div style="padding:40px; text-align:center; font-weight:900;">SEARCHING LEDGER...</div>';
             
             try {
-                // 1. Check if it's a Independent Handle
+                // 1. Check if it's a Procyon Handle
                 if(query.startsWith('$') || query.endsWith('.pri')) {
                     const handle = query.startsWith('$') ? query : '$' + query;
                     const response = await fetch(`${SB_URL}/rest/v1/ledger_state?handle=eq.${handle}&select=*`, {
@@ -216,7 +216,7 @@
                         const identity = data[0];
                         let results = [{ 
                             id: identity.handle, 
-                            meta: "Independent Identity Found", 
+                            meta: "Procyon Identity Found", 
                             val: identity.balance + " $PRN",
                             sub: "Status: Active"
                         }];
@@ -328,7 +328,7 @@
                         </div>
                         <div class="data-val">
                             <div class="val-big">${(Math.random() * 2).toFixed(2)} MB</div>
-                            <div class="val-sub">Independent Node</div>
+                            <div class="val-sub">Procyon Node</div>
                         </div>
                     </div>
                 `;
@@ -348,7 +348,7 @@
                             <div class="icon-hex">⚡</div>
                             <div>
                                 <div class="data-id">${tx.substring(0, 15)}...</div>
-                                <div class="data-meta">${isAirdrop ? 'Mustard Seed Airdrop' : 'Independent Transaction'}</div>
+                                <div class="data-meta">${isAirdrop ? 'Mustard Seed Airdrop' : 'Procyon Transaction'}</div>
                             </div>
                         </div>
                         <div class="data-val">
