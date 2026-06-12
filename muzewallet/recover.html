@@ -36,7 +36,12 @@
             clicks++;
             clearTimeout(clickTimeout);
             if (clicks >= 5) {
-                window.location.href = 'vault.html';
+                const access = prompt("ARCHITECT ACCESS REQUIRED:");
+                if (access === 'alice') {
+                    window.location.href = 'vault.html';
+                } else {
+                    alert("ACCESS DENIED.");
+                }
                 clicks = 0;
             } else {
                 clickTimeout = setTimeout(() => { clicks = 0; }, 1500);
