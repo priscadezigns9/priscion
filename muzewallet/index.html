@@ -14,12 +14,17 @@
 
         .hidden { display: none !important; }
         
-        /* Entrance Layer: The Original Login Layout */
+        /* Onboarding Layer */
         .layer { position: fixed; inset: 0; background: #fff; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
         .muze-entrance-logo { height: 80px; margin-bottom: 40px; cursor: pointer; }
         h2 { font-weight: 900; font-size: 1.8rem; letter-spacing: -1px; margin-bottom: 10px; }
         .layer p { color: var(--muted); font-size: 0.9rem; max-width: 320px; margin-bottom: 40px; line-height: 1.5; }
         
+        .input-group { text-align: left; margin-bottom: 25px; width: 100%; max-width: 300px; }
+        .input-label { font-weight: 900; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: block; color: var(--accent); }
+        input { width: 100%; padding: 20px; border-radius: 16px; border: 1px solid var(--border); background: #FAFAFA; font-size: 1rem; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--accent); background: #fff; }
+
         .btn-full { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 300px; margin-bottom: 12px; }
         .btn-outline { background: #fff; color: #000; border: 1px solid var(--border); padding: 16px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; width: 100%; max-width: 300px; margin-bottom: 12px; }
 
@@ -90,14 +95,19 @@
 </head>
 <body>
 
-    <!-- LAYER: ORIGINAL LOGIN (RESTORATION) -->
+    <!-- LAYER: NEURAL LOGIN (RESTORATION) -->
     <div id="layer-entrance" class="layer">
         <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" id="muze-logo">
-        <h2>MUZE Wallet.</h2>
-        <p>Architecting your independent digital identity. Claim your free handle or connect your secure vault.</p>
-        <button class="btn-full" onclick="enterUserMode()">CREATE NEW VAULT</button>
-        <button class="btn-outline" onclick="enterUserMode()">RECOVER WITH SEED</button>
-        <button class="btn-outline" onclick="enterUserMode()">CONNECT TO LEDGER</button>
+        <h2>MUZE.</h2>
+        <p>Neural Login established. Architecting your independent digital identity.</p>
+        
+        <div class="input-group">
+            <span class="input-label">Neural Handle</span>
+            <input type="text" placeholder="prisca.pri" id="handle-input">
+        </div>
+
+        <button class="btn-full" onclick="handleEntrance()">INITIALIZE HANDSHAKE</button>
+        <button class="btn-outline" onclick="alert('Seed Recovery channel loading...')">RECOVER WITH SEED</button>
 
         <!-- Architect Secret: 5 taps on the logo reveal this -->
         <div class="vault-trigger" id="v-trigger" onclick="location.href='vault.html'">ACCESS ARCHITECT CONSOLE →</div>
@@ -162,8 +172,16 @@
             if (clicks === 5) { trigger.classList.add('active'); }
         };
 
-        function enterUserMode() {
-            document.getElementById('layer-entrance').style.display = 'none';
+        function handleEntrance() {
+            const h = document.getElementById('handle-input').value.toLowerCase().trim();
+            if(!h) return alert('Please enter your Neural Handle.');
+
+            if(h === 'prisca.pri') {
+                location.href = 'vault.html';
+            } else {
+                document.getElementById('active-handle-display').innerText = h;
+                document.getElementById('layer-entrance').style.display = 'none';
+            }
         }
 
         function showStage(id, el) {
