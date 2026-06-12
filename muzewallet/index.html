@@ -53,10 +53,10 @@
         .private-tag { background: var(--jlo); color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.5rem; font-weight: 900; text-transform: uppercase; }
 
         /* Modals */
-        .sliding-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 20000; display: none; align-items: flex-end; backdrop-filter: blur(10px); }
-        .sliding-content { background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 40px 20px; transform: translateY(100%); transition: transform 0.3s ease; }
+        .sliding-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 20000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
+        .sliding-content { background: #fff; width: 100%; max-width: 400px; border-radius: 30px; padding: 40px 30px; transform: scale(0.9); opacity: 0; transition: all 0.2s ease; }
         .sliding-modal.active { display: flex; }
-        .sliding-modal.active .sliding-content { transform: translateY(0); }
+        .sliding-modal.active .sliding-content { transform: scale(1); opacity: 1; }
         
         .btn-full { background: var(--accent); color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; cursor: pointer; width: 100%; }
         .btn-outline { background: #fff; color: #000; border: 1px solid var(--border); padding: 16px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; cursor: pointer; width: 100%; }
@@ -86,7 +86,7 @@
             <button class="btn-full" onclick="location.href='create.html'">CREATE NEW VAULT</button>
             <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='recover.html'">RECOVER WITH SEED</button>
             <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='ledger.html'">CONNECT LEDGER</button>
-            <p style="text-align: center; margin-top: 30px; font-size: 0.7rem; color: var(--muted); cursor: pointer;" onclick="backToOnboardingMain()">← BACK</p>
+            <p style="text-align: center; margin-top: 30px; font-size: 0.7rem; color: var(--muted); cursor: pointer;" onclick="location.href='../index.html'">← BACK TO HUB</p>
         </div>
     </div>
 
@@ -181,10 +181,12 @@
     <!-- Modals -->
     <div id="modal-login" class="sliding-modal" onclick="closeModals()">
         <div class="sliding-content" onclick="event.stopPropagation()">
-            <h2 style="font-weight:900; margin-bottom:10px;">Neural Login</h2>
-            <input type="text" id="login-input" placeholder="Handle or Email" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:12px;">
-            <input type="password" id="login-pass" placeholder="Password" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px;">
-            <button class="btn-full" onclick="executeLogin()">LOGIN</button>
+            <h2 style="font-weight:900; margin-bottom:10px; font-family: 'Playfair Display', serif;">Neural Login</h2>
+            <p style="color:var(--muted); font-size:0.75rem; margin-bottom:25px; font-weight:600;">ACCESS THE PRISCION LEDGER</p>
+            <input type="text" id="login-input" placeholder="Handle or Email" style="width:100%; padding:18px; border-radius:18px; border:1px solid var(--border); margin-bottom:12px; font-family: inherit; font-size: 0.9rem;">
+            <input type="password" id="login-pass" placeholder="Password" style="width:100%; padding:18px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px; font-family: inherit; font-size: 0.9rem;">
+            <button class="btn-full" onclick="executeLogin()">AUTHENTICATE</button>
+            <button class="btn-outline" style="margin-top:10px; border:none; color:var(--muted);" onclick="closeModals()">CANCEL</button>
         </div>
     </div>
 
