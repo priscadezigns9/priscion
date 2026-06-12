@@ -31,5 +31,8 @@ MUZE is the gateway to the Priscion ecosystem, featuring a high-fidelity integra
 *   **Phase 1: The Foundation.** Launch MUZE Wallet, token suite, and Share-to-Earn. Deploy LYNX and MYNT core features.
 *   **Phase 2: The Migration.** Integrate established network brands once the ecosystem is populated and fluid.
 
+### 6. The Charity DAO (DAO Powered)
+The Priscion ecosystem remains anchored to its mission. Users who hold **$NRL (Neural Reserve)** tokens participate in governance by voting on charitable proposals. Verified charities can submit proposals to the network, and the community decides which initiatives receive funding, ensuring transparency and purpose within the ledger.
+
 ---
-*Status: LIVE | Version: 1.7 | Architect: Priscilla Narine*
+*Status: LIVE | Version: 1.8 | Architect: Priscilla Narine*
