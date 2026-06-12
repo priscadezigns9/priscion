@@ -21,9 +21,7 @@
             --font-body: 'Inter', sans-serif;
         }
 
-        /* ZERO ANIMATION STABILITY */
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
-        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
         nav {
@@ -67,10 +65,9 @@
 
         .services { padding: 0 8% 150px; max-width: 1400px; margin: 0 auto; }
         .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .service-card { background: #000; color: #fff; padding: 50px; border-radius: 40px; }
+        .service-card { background: #000; color: #fff; padding: 50px; border-radius: 40px; text-align: center; }
         .service-card h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
-        .service-card .price { font-weight: 900; font-size: 0.7rem; color: var(--muze-blue); margin-bottom: 20px; }
-        .service-card p { font-size: 0.9rem; color: #666; margin-bottom: 30px; }
+        .service-card p { font-size: 0.9rem; color: #666; margin-bottom: 30px; min-height: 60px; }
 
         .intel-strip { background: var(--surface); padding: 100px 8%; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 
@@ -103,7 +100,7 @@
                 <h1>Architecting<br>Reality.</h1>
                 <p>Migrating the world's elite brands to the Web3 Ledger. High-fidelity intelligence meets absolute autonomy.</p>
                 <div style="display: flex; gap: 20px;">
-                    <a href="affiliates/" style="text-decoration: none; background: var(--accent); color: #fff; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;">Get Started</a>
+                    <a href="signup.html" style="text-decoration: none; background: var(--accent); color: #fff; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;">Get Started</a>
                 </div>
             </div>
             <div class="dapp-grid">
@@ -136,21 +133,18 @@
             <div class="service-grid">
                 <div class="service-card">
                     <h3>Sovereign Onboarding</h3>
-                    <div class="price">$1,500.00</div>
                     <p>Establishing on-chain identity, .pri handle registration, and MUSE Wallet integration.</p>
-                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='muzewallet/'">ACQUIRE</button>
+                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='signup.html'">ACQUIRE</button>
                 </div>
                 <div class="service-card">
                     <h3>Empire Architecture</h3>
-                    <div class="price">$12,000.00</div>
                     <p>Full-spectrum brand synthesis, neural design systems, and multi-node deployment.</p>
-                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='muzewallet/'">ACQUIRE</button>
+                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='signup.html'">ACQUIRE</button>
                 </div>
                 <div class="service-card">
                     <h3>Ledger Migration</h3>
-                    <div class="price">CUSTOM</div>
                     <p>Full-scale migration of existing Web2 infrastructure to the Priscion Sovereign Ledger.</p>
-                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='muzewallet/'">CONSULT</button>
+                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='signup.html'">CONSULT</button>
                 </div>
             </div>
         </section>
