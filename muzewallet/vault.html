@@ -10,22 +10,22 @@
         :root { 
             --bg: #FFFFFF; --text: #000; --muted: #64748b; --border: #F1F5F9; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F8FAFC;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease-out; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* THE ANCHOR: No wrapping allowed on the root display */
+        /* THE ANCHOR: Table Layout to prevent vertical wrapping at all costs */
         body { 
             background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
             overflow: hidden; width: 100vw; height: 100vh; 
-            display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; 
+            display: table !important; table-layout: fixed !important;
         }
 
         .hidden { display: none !important; }
 
-        /* Sidebar Navigation: Locked width */
+        /* Sidebar: Table Cell */
         .sidebar {
-            width: 280px; height: 100vh; background: var(--bg); border-right: 1px solid var(--border);
-            padding: 40px 20px; display: flex; flex-direction: column; gap: 5px; z-index: 1000;
-            flex-shrink: 0 !important;
+            display: table-cell !important; width: 280px; height: 100vh; vertical-align: top;
+            background: var(--bg); border-right: 1px solid var(--border);
+            padding: 40px 20px; z-index: 1000;
         }
         .sidebar-label {
             font-size: 0.6rem; font-weight: 900; color: var(--muted); letter-spacing: 2px;
@@ -36,35 +36,36 @@
         .nav-item {
             padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem;
             color: var(--muted); cursor: pointer; display: flex; align-items: center;
-            gap: 12px; text-transform: uppercase; letter-spacing: 1px;
+            gap: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s;
         }
         .nav-item:hover { background: var(--surface); color: var(--text); }
         .nav-item.active { background: #000; color: #fff; }
 
-        /* Main Wrapper: Flex-row locked */
+        /* Main Wrapper: Table Cell with nested table */
         .main-wrapper { 
-            flex: 1; display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important;
-            height: 100vh; overflow: hidden; min-width: 0; 
+            display: table-cell !important; vertical-align: top;
+            height: 100vh; width: 100%;
         }
+        
+        .sub-layout { display: table !important; width: 100%; height: 100vh; table-layout: fixed !important; }
         
         /* Architect View (Left/Flexible) */
         .content { 
-            flex: 1; min-width: 300px; height: 100vh; overflow-y: auto; 
+            display: table-cell !important; vertical-align: top;
             padding: 60px 60px; background: #fff; position: relative; 
             border-right: 1px solid var(--border); 
         }
         
         /* Lens View / User Mirror (Right/Fixed Width) */
         .mirror-container { 
-            width: 450px; flex-shrink: 0 !important; height: 100vh; 
-            background: #fff; display: flex; flex-direction: column; 
-            overflow: hidden; position: relative; border-left: 4px solid #000; 
+            display: table-cell !important; width: 450px; vertical-align: top;
+            background: #fff; overflow: hidden; position: relative; border-left: 4px solid #000; 
         }
         
-        .mirror-header { padding: 15px 25px; border-bottom: 1px solid var(--border); background: #fff; display: flex; justify-content: space-between; align-items: center; z-index: 10; }
+        .mirror-header { padding: 15px 25px; border-bottom: 1px solid var(--border); background: #fff; display: flex; justify-content: space-between; align-items: center; }
         .mirror-label { font-size: 0.65rem; font-weight: 900; letter-spacing: 1.5px; color: var(--text); text-transform: uppercase; }
         .mirror-badge { background: #E0F2FE; color: #0369a1; padding: 5px 12px; border-radius: 100px; font-size: 0.55rem; font-weight: 900; }
-        #mirror-iframe { width: 100%; height: 100%; border: none; background: #F0F9FF; }
+        #mirror-iframe { width: 100%; height: calc(100vh - 50px); border: none; background: #F0F9FF; }
 
         h2 { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: -1.5px; font-size: 2.8rem; margin-bottom: 10px; color: #000; }
         p.subtitle { color: var(--muted); margin-bottom: 50px; font-size: 0.95rem; font-weight: 500; }
@@ -75,23 +76,19 @@
         .stat-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; display: block; }
         .stat-value { font-size: 1.8rem; font-weight: 900; color: #000; }
 
-        .stage { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .console-box { background: #000; color: #10b981; padding: 25px; border-radius: 20px; font-family: monospace; font-size: 0.8rem; line-height: 1.6; border: 1px solid #333; }
 
-        /* Responsive handling for smaller screens to maintain SIDEBAR + CONTENT + MIRROR */
-        @media (max-width: 1100px) {
+        @media (max-width: 1200px) {
             .sidebar { width: 80px; padding: 20px 10px; }
             .sidebar-label, .nav-item span { display: none; }
-            .nav-item { justify-content: center; padding: 15px; }
-            .mirror-container { width: 320px; }
+            .nav-item { justify-content: center; }
+            .mirror-container { width: 350px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR: Fixed Left -->
+    <!-- SIDEBAR -->
     <div class="sidebar">
         <div style="padding: 10px 20px 40px; cursor: pointer; text-align: center;" onclick="location.reload()">
             <img src="../assets/muze_icon_logo.png" style="height: 30px;">
@@ -112,73 +109,55 @@
         <div class="nav-item" onclick="showStage('dapps', this)"><span>Network DApps</span></div>
         <div class="nav-item" onclick="showStage('settings', this)"><span>Settings</span></div>
 
-        <div style="margin-top: auto; padding: 10px;">
+        <div style="margin-top: 100px; padding: 10px;">
             <button style="width:100%; background:#000; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.6rem; cursor:pointer; text-transform: uppercase; letter-spacing: 1px;" onclick="location.href='index.html'">LOCK</button>
         </div>
     </div>
 
-    <!-- MAIN WRAPPER: Flexible Row (Content + Mirror) -->
+    <!-- MAIN CONTENT + MIRROR -->
     <div class="main-wrapper">
-        
-        <!-- ARCHITECT CONTENT (Middle/Left) -->
-        <div class="content" id="architect-content">
+        <div class="sub-layout">
             
-            <div id="stage-main" class="stage">
-                <h2>Command Center</h2>
-                <p class="subtitle">Real-time oversight of the Priscion Ecosystem.</p>
+            <div class="content" id="architect-content">
+                <div id="stage-main" class="stage">
+                    <h2>Command Center</h2>
+                    <p class="subtitle">Real-time oversight of the Priscion Ecosystem.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card"><span class="stat-label">Network Revenue</span><div class="stat-value">$142,500</div></div>
+                        <div class="stat-card"><span class="stat-label">Anchored Handles</span><div class="stat-value">1,402</div></div>
+                    </div>
+                    <div class="console-box">> SYSTEM INIT...<br>> MIRROR ACTIVE</div>
+                </div>
+
+                <div id="stage-handles" class="stage hidden">
+                    <h2>Handles Ledger</h2>
+                    <div id="handles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;"></div>
+                </div>
                 
-                <div class="stats-grid">
-                    <div class="stat-card"><span class="stat-label">Network Revenue</span><div class="stat-value">$142,500</div></div>
-                    <div class="stat-card"><span class="stat-label">Anchored Handles</span><div class="stat-value">1,402</div></div>
-                    <div class="stat-card"><span class="stat-label">Node Status</span><div class="stat-value" style="color: #10b981;">OPTIMAL</div></div>
-                    <div class="stat-card"><span class="stat-label">Active Migrations</span><div class="stat-value">12</div></div>
+                <!-- Additional stages as before -->
+                <div id="stage-agency" class="stage hidden"><h2>Agency Hub</h2></div>
+                <div id="stage-messenger" class="stage hidden"><h2>Messenger</h2></div>
+                <div id="stage-vault" class="stage hidden"><h2>Vault</h2></div>
+                <div id="stage-card" class="stage hidden"><h2>Digital Card</h2></div>
+                <div id="stage-dapps" class="stage hidden"><h2>DApps</h2></div>
+                <div id="stage-settings" class="stage hidden"><h2>Settings</h2></div>
+            </div>
+
+            <div class="mirror-container" id="mirror-panel">
+                <div class="mirror-header">
+                    <span class="mirror-label">Live User Lens</span>
+                    <span class="mirror-badge">MIRROR ACTIVE</span>
                 </div>
-
-                <div class="console-box">
-                    > SYSTEM INIT [OK]<br>
-                    > MUZE L1 CORE SECURED...<br>
-                    > RECOVERY SHARD ANCHOR DETECTED...<br>
-                    > LIVE MIRROR HANDSHAKE [ACTIVE]
-                </div>
+                <iframe src="index.html" id="mirror-iframe"></iframe>
             </div>
 
-            <div id="stage-handles" class="stage hidden">
-                <h2>Handles Ledger</h2>
-                <p class="subtitle">Registry of sovereign .pri identities.</p>
-                <div id="handles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;"></div>
-            </div>
-
-            <div id="stage-agency" class="stage hidden">
-                <h2>Agency Hub</h2>
-                <p class="subtitle">Managing Web2 to Web3 Brand Migrations.</p>
-                <div style="background: var(--surface); padding: 60px; border-radius: 30px; text-align: center; border: 1px solid var(--border);">
-                    <div style="font-size: 0.8rem; font-weight: 900; color: var(--muted); letter-spacing: 2px;">NO PENDING MIGRATIONS</div>
-                </div>
-            </div>
-
-            <!-- Placeholder Stages -->
-            <div id="stage-messenger" class="stage hidden"><h2>Zapia Messenger</h2><p class="subtitle">Direct neural link.</p></div>
-            <div id="stage-vault" class="stage hidden"><h2>User Vault</h2><p class="subtitle">Mirrored perspective.</p></div>
-            <div id="stage-card" class="stage hidden"><h2>Elite Card</h2><p class="subtitle">Artifact Visualizer.</p><img src="../assets/card.png" style="width: 100%; max-width: 400px; border-radius: 20px;"></div>
-            <div id="stage-dapps" class="stage hidden"><h2>Network DApps</h2><p class="subtitle">Application Grid.</p></div>
-            <div id="stage-settings" class="stage hidden"><h2>Settings</h2><p class="subtitle">Security Governance.</p></div>
-
-        </div>
-
-        <!-- LENS VIEW / LIVE USER MIRROR (Right/Fixed) -->
-        <div class="mirror-container" id="mirror-panel">
-            <div class="mirror-header">
-                <span class="mirror-label">Live User Lens</span>
-                <span class="mirror-badge">MIRROR ACTIVE</span>
-            </div>
-            <iframe src="index.html" id="mirror-iframe"></iframe>
         </div>
     </div>
 
     <script>
         function toggleMirror() {
             const mirror = document.getElementById('mirror-panel');
-            mirror.classList.toggle('hidden');
+            mirror.style.display = (mirror.style.display === 'none') ? 'table-cell' : 'none';
         }
 
         function showStage(id, el) {
@@ -190,14 +169,12 @@
             if(el) el.classList.add('active');
 
             if(id === 'handles') renderHandles();
-            
-            // Auto-refresh mirror to stay in sync
             document.getElementById('mirror-iframe').contentWindow.location.reload();
         }
 
         function renderHandles() {
             const grid = document.getElementById('handles-grid');
-            const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'calalloo.pri', 'nurasen.pri', 'couturegallery.pri'];
+            const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'calalloo.pri', 'nurasen.pri'];
             grid.innerHTML = handles.map(h => `
                 <div style="background:#fff; border:1px solid var(--border); padding:20px; border-radius:15px; text-align:center;">
                     <h4 style="font-weight:900; font-size:0.8rem;">${h}</h4>
