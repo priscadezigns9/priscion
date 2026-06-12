@@ -21,16 +21,21 @@
         
         /* Entrance Layer */
         .layer { position: fixed; inset: 0; background: #fff; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
-        .card-entrance { background: #fff; border: 1px solid var(--border); padding: 50px 40px; border-radius: 40px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
         .muze-entrance-logo { height: 70px; margin-bottom: 40px; cursor: pointer; filter: grayscale(1); }
         .muze-entrance-logo:hover { filter: grayscale(0); }
         h2 { font-weight: 900; font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 15px; }
         .layer p { color: var(--muted); font-size: 0.9rem; margin-bottom: 40px; line-height: 1.6; max-width: 300px; margin-left: auto; margin-right: auto; }
         
+        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: left; cursor: pointer; width: 100%; max-width: 400px; margin-bottom: 15px; }
+        .onboarding-card.dark { background: #000; color: #fff; border: none; }
+        .onboarding-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: #000; }
+
         input { width: 100%; padding: 20px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 20px; font-weight: 600; text-align: center; font-size: 1rem; outline: none; }
         input:focus { border-color: #000; background: #fff; }
         .btn-full { width: 100%; background: #000; color: #fff; border: none; padding: 22px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 3px; cursor: pointer; text-transform: uppercase; }
         .btn-full:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .btn-outline { width: 100%; background: #fff; color: #000; border: 1px solid var(--border); padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; }
+        .btn-outline:hover { border-color: #000; }
         .btn-link { margin-top: 25px; font-size: 0.75rem; font-weight: 900; color: var(--muted); cursor: pointer; text-decoration: none; display: block; letter-spacing: 2px; text-transform: uppercase; }
         .btn-link:hover { color: #000; }
 
@@ -63,24 +68,51 @@
 
     <!-- ENTRANCE LAYER (Neural Handshake) -->
     <div class="layer" id="layer-entrance">
-        <div class="card-entrance" id="entrance-form">
-            <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" id="muze-logo">
-            <h2>Neural Handshake</h2>
+        <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" id="muze-logo">
+        
+        <!-- Tier 1: Main Selection -->
+        <div id="onboarding-main" style="width: 100%; max-width: 400px;">
+            <h2 class="playfair">Access MUZE</h2>
+            <p>The secure bridge to the Priscion Network.</p>
+            
+            <div class="onboarding-card dark" onclick="showHandshake()">
+                <h3 style="font-weight:900; margin-bottom:5px;">Neural Login</h3>
+                <p style="font-size:0.7rem; opacity:0.7;">Login with Handle or Email.</p>
+            </div>
+            
+            <div class="onboarding-card" onclick="showVaultOptions()">
+                <h3 style="font-weight:900; margin-bottom:5px;">Vault Setup</h3>
+                <p style="font-size:0.7rem; color:var(--muted);">Create, recover, or connect Ledger.</p>
+            </div>
+        </div>
+
+        <!-- Tier 2: Neural Handshake -->
+        <div class="hidden" id="handshake-form" style="width: 100%; max-width: 400px;">
+            <h2 class="playfair">Neural Handshake</h2>
             <p>Enter your .pri handle to unlock your Sovereign Vault.</p>
             <input type="text" id="handle-input" placeholder="prisca.pri">
             <button class="btn-full" onclick="handleEntrance()">INITIALIZE HANDSHAKE</button>
-            <a href="create.html" class="btn-link">CLAIM NEW IDENTITY</a>
-            <div class="btn-link" onclick="showRecovery()">SAFE RESET / RECOVERY</div>
+            <div class="btn-link" onclick="backToMain()">← BACK</div>
         </div>
 
-        <div class="card-entrance hidden" id="recovery-form">
-            <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo">
-            <h2>Safe Reset</h2>
-            <p>Enter your handle and password to recover your Recovery Shard from the Neural Login bridge.</p>
+        <!-- Tier 2: Vault Options -->
+        <div id="vault-options" class="hidden" style="width: 100%; max-width: 400px;">
+            <h2 class="playfair">Vault Setup</h2>
+            <p>Select your sovereign entry method.</p>
+            <button class="btn-full" onclick="location.href='create.html'">CREATE NEW VAULT</button>
+            <button class="btn-outline" style="margin-top: 15px;" onclick="showRecovery()">RECOVER WITH SEED</button>
+            <button class="btn-outline" onclick="location.href='ledger.html'">CONNECT LEDGER</button>
+            <div class="btn-link" onclick="backToMain()">← BACK</div>
+        </div>
+
+        <!-- Tier 3: Recovery -->
+        <div class="hidden" id="recovery-form" style="width: 100%; max-width: 400px;">
+            <h2 class="playfair">Safe Reset</h2>
+            <p>Recover your Recovery Shard from the Neural Login bridge.</p>
             <input type="text" id="rec-handle" placeholder="yourname.pri">
             <input type="password" id="rec-pass" placeholder="Vault Password">
             <button class="btn-full" id="rec-btn" onclick="recoverVault()">RECOVER VAULT</button>
-            <div class="btn-link" onclick="showLogin()">BACK TO LOGIN</div>
+            <div class="btn-link" onclick="showVaultOptions()">← BACK</div>
         </div>
     </div>
 
@@ -145,13 +177,30 @@
             if(clicks === 5) document.getElementById('v-trigger').classList.add('active');
         };
 
+        function showHandshake() {
+            hideAll();
+            document.getElementById('handshake-form').classList.remove('hidden');
+        }
+
+        function showVaultOptions() {
+            hideAll();
+            document.getElementById('vault-options').classList.remove('hidden');
+        }
+
         function showRecovery() {
-            document.getElementById('entrance-form').classList.add('hidden');
+            hideAll();
             document.getElementById('recovery-form').classList.remove('hidden');
         }
 
-        function showLogin() {
-            document.getElementById('entrance-form').classList.remove('hidden');
+        function backToMain() {
+            hideAll();
+            document.getElementById('onboarding-main').classList.remove('hidden');
+        }
+
+        function hideAll() {
+            document.getElementById('onboarding-main').classList.add('hidden');
+            document.getElementById('handshake-form').classList.add('hidden');
+            document.getElementById('vault-options').classList.add('hidden');
             document.getElementById('recovery-form').classList.add('hidden');
         }
 
@@ -170,9 +219,6 @@
                 if(!shard) throw new Error("No recovery shard found for this handle.");
 
                 const seed = MUZE_BRIDGE.decrypt(shard, p + h);
-                // In a real app, we'd verify if the seed is valid words.
-                // For high-fidelity demo, we assume success if it decodes.
-                
                 localStorage.setItem('muze_active', 'true');
                 localStorage.setItem('muze_handle', h);
                 localStorage.setItem('muze_vault_status', 'active');
@@ -189,14 +235,12 @@
         function handleEntrance() {
             const h = document.getElementById('handle-input').value.toLowerCase().trim();
             if(!h) return alert('Enter your handle.');
-
-            // Check local state or assume login if local handle matches
             const localHandle = localStorage.getItem('muze_handle');
             if(h === localHandle || h === 'prisca.pri') {
                 document.getElementById('active-handle-display').innerText = h;
                 document.getElementById('layer-entrance').style.display = 'none';
             } else {
-                alert("Identity not found locally. Try 'Safe Reset' to recover your vault.");
+                alert("Identity not found locally. Try 'Safe Reset' in Vault Options to recover your vault.");
             }
         }
 
