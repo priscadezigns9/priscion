@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYNX | Sovereign Messenger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F0F9FF;
+            --text: #1A1A1A;
+            --muted: #64748b;
+            --accent: #0ea5e9;
+            --muze-blue: #5AC8FA;
+            --jlo: #FACC15;
+            --surface: #fff;
+            --border: rgba(186, 230, 253, 0.5);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; }
+
+        nav {
+            height: 80px; padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+        }
+        .logo-box { display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit; }
+        .logo-box img { width: 35px; }
+        .logo-box span { font-weight: 900; letter-spacing: 2px; text-transform: uppercase; font-size: 0.8rem; }
+
+        .messenger-container {
+            flex: 1; display: grid; grid-template-columns: 350px 1fr; overflow: hidden;
+        }
+
+        .sidebar {
+            background: #fff; border-right: 1px solid var(--border); display: flex; flex-direction: column;
+        }
+        .sidebar-header { padding: 30px; border-bottom: 1px solid var(--border); }
+        .sidebar-header h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+
+        .chat-list { flex: 1; overflow-y: auto; }
+        .chat-item {
+            padding: 20px 30px; display: flex; align-items: center; gap: 15px; cursor: pointer; transition: 0.2s;
+            border-bottom: 1px solid rgba(0,0,0,0.03);
+        }
+        .chat-item:hover { background: var(--bg); }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--muze-blue); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 0.8rem; }
+
+        .main-chat { display: flex; flex-direction: column; background: #fff; position: relative; }
+        .chat-header { padding: 20px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .user-info h3 { font-size: 1rem; font-weight: 900; }
+        .user-info p { font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; }
+
+        .messages-area { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; background: #FAFDFF; }
+        .message { max-width: 60%; padding: 15px 20px; border-radius: 20px; font-size: 0.9rem; line-height: 1.5; }
+        .message.received { background: #fff; border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 5px; }
+        .message.sent { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
+
+        .input-area { padding: 30px 40px; border-top: 1px solid var(--border); background: #fff; display: flex; gap: 20px; }
+        input { flex: 1; padding: 15px 25px; border-radius: 100px; border: 1px solid var(--border); outline: none; font-family: inherit; }
+        .btn-send { background: #000; color: #fff; width: 50px; height: 50px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .btn-send:hover { transform: scale(1.1); }
+
+        .jlo-tag { background: var(--jlo); color: #000; padding: 4px 10px; border-radius: 5px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; margin-left: 10px; }
+
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .messenger-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="logo-box">
+            <img src="../assets/lynx_logo.png" alt="LYNX">
+            <span>LYNX Messenger</span>
+        </a>
+        <div class="jlo-tag">POWERED BY $JLO</div>
+    </nav>
+
+    <div class="messenger-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Messages</h2>
+            </div>
+            <div class="chat-list">
+                <div class="chat-item">
+                    <div class="avatar">AN</div>
+                    <div>
+                        <h4 style="font-size: 0.9rem;">Architect</h4>
+                        <p style="font-size: 0.75rem; color: var(--muted);">Encrypted Signal Active</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-chat">
+            <header class="chat-header">
+                <div class="user-info">
+                    <h3>Architect</h3>
+                    <p>sovereign.pri</p>
+                </div>
+            </header>
+
+            <div class="messages-area">
+                <div class="message received">
+                    Welcome to LYNX. This is a sovereign, handle-to-handle encrypted channel.
+                </div>
+                <div class="message received">
+                    Your communication is protected by the Chillata Layer ($JLO). No phone numbers, no tracking.
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" placeholder="Type a message...">
+                <button class="btn-send">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>
