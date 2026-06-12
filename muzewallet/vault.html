@@ -116,7 +116,7 @@
 </head>
 <body>
 
-    <div class="dev-toggle" onclick="toggleDevMode()" id="dev-toggle">GOD MODE</div>
+    <div class="dev-toggle" id="dev-toggle">GOD MODE</div>
 
     <div class="sidebar">
         <div style="padding:10px 10px 40px;"><img src="https://priscion.com/assets/muze_icon_logo.png" style="height:35px;"></div>
@@ -299,13 +299,6 @@
                     </tr>
                 `).join('');
             }
-        }
-
-        function toggleDevMode() {
-            isDevMode = !isDevMode;
-            const btn = document.getElementById('dev-toggle');
-            btn.innerText = isDevMode ? "GOD MODE" : "USER MODE";
-            btn.style.background = isDevMode ? "#7B35D4" : "#000";
         }
 
         function showStage(id, el) {
