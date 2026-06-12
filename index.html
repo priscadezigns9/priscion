@@ -65,6 +65,8 @@
             text-align: center;
         }
         .pillar-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .pillar-icon { width: 50px; margin-bottom: 25px; transition: 0.3s; }
+        .pillar-card:hover .pillar-icon { transform: scale(1.1); }
         .pillar-card h3 { font-weight: 900; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 15px; text-transform: uppercase; }
         .pillar-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
 
@@ -124,14 +126,17 @@
 
     <div class="pillar-grid">
         <a href="mynt/" class="pillar-card">
+            <img src="assets/mynt_logo.png" class="pillar-icon" onerror="this.src='assets/mynt_tile_icon.png'">
             <h3>MYNT</h3>
             <p>The sovereign marketplace. Mint and trade public and private digital assets.</p>
         </a>
         <a href="chillata/" class="pillar-card">
+            <img src="assets/chillata_logo.png" class="pillar-icon">
             <h3>CHILLATA</h3>
             <p>The privacy layer. Powering encrypted messaging and private asset vaults.</p>
         </a>
         <a href="pulse/" class="pillar-card">
+            <img src="assets/pulse_logo.png" class="pillar-icon">
             <h3>PULSE</h3>
             <p>Real-time network intelligence. The explorer for the Priscion Ledger.</p>
         </a>
