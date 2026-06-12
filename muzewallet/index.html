@@ -3,238 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Priscion Console v3.0</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <title>MUZE | High-Fidelity Neural Login</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Inter:wght@400;600;900&display=swap">
     <style>
-        :root { --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff; --jlo: #FACC15; }
+        :root { --bg: #FFFFFF; --text: #000; --muted: #888; --muze-blue: #5AC8FA; --border: #F0F0F0; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
-        .hidden { display: none !important; }
-        .v-tag { position: fixed; top: 10px; left: 10px; font-size: 0.5rem; font-weight: 900; color: var(--accent); z-index: 20000; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; width: 100vw; height: 100vh; overflow: hidden; }
         
-        /* Entrance Layer */
-        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
-        .muze-entrance-logo { height: 80px; margin-bottom: 30px; }
-        h1 { font-weight: 900; font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
+        .login-card { 
+            width: 90%; max-width: 400px; padding: 60px 40px; 
+            background: #fff; border-radius: 40px; border: 1px solid var(--border);
+            text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.05);
+            animation: fadeIn 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        .logo { height: 60px; margin-bottom: 30px; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 10px; letter-spacing: -1px; }
+        p { color: var(--muted); font-size: 0.9rem; margin-bottom: 40px; line-height: 1.4; }
+
+        .input-group { text-align: left; margin-bottom: 25px; }
+        .input-label { font-weight: 900; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: block; color: var(--muze-blue); }
+        input { width: 100%; padding: 20px; border-radius: 16px; border: 1px solid var(--border); background: #FAFAFA; font-size: 1rem; outline: none; transition: 0.2s; }
+        input:focus { border-color: var(--muze-blue); background: #fff; }
+
+        .btn-neural { width: 100%; background: #000; color: #fff; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-neural:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+        .vault-trigger { margin-top: 40px; font-weight: 900; font-size: 0.65rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
+        .vault-trigger:hover { color: var(--text); }
         
-        /* Onboarding */
-        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: left; cursor: pointer; width: 100%; max-width: 350px; margin-bottom: 15px; transition: transform 0.2s ease; }
-        .onboarding-card.neural { background: var(--muze-blue); color: #fff; border: none; box-shadow: 0 10px 20px rgba(90, 200, 250, 0.3); }
-
-        /* Sidebar & Navigation */
-        .sidebar { width: 260px; height: 100vh; background: #E0F2FE; border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 5px; }
-        .nav-label { font-weight: 900; font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin: 20px 0 10px 20px; }
-        .nav-item { padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.8rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
-        .nav-item:hover { background: rgba(255,255,255,0.5); }
-        .nav-item.active { background: #fff; color: var(--text); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(186, 230, 253, 0.2); }
-
-        /* Content Area */
-        .content { flex: 1; height: 100vh; padding: 40px 60px; overflow-y: auto; position: relative; background: var(--bg); }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        .user-pill { background: #fff; border: 1px solid var(--border); padding: 8px 20px; border-radius: 100px; display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 0.75rem; }
-        
-        /* Main UI Components */
-        .balance-card { margin-bottom: 30px; text-align: center; background: #fff; padding: 40px; border-radius: 30px; border: 1px solid var(--border); }
-        .balance-value { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; color: var(--accent); }
-        .action-bar { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; }
-        .action-btn { background: var(--muze-blue); color: #fff; width: 60px; height: 60px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.5rem; font-weight: 900; }
-        .action-btn.share { background: #000; width: auto; padding: 0 25px; }
-
-        .asset-list { display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
-        .asset-item { background: #fff; border: 1px solid var(--border); padding: 15px 20px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .asset-info { display: flex; align-items: center; gap: 15px; }
-        .asset-img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; }
-        .asset-name { font-weight: 700; font-size: 0.9rem; }
-        .asset-sub { font-size: 0.7rem; color: var(--muted); font-weight: 900; }
-        .asset-amount { font-weight: 900; font-size: 0.95rem; }
-
-        /* Privacy Indicator */
-        .private-tag { background: var(--jlo); color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.5rem; font-weight: 900; text-transform: uppercase; }
-
-        /* Modals */
-        .sliding-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 20000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
-        .sliding-content { background: #fff; width: 100%; max-width: 400px; border-radius: 30px; padding: 40px 30px; transform: scale(0.9); opacity: 0; transition: all 0.2s ease; }
-        .sliding-modal.active { display: flex; }
-        .sliding-modal.active .sliding-content { transform: scale(1); opacity: 1; }
-        
-        .btn-full { background: var(--accent); color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; cursor: pointer; width: 100%; }
-        .btn-outline { background: #fff; color: #000; border: 1px solid var(--border); padding: 16px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; cursor: pointer; width: 100%; }
-
-        @media (max-width: 900px) { .sidebar { display: none; } .content { padding: 40px 20px; } }
+        .badge { position: fixed; bottom: 30px; font-weight: 900; font-size: 0.5rem; color: #EEE; letter-spacing: 5px; }
     </style>
 </head>
 <body>
-    <div class="v-tag">v3.0 MUZE | JELLO ACTIVE</div>
-    
-    <!-- Entrance Layer -->
-    <div id="layer-entrance" class="layer">
-        <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" alt="MUZE">
+    <div class="login-card">
+        <img src="../assets/muze_icon_logo.png" class="logo" alt="MUZE">
         <h1>Welcome to MUZE.</h1>
-        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">The secure bridge to the Priscion Network.</p>
-        <div id="onboarding-main" style="width: 100%; max-width: 350px;">
-            <div class="onboarding-card neural" onclick="neuralLogin()">
-                <h3 style="font-weight:900; margin-bottom:5px;">Neural Login</h3>
-                <p style="font-size:0.7rem; opacity:0.9;">Login with Handle or Email.</p>
-            </div>
-            <div class="onboarding-card" onclick="showVaultOptions()">
-                <h3 style="font-weight:900; margin-bottom:5px;">Vault Setup</h3>
-                <p style="font-size:0.7rem; color:var(--muted);">Create or recover your private vault.</p>
-            </div>
+        <p>Your secure bridge to the Priscion Network.</p>
+
+        <div class="input-group">
+            <span class="input-label">Neural Handle</span>
+            <input type="text" placeholder="prisca.pri" id="handle">
         </div>
-        <div id="vault-options" style="display: none; width: 100%; max-width: 350px;">
-            <button class="btn-full" onclick="location.href='create.html'">CREATE NEW VAULT</button>
-            <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='recover.html'">RECOVER WITH SEED</button>
-            <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='ledger.html'">CONNECT LEDGER</button>
-            <p style="text-align: center; margin-top: 30px; font-size: 0.7rem; color: var(--muted); cursor: pointer;" onclick="location.href='../index.html'">← BACK TO HUB</p>
-        </div>
+
+        <button class="btn-neural" onclick="location.href='vault.html'">INITIALIZE LOGIN</button>
+
+        <div class="vault-trigger" onclick="location.href='vault.html'">OR ACCESS ARCHITECT VAULT →</div>
     </div>
 
-    <!-- Sidebar Navigation -->
-    <div class="sidebar">
-        <div style="padding:10px 10px 30px;"><img src="../assets/muze_icon_logo.png" style="height:30px;" alt="MUZE"></div>
-        <div class="nav-label">Main Console</div>
-        <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
-        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
-        
-        <div class="nav-label">Ecosystem DApps</div>
-        <div class="nav-item" onclick="showStage('lynx', this)">LYNX Messenger</div>
-        <div class="nav-item" onclick="showStage('mynt', this)">MYNT Store</div>
-        <div class="nav-item" onclick="showStage('pulse', this)">PULSE Explorer</div>
-        <div class="nav-item" onclick="showStage('leggo', this)">LEGGO Builder</div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="content">
-        <div class="top-bar">
-            <div id="privacy-status" class="private-tag">Chillata Secure</div>
-            <div class="user-pill" style="cursor: pointer;" onclick="openHandleSwitcher()">
-                <span id="display-handle">prisca.pri</span>
-            </div>
-        </div>
-
-        <!-- STAGE: Vault -->
-        <div id="stage-vault" class="stage">
-            <div class="balance-card">
-                <div class="balance-label" style="font-weight:900; font-size:0.6rem; color:var(--muted); letter-spacing:3px;">VAULT BALANCE</div>
-                <div class="balance-value">1,000.0 ADA</div>
-            </div>
-            <div class="action-bar">
-                <div class="action-btn" onclick="alert('Send Securely')"><span>↑</span>SEND</div>
-                <div class="action-btn" onclick="openReceiveModal()"><span>↓</span>RECV</div>
-                <div class="action-btn" onclick="alert('Chillata Swap')"><span>⇆</span>SWAP</div>
-                <div class="action-btn share" onclick="location.href='https://priscion.com/share-to-earn'"><span>✚</span>SHARE TO EARN</div>
-            </div>
-            <div class="nav-label" style="margin-left: 0;">Sovereign Assets</div>
-            <div class="asset-list">
-                <div class="asset-item"><div class="asset-info"><img src="../assets/prn.jpg" class="asset-img"><div><div class="asset-name">Priscion Utility</div><div class="asset-sub">$PRN</div></div></div><div class="asset-amount">50,000.00</div></div>
-                <div class="asset-item"><div class="asset-info"><img src="../assets/nrl.jpg" class="asset-img"><div><div class="asset-name">Neural Reserve</div><div class="asset-sub">$NRL</div></div></div><div class="asset-amount">10,000.00</div></div>
-                <div class="asset-item"><div class="asset-info"><div style="width:40px; height:40px; background:var(--jlo); border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:900;">$J</div><div><div class="asset-name">Chillata Privacy</div><div class="asset-sub">$JLO</div></div></div><div class="asset-amount">5,000.00</div></div>
-                <div class="asset-item"><div class="asset-info"><img src="../assets/musd.jpg" class="asset-img"><div><div class="asset-name">Muze USD</div><div class="asset-sub">$MUSD</div></div></div><div class="asset-amount">25,000.00</div></div>
-            </div>
-        </div>
-
-        <!-- STAGE: Digital Card -->
-        <div id="stage-card" class="stage hidden" style="text-align: center;">
-            <h2 style="margin-bottom: 20px; font-family: 'Playfair Display', serif;">Digital Card</h2>
-            <img src="../assets/card.jpg" style="width: 100%; max-width: 450px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
-            <button class="btn-outline" style="margin-top: 40px; color: #FF3B30; border-color: #FF3B30;" onclick="logout()">LOCK VAULT</button>
-        </div>
-
-        <!-- STAGE: LYNX -->
-        <div id="stage-lynx" class="stage hidden">
-            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">LYNX Messenger</h2>
-            <p style="color:var(--muted); font-size:0.8rem; margin-bottom:30px;">Private Handle-to-Handle Communication</p>
-            <div style="background:#fff; border:1px solid var(--border); border-radius:24px; padding:40px; text-align:center;">
-                <p style="font-weight:900; color:var(--muted); font-size:0.7rem; letter-spacing:1px;">ENCRYPTED VIA JELLO</p>
-                <div style="margin:40px 0; color:#ddd;">[ Messenger Interface Coming to Mainnet ]</div>
-                <button class="btn-full">START NEW CHAT</button>
-            </div>
-        </div>
-
-        <!-- STAGE: MYNT -->
-        <div id="stage-mynt" class="stage hidden">
-            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">MYNT Store</h2>
-            <p style="color:var(--muted); font-size:0.8rem; margin-bottom:30px;">The Marketplace for Sovereign Assets</p>
-            <div class="asset-list">
-                <div class="asset-item" onclick="alert('Minting Digital ID...')">
-                    <div class="asset-info"><div><div class="asset-name">Mint Digital ID Card</div><div class="asset-sub">Private NFT ($JLO)</div></div></div>
-                    <div class="private-tag">PRIVATE</div>
-                </div>
-                <div class="asset-item" onclick="alert('Minting Property Deed...')">
-                    <div class="asset-info"><div><div class="asset-name">Mint Property Deed</div><div class="asset-sub">Private NFT ($JLO)</div></div></div>
-                    <div class="private-tag">PRIVATE</div>
-                </div>
-                <div class="asset-item">
-                    <div class="asset-info"><div><div class="asset-name">Elite Founder Card</div><div class="asset-sub">Public NFT ($PRN)</div></div></div>
-                    <div class="asset-amount">500 $PRN</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Placeholder Stages -->
-        <div id="stage-pulse" class="stage hidden" style="text-align:center; padding-top:100px;"><h2>PULSE Explorer</h2><p style="color:var(--muted);">Network activity hub coming soon.</p></div>
-        <div id="stage-leggo" class="stage hidden" style="text-align:center; padding-top:100px;"><h2>LEGGO Builder</h2><p style="color:var(--muted);">Brand node launchpad coming soon.</p></div>
-
-    </div>
-
-    <!-- Modals -->
-    <div id="modal-login" class="sliding-modal" onclick="closeModals()">
-        <div class="sliding-content" onclick="event.stopPropagation()">
-            <h2 style="font-weight:900; margin-bottom:10px; font-family: 'Playfair Display', serif;">Neural Login</h2>
-            <p style="color:var(--muted); font-size:0.75rem; margin-bottom:25px; font-weight:600;">ACCESS THE PRISCION LEDGER</p>
-            <input type="text" id="login-input" placeholder="Handle or Email" style="width:100%; padding:18px; border-radius:18px; border:1px solid var(--border); margin-bottom:12px; font-family: inherit; font-size: 0.9rem;">
-            <input type="password" id="login-pass" placeholder="Password" style="width:100%; padding:18px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px; font-family: inherit; font-size: 0.9rem;">
-            <button class="btn-full" onclick="executeLogin()">AUTHENTICATE</button>
-            <button class="btn-outline" style="margin-top:10px; border:none; color:var(--muted);" onclick="closeModals()">CANCEL</button>
-        </div>
-    </div>
-
-    <div id="modal-handles" class="sliding-modal" onclick="closeModals()"><div class="sliding-content" onclick="event.stopPropagation()"><div id="handle-list"></div><button class="btn-full" style="background:#F5F5F5; color:#000; margin-top:20px;" onclick="closeModals()">CLOSE</button></div></div>
-    <div id="modal-receive" class="sliding-modal" onclick="closeModals()"><div class="sliding-content" onclick="event.stopPropagation()"><h2 id="recv-handle" style="font-weight:900;"></h2><p style="font-size:0.7rem; color:var(--muted); margin-bottom:30px;">NEURAL ANCHOR</p><div style="width:200px; height:200px; background:#F9F9F9; margin:0 auto 30px; border-radius:24px; display:flex; align-items:center; justify-content:center; color:#DDD; font-weight:900;">QR CODE</div><button class="btn-full" onclick="closeModals()">DONE</button></div></div>
-
-    <script>
-        const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const SB_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const sb = supabase.createClient(SB_URL, SB_KEY);
-
-        const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
-        function neuralLogin() { document.getElementById('modal-login').classList.add('active'); document.getElementById('login-input').focus(); }
-        
-        async function executeLogin() { 
-            const email = document.getElementById('login-input').value; 
-            const password = document.getElementById('login-pass').value;
-            
-            if(!email || !password) return alert('Enter credentials.');
-
-            const btn = document.querySelector('#modal-login .btn-full');
-            const originalText = btn.innerText;
-            btn.innerText = 'VERIFYING...';
-            btn.disabled = true;
-
-            try {
-                const { data, error } = await sb.auth.signInWithPassword({ email, password });
-                
-                if (error) throw error;
-
-                localStorage.setItem('muze_active', 'true');
-                localStorage.setItem('muze_handle', email); 
-                localStorage.setItem('muze_user_id', data.user.id);
-                location.reload();
-            } catch (err) {
-                alert('Neural Verification Failed: ' + err.message);
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        }
-        function showVaultOptions() { document.getElementById('onboarding-main').style.display = 'none'; document.getElementById('vault-options').style.display = 'block'; }
-        function backToOnboardingMain() { document.getElementById('onboarding-main').style.display = 'block'; document.getElementById('vault-options').style.display = 'none'; }
-        function showStage(id, el) { document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden')); document.getElementById('stage-' + id).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
-        function openHandleSwitcher() { const list = document.getElementById('handle-list'); list.innerHTML = ''; handles.forEach(h => { const active = h === document.getElementById('display-handle').innerText; const div = document.createElement('div'); div.style = "padding:20px; border-radius:18px; border:1px solid #EEE; margin-bottom:10px; cursor:pointer; font-weight:700; display:flex; justify-content:space-between;"; div.innerHTML = `<span>${h}</span>${active ? '✓' : ''}`; div.onclick = () => { document.getElementById('display-handle').innerText = h; localStorage.setItem('muze_handle', h); closeModals(); }; list.appendChild(div); }); document.getElementById('modal-handles').classList.add('active'); }
-        function openReceiveModal() { document.getElementById('recv-handle').innerText = document.getElementById('display-handle').innerText; document.getElementById('modal-receive').classList.add('active'); }
-        function closeModals() { document.querySelectorAll('.sliding-modal').forEach(m => m.classList.remove('active')); }
-        function logout() { localStorage.removeItem('muze_active'); location.reload(); }
-        window.onload = () => { if(localStorage.getItem('muze_active') === 'true') { document.getElementById('layer-entrance').style.display = 'none'; document.getElementById('display-handle').innerText = localStorage.getItem('muze_handle') || 'prisca.pri'; } };
-    </script>
+    <div class="badge">LIVE MODE ACTIVE V3.0</div>
 </body>
 </html>
