@@ -51,8 +51,11 @@
         .action-btn { background: var(--muze-blue); color: #fff; width: 75px; height: 75px; border-radius: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.6rem; font-weight: 900; box-shadow: 0 10px 20px rgba(90, 200, 250, 0.2); }
         .action-btn:hover { transform: translateY(-3px); }
         .action-btn.share { background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .action-btn.buy { background: #0070BA; box-shadow: 0 10px 20px rgba(0,112,186,0.2); }
 
-        .asset-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto; }
+        .section-header { font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
+        .asset-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto 40px; }
         .asset-item { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .asset-item:hover { border-color: var(--accent); transform: scale(1.02); }
         .asset-info { display: flex; align-items: center; gap: 20px; }
@@ -60,6 +63,21 @@
         .asset-name { font-weight: 900; font-size: 1rem; }
         .asset-symbol { font-size: 0.7rem; font-weight: 900; color: var(--muted); text-transform: uppercase; }
         .asset-amount { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.4rem; }
+
+        /* Handle NFTs Grid */
+        .handle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; width: 100%; max-width: 800px; margin: 0 auto; }
+        .handle-nft { background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 5px 15px rgba(186, 230, 253, 0.1); }
+        .handle-nft:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(186, 230, 253, 0.3); }
+        .handle-nft .logo-bg { position: absolute; top: -10px; right: -10px; opacity: 0.05; width: 80px; }
+        .handle-nft-icon { width: 40px; height: 40px; margin-bottom: 15px; }
+        .handle-nft-name { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; color: var(--text); }
+        .handle-nft-suffix { font-size: 0.65rem; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Integrated Swap Stage */
+        .swap-card { background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 40px; max-width: 500px; margin: 0 auto; }
+        .input-group { background: #f8fafc; border: 1px solid var(--border); padding: 20px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .input-group input { background: transparent; border: none; font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; outline: none; width: 150px; }
+        .asset-select { display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 0.9rem; cursor: pointer; }
 
         /* Settings Card */
         .settings-card { background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 40px; max-width: 600px; margin: 0 auto; text-align: left; }
@@ -126,6 +144,7 @@
             </div>
         </div>
 
+        <!-- STAGE: VAULT -->
         <div id="stage-vault" class="stage">
             <div class="balance-card">
                 <span class="balance-label">Total Vault Balance</span>
@@ -133,12 +152,14 @@
             </div>
 
             <div class="action-bar">
-                <div class="action-btn" onclick="location.href='../pulse'"><span>↑</span>SEND</div>
-                <div class="action-btn" onclick="location.href='../pulse'"><span>↓</span>RECV</div>
-                <div class="action-btn" onclick="location.href='../chillata'"><span>⇆</span>SWAP</div>
+                <div class="action-btn" onclick="alert('Sending to Pulse Network...')"><span>↑</span>SEND</div>
+                <div class="action-btn" onclick="alert('Receiving on Priscion L1...')"><span>↓</span>RECV</div>
+                <div class="action-btn" onclick="showStage('swap', document.getElementById('nav-vault'))"><span>⇆</span>SWAP</div>
                 <div class="action-btn share" onclick="location.href='../share-to-earn'"><span>✚</span>EARN</div>
+                <div class="action-btn buy" onclick="showStage('buy', document.getElementById('nav-vault'))"><span>$</span>BUY</div>
             </div>
 
+            <div class="section-header">Primary Assets</div>
             <div class="asset-list">
                 <div class="asset-item">
                     <div class="asset-info">
@@ -161,6 +182,87 @@
                     </div>
                     <div class="asset-amount">10,000.00</div>
                 </div>
+            </div>
+
+            <div class="section-header">Sovereign Handles (.pri)</div>
+            <div class="handle-grid">
+                <div class="handle-nft">
+                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <div class="handle-nft-name">prisca</div>
+                    <div class="handle-nft-suffix">.pri</div>
+                </div>
+                <div class="handle-nft">
+                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <div class="handle-nft-name">pricey</div>
+                    <div class="handle-nft-suffix">.pri</div>
+                </div>
+                <div class="handle-nft">
+                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <div class="handle-nft-name">ateliagaming</div>
+                    <div class="handle-nft-suffix">.pri</div>
+                </div>
+                <div class="handle-nft">
+                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <div class="handle-nft-name">calalloo</div>
+                    <div class="handle-nft-suffix">.pri</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STAGE: SWAP -->
+        <div id="stage-swap" class="stage hidden">
+            <h2 style="text-align: center; margin-bottom: 40px;">Chillata Swap</h2>
+            <div class="swap-card">
+                <div class="input-group">
+                    <div>
+                        <div style="font-size: 0.6rem; font-weight: 900; color: var(--muted); text-transform: uppercase;">From</div>
+                        <input type="text" placeholder="0.00" value="100.00">
+                    </div>
+                    <div class="asset-select">
+                        <img src="../assets/ada_logo.png" style="width: 20px;"> ADA
+                    </div>
+                </div>
+                <div style="text-align: center; margin: -10px 0; z-index: 2; position: relative;">
+                    <div style="background: #fff; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin: 0 auto; cursor: pointer;">↓</div>
+                </div>
+                <div class="input-group">
+                    <div>
+                        <div style="font-size: 0.6rem; font-weight: 900; color: var(--muted); text-transform: uppercase;">To</div>
+                        <input type="text" placeholder="0.00" value="500.00">
+                    </div>
+                    <div class="asset-select">
+                        <img src="../assets/prn.jpg" style="width: 20px; border-radius: 4px;"> PRN
+                    </div>
+                </div>
+                <button class="btn-full" style="margin-top: 20px;" onclick="alert('Handshake required for Swap...')">EXECUTE SWAP</button>
+                <div class="btn-link" style="text-align: center;" onclick="showStage('vault', document.getElementById('nav-vault'))">CANCEL</div>
+            </div>
+        </div>
+
+        <!-- STAGE: BUY -->
+        <div id="stage-buy" class="stage hidden">
+            <h2 style="text-align: center; margin-bottom: 40px;">Buy Crypto</h2>
+            <div class="swap-card" style="text-align: center;">
+                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_111x69.jpg" style="height: 40px; margin-bottom: 20px;">
+                <h3 class="playfair" style="margin-bottom: 10px;">Buy ADA with PayPal</h3>
+                <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 30px;">Instant settlement to your MUZE Vault. No KYC required for amounts under $500.</p>
+                
+                <div class="input-group">
+                    <div>
+                        <div style="font-size: 0.6rem; font-weight: 900; color: var(--muted); text-transform: uppercase;">Amount (USD)</div>
+                        <input type="text" value="100.00">
+                    </div>
+                    <div class="asset-select">USD</div>
+                </div>
+                
+                <div style="margin: 20px 0; font-weight: 900; font-size: 0.7rem;">YOU RECEIVE: <span style="color: var(--accent);">~350 ADA</span></div>
+                
+                <button class="btn-full" style="background: #0070BA;" onclick="alert('Redirecting to PayPal Secure Checkout...')">BUY NOW</button>
+                <div class="btn-link" onclick="showStage('vault', document.getElementById('nav-vault'))">CANCEL</div>
             </div>
         </div>
 
