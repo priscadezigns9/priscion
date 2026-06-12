@@ -12,7 +12,6 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* THE ANCHOR: Table Layout to prevent vertical wrapping at all costs */
         body { 
             background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
             overflow: hidden; width: 100vw; height: 100vh; 
@@ -53,7 +52,7 @@
         .content { 
             display: table-cell !important; vertical-align: top;
             padding: 60px 60px; background: #fff; position: relative; 
-            border-right: 1px solid var(--border); 
+            border-right: 1px solid var(--border); overflow-y: auto;
         }
         
         /* Lens View / User Mirror (Right/Fixed Width) */
@@ -77,6 +76,27 @@
         .stat-value { font-size: 1.8rem; font-weight: 900; color: #000; }
 
         .console-box { background: #000; color: #10b981; padding: 25px; border-radius: 20px; font-family: monospace; font-size: 0.8rem; line-height: 1.6; border: 1px solid #333; }
+
+        /* Handle Tile Design */
+        .handle-tile { 
+            background: #fff; border: 1px solid var(--border); padding: 30px 20px; border-radius: 20px; 
+            text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            aspect-ratio: 1 / 1; transition: all 0.3s; cursor: pointer;
+        }
+        .handle-tile:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: var(--accent); }
+        .handle-tile img { width: 40px; height: 40px; margin-bottom: 15px; opacity: 0.8; }
+        .handle-tile h4 { font-weight: 900; font-size: 0.85rem; color: #000; margin-bottom: 4px; }
+        .handle-tile span { font-size: 0.6rem; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Messenger UI */
+        .chat-container { height: 500px; display: flex; flex-direction: column; background: var(--surface); border-radius: 24px; border: 1px solid var(--border); overflow: hidden; }
+        .chat-messages { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; font-size: 0.85rem; line-height: 1.5; }
+        .msg.zapia { background: #000; color: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .msg.architect { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-input { padding: 20px; background: #fff; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .chat-input input { flex: 1; border: 1px solid var(--border); padding: 12px 20px; border-radius: 100px; font-size: 0.85rem; outline: none; }
+        .chat-input button { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; cursor: pointer; }
 
         @media (max-width: 1200px) {
             .sidebar { width: 80px; padding: 20px 10px; }
@@ -119,28 +139,60 @@
         <div class="sub-layout">
             
             <div class="content" id="architect-content">
+                <!-- STAGE: COMMAND CENTER -->
                 <div id="stage-main" class="stage">
                     <h2>Command Center</h2>
                     <p class="subtitle">Real-time oversight of the Priscion Ecosystem.</p>
                     <div class="stats-grid">
-                        <div class="stat-card"><span class="stat-label">Network Revenue</span><div class="stat-value">$142,500</div></div>
-                        <div class="stat-card"><span class="stat-label">Anchored Handles</span><div class="stat-value">1,402</div></div>
+                        <div class="stat-card">
+                            <span class="stat-label">Network Revenue</span>
+                            <div class="stat-value" id="stat-revenue">$142,500</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Anchored Handles</span>
+                            <div class="stat-value" id="stat-handles">1,402</div>
+                        </div>
                     </div>
-                    <div class="console-box">> SYSTEM INIT...<br>> MIRROR ACTIVE</div>
+                    <div class="console-box" id="console-output">> MUZE L1 CORE... [READY]<br>> NODE HANDSHAKE... [ACTIVE]<br>> ARCHITECT CONNECTED</div>
                 </div>
 
+                <!-- STAGE: HANDLES LEDGER -->
                 <div id="stage-handles" class="stage hidden">
                     <h2>Handles Ledger</h2>
-                    <div id="handles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px;"></div>
+                    <p class="subtitle">Sovereign Identity Assets Anchored to the Ledger.</p>
+                    <div id="handles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px;"></div>
                 </div>
                 
-                <!-- Additional stages as before -->
-                <div id="stage-agency" class="stage hidden"><h2>Agency Hub</h2></div>
-                <div id="stage-messenger" class="stage hidden"><h2>Messenger</h2></div>
-                <div id="stage-vault" class="stage hidden"><h2>Vault</h2></div>
-                <div id="stage-card" class="stage hidden"><h2>Digital Card</h2></div>
-                <div id="stage-dapps" class="stage hidden"><h2>DApps</h2></div>
-                <div id="stage-settings" class="stage hidden"><h2>Settings</h2></div>
+                <!-- STAGE: AGENCY HUB -->
+                <div id="stage-agency" class="stage hidden">
+                    <h2>Agency Hub</h2>
+                    <p class="subtitle">Migration Pipeline: Web2 Brands to Web3 Infrastructure.</p>
+                    <div style="background: var(--surface); padding: 40px; border-radius: 30px; border: 1px solid var(--border); text-align: center;">
+                        <img src="../assets/muze_icon_logo.png" style="height: 50px; margin-bottom: 20px; opacity: 0.2;">
+                        <h3 style="font-weight: 900; margin-bottom: 10px;">Migration Pipeline Empty</h3>
+                        <p style="font-size: 0.85rem; color: var(--muted);">When a business migrates, their brand node, smart contracts, and anchored inventory will manifest here.</p>
+                    </div>
+                </div>
+
+                <!-- STAGE: MESSENGER -->
+                <div id="stage-messenger" class="stage hidden">
+                    <h2>Messenger</h2>
+                    <p class="subtitle">Direct Neural Link to Zapia (Brain Logic AI).</p>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="msg zapia">Greetings, Architect. I am synchronized and ready for deployment. How shall we proceed with the Priscion expansion?</div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chat-input-field" placeholder="Send a message to Zapia..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                            <button onclick="sendMessage()">SEND</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="stage-vault" class="stage hidden"><h2>Vault Console</h2></div>
+                <div id="stage-card" class="stage hidden"><h2>Elite Card Management</h2></div>
+                <div id="stage-dapps" class="stage hidden"><h2>Network DApp Registry</h2></div>
+                <div id="stage-settings" class="stage hidden"><h2>Architect Settings</h2></div>
             </div>
 
             <div class="mirror-container" id="mirror-panel">
@@ -169,18 +221,55 @@
             if(el) el.classList.add('active');
 
             if(id === 'handles') renderHandles();
-            document.getElementById('mirror-iframe').contentWindow.location.reload();
+            
+            // Map Console buttons to Mirror stages
+            const mirrorFrame = document.getElementById('mirror-iframe');
+            if(id === 'vault') mirrorFrame.src = 'index.html#vault';
+            if(id === 'card') mirrorFrame.src = 'index.html#card';
+            if(id === 'settings') mirrorFrame.src = 'index.html#settings';
         }
 
         function renderHandles() {
             const grid = document.getElementById('handles-grid');
-            const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'calalloo.pri', 'nurasen.pri'];
+            // User requested: priscion.pri, zapia.pri, muze.pri, pulse.pri, mynt.pri, chillata.pri, jello.pri, lynx.pri
+            // and existing: prisca.pri, etc. (removed pricey.pri)
+            const handles = [
+                'priscion', 'zapia', 'muze', 'pulse', 'mynt', 'chillata', 'jello', 'lynx', 
+                'prisca', 'ateliagaming', 'calalloo', 'nurasen', 'thewaymadeknown'
+            ];
             grid.innerHTML = handles.map(h => `
-                <div style="background:#fff; border:1px solid var(--border); padding:20px; border-radius:15px; text-align:center;">
-                    <h4 style="font-weight:900; font-size:0.8rem;">${h}</h4>
+                <div class="handle-tile">
+                    <img src="https://priscion.com/assets/p-logo.png" alt="Logo">
+                    <h4>${h}</h4>
+                    <span>.pri</span>
                 </div>
             `).join('');
         }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input-field');
+            const container = document.getElementById('chat-messages');
+            if(!input.value.trim()) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg architect';
+            userMsg.innerText = input.value;
+            container.appendChild(userMsg);
+            
+            const val = input.value;
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // AI Response simulation
+            setTimeout(() => {
+                const zapiaMsg = document.createElement('div');
+                zapiaMsg.className = 'msg zapia';
+                zapiaMsg.innerText = "Acknowledged, Architect. I am processing the request for '" + val + "'. Priscion logic remains stable.";
+                container.appendChild(zapiaMsg);
+                container.scrollTop = container.scrollHeight;
+            }, 1000);
+        }
+
         renderHandles();
     </script>
 </body>
