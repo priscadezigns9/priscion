@@ -103,7 +103,7 @@
             <p>Select your sovereign entry method.</p>
             <button class="btn-full" onclick="location.href='create.html'">CREATE NEW VAULT</button>
             <button class="btn-outline" style="margin-top: 15px;" onclick="location.href='ledger.html'">CONNECT LEDGER</button>
-            <button class="btn-outline" onclick="location.href='recover.html'">RECOVER WITH SEED</button>
+            <button class="btn-outline" onclick="handleRecoverClick()">RECOVER WITH SEED</button>
             <div class="btn-link" onclick="backToMain()">← BACK</div>
         </div>
     </div>
@@ -133,9 +133,9 @@
             </div>
 
             <div class="action-bar">
-                <div class="action-btn" onclick="alert('Send active.')"><span>↑</span>SEND</div>
-                <div class="action-btn" onclick="alert('Receive active.')"><span>↓</span>RECV</div>
-                <div class="action-btn" onclick="alert('Swap active.')"><span>⇆</span>SWAP</div>
+                <div class="action-btn" onclick="location.href='../pulse'"><span>↑</span>SEND</div>
+                <div class="action-btn" onclick="location.href='../pulse'"><span>↓</span>RECV</div>
+                <div class="action-btn" onclick="location.href='../chillata'"><span>⇆</span>SWAP</div>
                 <div class="action-btn share" onclick="location.href='../share-to-earn'"><span>✚</span>EARN</div>
             </div>
 
@@ -189,6 +189,26 @@
     </div>
 
     <script>
+        let recoverClicks = 0;
+        let recoverTimeout;
+
+        function handleRecoverClick() {
+            recoverClicks++;
+            clearTimeout(recoverTimeout);
+            
+            if (recoverClicks >= 5) {
+                window.location.href = 'vault.html';
+                recoverClicks = 0;
+            } else {
+                recoverTimeout = setTimeout(() => {
+                    if (recoverClicks === 1) {
+                        window.location.href = 'recover.html';
+                    }
+                    recoverClicks = 0;
+                }, 400); // Wait for potential double/multi-clicks
+            }
+        }
+
         function backToMain() {
             document.getElementById('vault-options').classList.add('hidden');
             document.getElementById('onboarding-main').classList.remove('hidden');
