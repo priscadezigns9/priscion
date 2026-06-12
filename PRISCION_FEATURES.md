@@ -71,74 +71,27 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 ### **Asset Imagery**
 *   **Priscion Elite Card**: `assets/card.jpg` (Displays the user's current card image).
 
-## 10. Current Visual Layout & Snapshot Log
-These snapshots represent the approved high-fidelity interface as of June 12, 2026.
+## 10. Architect Command Center (God Mode)
+*   **Zero-Simulation Mandate**: Hardcoded dashboard numbers are strictly banned. The Command Center must reflect **Live Node Status** and **Anchored Ledger Data**.
+*   **Hard-Anchor Layout**: Implementation of `display: table` structural model in `vault.html` to force immutable side-by-side positioning of the Architect Console and the Live User Mirror.
+*   **Neural Messenger**: Direct P2P link between the Architect and Zapia (Brain Logic AI) integrated into the Console.
 
-### **MUZE Entry (Onboarding)**
-*   **Status**: High-Fidelity, Sky Blue Theme, Centered.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781295384187_1646.png`
-
-### **Neural Login (Web2 Entry)**
-*   **Status**: Functional Toggle, Centered Card.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781295390086_4454.png`
-
-### **PULSE Ledger Explorer**
-*   **Status**: Active, High-Fidelity Grid.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781295576331_9369.png`
-
-### **MYNT NFT Marketplace**
-*   **Status**: Functional, Asset Grid Active.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781295586526_4939.jpg`
-
-### **CHILLATA Exchange**
-*   **Status**: Sovereign Swap UI.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781295593807_4805.png`
-
-### **LYNX Messenger**
-*   **Status**: Sovereign Handle-to-Handle UI.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781295598857_7538.png`
-
-### **MUZE Settings & Seed Handshake**
-*   **Status**: Active, Functional Handshake.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781295958694_5072.png`
-
-### **Architect Command Center (God Mode)**
-*   **Status**: Active Split-Screen "Lens View" for real-time Hub monitoring and vault management.
-*   **Layout**: Side-by-side (Architect on left, 450px wide live mirror on right). **Strict horizontal anchoring** enabled via `flex-wrap: nowrap` and `flex-shrink: 0`.
-*   **Toggle**: Managed via a "Lens View" nav-item in the Architect sidebar.
-*   **Snapshot**: `screenshots/scs_priscioncom_1781305727270_5972.png`
-
-### **Priscion Elite Card (Visual)**
-*   **Status**: Integrated into MUZE.
-*   **Snapshot**: `screenshots/card_visual_fixed.png`
-
-## 11. Handle Anchoring & Registration
+## 11. Sovereign Handle Economy
 *   **User-Defined Handle**: During **Sign Up**, users explicitly choose their own **Sovereign Handle** (e.g., `myname.pri`). The system automatically appends `.pri` if omitted.
-*   **Availability Check**: The system checks the `profiles` table in Supabase to ensure the handle is not already taken before allowing registration.
-*   **Supabase Anchoring**: Once confirmed, the handle is anchored to the user's unique ID in the Supabase `profiles` table. 
-*   **Persistence**: Upon login, the system fetches the anchored handle from the database rather than predicting it, ensuring the user's chosen identity is persistent across all sessions and devices.
-*   **Visual Confirmation**: The chosen handle is displayed as a primary asset in the MUZE Wallet header.
+*   **Minting Design**: All minted handles manifest as **Square Tiles** featuring the **Priscion Logo**, the **Handle Name**, and the **.pri** suffix.
+*   **Core Ecosystem Handles**: 
+    *   `priscion.pri` (Network Head)
+    *   `zapia.pri` (AI Liaison)
+    *   `muze.pri`, `pulse.pri`, `mynt.pri`, `chillata.pri`, `jello.pri`, `lynx.pri` (Infrastructure Nodes).
+*   **Supabase Anchoring**: Once confirmed, the handle is anchored to the user's unique ID in the Supabase `profiles` table.
 
-## 12. Onboarding Diversion (Web2 vs. Web3)
-*   **Segmented Entry**: The MUZE entrance layer now explicitly shards users based on their technical background:
-    *   **Neural Login (Web2)**: Diverts newcomers to a Gmail-like experience where they register with a **Handle**, **Email**, and **Password**.
-    *   **Vault Setup (Web3)**: Diverts sovereign users to direct vault creation, recovery, or hardware wallet connection.
-*   **Recovery Access**: Once inside the MUZE Console, users can access their **Recovery Shard** (Secret Phrase) via the **Settings** stage. This is protected by a secondary "Neural Password" verification to ensure high-fidelity security.
-
-## 13. High-Fidelity Sovereign Shard Protocol
-*   **Decoupled Creation**: Recovery phrases are no longer generated at signup. Users must explicitly initiate generation within the **MUZE Settings** stage.
-*   **BIP-0039 World Dictionary**: Shards are pulled dynamically from the official industry-standard English wordlist.
-*   **Dynamic Handshake Verification**: After generation, the wallet triggers a random-index security question (e.g., "Enter word #4"). Successful verification anchors the shard to the handle.
-*   **One-Way Persistence**: Once verified, the phrase is locked. It is hidden from the UI and cannot be retrieved. 
-*   **Password-Gated Reset**: To generate a new shard, users must provide their **Neural Password**, which wipes the previous anchor and starts the generation flow fresh.
-
-## 14. Handle Economy & Tiered Pricing
-*   **Signal Strength Pricing**: Fees are determined by the "Signal Strength" of the handle to prevent hoarding and ensure ecosystem fairness.
-    *   **Standard (.pri)**: Base utility fee for personal names.
-    *   **Premium (Luxury/Dictionary)**: High-fidelity fees for global brand names (e.g., dior.pri, vogue.pri).
-    *   **Short Handles (3-4 chars)**: Exponentially higher fees to prevent bot-snatching.
-*   **The Protected Registry**: A gated list of high-value brand names that trigger verification requirements and premium pricing.
-*   **Revenue Allocation**: Premium fees are directed to the **NEURAL ($NRL) Treasury** or the **TWMK Endowment**, supporting the mission backbone.
+## 12. Agency Hub & Migration Pipeline
+*   **The Hub Role**: Centralized management for the **Priscion Migration Agency**. 
+*   **Migration Logic**: When a Web2 brand migrates, the Hub triggers:
+    1.  **Node Provisioning**: Deployment of brand-specific smart contracts.
+    2.  **Asset Anchoring**: Hashing and pinning of brand inventory/logos to the ledger.
+    3.  **Handle Issuance**: Verified business handle anchoring.
+*   **Pipeline Visibility**: The Hub provides real-time status of migrations in progress and node health for managed brands.
 
 ---
 *Last Updated: June 12, 2026*
