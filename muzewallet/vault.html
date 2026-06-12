@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
         :root { 
-            --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff;
+            --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F9F9F9;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
@@ -16,11 +16,9 @@
 
         /* Sidebar Navigation */
         .sidebar {
-            width: 280px; height: 100vh; background: #E0F2FE; border-right: 1px solid var(--border);
+            width: 280px; height: 100vh; background: var(--surface); border-right: 1px solid var(--border);
             padding: 40px 20px; display: flex; flex-direction: column; gap: 5px;
-            transition: transform 0.3s ease !important;
         }
-        .sidebar.collapsed { transform: translateX(-100%); }
         .nav-item {
             padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.8rem;
             color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px;
@@ -43,18 +41,17 @@
         }
 
         /* Vault / Vespr Style */
-        .balance-card { margin-bottom: 40px; text-align: center; background: #fff; padding: 40px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(186, 230, 253, 0.2); }
+        .balance-card { margin-bottom: 40px; text-align: center; }
         .balance-label { font-weight: 900; font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; }
-        .balance-value { font-size: 4rem; font-weight: 900; letter-spacing: -3px; color: var(--accent); }
+        .balance-value { font-size: 4rem; font-weight: 900; letter-spacing: -3px; }
 
         .action-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
         .action-btn {
-            background: var(--muze-blue); color: #fff; width: 65px; height: 65px; border-radius: 22px;
+            background: #000; color: #fff; width: 60px; height: 60px; border-radius: 20px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 0.55rem; font-weight: 900; gap: 5px; text-transform: uppercase;
+            cursor: pointer; font-size: 0.6rem; font-weight: 900; gap: 5px; text-transform: uppercase;
         }
-        .action-btn.share { background: #000; }
-        .action-btn.alt { background: #fff; color: var(--text); border: 1px solid var(--border); }
+        .action-btn.alt { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
 
         .asset-list { display: flex; flex-direction: column; gap: 15px; max-width: 600px; margin: 0 auto; }
         .asset-item {
@@ -63,7 +60,6 @@
         }
         .asset-info { display: flex; align-items: center; gap: 20px; }
         .asset-icon { width: 45px; height: 45px; background: var(--surface); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; }
-        .asset-img { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
         .asset-name { font-weight: 900; font-size: 1rem; }
         .asset-amount { font-weight: 900; font-size: 1.1rem; text-align: right; }
         .asset-sub { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
@@ -78,10 +74,6 @@
         .chat-bubble.out { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 5px; }
         .chat-input-area { margin-top: 20px; display: flex; gap: 10px; }
         .chat-input { flex: 1; padding: 15px 25px; border-radius: 100px; border: 1px solid var(--border); outline: none; background: var(--surface); font-weight: 600; }
-        .chat-btn { background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0 10px; opacity: 0.6; transition: opacity 0.2s; }
-        .chat-btn:hover { opacity: 1; }
-        .chat-btn svg { width: 20px; height: 20px; fill: none; stroke: var(--text); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-        .chat-btn.recording svg { stroke: #FF3B30; }
 
         /* Handles Gallery */
         .handles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
@@ -93,21 +85,14 @@
         .handle-badge { background: var(--surface); color: var(--muted); padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 900; letter-spacing: 1px; }
         .handle-badge.owned { background: var(--muze-blue); color: #fff; }
 
-        /* Card Display */
+        /* Sovereign Card */
         .card-display {
-            width: 100%; max-width: 500px; aspect-ratio: 1.6 / 1;
-            background: #000; border-radius: 24px; overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+            width: 100%; max-width: 600px; aspect-ratio: 1.6;
+            background: #000; border-radius: 30px; overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.1);
             margin: 0 auto;
-            position: relative;
-            background: #E0F2FE;
         }
-        .card-display img { width: 100%; height: 100%; object-fit: cover; }
-        .card-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 60%);
-            pointer-events: none;
-        }
+        .card-display img { width: 100%; height: 100%; object-fit: contain; background: #000; }
 
         /* STAGE: dAPPS */
         .stage-dapps-container { height: calc(100vh - 180px); display: flex; flex-direction: column; }
@@ -119,30 +104,6 @@
         .dapp-card h4 { font-weight: 900; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         .back-to-dapps { margin-bottom: 20px; font-weight: 900; font-size: 0.7rem; cursor: pointer; display: none; align-items: center; gap: 10px; color: var(--muze-blue); }
 
-        /* Unified Card Connect Overlay */
-        .card-connect-overlay {
-            position: absolute; inset: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.3s ease !important;
-            padding: 20px;
-        }
-        .card-connect-overlay.active { opacity: 1; pointer-events: all; }
-        .card-connect-overlay img { width: 150px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .card-connect-overlay h3 { font-weight: 900; font-size: 0.9rem; margin-bottom: 10px; }
-        .card-connect-overlay p { font-size: 0.7rem; color: var(--muted); margin-bottom: 25px; }
-
-        /* GOD MODE HUD (Architect Only) */
-        .god-hud {
-            position: fixed; top: 20px; right: 20px; z-index: 10000;
-            display: none; flex-direction: column; gap: 10px;
-            background: rgba(0,0,0,0.9); padding: 20px; border-radius: 20px;
-            border: 1px solid var(--accent); box-shadow: 0 0 30px rgba(123, 53, 212, 0.4);
-            color: #fff; font-family: 'Inter', sans-serif; min-width: 200px;
-        }
-        .god-hud h5 { font-weight: 900; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); margin-bottom: 10px; }
-        .god-stat { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 600; }
-        .god-stat span { color: var(--muze-blue); }
-        .god-btn { background: var(--accent); color: #fff; border: none; padding: 10px; border-radius: 8px; font-weight: 900; font-size: 0.6rem; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -150,7 +111,7 @@
     <div class="dev-toggle" onclick="toggleDevMode()" id="dev-toggle">GOD MODE</div>
 
     <div class="sidebar">
-        <div style="padding:10px 10px 40px;"><img src="../assets/muze_icon_logo.png" style="height:35px;"></div>
+        <div style="padding:10px 10px 40px;"><img src="https://priscion.com/assets/muze_icon_logo.png" style="height:35px;"></div>
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" onclick="showStage('handles', this)">Handle Registry</div>
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
@@ -175,14 +136,14 @@
             <div class="action-bar">
                 <div class="action-btn"><span>↑</span>SEND</div>
                 <div class="action-btn"><span>↓</span>RECV</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[3])"><span>⇆</span>SWAP</div>
-                <div class="action-btn share" onclick="location.href='https://priscion.com/share-to-earn'"><span>✚</span>SHARE TO OWN</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[3]); openDApp('../chillata/')"><span>⇆</span>SWAP</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[3]); openDApp('../chillata/')"><span>⚡</span>STAKE</div>
             </div>
 
             <div class="asset-list">
                 <div class="asset-item">
                     <div class="asset-info">
-                        <div class="asset-icon" style="color: #0033AD; font-weight: 900;">₳</div>
+                        <div class="asset-icon" style="color: #0033AD;">₳</div>
                         <div>
                             <div class="asset-name">Cardano</div>
                             <div class="asset-sub">ADA</div>
@@ -192,33 +153,13 @@
                 </div>
                 <div class="asset-item">
                     <div class="asset-info">
-                        <img src="../assets/prn.jpg" class="asset-img">
+                        <div class="asset-icon" style="background: #000; color: #fff;">$</div>
                         <div>
-                            <div class="asset-name">Independent Utility</div>
+                            <div class="asset-name">PRN</div>
                             <div class="asset-sub">$PRN</div>
                         </div>
                     </div>
-                    <div class="asset-amount">1,000.00</div>
-                </div>
-                <div class="asset-item">
-                    <div class="asset-info">
-                        <img src="../assets/nrl.jpg" class="asset-img">
-                        <div>
-                            <div class="asset-name">Neural Reserve</div>
-                            <div class="asset-sub">$NRL</div>
-                        </div>
-                    </div>
-                    <div class="asset-amount">50,000.00</div>
-                </div>
-                <div class="asset-item">
-                    <div class="asset-info">
-                        <img src="../assets/atlr.jpg" class="asset-img">
-                        <div>
-                            <div class="asset-name">Atelia Gaming</div>
-                            <div class="asset-sub">$ATLR</div>
-                        </div>
-                    </div>
-                    <div class="asset-amount">10,000.00</div>
+                    <div class="asset-amount">0.00</div>
                 </div>
             </div>
         </div>
@@ -232,64 +173,38 @@
         <!-- STAGE: MESSENGER -->
         <div id="stage-messenger" class="stage messenger-stage hidden">
             <div class="messenger-header">
-                <img src="../assets/lynx_logo.png">
+                <img src="https://priscion.com/assets/lynx_logo.png">
                 <h3 style="font-weight: 900; letter-spacing: 1px;">LYNX MESSENGER</h3>
             </div>
             <div class="chat-feed">
                 <div class="chat-bubble in">Architect Console active. Neural messenger encrypted.</div>
             </div>
             <div class="chat-input-area">
-                <input type="file" id="chat-file-input" style="display:none;" onchange="handleFile(this)">
-                <button class="chat-btn" onclick="triggerAttachment()">
-                    <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"></path></svg>
-                </button>
-                <button id="record-btn" class="chat-btn" onclick="toggleRecording()">
-                    <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"></path><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"></path></svg>
-                </button>
-                <input type="text" id="chat-input" class="chat-input" placeholder="Neural command..." onkeypress="if(event.key === 'Enter') sendNeuralMessage()">
-                <button class="btn-full" style="width: auto; padding: 15px 30px; margin: 0; position: relative; z-index: 100;" onclick="sendNeuralMessage()">SEND</button>
+                <input type="text" class="chat-input" placeholder="Neural command...">
+                <button class="btn-full" style="width: auto; padding: 15px 30px; margin: 0;">SEND</button>
             </div>
         </div>
 
         <!-- STAGE: dAPPS -->
         <div id="stage-dapps" class="stage hidden">
-            <div class="stage-dapps-container" style="position: relative;">
+            <div class="stage-dapps-container">
                 <div id="dapp-browser-back" class="back-to-dapps" onclick="closeDApp()">← BACK TO dAPPS</div>
-                
-                <div id="card-connect-overlay" class="card-connect-overlay">
-                    <img src="../assets/leggo_logo.png">
-                    <h3>CONNECT VAULT</h3>
-                    <p>This dApp is requesting access to your Architect Console.</p>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn-full" style="width:140px; padding:12px; font-size:0.6rem;" onclick="confirmConnect()">APPROVE</button>
-                        <button class="btn-outline" style="width:140px; padding:12px; font-size:0.6rem;" onclick="cancelConnect()">CANCEL</button>
-                    </div>
-                </div>
-
                 <div id="dapp-main-grid" class="dapp-grid">
-                    <div class="dapp-card" onclick="openDApp('./leggo.html')">
-                        <img src="../assets/leggo_logo.png">
-                        <h4>LEGGO</h4>
-                    </div>
-                    <div class="dapp-card" onclick="openDApp('../chillata/index.html?v=')">
-                        <img src="../assets/chillata_logo.png">
-                        <h4>CHILLATA</h4>
-                    </div>
-                    <div class="dapp-card" onclick="openDApp('../pulse/index.html')">
-                        <img src="../assets/pulse_logo.png">
+                    <div class="dapp-card" onclick="openDApp('../pulse/')">
+                        <img src="https://priscion.com/assets/pulse_logo.png">
                         <h4>PULSE</h4>
                     </div>
-                    <div class="dapp-card" onclick="openDApp('../mynt/index.html?v=')">
-                        <img src="../assets/mynt_logo.png">
+                    <div class="dapp-card" onclick="openDApp('../chillata/')">
+                        <img src="https://priscion.com/assets/chillata_logo.png">
+                        <h4>CHILLATA</h4>
+                    </div>
+                    <div class="dapp-card" onclick="openDApp('../mynt/')">
+                        <img src="https://priscion.com/assets/mynt_logo.png">
                         <h4>MYNT</h4>
                     </div>
-                    <div class="dapp-card" onclick="showStage('messenger', document.querySelectorAll('.nav-item')[1])">
-                        <img src="../assets/lynx_logo.png">
-                        <h4>LYNX</h4>
-                    </div>
-                    <div class="dapp-card" onclick="location.href='../share-to-earn/'">
-                        <div style="font-size: 1.5rem; margin-bottom: 10px;">📣</div>
-                        <h4>SHARE-TO-EARN</h4>
+                    <div class="dapp-card" onclick="openDApp('../leggo.html')">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png">
+                        <h4>LEGGO</h4>
                     </div>
                 </div>
                 <div id="dapp-iframe-wrapper" class="dapp-iframe-wrapper">
@@ -300,23 +215,11 @@
 
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
-            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Priscion Digital Card</h2>
-            <div class="card-display" onclick="document.getElementById('god-hud').style.display='flex'">
-                <img src="../assets/card.png">
-                <div class="card-overlay"></div>
+            <h2 style="margin-bottom: 40px; font-weight: 900; text-align: center;">Digital Asset Card</h2>
+            <div class="card-display">
+                <img src="https://priscion.com/assets/card.png" onerror="this.src='https://placehold.co/600x400/000000/FFFFFF?text=ASSET+CARD'">
             </div>
-            <p style="color: var(--muted); font-size: 0.8rem; text-align: center; margin-top: 30px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">The ultimate signal of autonomy.</p>
         </div>
-    </div>
-
-    <!-- GOD MODE INTERFACE -->
-    <div id="god-hud" class="god-hud">
-        <h5>Architect HUD</h5>
-        <div class="god-stat">Node Status: <span>Live</span></div>
-        <div class="god-stat">Ledger Sync: <span>100%</span></div>
-        <div class="god-stat">Admin Level: <span>God</span></div>
-        <button class="god-btn" onclick="alert('Anchoring Global Signal...')">Force Global Sync</button>
-        <button class="god-btn" style="background:#333" onclick="toggleGodMode()">Dismiss HUD</button>
     </div>
 
     <script>
@@ -348,11 +251,6 @@
             const btn = document.getElementById('dev-toggle');
             btn.innerText = isDevMode ? "GOD MODE" : "USER MODE";
             btn.style.background = isDevMode ? "#7B35D4" : "#000";
-            document.getElementById('god-hud').style.display = isDevMode ? 'flex' : 'none';
-        }
-
-        function toggleGodMode() {
-            document.getElementById('god-hud').style.display = 'none';
         }
 
         function showStage(id, el) {
@@ -363,24 +261,11 @@
             if(id !== 'dapps') closeDApp();
         }
 
-        let pendingDAppUrl = '';
-
         function openDApp(url) {
-            pendingDAppUrl = url;
-            document.getElementById('card-connect-overlay').classList.add('active');
-        }
-
-        function confirmConnect() {
-            document.getElementById('card-connect-overlay').classList.remove('active');
             document.getElementById('dapp-main-grid').style.display = 'none';
             document.getElementById('dapp-iframe-wrapper').style.display = 'block';
             document.getElementById('dapp-browser-back').style.display = 'flex';
-            document.getElementById('dapp-frame').src = pendingDAppUrl;
-        }
-
-        function cancelConnect() {
-            document.getElementById('card-connect-overlay').classList.remove('active');
-            pendingDAppUrl = '';
+            document.getElementById('dapp-frame').src = url;
         }
 
         function closeDApp() {
@@ -388,52 +273,6 @@
             document.getElementById('dapp-iframe-wrapper').style.display = 'none';
             document.getElementById('dapp-browser-back').style.display = 'none';
             document.getElementById('dapp-frame').src = '';
-        }
-
-        function triggerAttachment() {
-            document.getElementById('chat-file-input').click();
-        }
-
-        function handleFile(input) {
-            if(input.files && input.files[0]) {
-                const feed = document.querySelector('.chat-feed');
-                const bubble = document.createElement('div');
-                bubble.className = 'chat-bubble out';
-                bubble.innerText = 'Shared: ' + input.files[0].name;
-                feed.appendChild(bubble);
-                feed.scrollTop = feed.scrollHeight;
-            }
-        }
-
-        let isRecording = false;
-        function toggleRecording() {
-            isRecording = !isRecording;
-            const btn = document.getElementById('record-btn');
-            btn.classList.toggle('recording', isRecording);
-            if(isRecording) {
-                console.log('Architect recording started...');
-            } else {
-                const feed = document.querySelector('.chat-feed');
-                const bubble = document.createElement('div');
-                bubble.className = 'chat-bubble out';
-                bubble.innerText = 'Voice command attached.';
-                feed.appendChild(bubble);
-                feed.scrollTop = feed.scrollHeight;
-            }
-        }
-
-        function sendNeuralMessage() {
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if(text) {
-                const feed = document.querySelector('.chat-feed');
-                const bubble = document.createElement('div');
-                bubble.className = 'chat-bubble out';
-                bubble.innerText = text;
-                feed.appendChild(bubble);
-                feed.scrollTop = feed.scrollHeight;
-                input.value = '';
-            }
         }
 
         function renderHandles() {
@@ -446,16 +285,7 @@
             `).join('');
         }
 
-        /* HUD Trigger */
-        window.addEventListener('keydown', (e) => {
-            if(e.ctrlKey && e.shiftKey && e.key === 'G') {
-                document.getElementById('god-hud').style.display = 'flex';
-            }
-        });
-
         renderHandles();
     </script>
 </body>
 </html>
-<!-- CB 1781196235 -->
-<!-- Fidelity-Fix: 1781196711 -->
