@@ -20,7 +20,7 @@
         .hidden { display: none !important; }
         
         /* Entrance Layer */
-        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .muze-entrance-logo { height: 60px; margin-bottom: 30px; cursor: pointer; }
         h2 { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
         .layer p { color: var(--muted); font-size: 0.8rem; margin-bottom: 30px; line-height: 1.5; max-width: 280px; margin-left: auto; margin-right: auto; }
@@ -301,29 +301,32 @@
         window.onload = async () => {
             document.getElementById('muze-logo').onclick = handleLogoClick;
 
-            // Neural Persistence: Check Supabase session
+            // 1. Check Neural Persistence (Supabase session)
             const { data: { session } } = await supabaseClient.auth.getSession();
             
-            const isActive = localStorage.getItem('muze_active') === 'true';
-            const handle = localStorage.getItem('muze_handle');
+            // 2. Check Local Persistence
+            let isActive = localStorage.getItem('muze_active') === 'true';
+            let handle = localStorage.getItem('muze_handle');
             const isSeedConfirmed = localStorage.getItem('muze_seed_confirmed') === 'true';
 
-            if (session) {
-                // User has active Supabase session
-                if (!isActive || !handle) {
-                    // Sync profile to localStorage if missing
-                    const { data: profile } = await supabaseClient
-                        .from('profiles')
-                        .select('handle')
-                        .eq('id', session.user.id)
-                        .single();
-                    
-                    const finalHandle = (profile && profile.handle) ? profile.handle : session.user.email.split('@')[0] + '.pri';
-                    localStorage.setItem('muze_active', 'true');
-                    localStorage.setItem('muze_handle', finalHandle);
-                }
+            // 3. Sync Logic: If Supabase is active but local isn't, sync them (Neural Bridge)
+            if (session && (!isActive || !handle)) {
+                const { data: profile } = await supabaseClient
+                    .from('profiles')
+                    .select('handle')
+                    .eq('id', session.user.id)
+                    .single();
                 
-                document.getElementById('active-handle-display').innerText = localStorage.getItem('muze_handle');
+                handle = (profile && profile.handle) ? profile.handle : session.user.email.split('@')[0] + '.pri';
+                localStorage.setItem('muze_active', 'true');
+                localStorage.setItem('muze_handle', handle);
+                isActive = true;
+            }
+
+            // 4. Entrance Logic: Only show entrance if NO session exists in either path
+            if (isActive && handle) {
+                // Logged In: Show Dashboard
+                document.getElementById('active-handle-display').innerText = handle;
                 document.getElementById('layer-entrance').style.display = 'none';
                 
                 if (isSeedConfirmed) {
@@ -331,14 +334,14 @@
                     document.getElementById('shard-secured').classList.remove('hidden');
                 }
             } else {
-                // No session: Show entrance layer
+                // Not Logged In: Show Entrance Layer
                 document.getElementById('layer-entrance').style.display = 'flex';
-                // Clear local stale session if any
+                // Clean up any partial state
                 localStorage.removeItem('muze_active');
                 localStorage.removeItem('muze_handle');
             }
             
-            // Fade in body
+            // Fade in body once state is determined
             document.body.classList.add('loaded');
         };
     </script>
