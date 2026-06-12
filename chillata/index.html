@@ -6,10 +6,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CHILLATA | Sovereign Exchange v2.3</title>
+    <title>CHILLATA | Sovereign Exchange v2.4</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #FFFFFF; --text: #000; --muted: #888; --accent: #7B35D4; --border: #F0F0F0; --surface: #FAFAFA; --active-shadow: 0 10px 40px rgba(123, 53, 212, 0.15); }
+        :root { --bg: #FFFFFF; --text: #000; --muted: #888; --accent: #7B35D4; --border: #F0F0F0; --surface: #FAFAFA; --glow: 0 0 20px rgba(123, 53, 212, 0.2); }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body, html { width: 100%; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
         
@@ -24,8 +24,10 @@
         .label { font-weight: 900; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; display: block; }
         
         .asset-btn { display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: 16px; border: 1px solid transparent; cursor: pointer; transition: 0.2s; margin-bottom: 5px; width: 100%; background: none; text-align: left; }
-        .asset-btn:hover { background: var(--surface); border-color: var(--border); }
-        .asset-btn img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+        .asset-btn:hover { background: var(--surface); }
+        .asset-btn:active { transform: scale(0.95); background: var(--border); }
+        .asset-btn img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); pointer-events: none; }
+        .asset-meta { pointer-events: none; }
         .asset-meta h4 { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; margin: 0; }
         .asset-meta p { font-size: 0.6rem; color: var(--muted); margin: 0; }
 
@@ -35,15 +37,14 @@
 
         .trade-col { padding: 40px; background: #fff; }
         .input-wrap { background: var(--surface); border: 2px solid var(--border); padding: 25px; border-radius: 24px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .input-wrap.active { border-color: var(--accent); background: #fff; box-shadow: var(--active-shadow); transform: scale(1.02); }
+        .input-wrap.active { border-color: var(--accent); background: #fff; box-shadow: var(--glow); transform: translateY(-2px); }
         .input-wrap input { background: transparent; border: none; outline: none; font-size: 1.5rem; font-weight: 900; width: 60%; color: var(--text); }
-        .input-wrap .token-selector { display: flex; align-items: center; gap: 10px; }
+        .input-wrap .token-selector { display: flex; align-items: center; gap: 10px; pointer-events: none; }
         .input-wrap img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .input-wrap .symbol { font-weight: 900; font-size: 0.8rem; color: var(--muted); }
 
-        .btn-execute { width: 100%; background: #000; color: #fff; border: none; padding: 25px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; margin-top: 20px; transition: 0.3s; position: relative; overflow: hidden; }
-        .btn-execute:active { transform: scale(0.98); }
-        .btn-execute.processing { background: var(--accent); cursor: wait; }
+        .btn-execute { width: 100%; background: #000; color: #fff; border: none; padding: 25px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn-execute:active { background: var(--accent); transform: translateY(2px); }
 
         /* FOOTER DESTRUCTION */
         footer, .bottom-bar, nav, [class*="nav"], [id*="nav"], [class*="footer"], [id*="footer"] { display: none !important; }
@@ -59,12 +60,12 @@
     <div class="app">
         <header>
             <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png"></div>
-            <div id="status-tag" style="font-size: 0.5rem; font-weight: 900; background: var(--accent); color: #fff; padding: 5px 12px; border-radius: 20px;">READY v2.3</div>
+            <div id="status-tag" style="font-size: 0.5rem; font-weight: 900; background: var(--accent); color: #fff; padding: 5px 12px; border-radius: 20px;">READY v2.4</div>
         </header>
 
         <div class="terminal">
             <div class="col" style="padding: 30px;">
-                <span class="label">Select Asset</span>
+                <span class="label">Sovereign Assets</span>
                 
                 <button class="asset-btn" onclick="applyAsset('PRN', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg')">
                     <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
@@ -101,7 +102,7 @@
                 <span class="label">Sovereign Swap</span>
                 
                 <div class="input-wrap active" id="from-wrap" onclick="focusBox('from')">
-                    <input type="number" value="100" id="val-from" onfocus="focusBox('from')">
+                    <input type="number" value="100" id="val-from">
                     <div class="token-selector">
                         <span class="symbol" id="sym-from">PRN</span>
                         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" id="img-from">
@@ -111,14 +112,14 @@
                 <div style="text-align:center; padding:5px; color:var(--accent); font-size:1.5rem; font-weight:900;">↓</div>
 
                 <div class="input-wrap" id="to-wrap" onclick="focusBox('to')">
-                    <input type="number" value="120" id="val-to" onfocus="focusBox('to')">
+                    <input type="number" value="120" id="val-to">
                     <div class="token-selector">
                         <span class="symbol" id="sym-to">NRL</span>
                         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" id="img-to">
                     </div>
                 </div>
 
-                <button class="btn-execute" id="swap-btn" onclick="executeSwap()">Execute Swap</button>
+                <button class="btn-execute" onclick="this.innerText='SWAP ANCHORED'; setTimeout(()=>this.innerText='EXECUTE SWAP', 2000)">Execute Swap</button>
             </div>
         </div>
     </div>
@@ -130,42 +131,36 @@
             currentFocus = side;
             document.querySelectorAll('.input-wrap').forEach(el => el.classList.remove('active'));
             document.getElementById(side + '-wrap').classList.add('active');
-            console.log('Focus shifted to: ' + side);
+            console.log('Active Side: ' + currentFocus);
         }
+
+        // Add event listeners to inputs to capture focus when amount is changed
+        document.getElementById('val-from').addEventListener('focus', () => focusBox('from'));
+        document.getElementById('val-to').addEventListener('focus', () => focusBox('to'));
 
         function applyAsset(symbol, url) {
-            console.log('Applying ' + symbol + ' to ' + currentFocus);
-            document.getElementById('img-' + currentFocus).src = url;
-            document.getElementById('sym-' + currentFocus).innerText = symbol;
+            console.log('Action: Picking ' + symbol + ' for ' + currentFocus);
             
-            // Auto-switch focus to other side if we just picked the 'from' token
-            if(currentFocus === 'from') focusBox('to');
-        }
-
-        function executeSwap() {
-            const btn = document.getElementById('swap-btn');
-            const tag = document.getElementById('status-tag');
-            btn.classList.add('processing');
-            btn.innerText = 'PROCESSING...';
-            tag.innerText = 'SYNCING LEDGER';
+            // Explicitly target the elements
+            const imgEl = document.getElementById('img-' + currentFocus);
+            const symEl = document.getElementById('sym-' + currentFocus);
             
-            setTimeout(() => {
-                btn.classList.remove('processing');
-                btn.innerText = 'SWAP ANCHORED';
-                tag.innerText = 'SUCCESS';
-                setTimeout(() => {
-                    btn.innerText = 'EXECUTE SWAP';
-                    tag.innerText = 'READY v2.3';
-                }, 3000);
-            }, 2500);
+            if (imgEl && symEl) {
+                imgEl.src = url;
+                symEl.innerText = symbol;
+                
+                // Switch focus to the other side automatically for a smooth flow
+                if (currentFocus === 'from') {
+                    focusBox('to');
+                }
+            } else {
+                console.error('Error: Could not find elements for ' + currentFocus);
+            }
         }
         
-        // Final Footer Purge
+        // Ensure no legacy footer survives
         window.onload = function() {
-            const victims = ['footer', '.bottom-bar', 'nav', '.nav-bar', '#nav-bar'];
-            victims.forEach(v => {
-                document.querySelectorAll(v).forEach(el => el.remove());
-            });
+            document.querySelectorAll('footer, nav, .bottom-bar').forEach(el => el.remove());
         };
 
         const canvas = document.getElementById('viz');
