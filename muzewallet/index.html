@@ -220,19 +220,27 @@
             if (secret.classList.contains('blur')) {
                 const pass = prompt("Enter your Neural Password to reveal secret:");
                 if (pass) {
-                    const words = [
-                        "mustard", "seed", "faith", "mountain", "move", "grace", 
-                        "sovereign", "neural", "priscion", "eternal", "light", "heritage",
-                        "wisdom", "vision", "shield", "spirit", "truth", "path",
-                        "glory", "peace", "mercy", "power", "heart", "breath"
-                    ];
-                    // Shuffle or pick random 12 for the user session
-                    const shuffled = words.sort(() => 0.5 - Math.random());
-                    const selected = shuffled.slice(0, 12).join(' ');
-                    
-                    secret.innerText = selected;
-                    secret.classList.remove('blur');
-                    btn.innerText = "HIDE SECRET";
+                    // Fetch a random list of 12 words from a BIP39 wordlist or similar
+                    try {
+                        const response = await fetch('https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt');
+                        const text = await response.text();
+                        const allWords = text.split('\n').filter(w => w.length > 0);
+                        
+                        const selected = [];
+                        for(let i=0; i<12; i++) {
+                            selected.push(allWords[Math.floor(Math.random() * allWords.length)]);
+                        }
+                        
+                        secret.innerText = selected.join(' ');
+                        secret.classList.remove('blur');
+                        btn.innerText = "HIDE SECRET";
+                    } catch (e) {
+                        // Fallback to high-fidelity list if network fails
+                        const words = ["mustard", "seed", "faith", "mountain", "move", "grace", "sovereign", "neural", "priscion", "eternal", "light", "heritage"];
+                        secret.innerText = words.sort(() => 0.5 - Math.random()).join(' ');
+                        secret.classList.remove('blur');
+                        btn.innerText = "HIDE SECRET";
+                    }
                 }
             } else {
                 secret.classList.add('blur');
