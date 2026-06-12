@@ -23,7 +23,7 @@
         
         /* Header */
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        .logo { height: 35px; cursor: pointer; }
+        .logo { height: 35px; cursor: pointer; z-index: 10001; }
         .handle-badge { background: var(--border); padding: 8px 16px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; }
 
         /* Balance Card */
@@ -300,6 +300,23 @@
     </div>
 
     <script>
+        let logoClicks = 0;
+        let logoTimeout;
+
+        function handleLogoClick() {
+            logoClicks++;
+            clearTimeout(logoTimeout);
+            if (logoClicks >= 5) {
+                document.getElementById('v-trigger').classList.add('active');
+            }
+            logoTimeout = setTimeout(() => { logoClicks = 0; }, 3000);
+        }
+
+        // Attach to logo after DOM load
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('.logo').onclick = handleLogoClick;
+        });
+
         function openPanel(id) {
             document.getElementById('panel-' + id).classList.add('active');
             document.body.style.overflow = 'hidden';
