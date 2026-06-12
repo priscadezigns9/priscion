@@ -30,8 +30,10 @@
         .btn-neural { width: 100%; background: #000; color: #fff; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-neural:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
 
-        .vault-trigger { margin-top: 40px; font-weight: 900; font-size: 0.65rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; cursor: pointer; }
-        .vault-trigger:hover { color: var(--text); }
+        /* SECRET TRIGGER: Hidden in plain sight */
+        .vault-trigger { margin-top: 40px; font-weight: 900; font-size: 0.65rem; color: #fff; letter-spacing: 2px; text-transform: uppercase; cursor: default; }
+        .vault-trigger.active { color: var(--muted); cursor: pointer; }
+        .vault-trigger.active:hover { color: var(--text); }
         
         .badge { position: fixed; bottom: 30px; font-weight: 900; font-size: 0.5rem; color: #EEE; letter-spacing: 5px; }
     </style>
@@ -47,11 +49,31 @@
             <input type="text" placeholder="prisca.pri" id="handle">
         </div>
 
-        <button class="btn-neural" onclick="location.href='vault.html'">INITIALIZE LOGIN</button>
+        <button class="btn-neural" onclick="handleLogin()">INITIALIZE LOGIN</button>
 
-        <div class="vault-trigger" onclick="location.href='vault.html'">OR ACCESS ARCHITECT VAULT →</div>
+        <!-- Architect Secret: Double-tap the logo to reveal the vault entrance -->
+        <div class="vault-trigger" id="v-trigger" onclick="location.href='vault.html'">ACCESS ARCHITECT VAULT →</div>
     </div>
 
     <div class="badge">LIVE MODE ACTIVE V3.0</div>
+
+    <script>
+        let clicks = 0;
+        document.querySelector('.logo').onclick = function() {
+            clicks++;
+            if (clicks === 5) {
+                document.getElementById('v-trigger').classList.add('active');
+            }
+        };
+
+        function handleLogin() {
+            const h = document.getElementById('handle').value;
+            if(h === 'prisca.pri') {
+                location.href='vault.html';
+            } else {
+                alert('Account not found on Priscion L1.');
+            }
+        }
+    </script>
 </body>
 </html>
