@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | High-Fidelity Neural Login</title>
+    <title>MUZE | Neural Handshake</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Inter:wght@400;600;900&display=swap">
     <style>
         :root { --bg: #FFFFFF; --text: #000; --muted: #888; --muze-blue: #5AC8FA; --border: #F0F0F0; }
@@ -18,7 +18,7 @@
         }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-        .logo { height: 60px; margin-bottom: 30px; }
+        .logo { height: 60px; margin-bottom: 30px; cursor: pointer; }
         h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 10px; letter-spacing: -1px; }
         p { color: var(--muted); font-size: 0.9rem; margin-bottom: 40px; line-height: 1.4; }
 
@@ -30,7 +30,7 @@
         .btn-neural { width: 100%; background: #000; color: #fff; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         .btn-neural:hover { transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
 
-        /* SECRET TRIGGER: Hidden in plain sight */
+        /* SECRET TRIGGER: Architect Access */
         .vault-trigger { margin-top: 40px; font-weight: 900; font-size: 0.65rem; color: #fff; letter-spacing: 2px; text-transform: uppercase; cursor: default; }
         .vault-trigger.active { color: var(--muted); cursor: pointer; }
         .vault-trigger.active:hover { color: var(--text); }
@@ -40,7 +40,7 @@
 </head>
 <body>
     <div class="login-card">
-        <img src="../assets/muze_icon_logo.png" class="logo" alt="MUZE">
+        <img src="../assets/muze_icon_logo.png" class="logo" alt="MUZE" id="muze-logo">
         <h1>Welcome to MUZE.</h1>
         <p>Your secure bridge to the Priscion Network.</p>
 
@@ -51,28 +51,41 @@
 
         <button class="btn-neural" onclick="handleLogin()">INITIALIZE LOGIN</button>
 
-        <!-- Architect Secret: Double-tap the logo to reveal the vault entrance -->
-        <div class="vault-trigger" id="v-trigger" onclick="location.href='vault.html'">ACCESS ARCHITECT VAULT →</div>
+        <!-- Architect Secret: 5 taps on the logo reveal this -->
+        <div class="vault-trigger" id="v-trigger" onclick="location.href='vault.html'">ACCESS ARCHITECT CONSOLE →</div>
     </div>
 
-    <div class="badge">LIVE MODE ACTIVE V3.0</div>
+    <div class="badge">LIVE MODE ACTIVE V3.2</div>
 
     <script>
         let clicks = 0;
-        document.querySelector('.logo').onclick = function() {
+        const logo = document.getElementById('muze-logo');
+        const trigger = document.getElementById('v-trigger');
+
+        logo.onclick = function() {
             clicks++;
             if (clicks === 5) {
-                document.getElementById('v-trigger').classList.add('active');
+                trigger.classList.add('active');
             }
         };
 
         function handleLogin() {
-            const h = document.getElementById('handle').value;
+            const h = document.getElementById('handle').value.toLowerCase().trim();
+            if(!h) {
+                alert('Please enter your Neural Handle.');
+                return;
+            }
+            
+            // ARCHITECT BYPASS
             if(h === 'prisca.pri') {
                 location.href='vault.html';
-            } else {
-                alert('Account not found on Priscion L1.');
+                return;
             }
+
+            // USER FLOW
+            // In a real environment, this would verify the handle on-chain
+            // For now, we redirect to the High-Fidelity User UI
+            location.href = 'index.html.vespr';
         }
     </script>
 </body>
