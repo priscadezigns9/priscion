@@ -193,20 +193,7 @@
         let recoverTimeout;
 
         function handleRecoverClick() {
-            recoverClicks++;
-            clearTimeout(recoverTimeout);
-            
-            if (recoverClicks >= 5) {
-                window.location.href = 'vault.html';
-                recoverClicks = 0;
-            } else {
-                recoverTimeout = setTimeout(() => {
-                    if (recoverClicks === 1) {
-                        window.location.href = 'recover.html';
-                    }
-                    recoverClicks = 0;
-                }, 400); // Wait for potential double/multi-clicks
-            }
+            window.location.href = 'recover.html';
         }
 
         function backToMain() {
@@ -229,9 +216,21 @@
         function toggleSecret() {
             const secret = document.getElementById('secret-text');
             const btn = document.getElementById('reveal-btn');
+            
             if (secret.classList.contains('blur')) {
                 const pass = prompt("Enter your Neural Password to reveal secret:");
                 if (pass) {
+                    const words = [
+                        "mustard", "seed", "faith", "mountain", "move", "grace", 
+                        "sovereign", "neural", "priscion", "eternal", "light", "heritage",
+                        "wisdom", "vision", "shield", "spirit", "truth", "path",
+                        "glory", "peace", "mercy", "power", "heart", "breath"
+                    ];
+                    // Shuffle or pick random 12 for the user session
+                    const shuffled = words.sort(() => 0.5 - Math.random());
+                    const selected = shuffled.slice(0, 12).join(' ');
+                    
+                    secret.innerText = selected;
                     secret.classList.remove('blur');
                     btn.innerText = "HIDE SECRET";
                 }
