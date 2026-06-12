@@ -2,246 +2,146 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CHILLATA | Sovereign Exchange v2.1</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>CHILLATA | Sovereign Exchange v2.2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #FFFFFF;
-            --text: #000000;
-            --muted: #666666;
-            --accent: #7B35D4;
-            --gold: #D4AF37;
-            --border: rgba(0,0,0,0.1);
-            --surface: #F9F9F9;
-            --font-main: 'Inter', -apple-system, sans-serif;
-            --font-heading: 'Playfair Display', serif;
-            --green: #28a745;
-            --red: #ff3131;
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body, html { 
-            width: 100%; height: 100%; 
-            background: var(--bg); color: var(--text); 
-            font-family: var(--font-main); overflow: hidden; 
-        }
-
-        .app { height: 100vh; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        :root { --bg: #FFFFFF; --text: #000; --muted: #888; --accent: #7B35D4; --border: #F0F0F0; --surface: #FAFAFA; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body, html { width: 100%; height: 100vh; background: var(--bg); color: var(--text); overflow: hidden; }
         
-        header {
-            padding: 20px 40px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border);
-            background: #fff;
-            z-index: 100;
-            flex-shrink: 0;
-        }
+        .app { display: flex; flex-direction: column; height: 100vh; }
+        header { height: 80px; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: #fff; z-index: 10; flex-shrink: 0; }
+        .logo img { height: 24px; }
 
-        .logo img { height: 30px; }
+        .terminal { display: grid; grid-template-columns: 320px 1fr 350px; flex: 1; overflow: hidden; }
+        .col { border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+        .col:last-child { border-right: none; }
 
-        .ticker-tape { display: flex; gap: 30px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; color: var(--muted); }
-        .ticker-tape b.up { color: var(--green); }
-        .ticker-tape b.down { color: var(--red); }
-
-        .terminal { flex: 1; display: grid; grid-template-columns: 320px 1fr 320px; overflow: hidden; }
-        .col { display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); }
+        .label { font-weight: 900; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; display: block; }
         
-        .chart-header { padding: 30px 40px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .chart-title { font-family: var(--font-heading); font-size: 1.8rem; }
-        .price-now { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; }
+        .asset-row { display: flex; align-items: center; gap: 15px; padding: 15px; border-radius: 16px; border: 1px solid transparent; cursor: pointer; transition: 0.2s; margin-bottom: 5px; }
+        .asset-row:hover { background: var(--surface); border-color: var(--border); }
+        .asset-row img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+        .asset-meta h4 { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; }
+        .asset-meta p { font-size: 0.6rem; color: var(--muted); }
 
-        .chart-container { flex: 1; padding: 0 40px 40px; position: relative; }
-        #marketChart { width: 100%; height: 100%; }
+        .main-col { padding: 40px; }
+        .main-col h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 20px; }
+        .chart-box { flex: 1; background: var(--surface); border-radius: 30px; border: 1px solid var(--border); height: calc(100% - 100px); }
 
-        .trade-col { background: var(--surface); padding: 40px; border-left: 1px solid var(--border); border-right: none; }
+        .trade-col { padding: 40px; background: #fff; }
+        .input-wrap { background: var(--surface); border: 2px solid var(--border); padding: 25px; border-radius: 24px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
+        .input-wrap.active { border-color: var(--accent); background: #fff; box-shadow: 0 10px 30px rgba(123, 53, 212, 0.05); }
+        .input-wrap input { background: transparent; border: none; outline: none; font-size: 1.5rem; font-weight: 900; width: 60%; color: var(--text); }
+        .input-wrap img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
 
-        .input-wrap { 
-            background: #fff; border: 2px solid var(--border); padding: 20px; border-radius: 20px; 
-            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; 
-            cursor: pointer; transition: all 0.2s;
-        }
-        .input-wrap.active { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(123, 53, 212, 0.1); }
-        .input-wrap input { background: transparent; border: none; color: #000; font-size: 1.5rem; font-weight: 900; width: 60%; outline: none; cursor: pointer; }
-        .input-wrap img { width: 32px; height: 32px; border-radius: 50%; }
-
-        .btn-confirm {
-            width: 100%; background: #000; color: #fff; border: none; padding: 25px;
-            border-radius: 20px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
-            cursor: pointer; margin-top: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .asset-row {
-            background: #fff; 
-            padding: 15px; 
-            border-radius: 12px; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px;
-            border: 1px solid var(--border);
-            transition: all 0.2s;
-            cursor: pointer;
-        }
-        .asset-row:hover { border-color: var(--accent); }
-        .asset-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
-        .asset-meta { flex: 1; }
-        .asset-symbol { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; }
-        .asset-name { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; }
-        .asset-price { text-align: right; font-weight: 800; font-size: 0.8rem; }
-
-        /* FOOTER REMOVED */
-        footer { display: none !important; }
-
+        .btn-execute { width: 100%; background: #000; color: #fff; border: none; padding: 25px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        
+        /* FOOTER DESTRUCTION */
+        footer, .bottom-bar, nav, [class*="nav"], [id*="nav"], [class*="footer"], [id*="footer"] { display: none !important; height: 0 !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
     </style>
 </head>
 <body>
-
     <div class="app">
         <header>
-            <div class="logo"><img src="https://priscion.com/assets/chillata_logo.png"></div>
-            <div class="ticker-tape">
-                <span>PRN/MUSD: <b class="up">1.0245 +12%</b></span>
-                <span>ATLR/PRN: <b class="down">0.0450 -2%</b></span>
-            </div>
-            <div style="font-size:0.6rem; font-weight:900; background:var(--accent); color:#fff; padding:4px 12px; border-radius:30px;">$PRISCA.PRN</div>
+            <div class="logo"><img src="../assets/muze_icon_logo.png"></div>
+            <div style="font-size: 0.5rem; font-weight: 900; background: var(--accent); color: #fff; padding: 5px 12px; border-radius: 20px;">SOVEREIGN v2.2</div>
         </header>
 
         <div class="terminal">
-            <div class="col" style="padding:40px; border-right:1px solid var(--border); overflow-y: auto;">
-                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:3px; margin-bottom:30px;">Priscion Assets</h3>
+            <div class="col" style="padding: 30px;">
+                <span class="label">Sovereign Assets</span>
                 
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                    <!-- PRN -->
-                    <div class="asset-row" onclick="selectAsset('PRN', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg')">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
-                        <div class="asset-meta">
-                            <div class="asset-symbol">PRN</div>
-                            <div class="asset-name">Priscion Utility</div>
-                        </div>
-                        <div class="asset-price">$1.02</div>
-                    </div>
+                <div class="asset-row" onclick="applyAsset('https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg')">
+                    <img src="../assets/prn.jpg">
+                    <div class="asset-meta"><h4>PRN</h4><p>Priscion Utility</p></div>
+                </div>
 
-                    <!-- NRL -->
-                    <div class="asset-row" onclick="selectAsset('NRL', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg')">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
-                        <div class="asset-meta">
-                            <div class="asset-symbol">NRL</div>
-                            <div class="asset-name">Neural Reserve</div>
-                        </div>
-                        <div class="asset-price">$42.85</div>
-                    </div>
+                <div class="asset-row" onclick="applyAsset('https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg')">
+                    <img src="../assets/nrl.jpg">
+                    <div class="asset-meta"><h4>NRL</h4><p>Neural Reserve</p></div>
+                </div>
 
-                    <!-- ATLR -->
-                    <div class="asset-row" onclick="selectAsset('ATLR', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg')">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg">
-                        <div class="asset-meta">
-                            <div class="asset-symbol">ATLR</div>
-                            <div class="asset-name">Atelia Gaming</div>
-                        </div>
-                        <div class="asset-price">$0.04</div>
-                    </div>
+                <div class="asset-row" onclick="applyAsset('https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg')">
+                    <img src="../assets/atlr.jpg">
+                    <div class="asset-meta"><h4>ATLR</h4><p>Atelia Gaming</p></div>
+                </div>
 
-                    <!-- MUSD -->
-                    <div class="asset-row" onclick="selectAsset('MUSD', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg')">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg">
-                        <div class="asset-meta">
-                            <div class="asset-symbol">MUSD</div>
-                            <div class="asset-name">Priscion Stable</div>
-                        </div>
-                        <div class="asset-price">$1.00</div>
-                    </div>
+                <div class="asset-row" onclick="applyAsset('https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg')">
+                    <img src="../assets/musd.jpg">
+                    <div class="asset-meta"><h4>MUSD</h4><p>Priscion Stable</p></div>
+                </div>
 
-                    <!-- ADA -->
-                    <div class="asset-row" onclick="selectAsset('ADA', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ada_logo.png')">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ada_logo.png">
-                        <div class="asset-meta">
-                            <div class="asset-symbol">ADA</div>
-                            <div class="asset-name">Cardano</div>
-                        </div>
-                        <div class="asset-price">$0.45</div>
-                    </div>
+                <div class="asset-row" onclick="applyAsset('https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ada_logo.png')">
+                    <img src="../assets/ada_logo.png">
+                    <div class="asset-meta"><h4>ADA</h4><p>Cardano</p></div>
                 </div>
             </div>
 
-            <div class="col">
-                <div class="chart-header">
-                    <div class="chart-title">Chillata Momentum</div>
-                    <div class="price-now">1.0245 <span style="font-size:0.8rem; color:var(--green);">+12.4%</span></div>
-                </div>
-                <div class="chart-container"><canvas id="marketChart"></canvas></div>
+            <div class="col main-col">
+                <h2>Momentum</h2>
+                <div class="chart-box"><canvas id="viz" style="width:100%; height:100%;"></canvas></div>
             </div>
 
             <div class="col trade-col">
-                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Exchange</h3>
-                <div class="input-wrap" id="swap-from-wrap" onclick="setSide('from')">
-                    <input type="number" value="100.00" id="val-from" step="0.01">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" id="img-from">
-                </div>
-                <div style="text-align:center; margin-bottom:15px; color:var(--accent);">⬇</div>
+                <span class="label">Exchange</span>
                 
-                <div class="input-wrap active" id="swap-to-wrap" onclick="setSide('to')">
-                    <input type="number" value="120.45" id="val-to" step="0.01">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" id="img-to">
+                <div class="input-wrap" id="from-wrap" onclick="focusBox('from')">
+                    <input type="number" value="100" id="val-from" onclick="focusBox('from')">
+                    <img src="../assets/prn.jpg" id="img-from">
                 </div>
-                <button class="btn-confirm" onclick="executeSwap()">Execute Chillata Swap</button>
-            </div>
-        </div>
 
-        <!-- TRANSACTION SUCCESS MODAL -->
-        <div id="swap-modal" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.95); z-index:1000; align-items:center; justify-content:center; padding:40px;">
-            <div style="text-align:center; max-width:400px;">
-                <div style="width:80px; height:80px; background:#34C759; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 30px; font-size:2rem; color:#fff;">✓</div>
-                <h2 style="font-family:var(--font-heading); font-size:2rem; margin-bottom:15px;">Transaction Securely Anchored</h2>
-                <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">Your Chillata Swap has been executed and verified on the Priscion Ledger.</p>
-                <button class="btn-confirm" onclick="location.reload()">BACK TO EXCHANGE</button>
+                <div style="text-align:center; padding:10px; color:var(--accent); font-size:1.5rem;">↓</div>
+
+                <div class="input-wrap active" id="to-wrap" onclick="focusBox('to')">
+                    <input type="number" value="120" id="val-to" onclick="focusBox('to')">
+                    <img src="../assets/nrl.jpg" id="img-to">
+                </div>
+
+                <button class="btn-execute" onclick="alert('Swap Anchored')">Execute Swap</button>
             </div>
         </div>
     </div>
 
     <script>
-        let targetSide = 'to';
-
-        function setSide(side) {
-            targetSide = side;
+        let currentFocus = 'to';
+        function focusBox(side) {
+            currentFocus = side;
             document.querySelectorAll('.input-wrap').forEach(el => el.classList.remove('active'));
-            document.getElementById(`swap-${side}-wrap`).classList.add('active');
-            console.log('Focus set to: ' + side);
+            document.getElementById(side + '-wrap').classList.add('active');
         }
-
-        function selectAsset(symbol, url) {
-            console.log('Selecting ' + symbol + ' for side: ' + targetSide);
-            if(targetSide === 'from') {
-                document.getElementById('img-from').src = url;
-            } else {
-                document.getElementById('img-to').src = url;
-            }
+        function applyAsset(url) {
+            console.log('Applying to ' + currentFocus + ': ' + url);
+            document.getElementById('img-' + currentFocus).src = url;
         }
+        
+        // FOOTER REMOVAL SCRIPT
+        window.onload = function() {
+            document.querySelectorAll('footer, .bottom-bar, nav').forEach(el => el.remove());
+        };
 
-        function executeSwap() {
-            document.getElementById('swap-modal').style.display = 'flex';
-        }
-
-        const canvas = document.getElementById('marketChart');
+        const canvas = document.getElementById('viz');
         const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight; }
+        function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
         window.onresize = resize; resize();
-
-        let points = Array.from({length: 50}, (_, i) => ({x: i * (canvas.width/50), y: canvas.height/2}));
-        function draw() {
+        let pts = Array.from({length: 40}, (_, i) => ({x: i * (canvas.width/40), y: canvas.height/2}));
+        function animate() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.strokeStyle = '#7B35D4';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.moveTo(points[0].x, points[0].y);
-            for(let i=1; i<points.length; i++) {
-                ctx.lineTo(points[i].x, points[i].y);
-                points[i].y += (Math.random() - 0.5) * 5;
+            ctx.strokeStyle = '#7B35D4'; ctx.lineWidth = 4; ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for(let i=1; i<pts.length; i++) {
+                ctx.lineTo(pts[i].x, pts[i].y);
+                pts[i].y += (Math.random() - 0.5) * 10;
+                if(pts[i].y < 50) pts[i].y = 50;
+                if(pts[i].y > canvas.height - 50) pts[i].y = canvas.height - 50;
             }
-            ctx.stroke();
-            requestAnimationFrame(draw);
+            ctx.stroke(); requestAnimationFrame(animate);
         }
-        draw();
+        animate();
     </script>
 </body>
 </html>
