@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUZE | Architect Console</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { 
             --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F9F9F9;
@@ -64,6 +65,13 @@
         .asset-amount { font-weight: 900; font-size: 1.1rem; text-align: right; }
         .asset-sub { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
 
+        /* Leads View */
+        .leads-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .leads-table th { text-align: left; padding: 20px; border-bottom: 2px solid var(--border); font-weight: 900; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); }
+        .leads-table td { padding: 20px; border-bottom: 1px solid var(--border); font-size: 0.85rem; font-weight: 600; }
+        .leads-table tr:hover { background: var(--surface); }
+        .tag { background: var(--muze-blue); color: #fff; padding: 4px 10px; border-radius: 100px; font-size: 0.6rem; font-weight: 900; }
+
         /* Messenger */
         .messenger-stage { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; height: calc(100vh - 200px); }
         .messenger-header { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
@@ -113,6 +121,7 @@
     <div class="sidebar">
         <div style="padding:10px 10px 40px;"><img src="https://priscion.com/assets/muze_icon_logo.png" style="height:35px;"></div>
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
+        <div class="nav-item" onclick="showStage('leads', this)">Onboarding Leads</div>
         <div class="nav-item" onclick="showStage('handles', this)">Handle Registry</div>
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Explorer</div>
@@ -136,8 +145,8 @@
             <div class="action-bar">
                 <div class="action-btn"><span>↑</span>SEND</div>
                 <div class="action-btn"><span>↓</span>RECV</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[3]); openDApp('../chillata/')"><span>⇆</span>SWAP</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[3]); openDApp('../chillata/')"><span>⚡</span>STAKE</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[4]); openDApp('../chillata/')"><span>⇆</span>SWAP</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[4]); openDApp('../chillata/')"><span>⚡</span>STAKE</div>
             </div>
 
             <div class="asset-list">
@@ -164,6 +173,29 @@
             </div>
         </div>
 
+        <!-- STAGE: LEADS (High-Fidelity Zero-Simulation View) -->
+        <div id="stage-leads" class="stage hidden">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:40px;">
+                <h2 style="font-weight: 900;">Empire Intake Ledger</h2>
+                <button onclick="loadLeads()" style="background: #000; color: #fff; border: none; padding: 10px 20px; border-radius: 100px; font-weight: 900; font-size: 0.6rem; letter-spacing: 2px; cursor: pointer;">REFRESH LEDGER</button>
+            </div>
+            <div style="background: #fff; border: 1px solid var(--border); border-radius: 24px; overflow: hidden;">
+                <table class="leads-table">
+                    <thead>
+                        <tr>
+                            <th>Business</th>
+                            <th>Identity</th>
+                            <th>Migration</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leads-body">
+                        <tr><td colspan="4" style="text-align:center; color:var(--muted); padding:40px;">SYNCING WITH PRISCION L1...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- STAGE: HANDLES -->
         <div id="stage-handles" class="stage hidden">
             <h2 style="margin-bottom: 40px; font-weight: 900;">Network Handle Registry</h2>
@@ -181,7 +213,7 @@
             </div>
             <div class="chat-input-area">
                 <input type="text" class="chat-input" placeholder="Neural command...">
-                <button class="btn-full" style="width: auto; padding: 15px 30px; margin: 0;">SEND</button>
+                <button style="width: auto; padding: 15px 30px; margin: 0; background: #000; color: #fff; border: none; border-radius: 100px; font-weight: 900; cursor: pointer;">SEND</button>
             </div>
         </div>
 
@@ -223,6 +255,10 @@
     </div>
 
     <script>
+        const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const SB_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
         let isDevMode = true;
         const brandHandles = [
             { name: "prisca.pri", owned: true },
@@ -240,11 +276,30 @@
             { name: "thetechscouthq.pri", owned: true },
             { name: "quietluxury.pri", owned: true },
             { name: "thesovereignsignal.pri", owned: true },
-            { name: "primelandnetwork.pri", owned: true },
-            { name: "dior.pri", owned: true },
-            { name: "vogue.pri", owned: true },
-            { name: "amazon.pri", owned: true }
+            { name: "primelandnetwork.pri", owned: true }
         ];
+
+        async function loadLeads() {
+            const body = document.getElementById('leads-body');
+            body.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px;">REFRESHING LEDGER...</td></tr>';
+            
+            const { data, error } = await supabaseClient.from('onboarding_intents').select('*').order('created_at', { ascending: false });
+
+            if (error) {
+                body.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red; padding:40px;">ERROR: ${error.message}</td></tr>`;
+            } else if (data.length === 0) {
+                body.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--muted); padding:40px;">NO INTENTS ANCHORED.</td></tr>';
+            } else {
+                body.innerHTML = data.map(lead => `
+                    <tr>
+                        <td>${lead.business_name}</td>
+                        <td>${lead.contact_email}</td>
+                        <td>${lead.migration_type}</td>
+                        <td><span class="tag">PENDING REVIEW</span></td>
+                    </tr>
+                `).join('');
+            }
+        }
 
         function toggleDevMode() {
             isDevMode = !isDevMode;
@@ -258,6 +313,7 @@
             document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
+            if(id === 'leads') loadLeads();
             if(id !== 'dapps') closeDApp();
         }
 
@@ -277,6 +333,7 @@
 
         function renderHandles() {
             const grid = document.getElementById('handles-grid');
+            if(!grid) return;
             grid.innerHTML = brandHandles.map(h => `
                 <div class="handle-card">
                     <h4>${h.name}</h4>
