@@ -298,9 +298,8 @@
             // Map Console buttons to Mirror stages
             const mirrorFrame = document.getElementById('mirror-iframe');
             if(mirrorFrame && mirrorFrame.contentWindow) {
-                // Ensure frame is ready before sending hash
-                mirrorFrame.src = 'index.html#' + id;
-                // Force hash update if already on index.html
+                const version = Date.now();
+                mirrorFrame.src = 'index.html?v=' + version + '#' + id;
                 try {
                    mirrorFrame.contentWindow.location.hash = '#' + id;
                 } catch(e) {}
