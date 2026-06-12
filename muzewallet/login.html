@@ -224,7 +224,7 @@
     <script>
         const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
         const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         let isLogin = true;
 
@@ -274,11 +274,11 @@
 
             try {
                 if(isLogin) {
-                    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                     if(error) throw error;
                     
                     // Fetch the anchored handle from Supabase
-                    const { data: profile, error: pError } = await supabase
+                    const { data: profile, error: pError } = await supabaseClient
                         .from('profiles')
                         .select('handle')
                         .eq('id', data.user.id)
@@ -294,7 +294,7 @@
                     if (!finalHandle.endsWith('.pri')) finalHandle += '.pri';
 
                     // 1. Check if handle exists
-                    const { data: existing, error: checkError } = await supabase
+                    const { data: existing, error: checkError } = await supabaseClient
                         .from('profiles')
                         .select('handle')
                         .eq('handle', finalHandle);
@@ -302,12 +302,12 @@
                     if (existing && existing.length > 0) throw new Error("This handle is already taken.");
 
                     // 2. Auth Sign Up
-                    const { data, error } = await supabase.auth.signUp({ email, password });
+                    const { data, error } = await supabaseClient.auth.signUp({ email, password });
                     if(error) throw error;
 
                     // 3. Create Profile with Handle
                     if (data.user) {
-                        const { error: profileError } = await supabase.from('profiles').upsert({ 
+                        const { error: profileError } = await supabaseClient.from('profiles').upsert({ 
                             id: data.user.id, 
                             handle: finalHandle,
                             updated_at: new Date()
