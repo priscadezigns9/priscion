@@ -130,5 +130,13 @@ These snapshots represent the approved high-fidelity interface as of June 12, 20
 *   **One-Way Persistence**: Once verified, the phrase is locked. It is hidden from the UI and cannot be retrieved. 
 *   **Password-Gated Reset**: To generate a new shard, users must provide their **Neural Password**, which wipes the previous anchor and starts the generation flow fresh.
 
+## 14. Handle Economy & Tiered Pricing
+*   **Signal Strength Pricing**: Fees are determined by the "Signal Strength" of the handle to prevent hoarding and ensure ecosystem fairness.
+    *   **Standard (.pri)**: Base utility fee for personal names.
+    *   **Premium (Luxury/Dictionary)**: High-fidelity fees for global brand names (e.g., dior.pri, vogue.pri).
+    *   **Short Handles (3-4 chars)**: Exponentially higher fees to prevent bot-snatching.
+*   **The Protected Registry**: A gated list of high-value brand names that trigger verification requirements and premium pricing.
+*   **Revenue Allocation**: Premium fees are directed to the **NEURAL ($NRL) Treasury** or the **TWMK Endowment**, supporting the mission backbone.
+
 ---
 *Last Updated: June 12, 2026*
