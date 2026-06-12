@@ -1,0 +1,43 @@
+# PRISCION AGENCY: REVENUE & INTEGRATION STRATEGY (v1.0)
+
+## 1. The Migration Model
+The Priscion Agency operates on a three-tier onboarding system designed to bridge Web2 businesses into the Sovereign Ledger with zero friction.
+
+### Tier 1: The Fresh Build (New Businesses)
+*   **Scope:** Ground-up website development with native Web3 DNA.
+*   **Features:** Integrated MUZE Wallet, Neural Login, and $PRN Payment gateways.
+*   **Pricing:** Design Fee + Web3 Integration Premium.
+
+### Tier 2: The Direct Migration (Existing SMBs)
+*   **Scope:** Injecting the Sovereign Layer into existing WordPress, Shopify, Wix, or custom sites.
+*   **Process:** AI-driven "Instant IT Department" handles the script injection and inventory sync via user-provided access.
+*   **Pricing:** One-time Migration Fee + Monthly API Subscription.
+
+### Tier 3: The Professional Handshake (Enterprise)
+*   **Scope:** API-level integration for large corporations with existing IT departments.
+*   **Process:** Provision of high-fidelity documentation and API keys for internal implementation.
+*   **Pricing:** Enterprise Licensing + Volume-based Transaction Fees.
+
+---
+
+## 2. The MUZE API & Recovery Protocol
+To ensure merchant and user confidence, the MUZE Wallet utilizes a "Sovereign Hybrid" recovery system.
+
+*   **API Recovery Shard:** A piece of the wallet's access is encrypted and stored within the Neural Login bridge.
+*   **Safe Reset:** If a user loses their recovery phrase, they can regain access to their .pri handle and assets via their Neural Login. 
+*   **Vault Integrity:** Once the user confirms they have saved their phrase, the raw "secret" is purged from view, maintaining high-fidelity security.
+
+---
+
+## 3. Fee Structure & Revenue Split
+The Priscion Network utilizes a "Confidence-First" pricing model.
+
+*   **One-Time Migration Fee:** Covers the initial setup and architectural handshake.
+*   **Monthly API Subscription:** Covers the ongoing maintenance of the recovery bridge and vault hosting.
+*   **The 85/15 Split:** 
+    *   **85%** of every transaction goes directly to the Merchant.
+    *   **15%** of every transaction is retained by the Priscion Agency as a platform fee.
+    *   *Note: All previous tithing models have been purged. This is a 100% business-centric split.*
+
+---
+*Document Date: June 12, 2026 | Architect: Priscilla Narine*
