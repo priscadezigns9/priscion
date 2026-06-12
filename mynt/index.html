@@ -366,7 +366,7 @@
                 // Save to v2 (encrypted) - if they are logged in, walletState exists
                 // Note: To re-encrypt properly, we'd need the password again. 
                 // In a real dApp, we keep the key in memory. 
-                // For this simulation, we'll just update the v1 for UI and notify them.
+                // For this handshake, we'll update the v1 for UI and notify them.
                 localStorage.setItem('muze_vault_v1', JSON.stringify(walletState));
                 initStore();
             } else if(customHandle) {
