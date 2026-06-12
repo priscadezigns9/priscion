@@ -5,19 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUZE | Create Vault</title>
     <link rel="icon" type="image/png" href="https://priscion.com/assets/p-logo.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
     <style>
-        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --accent: #7B35D4; }
+        :root { --bg: #fff; --text: #000; --muted: #666; --border: #EEE; --accent: #000; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 40px; text-align: center; }
-        .muze-logo { height: 60px; margin-bottom: 40px; }
-        h2 { font-weight: 900; font-size: 1.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+        .muze-logo { height: 70px; margin-bottom: 40px; }
+        h2 { font-weight: 900; font-size: 2.2rem; margin-bottom: 20px; letter-spacing: -1px; }
         .seed-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 500px; margin-bottom: 40px; }
         .seed-word { background: #F9F9F9; border: 1px solid var(--border); padding: 15px; border-radius: 12px; font-size: 0.8rem; font-weight: 900; color: #000; display: flex; align-items: center; gap: 10px; }
         .seed-word span { color: var(--muted); font-size: 0.6rem; width: 20px; text-align: left; }
-        .btn-full { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; width: 100%; max-width: 300px; }
-        p { color: var(--muted); font-size: 0.8rem; max-width: 400px; margin-bottom: 30px; line-height: 1.6; }
+        .btn-full { background: #000; color: #fff; border: none; padding: 22px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 3px; cursor: pointer; width: 100%; max-width: 350px; text-transform: uppercase; }
+        p { color: var(--muted); font-size: 0.9rem; max-width: 450px; margin-bottom: 40px; line-height: 1.6; }
         .hidden { display: none !important; }
-        input { width: 100%; max-width: 300px; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: #F9F9F9; margin-bottom: 15px; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center; }
+        input { width: 100%; max-width: 350px; padding: 20px; border-radius: 100px; border: 1px solid var(--border); background: #F9F9F9; margin-bottom: 20px; font-weight: 600; font-family: 'Inter', sans-serif; text-align: center; outline: none; }
+        input:focus { border-color: #000; background: #fff; }
     </style>
 </head>
 <body>
