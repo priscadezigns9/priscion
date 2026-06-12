@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MUZE | Create Vault</title>
+    <link rel="icon" type="image/png" href="https://priscion.com/assets/p-logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
     <style>
-        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; }
+        :root { --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --accent: #7B35D4; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 40px; text-align: center; }
         .muze-logo { height: 60px; margin-bottom: 40px; }
         h2 { font-weight: 900; font-size: 1.5rem; margin-bottom: 20px; letter-spacing: -1px; }
@@ -26,20 +27,7 @@
     <div id="step-display">
         <h2>Secure your Recovery Seed.</h2>
         <p>Write these 12 words down on a physical piece of paper and store it in a secure location. Never share it with anyone.</p>
-        <div class="seed-grid">
-            <div class="seed-word"><span>01</span> ARCHITECT</div>
-            <div class="seed-word"><span>02</span> REALITY</div>
-            <div class="seed-word"><span>03</span> SOVEREIGN</div>
-            <div class="seed-word"><span>04</span> NEURAL</div>
-            <div class="seed-word"><span>05</span> LEDGER</div>
-            <div class="seed-word"><span>06</span> AUTONOMY</div>
-            <div class="seed-word"><span>07</span> PRECISION</div>
-            <div class="seed-word"><span>08</span> SIGNAL</div>
-            <div class="seed-word"><span>09</span> INDEPENDENT</div>
-            <div class="seed-word"><span>10</span> VAULT</div>
-            <div class="seed-word"><span>11</span> LEGACY</div>
-            <div class="seed-word"><span>12</span> MISSION</div>
-        </div>
+        <div class="seed-grid" id="seed-grid"></div>
         <button class="btn-full" onclick="showVerification()">I HAVE SAVED THEM</button>
     </div>
 
@@ -49,13 +37,13 @@
         <p>Please enter the following words from your recovery phrase to confirm you've saved them correctly.</p>
         
         <div style="margin-bottom: 20px;">
-            <label style="font-size: 0.7rem; font-weight: 900; color: var(--muted); display: block; margin-bottom: 10px;">WORD #03</label>
-            <input type="text" id="verify-3" placeholder="Enter word #3">
+            <label id="label-v1" style="font-size: 0.7rem; font-weight: 900; color: var(--muted); display: block; margin-bottom: 10px;">WORD #</label>
+            <input type="text" id="verify-1" placeholder="Enter word">
         </div>
 
         <div style="margin-bottom: 30px;">
-            <label style="font-size: 0.7rem; font-weight: 900; color: var(--muted); display: block; margin-bottom: 10px;">WORD #07</label>
-            <input type="text" id="verify-7" placeholder="Enter word #7">
+            <label id="label-v2" style="font-size: 0.7rem; font-weight: 900; color: var(--muted); display: block; margin-bottom: 10px;">WORD #</label>
+            <input type="text" id="verify-2" placeholder="Enter word">
         </div>
 
         <button class="btn-full" onclick="validateVerification()">CONFIRM & PROCEED</button>
@@ -63,22 +51,45 @@
     </div>
 
     <script>
+        const words = ["MUSTARD", "VAULT", "SOVEREIGN", "NEURAL", "LEDGER", "AUTONOMY", "PRECISION", "SIGNAL", "INDEPENDENT", "ARCHITECT", "LEGACY", "MISSION", "FAITH", "GRACE", "WISDOM", "TRUTH", "LIGHT", "GLORY", "HONOR", "POWER", "PEACE", "UNITY", "FREEDOM", "DIGITAL"];
+        let generatedSeed = [];
+        let verifyIndices = [];
+
+        function generateSeed() {
+            const grid = document.getElementById('seed-grid');
+            const shuffled = words.sort(() => 0.5 - Math.random());
+            generatedSeed = shuffled.slice(0, 12);
+            
+            grid.innerHTML = generatedSeed.map((word, i) => `
+                <div class="seed-word"><span>${String(i+1).padStart(2, '0')}</span> ${word}</div>
+            `).join('');
+
+            localStorage.setItem('muze_temp_seed', generatedSeed.join(' '));
+        }
+
         function showVerification() {
             document.getElementById('step-display').classList.add('hidden');
             document.getElementById('step-verify').classList.remove('hidden');
+            
+            // Pick 2 random indices to verify
+            verifyIndices = [Math.floor(Math.random() * 6), Math.floor(Math.random() * 6) + 6];
+            document.getElementById('label-v1').innerText = `WORD #${verifyIndices[0] + 1}`;
+            document.getElementById('label-v2').innerText = `WORD #${verifyIndices[1] + 1}`;
         }
 
         function validateVerification() {
-            const word3 = document.getElementById('verify-3').value.trim().toUpperCase();
-            const word7 = document.getElementById('verify-7').value.trim().toUpperCase();
+            const v1 = document.getElementById('verify-1').value.trim().toUpperCase();
+            const v2 = document.getElementById('verify-2').value.trim().toUpperCase();
 
-            if (word3 === 'SOVEREIGN' && word7 === 'PRECISION') {
+            if (v1 === generatedSeed[verifyIndices[0]] && v2 === generatedSeed[verifyIndices[1]]) {
                 location.href = 'password.html';
             } else {
                 alert("Incorrect words. Please verify your seed and try again.");
                 location.reload();
             }
         }
+
+        window.onload = generateSeed;
     </script>
 </body>
 </html>
