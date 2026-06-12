@@ -57,7 +57,7 @@
         .hero p { max-width: 600px; color: var(--muted); font-size: 1.1rem; margin-bottom: 40px; }
 
         .pillar-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding: 0 8% 100px;
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding: 0 8% 60px;
         }
         .pillar-card {
             background: var(--surface); border: 1px solid var(--border); padding: 50px 40px;
@@ -67,6 +67,21 @@
         .pillar-card:hover { border-color: var(--accent); transform: translateY(-5px); }
         .pillar-card h3 { font-weight: 900; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 15px; text-transform: uppercase; }
         .pillar-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
+
+        .services-section {
+            padding: 80px 8%; background: #fff; border-top: 1px solid var(--border);
+        }
+        .services-section h2 { 
+            font-family: var(--font-heading); font-size: 3rem; margin-bottom: 50px; text-align: center; 
+        }
+        .services-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; max-width: 1000px; margin: 0 auto;
+        }
+        .service-item {
+            padding-bottom: 20px; border-bottom: 1px solid #f1f5f9;
+        }
+        .service-item h4 { font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; color: var(--accent); }
+        .service-item p { font-size: 0.9rem; color: var(--muted); }
 
         .cta-section {
             padding: 80px 8%; text-align: center; background: #fff; border-top: 1px solid var(--border);
@@ -82,7 +97,7 @@
         .copyright { font-weight: 900; font-size: 0.6rem; letter-spacing: 3px; color: #CCC; text-transform: uppercase; }
 
         @media (max-width: 1024px) {
-            .pillar-grid { grid-template-columns: 1fr; }
+            .pillar-grid, .services-grid { grid-template-columns: 1fr; }
             h1 { font-size: 3.5rem; }
         }
     </style>
@@ -91,7 +106,7 @@
 
     <nav>
         <div class="nav-links">
-            <a href="pulse/">Explorer</a>
+            <a href="pulse/">PULSE</a>
             <a href="whitepaper/">Whitepaper</a>
         </div>
         <div class="nav-links">
@@ -101,26 +116,48 @@
 
     <section class="hero">
         <img src="assets/p-logo.png" class="p-logo-hero" onclick="location.href='/'" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png'">
-        <div class="kicker">The Independent Ledger</div>
+        <div class="kicker">The Sovereign Ledger</div>
         <h1>Architecting<br>Reality.</h1>
-        <p>Global brand design and high quality digital systems. We build the automatic tools that power the 2026 digital age.</p>
+        <p>High quality digital systems and sovereign brand design. We build the automatic tools that power the independent age.</p>
         <a href="muzewallet/index.html" class="btn-cta">SHARE TO EARN</a>
     </section>
 
     <div class="pillar-grid">
-        <a href="muzewallet/index.html" class="pillar-card">
-            <h3>MUZE WALLET</h3>
-            <p>The sovereign gateway. Manage your assets, messages, and vaults with Neural security.</p>
+        <a href="mynt/" class="pillar-card">
+            <h3>MYNT</h3>
+            <p>The sovereign marketplace. Mint and trade public and private digital assets.</p>
+        </a>
+        <a href="chillata/" class="pillar-card">
+            <h3>CHILLATA</h3>
+            <p>The privacy layer. Powering encrypted messaging and private asset vaults.</p>
         </a>
         <a href="pulse/" class="pillar-card">
-            <h3>PULSE EXPLORER</h3>
-            <p>Real-time network intelligence. Track the growth and activity of the Priscion Ledger.</p>
-        </a>
-        <a href="mynt/" class="pillar-card">
-            <h3>MYNT MARKETPLACE</h3>
-            <p>The hub for sovereign commerce. Mint and trade public and private digital assets.</p>
+            <h3>PULSE</h3>
+            <p>Real-time network intelligence. The explorer for the Priscion Ledger.</p>
         </a>
     </div>
+
+    <section class="services-section">
+        <h2>Our Services</h2>
+        <div class="services-grid">
+            <div class="service-item">
+                <h4>Blockchain Integration</h4>
+                <p>Merging Web2 inventory and business logic with the sovereign ledger.</p>
+            </div>
+            <div class="service-item">
+                <h4>UI/UX Design</h4>
+                <p>Building high-fidelity, Vespr-grade interfaces for Web3 applications.</p>
+            </div>
+            <div class="service-item">
+                <h4>Tokenomics Architecture</h4>
+                <p>Designing custom token utility and economic models for brand ecosystems.</p>
+            </div>
+            <div class="service-item">
+                <h4>Smart Contract Development</h4>
+                <p>Secure, audited contract deployment for marketplaces and minting hubs.</p>
+            </div>
+        </div>
+    </section>
 
     <footer>
         <p class="copyright">Prisca Dezigns &copy; 2026 | Anchored to Eternity</p>
