@@ -101,9 +101,17 @@
         /* God Mode Wallet */
         .wallet-panel { background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 40px; margin-top: 40px; }
         .wallet-balance { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
-        .wallet-actions { display: flex; gap: 15px; }
-        .wallet-btn { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; }
+        .wallet-actions { display: flex; flex-wrap: wrap; gap: 15px; }
+        .wallet-btn { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; min-width: 100px; }
         .wallet-btn.outline { background: #fff; color: #000; border: 1px solid #000; }
+        .wallet-btn.stake { background: var(--accent); color: #fff; }
+
+        .card-preview { 
+            width: 100%; max-width: 500px; height: 300px; 
+            border-radius: 24px; background-size: contain; background-repeat: no-repeat;
+            background-position: center; border: 1px solid var(--border);
+            background-image: url('../assets/card.png');
+        }
 
         @media (max-width: 1200px) {
             .sidebar { width: 80px; padding: 20px 10px; }
@@ -174,9 +182,11 @@
                         <span class="stat-label">GOD MODE WALLET</span>
                         <div class="wallet-balance">500,000.00 <span style="font-size: 1rem; color: var(--muted);">ADA</span></div>
                         <div class="wallet-actions">
-                            <button class="wallet-btn">SEND</button>
-                            <button class="wallet-btn outline">RECEIVE</button>
+                            <button class="wallet-btn" onclick="alert('Sending assets...')">SEND</button>
+                            <button class="wallet-btn outline" onclick="alert('Ready to receive.')">RECEIVE</button>
                             <button class="wallet-btn outline" onclick="alert('Launching Sovereign Swap...')">SWAP</button>
+                            <button class="wallet-btn stake" onclick="alert('Staking Protocol Initialized.')">STAKE</button>
+                            <button class="wallet-btn outline" onclick="alert('Adding Liquidity to $PRN Pool...')">LIQUIDITY</button>
                         </div>
                     </div>
 
@@ -230,7 +240,7 @@
                 <div id="stage-card" class="stage hidden">
                     <h2>Elite Card</h2>
                     <p class="subtitle">Managing the Physical-to-Digital Bridge.</p>
-                    <img src="https://share.zapia.com/3zbj84lihry8lo9v476pt9" style="width: 100%; max-width: 500px; border-radius: 24px;">
+                    <div class="card-preview"></div>
                 </div>
                 
                 <div id="stage-dapps" class="stage hidden"><h2>Network DApp Registry</h2></div>
@@ -287,9 +297,14 @@
             
             // Map Console buttons to Mirror stages
             const mirrorFrame = document.getElementById('mirror-iframe');
-            if(id === 'vault') mirrorFrame.src = 'index.html#vault';
-            if(id === 'card') mirrorFrame.src = 'index.html#card';
-            if(id === 'settings') mirrorFrame.src = 'index.html#settings';
+            if(mirrorFrame && mirrorFrame.contentWindow) {
+                // Ensure frame is ready before sending hash
+                mirrorFrame.src = 'index.html#' + id;
+                // Force hash update if already on index.html
+                try {
+                   mirrorFrame.contentWindow.location.hash = '#' + id;
+                } catch(e) {}
+            }
         }
 
         function renderHandles() {
@@ -300,11 +315,20 @@
             ];
             grid.innerHTML = handles.map(h => `
                 <div class="handle-tile">
-                    <img src="https://priscion.com/assets/p-logo.png" alt="Logo">
+                    <img src="../assets/muze_icon_logo.png" alt="Logo">
                     <h4>${h}</h4>
                     <span>.pri</span>
                 </div>
             `).join('');
+        }
+
+        function loadChat() {
+            const saved = localStorage.getItem('architect_chat');
+            if (saved) {
+                const container = document.getElementById('chat-messages');
+                container.innerHTML = saved;
+                container.scrollTop = container.scrollHeight;
+            }
         }
 
         function sendMessage() {
@@ -321,6 +345,9 @@
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
+            // Save to localStorage
+            localStorage.setItem('architect_chat', container.innerHTML);
+
             // AI Response simulation
             setTimeout(() => {
                 const zapiaMsg = document.createElement('div');
@@ -334,12 +361,18 @@
                 zapiaMsg.innerText = responses[Math.floor(Math.random() * responses.length)];
                 container.appendChild(zapiaMsg);
                 container.scrollTop = container.scrollHeight;
+                
+                // Save to localStorage
+                localStorage.setItem('architect_chat', container.innerHTML);
             }, 1000);
         }
 
-        renderHandles();
-        fetchLiveStats();
-        setInterval(fetchLiveStats, 30000); // Sync every 30s
+        window.onload = () => {
+            renderHandles();
+            fetchLiveStats();
+            loadChat();
+            setInterval(fetchLiveStats, 30000); 
+        };
     </script>
 </body>
 </html>
