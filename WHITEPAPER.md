@@ -1,4 +1,4 @@
-# THE PROCYON WHITE PAPER (v1.2)
+# THE PRISCION WHITE PAPER (v1.2)
 ## Vision: The Great Migration (Web2 to Web3)
 
 ### 1. The Core Thesis
@@ -23,7 +23,7 @@ The primary entry point for the network.
 
 ### 5. Implementation Roadmap
 *   **Phase 1: The Foundation.** Launch MUZE Wallet, $PRN/$NRL tokens, and the Share-to-Own engine. Build the "Members" community.
-*   **Phase 2: The Migration.** Integrate established brands (Prisca Dezigns, Orcinos, Atelia) once the network is populated and fluid.
+*   **Phase 2: The Migration.** Integrate established network brands once the ecosystem is populated and fluid.
 
 ### 6. The Endowment Architecture (Charity Hub)
 *   **Independent Partner:** The Way Made Known (TWMK) is an independent NGO and primary charitable partner of Priscion.
