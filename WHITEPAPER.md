@@ -9,13 +9,13 @@ The Priscion Network operates on a specialized multi-token economy, ensuring liq
 
 *   **$PRN (Priscion):** The primary utility token. Used for public network fees, brand activations, and **Public NFTs**.
 *   **$NRL (Neural):** The private reserve and governance asset. Powers **Neural Login** and **DAO Governance**.
-*   **$JLO (Chillata/Jello):** The privacy layer token. Powers the **Chillata Privacy Protocol**. Used for **Private NFTs** (IDs, Deeds) and the **LYNX Messenger**.
+*   **$JLO (Jello):** The privacy layer token. Powers the **Jello Privacy Protocol**. Used for **Private NFTs** (IDs, Deeds) and the **LYNX Messenger**.
 *   **$MUSD (Muze USD):** The ecosystem’s stable settlement token for commerce and merchant payouts.
 
 ### 3. The MUZE Wallet & DApp Suite
 MUZE is the gateway to the Priscion ecosystem, featuring a high-fidelity integrated DApp suite:
 
-*   **LYNX (Messenger):** A handle-to-handle, peer-to-peer encrypted messenger. **Powered by $JLO** for total privacy. No phone numbers—only your sovereign .pri handle.
+*   **LYNX (Messenger):** A handle-to-handle, peer-to-peer encrypted messenger. **Powered by Jello** for total privacy. No phone numbers—only your sovereign .pri handle.
 *   **MYNT (Marketplace & Mint):** The unified store for assets. Users can mint anything into an NFT—from an Elite ID card to a property deed.
     *   **Private Minting:** Uses $JLO. Encrypted via the privacy layer, visible only in the user's Private Vault.
     *   **Public Minting:** Uses $PRN. Visible to the network for brands and marketplaces.
