@@ -73,11 +73,12 @@
 
         async function handleAuth() {
             const handle = document.getElementById('handle').value.toLowerCase().trim();
+            const email = document.getElementById('email').value.toLowerCase().trim();
             const password = document.getElementById('password').value;
             const msg = document.getElementById('msg');
             const btn = document.getElementById('auth-btn');
 
-            if(!handle || !password) {
+            if(!handle || !password || (!isLogin && !email)) {
                 msg.style.color = 'red';
                 msg.innerText = 'ERROR: MISSING CREDENTIALS';
                 return;
@@ -86,18 +87,33 @@
             btn.disabled = true;
             btn.innerText = isLogin ? 'SYNCHRONIZING...' : 'ANCHORING...';
             
-            setTimeout(() => {
-                localStorage.setItem('muze_active', 'true');
-                localStorage.setItem('muze_handle', handle);
-                localStorage.setItem('muze_vault_status', 'active');
-                
-                msg.style.color = 'var(--accent)';
-                msg.innerText = isLogin ? 'HANDSHAKE SUCCESSFUL' : 'IDENTITY ANCHORED';
-                
+            try {
+                if (isLogin) {
+                    // Placeholder for Supabase Auth Logic
+                    // const { data, error } = await supabase.auth.signInWithPassword({ email: handle, password: password });
+                } else {
+                    // Placeholder for Supabase Signup Logic
+                    // const { data, error } = await supabase.auth.signUp({ email: email, password: password, options: { data: { handle: handle } } });
+                }
+
                 setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 1000);
-            }, 1500);
+                    localStorage.setItem('muze_active', 'true');
+                    localStorage.setItem('muze_handle', handle);
+                    localStorage.setItem('muze_vault_status', 'active');
+                    
+                    msg.style.color = 'var(--accent)';
+                    msg.innerText = isLogin ? 'HANDSHAKE SUCCESSFUL' : 'IDENTITY ANCHORED';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                }, 1500);
+            } catch (err) {
+                msg.style.color = 'red';
+                msg.innerText = 'ERROR: HANDSHAKE FAILED';
+                btn.disabled = false;
+                btn.innerText = 'RETRY';
+            }
         }
     </script>
 </body>
