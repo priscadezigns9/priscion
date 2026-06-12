@@ -250,6 +250,17 @@
         let logoClicks = 0;
         let logoTimeout;
 
+        function handleHashChange() {
+            const hash = window.location.hash.replace('#', '');
+            if (['vault', 'card', 'settings'].includes(hash)) {
+                const navId = 'nav-' + hash;
+                const el = document.getElementById(navId);
+                if (el) showStage(hash, el);
+            }
+        }
+
+        window.addEventListener('hashchange', handleHashChange);
+
         function handleLogoClick() {
             logoClicks++;
             clearTimeout(logoTimeout);
@@ -346,6 +357,7 @@
             
             // Fade in body
             document.body.classList.add('loaded');
+            handleHashChange();
         };
     </script>
 </body>
