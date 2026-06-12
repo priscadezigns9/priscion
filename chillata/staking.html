@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Staking Laboratory | Priscion Ledger</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --text: #000000;
+            --muted: #666666;
+            --accent: #7B35D4;
+            --border: rgba(0,0,0,0.1);
+            --surface: #F9F9F9;
+            --font-main: 'Inter', sans-serif;
+            --font-heading: 'Playfair Display', serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-main); }
+
+        .container { padding: 40px 20px; max-width: 600px; margin: 0 auto; }
+        h1 { font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 10px; }
+        p.subtitle { color: var(--muted); margin-bottom: 40px; font-size: 0.9rem; letter-spacing: 1px; }
+
+        .pool-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 24px;
+            padding: 30px; margin-bottom: 20px;
+        }
+        .pool-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .pool-pair { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.1rem; }
+        
+        .apr-tag { background: #E9D5FF; color: var(--accent); padding: 5px 12px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; }
+
+        .pool-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .stat-box { font-size: 0.8rem; color: var(--muted); }
+        .stat-val { color: var(--text); font-weight: 700; font-size: 1rem; margin-top: 5px; }
+
+        .btn-stake {
+            width: 100%; background: var(--accent); color: #fff; border: none; padding: 18px;
+            border-radius: 16px; font-weight: 900; font-size: 0.85rem; letter-spacing: 2px; cursor: pointer;
+        }
+
+        .back-nav { margin-bottom: 30px; display: inline-block; text-decoration: none; color: var(--accent); font-weight: 800; font-size: 0.8rem; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-nav">← BACK TO SWAP</a>
+        <h1>Staking Laboratory</h1>
+        <p class="subtitle">Fuel the Sovereign Swap and earn yield from network fees.</p>
+
+        <!-- Pool 1 -->
+        <div class="pool-card">
+            <div class="pool-header">
+                <div class="pool-pair">
+                    PRN / ADA
+                </div>
+                <div class="apr-tag">24% APR</div>
+            </div>
+            <div class="pool-stats">
+                <div class="stat-box">Total Liquidity<div class="stat-val">$2.4M</div></div>
+                <div class="stat-box">Your Share<div class="stat-val">0.00%</div></div>
+            </div>
+            <button class="btn-stake" onclick="alert('Provide PRN/ADA Liquidity to earn 85% of pool fees.')">PROVIDE LIQUIDITY</button>
+        </div>
+
+        <!-- Pool 2 -->
+        <div class="pool-card">
+            <div class="pool-header">
+                <div class="pool-pair">
+                    PRN / JLO
+                </div>
+                <div class="apr-tag">32% APR</div>
+            </div>
+            <div class="pool-stats">
+                <div class="stat-box">Total Liquidity<div class="stat-val">$840K</div></div>
+                <div class="stat-box">Your Share<div class="stat-val">0.00%</div></div>
+            </div>
+            <button class="btn-stake" onclick="alert('Provide PRN/JLO Liquidity to earn 85% of pool fees.')">PROVIDE LIQUIDITY</button>
+        </div>
+    </div>
+</body>
+</html>
