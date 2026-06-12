@@ -149,6 +149,7 @@
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Explorer</div>
         <div class="nav-item" onclick="showStage('card', this)">Priscion Digital Card</div>
+        <div class="nav-item" onclick="showStage('settings', this)">Settings</div>
     </div>
 
     <div class="content">
@@ -166,10 +167,10 @@
             </div>
 
             <div class="action-bar">
-                <div class="action-btn"><span>↑</span>SEND</div>
-                <div class="action-btn"><span>↓</span>RECV</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../leggo.html')"><span>⇆</span>SWAP</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../leggo.html')"><span>⚡</span>STAKE</div>
+                <div class="action-btn" onclick="alert('Opening Neural Sending Channel...')"><span>↑</span>SEND</div>
+                <div class="action-btn" onclick="alert('Priscion Receiving Address: addr1...pd7' )"><span>↓</span>RECV</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../chillata/index.html')"><span>⇆</span>SWAP</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../chillata/index.html')"><span>⚡</span>STAKE</div>
             </div>
 
             <div class="asset-list">
@@ -289,11 +290,44 @@
             </div>
         </div>
 
+        <!-- STAGE: SETTINGS --> 
+        <div id="stage-settings" class="stage hidden"> 
+            <h2 style="margin-bottom: 40px; font-weight: 900;">Vault Settings</h2> 
+            <div class="asset-list"> 
+                <div class="asset-item"> 
+                    <div class="asset-info"> 
+                        <div> 
+                            <div class="asset-name">Privacy Mode</div> 
+                            <div class="asset-sub">Hide balances on splash</div> 
+                        </div> 
+                    </div> 
+                    <input type="checkbox" checked> 
+                </div> 
+                <div class="asset-item"> 
+                    <div class="asset-info"> 
+                        <div> 
+                            <div class="asset-name">Neural Backup</div> 
+                            <div class="asset-sub">Encrypted cloud synchronization</div> 
+                        </div> 
+                    </div> 
+                    <button class="btn-outline" style="width: auto; padding: 10px 20px;">SYNC</button> 
+                </div> 
+                <div class="asset-item"> 
+                    <div class="asset-info"> 
+                        <div> 
+                            <div class="asset-name">Wallet Management</div> 
+                            <div class="asset-sub">Switch between active vaults</div> 
+                        </div> 
+                    </div> 
+                    <button class="btn-outline" style="width: auto; padding: 10px 20px;" onclick="location.href='recover.html'">SWITCH</button> 
+                </div> 
+            </div> 
+        </div>
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
             <h2 style="margin-bottom: 20px; font-weight: 900; text-align: center;">Priscion Digital Card</h2>
             <div class="card-display">
-                <img src="../assets/card.png">
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png">
                 <div class="card-overlay"></div>
             </div>
 
