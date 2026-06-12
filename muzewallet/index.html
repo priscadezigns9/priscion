@@ -159,12 +159,12 @@
                 <button class="btn-outline" style="width: 100%;" onclick="location.href='recover.html'">RECOVER VAULT</button> 
                 <button class="btn-outline" style="width: 100%;" onclick="location.href='ledger.html'">CONNECT LEDGER</button> 
             </div> 
-            <button style="margin-top: 30px; background: none; border: none; font-weight: 900; color: var(--muted); cursor: pointer;" onclick="toggleWalletModal()">CLOSE</button> 
+            <button style="margin-top: 30px; background: none; border: none; font-weight: 900; color: var(--muted); cursor: pointer;" onclick="openHandleSwitcher()">CLOSE</button> 
         </div> 
     </div>
     <div class="content">
         <div class="top-bar">
-            <div class="user-pill" style="cursor: pointer;" onclick="toggleWalletModal()">
+            <div class="user-pill" style="cursor: pointer;" onclick="openHandleSwitcher()">
                 <span id="display-handle">user.pri</span>
             </div>
         </div>
@@ -183,7 +183,7 @@
                 <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../leggo.html')"><span>⚡</span>STAKE</div>
             </div>
 
-            <div class="asset-list">
+                        <div class="asset-list">
                 <div class="asset-item">
                     <div class="asset-info">
                         <div class="asset-icon" style="color: #0033AD; font-weight: 900;">₳</div>
@@ -198,7 +198,50 @@
                     <div class="asset-info">
                         <img src="../assets/prn.jpg" class="asset-img">
                         <div>
-                            <div class="asset-name">Independent Utility</div>
+                            <div class="asset-name">Priscion</div>
+                            <div class="asset-sub"></div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">50,000.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="../assets/nrl.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Neural Reserve</div>
+                            <div class="asset-sub"></div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">10,000.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="../assets/atlr.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Atelia Gaming</div>
+                            <div class="asset-sub"></div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">5,000.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/tokens/jlo.jpg" class="asset-img" onerror="this.src='../assets/muze_icon_logo.png'">
+                        <div>
+                            <div class="asset-name">Jello Coin</div>
+                            <div class="asset-sub"></div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">25,000.00</div>
+                </div>
+            </div></div>
+                    <div class="asset-amount">1,000.00</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="../assets/prn.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Priscion</div>
                             <div class="asset-sub">$PRN</div>
                         </div>
                     </div>
@@ -468,6 +511,26 @@
             renderHandles();
         }
 
+        
+        const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
+        
+        function openHandleSwitcher() {
+            const container = document.getElementById('handle-list-container');
+            container.innerHTML = '';
+            handles.forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'handle-option';
+                div.style = 'padding:20px; border-radius:20px; border:1px solid #EEE; margin-bottom:10px; cursor:pointer; font-weight:700; display:flex; align-items:center; justify-content:space-between;';
+                div.innerHTML = ;
+                div.onclick = () => {
+                    document.getElementById('display-handle').innerText = h;
+                    document.getElementById('handle-modal').style.display = 'none';
+                };
+                container.appendChild(div);
+            });
+            document.getElementById('handle-modal').style.display = 'flex';
+        }
+
         function toggleWalletModal() { 
             const modal = document.getElementById("wallet-modal"); 
             if(modal.style.display === "flex") { 
@@ -528,6 +591,19 @@
             renderHandles();
         });
     </script>
+    <!-- HANDLE SWITCHER MODAL -->
+    <div id="handle-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:99999; backdrop-filter:blur(10px); align-items:flex-end;">
+        <div style="background:#fff; width:100%; border-radius:30px 30px 0 0; padding:40px 20px; max-height:80vh; overflow-y:auto;">
+            <div style="text-align:center; margin-bottom:30px;">
+                <div style="width:40px; height:5px; background:#EEE; border-radius:10px; margin:0 auto 20px;"></div>
+                <h2 style="font-weight:900;">Switch Profile</h2>
+            </div>
+            <div id="handle-list-container">
+                <!-- Handles will be injected here -->
+            </div>
+            <button class="btn-full" style="background:#F5F5F5; color:#000; margin-top:20px;" onclick="document.getElementById('handle-modal').style.display='none'">CANCEL</button>
+        </div>
+    </div>
 </body>
 </html>
 <!-- CB -->
