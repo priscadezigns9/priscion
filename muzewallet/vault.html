@@ -70,12 +70,12 @@
         p.subtitle { color: var(--muted); margin-bottom: 50px; font-size: 0.95rem; font-weight: 500; }
 
         /* Stats & UI Cards */
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 60px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 40px; }
         .stat-card { background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); }
         .stat-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; display: block; }
         .stat-value { font-size: 1.8rem; font-weight: 900; color: #000; }
 
-        .console-box { background: #000; color: #10b981; padding: 25px; border-radius: 20px; font-family: monospace; font-size: 0.8rem; line-height: 1.6; border: 1px solid #333; }
+        .console-box { background: #000; color: #10b981; padding: 25px; border-radius: 20px; font-family: monospace; font-size: 0.8rem; line-height: 1.6; border: 1px solid #333; margin-top: 20px; }
 
         /* Handle Tile Design */
         .handle-tile { 
@@ -97,6 +97,13 @@
         .chat-input { padding: 20px; background: #fff; border-top: 1px solid var(--border); display: flex; gap: 10px; }
         .chat-input input { flex: 1; border: 1px solid var(--border); padding: 12px 20px; border-radius: 100px; font-size: 0.85rem; outline: none; }
         .chat-input button { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; cursor: pointer; }
+
+        /* God Mode Wallet */
+        .wallet-panel { background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 40px; margin-top: 40px; }
+        .wallet-balance { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
+        .wallet-actions { display: flex; gap: 15px; }
+        .wallet-btn { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; }
+        .wallet-btn.outline { background: #fff; color: #000; border: 1px solid #000; }
 
         @media (max-width: 1200px) {
             .sidebar { width: 80px; padding: 20px 10px; }
@@ -142,18 +149,38 @@
                 <!-- STAGE: COMMAND CENTER -->
                 <div id="stage-main" class="stage">
                     <h2>Command Center</h2>
-                    <p class="subtitle">Real-time oversight of the Priscion Ecosystem.</p>
+                    <p class="subtitle">Live Node Status & Anchored Ledger Data.</p>
+                    
                     <div class="stats-grid">
                         <div class="stat-card">
                             <span class="stat-label">Network Revenue</span>
-                            <div class="stat-value" id="stat-revenue">$142,500</div>
+                            <div class="stat-value" id="stat-revenue">$0.00</div>
                         </div>
                         <div class="stat-card">
                             <span class="stat-label">Anchored Handles</span>
-                            <div class="stat-value" id="stat-handles">1,402</div>
+                            <div class="stat-value" id="stat-handles">...</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Active Leads</span>
+                            <div class="stat-value" id="stat-leads">...</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Node Health</span>
+                            <div class="stat-value" style="color: #10b981;">100%</div>
                         </div>
                     </div>
-                    <div class="console-box" id="console-output">> MUZE L1 CORE... [READY]<br>> NODE HANDSHAKE... [ACTIVE]<br>> ARCHITECT CONNECTED</div>
+
+                    <div class="wallet-panel">
+                        <span class="stat-label">GOD MODE WALLET</span>
+                        <div class="wallet-balance">500,000.00 <span style="font-size: 1rem; color: var(--muted);">ADA</span></div>
+                        <div class="wallet-actions">
+                            <button class="wallet-btn">SEND</button>
+                            <button class="wallet-btn outline">RECEIVE</button>
+                            <button class="wallet-btn outline" onclick="alert('Launching Sovereign Swap...')">SWAP</button>
+                        </div>
+                    </div>
+
+                    <div class="console-box" id="console-output">> MUZE L1 CORE... [READY]<br>> NODE HANDSHAKE... [ACTIVE]<br>> ARCHITECT CONNECTED<br>> SYNCING LEDGER DATA... [COMPLETE]</div>
                 </div>
 
                 <!-- STAGE: HANDLES LEDGER -->
@@ -189,8 +216,23 @@
                     </div>
                 </div>
 
-                <div id="stage-vault" class="stage hidden"><h2>Vault Console</h2></div>
-                <div id="stage-card" class="stage hidden"><h2>Elite Card Management</h2></div>
+                <div id="stage-vault" class="stage hidden">
+                    <h2>Vault Console</h2>
+                    <p class="subtitle">Mirroring User Vault Controls.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-label">Vault Balance</span>
+                            <div class="stat-value">25,480.00 ADA</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="stage-card" class="stage hidden">
+                    <h2>Elite Card</h2>
+                    <p class="subtitle">Managing the Physical-to-Digital Bridge.</p>
+                    <img src="https://share.zapia.com/3zbj84lihry8lo9v476pt9" style="width: 100%; max-width: 500px; border-radius: 24px;">
+                </div>
+                
                 <div id="stage-dapps" class="stage hidden"><h2>Network DApp Registry</h2></div>
                 <div id="stage-settings" class="stage hidden"><h2>Architect Settings</h2></div>
             </div>
@@ -207,6 +249,27 @@
     </div>
 
     <script>
+        const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function fetchLiveStats() {
+            try {
+                // Fetch Handles (Profiles)
+                const { count: handlesCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+                document.getElementById('stat-handles').innerText = handlesCount || 0;
+
+                // Fetch Leads
+                const { count: leadsCount } = await supabaseClient.from('leads').select('*', { count: 'exact', head: true });
+                document.getElementById('stat-leads').innerText = leadsCount || 0;
+                
+                // Revenue Logic (Placeholder for now until revenue table exists)
+                document.getElementById('stat-revenue').innerText = '$0.00';
+            } catch (e) {
+                console.error("Ledger Sync Error:", e);
+            }
+        }
+
         function toggleMirror() {
             const mirror = document.getElementById('mirror-panel');
             mirror.style.display = (mirror.style.display === 'none') ? 'table-cell' : 'none';
@@ -231,8 +294,6 @@
 
         function renderHandles() {
             const grid = document.getElementById('handles-grid');
-            // User requested: priscion.pri, zapia.pri, muze.pri, pulse.pri, mynt.pri, chillata.pri, jello.pri, lynx.pri
-            // and existing: prisca.pri, etc. (removed pricey.pri)
             const handles = [
                 'priscion', 'zapia', 'muze', 'pulse', 'mynt', 'chillata', 'jello', 'lynx', 
                 'prisca', 'ateliagaming', 'calalloo', 'nurasen', 'thewaymadeknown'
@@ -264,13 +325,21 @@
             setTimeout(() => {
                 const zapiaMsg = document.createElement('div');
                 zapiaMsg.className = 'msg zapia';
-                zapiaMsg.innerText = "Acknowledged, Architect. I am processing the request for '" + val + "'. Priscion logic remains stable.";
+                const responses = [
+                    "Understood. I am monitoring the ledger for activity related to your request.",
+                    "The Priscion node is stable. Proceeding with the updates as discussed.",
+                    "Acknowledged. I've logged this in our mission protocol.",
+                    "Fidelity check complete. Ready for the next phase, Architect."
+                ];
+                zapiaMsg.innerText = responses[Math.floor(Math.random() * responses.length)];
                 container.appendChild(zapiaMsg);
                 container.scrollTop = container.scrollHeight;
             }, 1000);
         }
 
         renderHandles();
+        fetchLiveStats();
+        setInterval(fetchLiveStats, 30000); // Sync every 30s
     </script>
 </body>
 </html>
