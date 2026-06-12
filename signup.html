@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sovereign Onboarding | PRISCION</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { --bg: #FFFFFF; --text: #000; --muted: #888; --accent: #7B35D4; --border: #F0F0F0; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
@@ -17,28 +18,69 @@
         input { width: 100%; padding: 20px; border-radius: 16px; border: 1px solid var(--border); background: #FAFAFA; font-size: 1rem; outline: none; }
         input:focus { border-color: var(--accent); background: #fff; }
         .btn-submit { width: 100%; background: #000; color: #fff; padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .btn-submit:hover { transform: scale(1.02); }
+        .btn-submit:disabled { background: var(--muted); cursor: not-allowed; }
+        #msg { margin-top: 20px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="card">
         <h1>Empire Intent</h1>
         <p>Submit your business details for Sovereign Ledger onboarding.</p>
-        <form onsubmit="event.preventDefault(); alert('Intent Logged. The Architect will review.');">
+        <form id="signup-form">
             <div class="field">
                 <label>Business Name</label>
-                <input type="text" placeholder="e.g. Atelia Gaming" required>
+                <input type="text" id="biz_name" placeholder="e.g. Atelia Gaming" required>
             </div>
             <div class="field">
                 <label>Primary Contact</label>
-                <input type="email" placeholder="email@business.com" required>
+                <input type="email" id="contact" placeholder="email@business.com" required>
             </div>
             <div class="field">
                 <label>Migration Type</label>
-                <input type="text" placeholder="E-commerce / Identity / Infrastructure" required>
+                <input type="text" id="migration_type" placeholder="E-commerce / Identity / Infrastructure" required>
             </div>
-            <button class="btn-submit">SUBMIT INTENT</button>
+            <button type="submit" class="btn-submit" id="submit-btn">SUBMIT INTENT</button>
         </form>
+        <div id="msg"></div>
     </div>
+
+    <script>
+        const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const SB_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const supabase = supabase.createClient(SB_URL, SB_KEY);
+
+        const form = document.getElementById('signup-form');
+        const btn = document.getElementById('submit-btn');
+        const msg = document.getElementById('msg');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            btn.disabled = true;
+            btn.innerText = 'ANCHORING...';
+            msg.innerText = '';
+
+            const data = {
+                business_name: document.getElementById('biz_name').value,
+                contact_email: document.getElementById('contact').value,
+                migration_type: document.getElementById('migration_type').value,
+                created_at: new Date().toISOString()
+            };
+
+            const { error } = await supabase.from('onboarding_intents').insert([data]);
+
+            if (error) {
+                console.error(error);
+                msg.style.color = 'red';
+                msg.innerText = 'ERROR: UNABLE TO CONNECT TO LEDGER';
+                btn.disabled = false;
+                btn.innerText = 'RETRY SUBMIT';
+            } else {
+                msg.style.color = 'var(--accent)';
+                msg.innerText = 'INTENT ANCHORED. THE ARCHITECT HAS BEEN NOTIFIED.';
+                form.reset();
+                btn.innerText = 'SUCCESS';
+            }
+        };
+    </script>
 </body>
 </html>
