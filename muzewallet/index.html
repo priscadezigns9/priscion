@@ -6,43 +6,67 @@
     <title>MUZE | Priscion Console v3.0</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
     <style>
-        :root { --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff; }
+        :root { --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff; --jlo: #FACC15; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
         .hidden { display: none !important; }
         .v-tag { position: fixed; top: 10px; left: 10px; font-size: 0.5rem; font-weight: 900; color: var(--accent); z-index: 20000; }
+        
+        /* Entrance Layer */
         .layer { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
         .muze-entrance-logo { height: 80px; margin-bottom: 30px; }
         h1 { font-weight: 900; font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
+        
+        /* Onboarding */
         .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: left; cursor: pointer; width: 100%; max-width: 350px; margin-bottom: 15px; transition: transform 0.2s ease; }
-        .onboarding-card:hover { transform: translateY(-2px); }
         .onboarding-card.neural { background: var(--muze-blue); color: #fff; border: none; box-shadow: 0 10px 20px rgba(90, 200, 250, 0.3); }
-        .sidebar { width: 280px; height: 100vh; background: #E0F2FE; border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; }
-        .nav-item { padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.85rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px; }
-        .nav-item.active { background: #fff; color: var(--text); border: 1px solid var(--border); }
-        .content { flex: 1; height: 100vh; padding: 60px 80px; overflow-y: auto; position: relative; background: var(--bg); }
-        .top-bar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 60px; }
+
+        /* Sidebar & Navigation */
+        .sidebar { width: 260px; height: 100vh; background: #E0F2FE; border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 5px; }
+        .nav-label { font-weight: 900; font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin: 20px 0 10px 20px; }
+        .nav-item { padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.8rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+        .nav-item:hover { background: rgba(255,255,255,0.5); }
+        .nav-item.active { background: #fff; color: var(--text); border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(186, 230, 253, 0.2); }
+
+        /* Content Area */
+        .content { flex: 1; height: 100vh; padding: 40px 60px; overflow-y: auto; position: relative; background: var(--bg); }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         .user-pill { background: #fff; border: 1px solid var(--border); padding: 8px 20px; border-radius: 100px; display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 0.75rem; }
-        .balance-card { margin-bottom: 40px; text-align: center; background: #fff; padding: 40px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(186, 230, 253, 0.2); }
-        .balance-value { font-size: 4.5rem; font-weight: 900; letter-spacing: -3px; color: var(--accent); }
-        .action-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
-        .action-btn { background: var(--muze-blue); color: #fff; width: 65px; height: 65px; border-radius: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.55rem; font-weight: 900; }
-        .action-btn.share { background: #000; }
+        
+        /* Main UI Components */
+        .balance-card { margin-bottom: 30px; text-align: center; background: #fff; padding: 40px; border-radius: 30px; border: 1px solid var(--border); }
+        .balance-value { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; color: var(--accent); }
+        .action-bar { display: flex; justify-content: center; gap: 12px; margin-bottom: 40px; }
+        .action-btn { background: var(--muze-blue); color: #fff; width: 60px; height: 60px; border-radius: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.5rem; font-weight: 900; }
+        .action-btn.share { background: #000; width: auto; padding: 0 25px; }
+
         .asset-list { display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
-        .asset-item { background: #fff; border: 1px solid var(--border); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .asset-item { background: #fff; border: 1px solid var(--border); padding: 15px 20px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .asset-info { display: flex; align-items: center; gap: 15px; }
-        .asset-img { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
+        .asset-img { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; }
+        .asset-name { font-weight: 700; font-size: 0.9rem; }
+        .asset-sub { font-size: 0.7rem; color: var(--muted); font-weight: 900; }
+        .asset-amount { font-weight: 900; font-size: 0.95rem; }
+
+        /* Privacy Indicator */
+        .private-tag { background: var(--jlo); color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.5rem; font-weight: 900; text-transform: uppercase; }
+
+        /* Modals */
         .sliding-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 20000; display: none; align-items: flex-end; backdrop-filter: blur(10px); }
         .sliding-content { background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 40px 20px; transform: translateY(100%); transition: transform 0.3s ease; }
         .sliding-modal.active { display: flex; }
         .sliding-modal.active .sliding-content { transform: translateY(0); }
+        
         .btn-full { background: var(--accent); color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; cursor: pointer; width: 100%; }
         .btn-outline { background: #fff; color: #000; border: 1px solid var(--border); padding: 16px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; cursor: pointer; width: 100%; }
-        @media (max-width: 900px) { .sidebar { display: none; } .content { padding: 40px 20px; } .top-bar { justify-content: center; } }
+
+        @media (max-width: 900px) { .sidebar { display: none; } .content { padding: 40px 20px; } }
     </style>
 </head>
 <body>
-    <div class="v-tag">v3.0 MUZE</div>
+    <div class="v-tag">v3.0 MUZE | CHILLATA ACTIVE</div>
+    
+    <!-- Entrance Layer -->
     <div id="layer-entrance" class="layer">
         <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" alt="MUZE">
         <h1>Welcome to MUZE.</h1>
@@ -54,7 +78,7 @@
             </div>
             <div class="onboarding-card" onclick="showVaultOptions()">
                 <h3 style="font-weight:900; margin-bottom:5px;">Vault Setup</h3>
-                <p style="font-size:0.7rem; color:var(--muted);">Create or recover your vault.</p>
+                <p style="font-size:0.7rem; color:var(--muted);">Create or recover your private vault.</p>
             </div>
         </div>
         <div id="vault-options" style="display: none; width: 100%; max-width: 350px;">
@@ -64,66 +88,115 @@
             <p style="text-align: center; margin-top: 30px; font-size: 0.7rem; color: var(--muted); cursor: pointer;" onclick="backToOnboardingMain()">← BACK</p>
         </div>
     </div>
+
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
-        <div style="padding:10px 10px 40px;"><img src="../assets/muze_icon_logo.png" style="height:35px;" alt="MUZE"></div>
+        <div style="padding:10px 10px 30px;"><img src="../assets/muze_icon_logo.png" style="height:30px;" alt="MUZE"></div>
+        <div class="nav-label">Main Console</div>
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
+        
+        <div class="nav-label">Ecosystem DApps</div>
+        <div class="nav-item" onclick="showStage('lynx', this)">LYNX Messenger</div>
+        <div class="nav-item" onclick="showStage('mynt', this)">MYNT Store</div>
+        <div class="nav-item" onclick="showStage('pulse', this)">PULSE Explorer</div>
+        <div class="nav-item" onclick="showStage('leggo', this)">LEGGO Builder</div>
     </div>
+
+    <!-- Main Content -->
     <div class="content">
         <div class="top-bar">
+            <div id="privacy-status" class="private-tag">Chillata Secure</div>
             <div class="user-pill" style="cursor: pointer;" onclick="openHandleSwitcher()">
                 <span id="display-handle">prisca.pri</span>
             </div>
         </div>
+
+        <!-- STAGE: Vault -->
         <div id="stage-vault" class="stage">
             <div class="balance-card">
                 <div class="balance-label" style="font-weight:900; font-size:0.6rem; color:var(--muted); letter-spacing:3px;">VAULT BALANCE</div>
                 <div class="balance-value">1,000.0 ADA</div>
             </div>
             <div class="action-bar">
-                <div class="action-btn" onclick="alert('Sending interface active.')"><span>↑</span>SEND</div>
+                <div class="action-btn" onclick="alert('Send Securely')"><span>↑</span>SEND</div>
                 <div class="action-btn" onclick="openReceiveModal()"><span>↓</span>RECV</div>
-                <div class="action-btn" onclick="alert('Swap active.')"><span>⇆</span>SWAP</div>
-                <div class="action-btn share" onclick="location.href='https://priscion.com/share-to-earn'"><span>✚</span>SHARE TO OWN</div>
+                <div class="action-btn" onclick="alert('Chillata Swap')"><span>⇆</span>SWAP</div>
+                <div class="action-btn share" onclick="location.href='https://priscion.com/share-to-earn'"><span>✚</span>SHARE TO EARN</div>
             </div>
+            <div class="nav-label" style="margin-left: 0;">Sovereign Assets</div>
             <div class="asset-list">
-                <div class="asset-item"><div class="asset-info"><img src="../assets/prn.jpg" class="asset-img"><div><div class="asset-name">Independent Utility</div><div class="asset-sub">$PRN</div></div></div><div class="asset-amount">50,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><img src="../assets/prn.jpg" class="asset-img"><div><div class="asset-name">Priscion Utility</div><div class="asset-sub">$PRN</div></div></div><div class="asset-amount">50,000.00</div></div>
                 <div class="asset-item"><div class="asset-info"><img src="../assets/nrl.jpg" class="asset-img"><div><div class="asset-name">Neural Reserve</div><div class="asset-sub">$NRL</div></div></div><div class="asset-amount">10,000.00</div></div>
-                <div class="asset-item"><div class="asset-info"><img src="../assets/musd.jpg" class="asset-img" onerror="this.src='https://via.placeholder.com/45?text=M'"><div><div class="asset-name">Mustard</div><div class="asset-sub">$MUSD</div></div></div><div class="asset-amount">25,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><div style="width:40px; height:40px; background:var(--jlo); border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:900;">$J</div><div><div class="asset-name">Chillata Privacy</div><div class="asset-sub">$JLO</div></div></div><div class="asset-amount">5,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><img src="../assets/musd.jpg" class="asset-img"><div><div class="asset-name">Muze USD</div><div class="asset-sub">$MUSD</div></div></div><div class="asset-amount">25,000.00</div></div>
             </div>
         </div>
+
+        <!-- STAGE: Digital Card -->
         <div id="stage-card" class="stage hidden" style="text-align: center;">
-            <h2 style="margin-bottom: 20px;">Digital Card</h2>
-            <img src="../assets/card.jpg" style="width: 100%; max-width: 450px; border-radius: 24px;" onerror="this.src='https://via.placeholder.com/450x280?text=Digital+Card'">
+            <h2 style="margin-bottom: 20px; font-family: 'Playfair Display', serif;">Digital Card</h2>
+            <img src="../assets/card.jpg" style="width: 100%; max-width: 450px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
             <button class="btn-outline" style="margin-top: 40px; color: #FF3B30; border-color: #FF3B30;" onclick="logout()">LOCK VAULT</button>
         </div>
-    </div>
-        <div id="modal-login" class="sliding-modal" onclick="closeModals()">
-            <div class="sliding-content" onclick="event.stopPropagation()">
-                <h2 style="font-weight:900; margin-bottom:10px;">Login</h2>
-                <p style="font-size:0.7rem; color:var(--muted); margin-bottom:30px;">Enter your Handle or Email</p>
-                <input type="text" id="login-input" placeholder="Handle or Email" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:12px; font-family:inherit; font-size:1rem;">
-                <input type="password" id="login-pass" placeholder="Password" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px; font-family:inherit; font-size:1rem;">
-                <button class="btn-full" onclick="executeLogin()">LOGIN</button>
-                <button class="btn-outline" style="margin-top:10px; border:none;" onclick="closeModals()">CANCEL</button>
+
+        <!-- STAGE: LYNX -->
+        <div id="stage-lynx" class="stage hidden">
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">LYNX Messenger</h2>
+            <p style="color:var(--muted); font-size:0.8rem; margin-bottom:30px;">Private Handle-to-Handle Communication</p>
+            <div style="background:#fff; border:1px solid var(--border); border-radius:24px; padding:40px; text-align:center;">
+                <p style="font-weight:900; color:var(--muted); font-size:0.7rem; letter-spacing:1px;">ENCRYPTED VIA CHILLATA</p>
+                <div style="margin:40px 0; color:#ddd;">[ Messenger Interface Coming to Mainnet ]</div>
+                <button class="btn-full">START NEW CHAT</button>
             </div>
         </div>
-        <div id="modal-handles" class="sliding-modal" onclick="closeModals()"><div class="sliding-content" onclick="event.stopPropagation()"><div id="handle-list"></div><button class="btn-full" style="background:#F5F5F5; color:#000; margin-top:20px;" onclick="closeModals()">CLOSE</button></div></div>
+
+        <!-- STAGE: MYNT -->
+        <div id="stage-mynt" class="stage hidden">
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 10px;">MYNT Store</h2>
+            <p style="color:var(--muted); font-size:0.8rem; margin-bottom:30px;">The Marketplace for Sovereign Assets</p>
+            <div class="asset-list">
+                <div class="asset-item" onclick="alert('Minting Digital ID...')">
+                    <div class="asset-info"><div><div class="asset-name">Mint Digital ID Card</div><div class="asset-sub">Private NFT ($JLO)</div></div></div>
+                    <div class="private-tag">PRIVATE</div>
+                </div>
+                <div class="asset-item" onclick="alert('Minting Property Deed...')">
+                    <div class="asset-info"><div><div class="asset-name">Mint Property Deed</div><div class="asset-sub">Private NFT ($JLO)</div></div></div>
+                    <div class="private-tag">PRIVATE</div>
+                </div>
+                <div class="asset-item">
+                    <div class="asset-info"><div><div class="asset-name">Elite Founder Card</div><div class="asset-sub">Public NFT ($PRN)</div></div></div>
+                    <div class="asset-amount">500 $PRN</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Placeholder Stages -->
+        <div id="stage-pulse" class="stage hidden" style="text-align:center; padding-top:100px;"><h2>PULSE Explorer</h2><p style="color:var(--muted);">Network activity hub coming soon.</p></div>
+        <div id="stage-leggo" class="stage hidden" style="text-align:center; padding-top:100px;"><h2>LEGGO Builder</h2><p style="color:var(--muted);">Brand node launchpad coming soon.</p></div>
+
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-login" class="sliding-modal" onclick="closeModals()">
+        <div class="sliding-content" onclick="event.stopPropagation()">
+            <h2 style="font-weight:900; margin-bottom:10px;">Neural Login</h2>
+            <input type="text" id="login-input" placeholder="Handle or Email" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:12px;">
+            <input type="password" id="login-pass" placeholder="Password" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px;">
+            <button class="btn-full" onclick="executeLogin()">LOGIN</button>
+        </div>
+    </div>
+
+    <div id="modal-handles" class="sliding-modal" onclick="closeModals()"><div class="sliding-content" onclick="event.stopPropagation()"><div id="handle-list"></div><button class="btn-full" style="background:#F5F5F5; color:#000; margin-top:20px;" onclick="closeModals()">CLOSE</button></div></div>
     <div id="modal-receive" class="sliding-modal" onclick="closeModals()"><div class="sliding-content" onclick="event.stopPropagation()"><h2 id="recv-handle" style="font-weight:900;"></h2><p style="font-size:0.7rem; color:var(--muted); margin-bottom:30px;">NEURAL ANCHOR</p><div style="width:200px; height:200px; background:#F9F9F9; margin:0 auto 30px; border-radius:24px; display:flex; align-items:center; justify-content:center; color:#DDD; font-weight:900;">QR CODE</div><button class="btn-full" onclick="closeModals()">DONE</button></div></div>
+
     <script>
         const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
         function neuralLogin() { document.getElementById('modal-login').classList.add('active'); document.getElementById('login-input').focus(); }
         function executeLogin() { 
             const h = document.getElementById('login-input').value; 
             const p = document.getElementById('login-pass').value;
-            if(h && p) { 
-                // Supabase Handshake Logic (Simulated for this session, using handle as ID)
-                localStorage.setItem('muze_active', 'true'); 
-                localStorage.setItem('muze_handle', h); 
-                location.reload(); 
-            } else {
-                alert('Please enter both handle/email and password.');
-            }
+            if(h && p) { localStorage.setItem('muze_active', 'true'); localStorage.setItem('muze_handle', h); location.reload(); }
         }
         function showVaultOptions() { document.getElementById('onboarding-main').style.display = 'none'; document.getElementById('vault-options').style.display = 'block'; }
         function backToOnboardingMain() { document.getElementById('onboarding-main').style.display = 'block'; document.getElementById('vault-options').style.display = 'none'; }
