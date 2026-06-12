@@ -12,14 +12,15 @@
             --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; opacity: 0; }
+        body.loaded { opacity: 1; }
 
         h1, h2, h3, .playfair { font-family: 'Playfair Display', serif; }
         
         .hidden { display: none !important; }
         
         /* Entrance Layer */
-        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
         .muze-entrance-logo { height: 60px; margin-bottom: 30px; cursor: pointer; }
         h2 { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
         .layer p { color: var(--muted); font-size: 0.8rem; margin-bottom: 30px; line-height: 1.5; max-width: 280px; margin-left: auto; margin-right: auto; }
@@ -290,29 +291,55 @@
             }
         }
 
-        function logout() {
+        async function logout() {
+            await supabaseClient.auth.signOut();
             localStorage.removeItem('muze_active');
             localStorage.removeItem('muze_handle');
             location.reload();
         }
 
-        window.onload = () => {
+        window.onload = async () => {
+            document.getElementById('muze-logo').onclick = handleLogoClick;
+
+            // Neural Persistence: Check Supabase session
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
             const isActive = localStorage.getItem('muze_active') === 'true';
             const handle = localStorage.getItem('muze_handle');
             const isSeedConfirmed = localStorage.getItem('muze_seed_confirmed') === 'true';
-            
-            document.getElementById('muze-logo').onclick = handleLogoClick;
 
-            if (isActive && handle) {
-                document.getElementById('active-handle-display').innerText = handle;
+            if (session) {
+                // User has active Supabase session
+                if (!isActive || !handle) {
+                    // Sync profile to localStorage if missing
+                    const { data: profile } = await supabaseClient
+                        .from('profiles')
+                        .select('handle')
+                        .eq('id', session.user.id)
+                        .single();
+                    
+                    const finalHandle = (profile && profile.handle) ? profile.handle : session.user.email.split('@')[0] + '.pri';
+                    localStorage.setItem('muze_active', 'true');
+                    localStorage.setItem('muze_handle', finalHandle);
+                }
+                
+                document.getElementById('active-handle-display').innerText = localStorage.getItem('muze_handle');
                 document.getElementById('layer-entrance').style.display = 'none';
-                if(isSeedConfirmed) {
+                
+                if (isSeedConfirmed) {
                     document.getElementById('shard-unassigned').classList.add('hidden');
                     document.getElementById('shard-secured').classList.remove('hidden');
                 }
             } else {
+                // No session: Show entrance layer
                 document.getElementById('layer-entrance').style.display = 'flex';
+                // Clear local stale session if any
+                localStorage.removeItem('muze_active');
+                localStorage.removeItem('muze_handle');
             }
+            
+            // Fade in body
+            document.body.classList.add('loaded');
         };
     </script>
 </body>
