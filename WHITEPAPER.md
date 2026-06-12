@@ -1,4 +1,4 @@
-# THE PRISCION WHITE PAPER (v1.4)
+# THE PRISCION WHITE PAPER (v1.7)
 ## Vision: The Great Migration (Web2 to Web3)
 
 ### 1. The Core Thesis
@@ -31,11 +31,5 @@ MUZE is the gateway to the Priscion ecosystem, featuring a high-fidelity integra
 *   **Phase 1: The Foundation.** Launch MUZE Wallet, token suite, and Share-to-Earn. Deploy LYNX and MYNT core features.
 *   **Phase 2: The Migration.** Integrate established network brands once the ecosystem is populated and fluid.
 
-### 6. The Charity Hub (DAO Powered)
-*   **Invisible Impact:** To ensure the mission remains the backbone of the network while maintaining ecosystem health, **10% of the platform fees** (not total activity) are routed to the **Impact Fund**. This aligns with our **85/15 Payout Standard**, where the network's 15% share funds both operations and the mission.
-*   **The Charity DAO (NRL Powered):**
-    *   **Governance:** $NRL holders vote on distributions from the Impact Fund to Architect-selected charities.
-*   **Independent Partner:** The Way Made Known (TWMK) is the primary charitable partner.
-
 ---
-*Status: LIVE | Version: 1.6 | Architect: Priscilla Narine*
+*Status: LIVE | Version: 1.7 | Architect: Priscilla Narine*
