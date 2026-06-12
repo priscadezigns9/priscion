@@ -32,8 +32,11 @@ MUZE is the gateway to the Priscion ecosystem, featuring a high-fidelity integra
 *   **Phase 2: The Migration.** Integrate established network brands once the ecosystem is populated and fluid.
 
 ### 6. The Charity Hub (DAO Powered)
-*   **Invisible Impact:** A 10% fee is built into product pricing, ensuring the mission is funded effortlessly without friction.
-*   **Governance:** $NRL holders vote on distributions to Architect-selected charities via the TWMK hub.
+*   **Invisible Impact:** 10% of ecosystem activity is seamlessly routed to the **Impact Fund**. To eliminate onboarding friction, this is built into the network's liquidity and pricing models rather than being displayed as a separate tax. The impact is "Invisible" to the user but absolute in its execution.
+*   **The Charity DAO (NRL Powered):**
+    *   **Governance:** $NRL holders vote on distributions from the Impact Fund.
+    *   **Decision Power:** Users decide which verified, Architect-selected charities receive the funds.
+*   **Independent Partner:** The Way Made Known (TWMK) is the independent NGO and primary charitable partner.
 
 ---
-*Status: LIVE | Version: 1.4 | Architect: Priscilla Narine*
+*Status: LIVE | Version: 1.5 | Architect: Priscilla Narine*
