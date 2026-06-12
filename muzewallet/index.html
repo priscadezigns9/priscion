@@ -149,12 +149,22 @@
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Explorer</div>
         <div class="nav-item" onclick="showStage('card', this)">Priscion Digital Card</div>
-        <div class="nav-item" onclick="showStage('settings', this)">Settings</div>
     </div>
 
+    <div id="wallet-modal" class="hidden" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px;"> 
+        <div style="background: #fff; border-radius: 30px; width: 100%; max-width: 400px; padding: 40px; text-align: center;"> 
+            <h3 style="font-weight: 900; margin-bottom: 30px;">Manage Vaults</h3> 
+            <div style="display: flex; flex-direction: column; gap: 15px;"> 
+                <button class="btn-outline" style="width: 100%;" onclick="location.href='create.html'">CREATE NEW VAULT</button> 
+                <button class="btn-outline" style="width: 100%;" onclick="location.href='recover.html'">RECOVER VAULT</button> 
+                <button class="btn-outline" style="width: 100%;" onclick="location.href='ledger.html'">CONNECT LEDGER</button> 
+            </div> 
+            <button style="margin-top: 30px; background: none; border: none; font-weight: 900; color: var(--muted); cursor: pointer;" onclick="toggleWalletModal()">CLOSE</button> 
+        </div> 
+    </div>
     <div class="content">
         <div class="top-bar">
-            <div class="user-pill">
+            <div class="user-pill" style="cursor: pointer;" onclick="toggleWalletModal()">
                 <span id="display-handle">user.pri</span>
             </div>
         </div>
@@ -167,10 +177,10 @@
             </div>
 
             <div class="action-bar">
-                <div class="action-btn" onclick="alert('Opening Neural Sending Channel...')"><span>↑</span>SEND</div>
-                <div class="action-btn" onclick="alert('Priscion Receiving Address: addr1...pd7' )"><span>↓</span>RECV</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../chillata/index.html')"><span>⇆</span>SWAP</div>
-                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../chillata/index.html')"><span>⚡</span>STAKE</div>
+                <div class="action-btn"><span>↑</span>SEND</div>
+                <div class="action-btn"><span>↓</span>RECV</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../leggo.html')"><span>⇆</span>SWAP</div>
+                <div class="action-btn alt" onclick="showStage('dapps', document.querySelectorAll('.nav-item')[2]); openDApp('../leggo.html')"><span>⚡</span>STAKE</div>
             </div>
 
             <div class="asset-list">
@@ -290,44 +300,11 @@
             </div>
         </div>
 
-        <!-- STAGE: SETTINGS --> 
-        <div id="stage-settings" class="stage hidden"> 
-            <h2 style="margin-bottom: 40px; font-weight: 900;">Vault Settings</h2> 
-            <div class="asset-list"> 
-                <div class="asset-item"> 
-                    <div class="asset-info"> 
-                        <div> 
-                            <div class="asset-name">Privacy Mode</div> 
-                            <div class="asset-sub">Hide balances on splash</div> 
-                        </div> 
-                    </div> 
-                    <input type="checkbox" checked> 
-                </div> 
-                <div class="asset-item"> 
-                    <div class="asset-info"> 
-                        <div> 
-                            <div class="asset-name">Neural Backup</div> 
-                            <div class="asset-sub">Encrypted cloud synchronization</div> 
-                        </div> 
-                    </div> 
-                    <button class="btn-outline" style="width: auto; padding: 10px 20px;">SYNC</button> 
-                </div> 
-                <div class="asset-item"> 
-                    <div class="asset-info"> 
-                        <div> 
-                            <div class="asset-name">Wallet Management</div> 
-                            <div class="asset-sub">Switch between active vaults</div> 
-                        </div> 
-                    </div> 
-                    <button class="btn-outline" style="width: auto; padding: 10px 20px;" onclick="location.href='recover.html'">SWITCH</button> 
-                </div> 
-            </div> 
-        </div>
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden">
             <h2 style="margin-bottom: 20px; font-weight: 900; text-align: center;">Priscion Digital Card</h2>
             <div class="card-display">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png">
+                <img src="../assets/card.png">
                 <div class="card-overlay"></div>
             </div>
 
@@ -433,7 +410,7 @@
             }
         }
 
-        const handles = [ {name: "architect.pri", active: false}, {name: "foundation.pri", active: false}, {name: "prophet.pri", active: false}, {name: "apostle.pri", active: false}, 
+        const handles = [
             { name: "prisca.pri", active: true },
             { name: "pricey.pri", active: false },
             { name: "calalloo.pri", active: false },
@@ -470,6 +447,17 @@
             if(handleDisplay) handleDisplay.innerText = activeHandle;
             renderHandles();
         }
+
+        function toggleWalletModal() { 
+            const modal = document.getElementById("wallet-modal"); 
+            if(modal.style.display === "flex") { 
+                modal.style.display = "none"; 
+                modal.classList.add("hidden"); 
+            } else { 
+                modal.style.display = "flex"; 
+                modal.classList.remove("hidden"); 
+            } 
+        } 
 
         function searchHandle() { 
             const query = document.getElementById("messenger-search").value.trim().toLowerCase(); 
