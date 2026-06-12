@@ -20,6 +20,12 @@
             width: 280px; height: 100vh; background: var(--surface); border-right: 1px solid var(--border);
             padding: 40px 20px; display: flex; flex-direction: column; gap: 5px; z-index: 1000;
         }
+        .sidebar-label {
+            font-size: 0.6rem; font-weight: 900; color: var(--muted); letter-spacing: 2px;
+            text-transform: uppercase; padding: 25px 20px 10px; border-top: 1px solid #EEE;
+            margin-top: 20px;
+        }
+        .sidebar-label:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
         .nav-item {
             padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.8rem;
             color: var(--muted); cursor: pointer; display: flex; align-items: center;
@@ -71,11 +77,19 @@
 
     <div class="sidebar">
         <div style="padding: 10px 20px 40px;"><img src="../assets/muze_icon_logo.png" style="height: 30px;"></div>
+        
+        <div class="sidebar-label">GOD MODE</div>
         <div class="nav-item active" onclick="showStage('main', this)">Command Center</div>
         <div class="nav-item" onclick="showStage('handles', this)">Handles Ledger</div>
         <div class="nav-item" onclick="showStage('agency', this)">Agency Hub</div>
-        <div class="nav-item" onclick="showStage('dapps', this)">Network DApps</div>
         <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
+
+        <div class="sidebar-label">MUZE CONSOLE</div>
+        <div class="nav-item" onclick="showStage('vault', this)">Vault</div>
+        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
+        <div class="nav-item" onclick="showStage('dapps', this)">Network DApps</div>
+        <div class="nav-item" onclick="showStage('settings', this)">Settings</div>
+
         <div style="margin-top: auto; padding: 20px;">
             <button style="width:100%; background:#000; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem; cursor:pointer;" onclick="location.href='index.html'">LOCK CONSOLE</button>
         </div>
@@ -104,22 +118,67 @@
 
             <div id="stage-agency" class="stage hidden">
                 <h2>Agency Hub</h2>
-                <div id="leads-table-container"></div>
+                <p class="subtitle">Brand Onboarding and Affiliate Monitoring.</p>
+                <div id="leads-table-container" style="background: var(--surface); padding: 40px; border-radius: 24px; text-align: center; border: 1px solid var(--border);">
+                    <div style="font-size: 0.8rem; font-weight: 600; color: var(--muted);">NO ACTIVE BRAND MIGRATIONS</div>
+                </div>
+            </div>
+
+            <div id="stage-vault" class="stage hidden">
+                <h2>User Vault</h2>
+                <p class="subtitle">Mirroring the sovereign asset view.</p>
+                <div style="background: #000; color: #fff; padding: 40px; border-radius: 24px; text-align: center;">
+                    <span class="stat-label" style="color: #666;">MIRRORED BALANCE</span>
+                    <div style="font-size: 2.5rem; font-weight: 900;">25,480.00 ADA</div>
+                </div>
+            </div>
+
+            <div id="stage-card" class="stage hidden">
+                <h2>Elite Card</h2>
+                <p class="subtitle">Digital Identity and Settlement Artifact.</p>
+                <img src="https://share.zapia.com/3zbj84lihry8lo9v476pt9" style="width: 100%; max-width: 500px; border-radius: 24px;">
             </div>
 
             <div id="stage-dapps" class="stage hidden">
                 <h2>Network DApps</h2>
-                <div id="dapp-main-grid">
-                    <button onclick="openDApp('https://priscion.com/mynt')">MYNT</button>
-                    <button onclick="openDApp('https://priscion.com/share-to-earn')">SHARE-TO-EARN</button>
+                <p class="subtitle">Access decentralized portals across the network.</p>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div style="background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); cursor: pointer;" onclick="openDApp('https://priscion.com/mynt')">
+                        <div style="font-weight: 900; font-size: 1.1rem; margin-bottom: 5px;">MYNT</div>
+                        <div style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;">Marketplace</div>
+                    </div>
+                    <div style="background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); cursor: pointer;" onclick="openDApp('https://priscion.com/share-to-earn')">
+                        <div style="font-weight: 900; font-size: 1.1rem; margin-bottom: 5px;">SHARE-TO-EARN</div>
+                        <div style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;">Affiliate Engine</div>
+                    </div>
+                    <div style="background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); cursor: pointer;" onclick="openDApp('https://priscion.com/pulse')">
+                        <div style="font-weight: 900; font-size: 1.1rem; margin-bottom: 5px;">PULSE</div>
+                        <div style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;">Explorer</div>
+                    </div>
+                    <div style="background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); cursor: pointer;" onclick="openDApp('https://priscion.com/chillata')">
+                        <div style="font-weight: 900; font-size: 1.1rem; margin-bottom: 5px;">CHILLATA</div>
+                        <div style="font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px;">Swap Protocol</div>
+                    </div>
                 </div>
             </div>
 
-            <div id="dapp-iframe-wrapper">
-                <div id="dapp-browser-back" onclick="closeDApp()">← BACK</div>
-                <iframe id="dapp-frame"></iframe>
+            <div id="stage-settings" class="stage hidden">
+                <h2>Wallet Settings</h2>
+                <p class="subtitle">Sovereign Shard and Neural Security.</p>
+                <div style="background: var(--surface); border: 1px solid var(--border); padding: 40px; border-radius: 24px;">
+                    <div style="color: #10b981; font-weight: 900; font-size: 0.8rem; letter-spacing: 1px;">✓ VAULT ANCHORED</div>
+                </div>
             </div>
-        </div>
+
+            <div id="stage-messenger" class="stage hidden">
+                <h2>Zapia Messenger</h2>
+                <p class="subtitle">Direct Neural Link to the Architect.</p>
+                <div class="chat-area">
+                    <div style="font-size: 0.8rem; background: #fff; padding: 15px; border-radius: 15px; margin-bottom: 10px; border: 1px solid var(--border); width: 80%;">
+                        System Online. Ready for instructions.
+                    </div>
+                </div>
+            </div>
 
         <!-- LIVE USER MIRROR -->
         <div class="mirror-container" id="mirror-panel">
@@ -161,7 +220,15 @@
 
         function renderHandles() {
             const grid = document.getElementById('handles-grid');
-            grid.innerHTML = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri'].map(h => `
+            const handles = [
+                'prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'calalloo.pri', 
+                'nurasen.pri', 'couturegallery.pri', 'thewaymadeknown.pri',
+                'theautodrome.pri', 'peakfit.pri', 'glowprotocol.pri',
+                'soleprestige.pri', 'essenceelite.pri', 'theescapist.pri',
+                'thetechscouthq.pri', 'quietluxury.pri', 'trustedsignal.pri',
+                'primelandnetwork.pri'
+            ];
+            grid.innerHTML = handles.map(h => `
                 <div class="handle-card"><h4>${h}</h4></div>
             `).join('');
         }
