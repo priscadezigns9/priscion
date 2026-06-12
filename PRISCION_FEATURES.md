@@ -104,6 +104,8 @@ These snapshots represent the approved high-fidelity interface as of June 12, 20
 
 ### **Architect Command Center (God Mode)**
 *   **Status**: Active Split-Screen "Lens View" for real-time Hub monitoring and vault management.
+*   **Layout**: Side-by-side (Architect on left, 450px wide live mirror on right). **Strict horizontal anchoring** enabled via `flex-wrap: nowrap` and `flex-shrink: 0`.
+*   **Toggle**: Managed via a "Lens View" nav-item in the Architect sidebar.
 *   **Snapshot**: `screenshots/scs_priscioncom_1781305727270_5972.png`
 
 ### **Priscion Elite Card (Visual)**
