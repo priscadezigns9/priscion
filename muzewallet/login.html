@@ -228,6 +228,21 @@
 
         let isLogin = true;
 
+        async function generateSeed() {
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/bitcoin/bips/master/bip-0039/english.txt');
+                const text = await response.text();
+                const allWords = text.split('\n').filter(w => w.length > 0);
+                const selected = [];
+                for(let i=0; i<12; i++) {
+                    selected.push(allWords[Math.floor(Math.random() * allWords.length)]);
+                }
+                return selected.join(' ');
+            } catch (e) {
+                return "mustard seed faith mountain move grace sovereign neural priscion eternal light heritage";
+            }
+        }
+
         function togglePassword() {
             const input = document.getElementById('password');
             const open = document.getElementById('eye-open');
@@ -305,17 +320,21 @@
                     const { data, error } = await supabaseClient.auth.signUp({ email, password });
                     if(error) throw error;
 
-                    // 3. Create Profile with Handle
+                    // 3. Generate and Save Recovery Phrase
+                    const seed = await generateSeed();
+
+                    // 4. Create Profile with Handle and Seed
                     if (data.user) {
                         const { error: profileError } = await supabaseClient.from('profiles').upsert({ 
                             id: data.user.id, 
                             handle: finalHandle,
+                            recovery_phrase: seed,
                             updated_at: new Date()
                         });
                         if (profileError) throw profileError;
                     }
 
-                    alert("Account created! Please check your email for verification.");
+                    alert(`Account created! Your Sovereign Recovery Phrase is:\n\n${seed}\n\nPlease save this words. They are your only way to recover your vault.`);
                     toggleMode();
                 }
             } catch (err) {
