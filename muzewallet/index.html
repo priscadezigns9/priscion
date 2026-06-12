@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Procyon Console v2.8</title>
+    <title>MUZE | Procyon Console v3.0</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
     <style>
         :root { --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff; }
@@ -14,8 +14,9 @@
         .layer { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
         .muze-entrance-logo { height: 80px; margin-bottom: 30px; }
         h1 { font-weight: 900; font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
-        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: left; cursor: pointer; width: 100%; max-width: 350px; margin-bottom: 15px; }
-        .onboarding-card.neural { background: var(--muze-blue); color: #fff; border: none; }
+        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: left; cursor: pointer; width: 100%; max-width: 350px; margin-bottom: 15px; transition: transform 0.2s ease; }
+        .onboarding-card:hover { transform: translateY(-2px); }
+        .onboarding-card.neural { background: var(--muze-blue); color: #fff; border: none; box-shadow: 0 10px 20px rgba(90, 200, 250, 0.3); }
         .sidebar { width: 280px; height: 100vh; background: #E0F2FE; border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; }
         .nav-item { padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.85rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px; }
         .nav-item.active { background: #fff; color: var(--text); border: 1px solid var(--border); }
@@ -41,9 +42,9 @@
     </style>
 </head>
 <body>
-    <div class="v-tag">v2.8 PROCYON</div>
+    <div class="v-tag">v3.0 PROCYON</div>
     <div id="layer-entrance" class="layer">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" class="muze-entrance-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png'">
+        <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" alt="MUZE">
         <h1>Welcome to MUZE.</h1>
         <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">The secure bridge to the Procyon Network.</p>
         <div id="onboarding-main" style="width: 100%; max-width: 350px;">
@@ -64,7 +65,7 @@
         </div>
     </div>
     <div class="sidebar">
-        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" style="height:35px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png'"></div>
+        <div style="padding:10px 10px 40px;"><img src="../assets/muze_icon_logo.png" style="height:35px;" alt="MUZE"></div>
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
     </div>
@@ -86,14 +87,14 @@
                 <div class="action-btn share" onclick="location.href='https://priscion.com/share-to-earn'"><span>✚</span>SHARE TO OWN</div>
             </div>
             <div class="asset-list">
-                <div class="asset-item"><div class="asset-info"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" class="asset-img"><div><div class="asset-name">Independent Utility</div><div class="asset-sub">$PRN</div></div></div><div class="asset-amount">50,000.00</div></div>
-                <div class="asset-item"><div class="asset-info"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" class="asset-img"><div><div class="asset-name">Neural Reserve</div><div class="asset-sub">$NRL</div></div></div><div class="asset-amount">10,000.00</div></div>
-                <div class="asset-item"><div class="asset-info"><div class="asset-img" style="background:#FFD700; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900;">M</div><div><div class="asset-name">Mustard</div><div class="asset-sub">$MUSD</div></div></div><div class="asset-amount">25,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><img src="../assets/prn.jpg" class="asset-img"><div><div class="asset-name">Independent Utility</div><div class="asset-sub">$PRN</div></div></div><div class="asset-amount">50,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><img src="../assets/nrl.jpg" class="asset-img"><div><div class="asset-name">Neural Reserve</div><div class="asset-sub">$NRL</div></div></div><div class="asset-amount">10,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><img src="../assets/musd.jpg" class="asset-img" onerror="this.src='https://via.placeholder.com/45?text=M'"><div><div class="asset-name">Mustard</div><div class="asset-sub">$MUSD</div></div></div><div class="asset-amount">25,000.00</div></div>
             </div>
         </div>
         <div id="stage-card" class="stage hidden" style="text-align: center;">
             <h2 style="margin-bottom: 20px;">Digital Card</h2>
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" style="width: 100%; max-width: 450px; border-radius: 24px;">
+            <img src="../assets/card.jpg" style="width: 100%; max-width: 450px; border-radius: 24px;" onerror="this.src='https://via.placeholder.com/450x280?text=Digital+Card'">
             <button class="btn-outline" style="margin-top: 40px; color: #FF3B30; border-color: #FF3B30;" onclick="logout()">LOCK VAULT</button>
         </div>
     </div>
