@@ -316,25 +316,17 @@
                     
                     if (existing && existing.length > 0) throw new Error("This handle is already taken.");
 
-                    // 2. Auth Sign Up
-                    const { data, error } = await supabaseClient.auth.signUp({ email, password });
-                    if(error) throw error;
-
-                    // 3. Generate and Save Recovery Phrase
-                    const seed = await generateSeed();
-
-                    // 4. Create Profile with Handle and Seed
+                    // 3. Create Profile with Handle
                     if (data.user) {
                         const { error: profileError } = await supabaseClient.from('profiles').upsert({ 
                             id: data.user.id, 
                             handle: finalHandle,
-                            recovery_phrase: seed,
                             updated_at: new Date()
                         });
                         if (profileError) throw profileError;
                     }
 
-                    alert(`Account created! Your Sovereign Recovery Phrase is:\n\n${seed}\n\nPlease save this words. They are your only way to recover your vault.`);
+                    alert(`Account created successfully!`);
                     toggleMode();
                 }
             } catch (err) {
