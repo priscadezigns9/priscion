@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CHILLATA | Priscion DEX</title>
+    <title>CHILLATA | Execute Chillata Swap</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -12,6 +12,7 @@
             --text: #000000;
             --muted: #666666;
             --accent: #7B35D4;
+            --gold: #D4AF37;
             --border: rgba(0,0,0,0.1);
             --surface: #F9F9F9;
             --font-main: 'Inter', -apple-system, sans-serif;
@@ -21,9 +22,13 @@
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body, html { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: var(--font-main); overflow: hidden; }
+        body, html { 
+            width: 100%; height: 100%; 
+            background: var(--bg); color: var(--text); 
+            font-family: var(--font-main); overflow: hidden; 
+        }
 
-        .app { height: 100%; display: grid; grid-template-rows: auto 1fr; position: relative; }
+        .app { height: 100%; display: grid; grid-template-rows: auto 1fr auto; padding-bottom: 70px; position: relative; }
 
         header {
             padding: 20px 40px;
@@ -39,7 +44,11 @@
         .ticker-tape b.up { color: var(--green); }
         .ticker-tape b.down { color: var(--red); }
 
-        .terminal { display: grid; grid-template-columns: 320px 1fr 320px; overflow: hidden; }
+        .terminal {
+            display: grid; grid-template-columns: 320px 1fr 320px;
+            overflow: hidden;
+        }
+
         .col { display: flex; flex-direction: column; overflow: hidden; }
 
         .chart-header { padding: 30px 40px; display: flex; justify-content: space-between; align-items: flex-end; }
@@ -49,34 +58,44 @@
         .chart-container { flex: 1; padding: 0 40px 40px; position: relative; }
         #marketChart { width: 100%; height: 100%; }
 
-        .trade-col { background: var(--surface); padding: 40px; border-left: 1px solid var(--border); position: relative; }
-        .input-wrap { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .input-wrap:hover { border-color: var(--accent); }
+        .trade-col { background: var(--surface); padding: 40px; border-left: 1px solid var(--border); }
+        .input-wrap { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         .input-wrap input { background: transparent; border: none; color: #000; font-size: 1.5rem; font-weight: 900; width: 60%; outline: none; }
-        .token-select { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 0.9rem; }
-        .token-select img { width: 32px; height: 32px; border-radius: 50%; }
+        .input-wrap img { width: 32px; height: 32px; border-radius: 50%; }
 
         .btn-confirm {
             width: 100%; background: #000; color: #fff; border: none; padding: 25px;
             border-radius: 20px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
-            cursor: pointer; margin-top: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer; margin-top: 20px; margin-bottom: 80px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .asset-row {
-            background: #fff; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px;
-            border: 1px solid var(--border); transition: all 0.2s; margin-bottom: 10px; cursor: pointer;
+        footer { position: absolute; bottom: 0; left: 0; right: 0; z-index: 100;
+            padding: 20px 40px;
+            display: flex; justify-content: center; gap: 40px;
+            border-top: 1px solid var(--border);
+            background: var(--surface);
         }
-        .asset-row:hover { border-color: var(--accent); }
+
+        .nav-link { text-decoration: none; color: var(--muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+        .nav-link.active { color: var(--accent); }
+
+        /* Asset List Styling */
+        .asset-row {
+            background: #fff; 
+            padding: 15px; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .asset-row:hover { border-color: var(--accent); background: #fff; }
         .asset-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
         .asset-meta { flex: 1; }
         .asset-symbol { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; }
         .asset-name { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; }
         .asset-price { text-align: right; font-weight: 800; font-size: 0.8rem; }
-
-        /* Modal / Select */
-        #token-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: #fff; border-radius: 30px; width: 100%; max-width: 400px; padding: 30px; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 
     </style>
 </head>
@@ -89,164 +108,124 @@
                 <span>PRN/MUSD: <b class="up">1.0245 +12%</b></span>
                 <span>ATLR/PRN: <b class="down">0.0450 -2%</b></span>
             </div>
-            <div style="font-size:0.6rem; font-weight:900; background:var(--accent); color:#fff; padding:4px 12px; border-radius:30px; cursor:pointer;" onclick="location.href='../index.html'">BACK TO HUB</div>
+            <div style="font-size:0.6rem; font-weight:900; background:var(--accent); color:#fff; padding:4px 12px; border-radius:30px;">$PRISCA.PRN</div>
         </header>
 
         <div class="terminal">
             <div class="col" style="padding:40px; border-right:1px solid var(--border); overflow-y: auto;">
                 <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:3px; margin-bottom:30px;">Priscion Assets</h3>
-                <div id="asset-list-sidebar"></div>
+                
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <!-- PRN -->
+                    <div class="asset-row">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">PRN</div>
+                            <div class="asset-name">Priscion Utility</div>
+                        </div>
+                        <div class="asset-price">$1.02</div>
+                    </div>
+
+                    <!-- NRL -->
+                    <div class="asset-row">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">NRL</div>
+                            <div class="asset-name">Neural Reserve</div>
+                        </div>
+                        <div class="asset-price">$42.85</div>
+                    </div>
+
+                    <!-- ATLR -->
+                    <div class="asset-row">
+                        <img src="https://priscion.chttps://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">ATLR</div>
+                            <div class="asset-name">Atelia Gaming</div>
+                        </div>
+                        <div class="asset-price">$0.04</div>
+                    </div>
+
+                    <!-- MUSD -->
+                    <div class="asset-row">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">MUSD</div>
+                            <div class="asset-name">Priscion Stable</div>
+                        </div>
+                        <div class="asset-price">$1.00</div>
+                    </div>
+
+                    <!-- JLO -->
+                    <div class="asset-row">
+                        <img src="https://priscion.com/assets/jlo.jpg">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">JLO</div>
+                            <div class="asset-name">Joint Ledger Ops</div>
+                        </div>
+                        <div class="asset-price">$1.00</div>
+                    </div>
+
+                    <!-- ADA -->
+                    <div class="asset-row">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ada_logo.png">
+                        <div class="asset-meta">
+                            <div class="asset-symbol">ADA</div>
+                            <div class="asset-name">Cardano</div>
+                        </div>
+                        <div class="asset-price">$0.45</div>
+                    </div>
+                </div>
             </div>
 
             <div class="col">
                 <div class="chart-header">
                     <div class="chart-title">Chillata Momentum</div>
-                    <div class="price-now" id="live-price">1.0245 <span style="font-size:0.8rem; color:var(--green);">+12.4%</span></div>
+                    <div class="price-now">1.0245 <span style="font-size:0.8rem; color:var(--green);">+12.4%</span></div>
                 </div>
                 <div class="chart-container"><canvas id="marketChart"></canvas></div>
             </div>
 
             <div class="col trade-col">
-                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Swap</h3>
+                <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Exchange</h3>
+                <div class="input-wrap">
+                    <input type="text" value="100.00">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
+                </div>
+                <div style="text-align:center; margin-bottom:15px; color:var(--accent);">⬇</div>
                 
-                <div class="input-wrap" onclick="openSelector('from')">
-                    <input type="number" id="from-amount" value="100.00" oninput="calculateSwap()">
-                    <div class="token-select" id="from-token-display">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
-                        <span>PRN</span>
-                    </div>
+                <div class="input-wrap">
+                    <input type="text" value="120.45" readonly>
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
                 </div>
-
-                <div style="text-align:center; margin: 10px 0; color:var(--accent); font-size: 1.5rem; cursor: pointer;" onclick="switchTokens()">⇅</div>
-                
-                <div class="input-wrap" onclick="openSelector('to')">
-                    <input type="number" id="to-amount" value="0.00" oninput="calculateSwap('to')">
-                    <div class="token-select" id="to-token-display">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
-                        <span>NRL</span>
-                    </div>
-                </div>
-
-                <div style="margin-top: 20px; font-size: 0.7rem; color: var(--muted); font-weight: 700; display: flex; justify-content: space-between;">
-                    <span>Slippage Tolerance</span>
-                    <span>0.5%</span>
-                </div>
-
-                <button class="btn-confirm" onclick="executeSwap()">Execute Swap</button>
-                
-                <div style="margin-top: 40px; text-align: center;">
-                    <a href="#" style="font-size: 0.65rem; font-weight: 900; color: var(--accent); text-decoration: none; letter-spacing: 2px;" onclick="alert('Opening Staking Laboratory...')">ENTER STAKING LABORATORY</a>
-                </div>
+                <button class="btn-confirm" onclick="executeSwap()">Execute Chillata Swap</button>
             </div>
         </div>
 
-        <!-- TOKEN SELECTOR MODAL -->
-        <div id="token-modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 style="font-weight: 900;">Select Token</h3>
-                    <span style="cursor:pointer; font-weight: 900;" onclick="closeSelector()">✕</span>
-                </div>
-                <div id="modal-list"></div>
-            </div>
-        </div>
-
-        <!-- SUCCESS MODAL -->
-        <div id="swap-modal" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.95); z-index:5000; align-items:center; justify-content:center; padding:40px;">
+        <!-- TRANSACTION SUCCESS MODAL -->
+        <div id="swap-modal" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.95); z-index:1000; align-items:center; justify-content:center; padding:40px;">
             <div style="text-align:center; max-width:400px;">
                 <div style="width:80px; height:80px; background:#34C759; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 30px; font-size:2rem; color:#fff;">✓</div>
-                <h2 style="font-family:var(--font-heading); font-size:2rem; margin-bottom:15px;">Swap Secured</h2>
-                <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">Your transaction has been securely anchored to the Priscion Ledger.</p>
-                <button class="btn-confirm" onclick="location.reload()">DONE</button>
+                <h2 style="font-family:var(--font-heading); font-size:2rem; margin-bottom:15px;">Transaction Securely Anchored</h2>
+                <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">Your Chillata Swap has been executed and verified on the Priscion Ledger.</p>
+                <button class="btn-confirm" onclick="location.reload()">BACK TO EXCHANGE</button>
             </div>
         </div>
+
+        <footer>
+            <a href="exchange.html" class="nav-link active">Exchange</a>
+            <a href="vault.html" class="nav-link">Vault</a>
+            <a href="auth.html" class="nav-link">Identity</a>
+            <a href="#" class="nav-link" onclick="alert('Opening Priscion Staking Laboratory... Mining $PRN, $NRL, $ATLR, $JLO enabled.')">Stake</a>
+            <a href="../index.html" class="nav-link">Hub</a>
+        </footer>
     </div>
 
     <script>
-        const tokens = [
-            { symbol: 'PRN', name: 'Priscion Utility', price: 1.02, img: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg' },
-            { symbol: 'NRL', name: 'Neural Reserve', price: 42.85, img: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg' },
-            { symbol: 'ATLR', name: 'Atelia Gaming', price: 0.04, img: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg' },
-            { symbol: 'MUSD', name: 'Priscion Stable', price: 1.00, img: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg' },
-            { symbol: 'ADA', name: 'Cardano', price: 0.45, img: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png' }
-        ];
-
-        let fromToken = tokens[0];
-        let toToken = tokens[1];
-        let selectingFor = 'from';
-
-        function renderSidebar() {
-            const list = document.getElementById('asset-list-sidebar');
-            list.innerHTML = tokens.map(t => `
-                <div class="asset-row" onclick="setToken('${t.symbol}', 'from')">
-                    <img src="${t.img}">
-                    <div class="asset-meta">
-                        <div class="asset-symbol">${t.symbol}</div>
-                        <div class="asset-name">${t.name}</div>
-                    </div>
-                    <div class="asset-price">$${t.price.toFixed(2)}</div>
-                </div>
-            `).join('');
-        }
-
-        function openSelector(side) {
-            selectingFor = side;
-            document.getElementById('token-modal').style.display = 'flex';
-            const list = document.getElementById('modal-list');
-            list.innerHTML = tokens.map(t => `
-                <div class="asset-row" onclick="selectToken('${t.symbol}')">
-                    <img src="${t.img}">
-                    <div class="asset-meta">
-                        <div class="asset-symbol">${t.symbol}</div>
-                        <div class="asset-name">${t.name}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function closeSelector() {
-            document.getElementById('token-modal').style.display = 'none';
-        }
-
-        function selectToken(symbol) {
-            const token = tokens.find(t => t.symbol === symbol);
-            if(selectingFor === 'from') fromToken = token;
-            else toToken = token;
-            updateUI();
-            closeSelector();
-        }
-
-        function updateUI() {
-            document.getElementById('from-token-display').innerHTML = `<img src="${fromToken.img}"><span>${fromToken.symbol}</span>`;
-            document.getElementById('to-token-display').innerHTML = `<img src="${toToken.img}"><span>${toToken.symbol}</span>`;
-            calculateSwap();
-        }
-
-        function calculateSwap(side = 'from') {
-            const fromAmount = document.getElementById('from-amount');
-            const toAmount = document.getElementById('to-amount');
-            
-            if(side === 'from') {
-                const val = parseFloat(fromAmount.value) || 0;
-                toAmount.value = ((val * fromToken.price) / toToken.price).toFixed(6);
-            } else {
-                const val = parseFloat(toAmount.value) || 0;
-                fromAmount.value = ((val * toToken.price) / fromToken.price).toFixed(6);
-            }
-        }
-
-        function switchTokens() {
-            const temp = fromToken;
-            fromToken = toToken;
-            toToken = temp;
-            updateUI();
-        }
-
         function executeSwap() {
             document.getElementById('swap-modal').style.display = 'flex';
         }
 
-        // Chart Logic
         const canvas = document.getElementById('marketChart');
         const ctx = canvas.getContext('2d');
         function resize() { canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight; }
@@ -266,12 +245,7 @@
             ctx.stroke();
             requestAnimationFrame(draw);
         }
-
-        window.onload = () => {
-            renderSidebar();
-            updateUI();
-            draw();
-        };
+        draw();
     </script>
 </body>
 </html>
