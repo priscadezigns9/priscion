@@ -26,7 +26,7 @@ MUZE is the gateway to the Priscion ecosystem, featuring a high-fidelity integra
 Priscion provides a full-spectrum digital migration and development suite for brands entering the sovereign ledger:
 
 *   **Blockchain Integration:** Merging Web2 inventory and business logic with the Priscion Ledger.
-*   **Sovereign UI/UX Design:** Building high-fidelity, Vespr-grade interfaces for Web3 applications.
+*   **Sovereign UI/UX Design:** Building high-fidelity interfaces for Web3 applications.
 *   **Tokenomics Architecture:** Designing custom token utility and economic models for brand ecosystems.
 *   **Smart Contract Development:** Secure, audited contract deployment for marketplaces and minting hubs.
 
