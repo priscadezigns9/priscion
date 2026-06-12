@@ -5,42 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUZE | User Console</title>
     <link rel="icon" type="image/png" href="https://priscion.com/assets/p-logo.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bridge.js"></script>
     <style>
         :root { 
-            --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F9F9F9;
+            --bg: #fff; --text: #000; --muted: #666; --border: #EEE; --muze-blue: #5AC8FA; --accent: #000; --surface: #F9F9F9;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
 
+        h1, h2, h3, .playfair { font-family: 'Playfair Display', serif; }
+        
         .hidden { display: none !important; }
         
         /* Entrance Layer */
         .layer { position: fixed; inset: 0; background: #fff; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
-        .card-entrance { background: #fff; border: 1px solid var(--border); padding: 40px; border-radius: 32px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
-        .muze-entrance-logo { height: 60px; margin-bottom: 30px; cursor: pointer; }
-        h2 { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; margin-bottom: 10px; }
-        .layer p { color: var(--muted); font-size: 0.8rem; margin-bottom: 30px; line-height: 1.5; }
+        .card-entrance { background: #fff; border: 1px solid var(--border); padding: 50px 40px; border-radius: 40px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .muze-entrance-logo { height: 70px; margin-bottom: 40px; cursor: pointer; filter: grayscale(1); }
+        .muze-entrance-logo:hover { filter: grayscale(0); }
+        h2 { font-weight: 900; font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 15px; }
+        .layer p { color: var(--muted); font-size: 0.9rem; margin-bottom: 40px; line-height: 1.6; max-width: 300px; margin-left: auto; margin-right: auto; }
         
-        input { width: 100%; padding: 18px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 15px; font-weight: 600; text-align: center; font-size: 0.9rem; }
-        .btn-full { width: 100%; background: #000; color: #fff; border: none; padding: 18px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; cursor: pointer; }
-        .btn-link { margin-top: 20px; font-size: 0.7rem; font-weight: 900; color: var(--muze-blue); cursor: pointer; text-decoration: none; display: block; letter-spacing: 1px; }
+        input { width: 100%; padding: 20px; border-radius: 100px; border: 1px solid var(--border); background: var(--surface); margin-bottom: 20px; font-weight: 600; text-align: center; font-size: 1rem; outline: none; }
+        input:focus { border-color: #000; background: #fff; }
+        .btn-full { width: 100%; background: #000; color: #fff; border: none; padding: 22px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 3px; cursor: pointer; text-transform: uppercase; }
+        .btn-full:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .btn-link { margin-top: 25px; font-size: 0.75rem; font-weight: 900; color: var(--muted); cursor: pointer; text-decoration: none; display: block; letter-spacing: 2px; text-transform: uppercase; }
+        .btn-link:hover { color: #000; }
 
         /* Dashboard UI */
-        .sidebar { width: 280px; height: 100vh; background: var(--surface); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 5px; }
-        .nav-item { padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.8rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px; }
-        .nav-item.active { background: #fff; color: var(--text); box-shadow: 0 4px 12px rgba(0,0,0,0.03); border: 1px solid var(--border); }
-        .content { flex: 1; height: 100vh; padding: 60px 80px; overflow-y: auto; }
-        .balance-card { margin-bottom: 40px; text-align: center; }
-        .balance-value { font-size: 3.5rem; font-weight: 900; letter-spacing: -2px; }
-        .asset-list { display: flex; flex-direction: column; gap: 12px; max-width: 500px; margin: 0 auto; }
-        .asset-item { background: #fff; border: 1px solid var(--border); padding: 20px; border-radius: 18px; display: flex; justify-content: space-between; align-items: center; }
-        .asset-info { display: flex; align-items: center; gap: 15px; }
-        .asset-img { width: 35px; height: 35px; border-radius: 10px; background: #f0f0f0; object-fit: cover; }
-        .asset-name { font-weight: 900; font-size: 0.9rem; }
-        .asset-amount { font-weight: 900; font-size: 1rem; }
+        .sidebar { width: 300px; height: 100vh; background: #fff; border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; gap: 10px; }
+        .nav-item { padding: 15px 25px; border-radius: 15px; font-weight: 700; font-size: 0.85rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-item.active { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+        .content { flex: 1; height: 100vh; padding: 80px 100px; overflow-y: auto; background: #fff; }
+        
+        .balance-card { margin-bottom: 60px; text-align: left; }
+        .balance-label { font-size: 0.7rem; font-weight: 900; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .balance-value { font-family: 'Playfair Display', serif; font-size: 4.5rem; font-weight: 900; letter-spacing: -3px; }
+        
+        .asset-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 600px; }
+        .asset-item { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .asset-item:hover { border-color: #000; transform: scale(1.02); }
+        .asset-info { display: flex; align-items: center; gap: 20px; }
+        .asset-img { width: 45px; height: 45px; border-radius: 12px; background: #f0f0f0; object-fit: cover; }
+        .asset-name { font-weight: 900; font-size: 1rem; }
+        .asset-symbol { font-size: 0.7rem; font-weight: 900; color: var(--muted); text-transform: uppercase; }
+        .asset-amount { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.4rem; }
 
         #v-trigger { position: fixed; bottom: 20px; right: 20px; font-size: 0.5rem; font-weight: 900; color: #EEE; opacity: 0; pointer-events: none; }
         #v-trigger.active { opacity: 1; pointer-events: auto; color: var(--muze-blue); text-decoration: none; }
@@ -92,19 +103,38 @@
 
         <div id="stage-vault" class="stage">
             <div class="balance-card">
-                <div style="font-weight: 900; font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; margin-bottom: 10px;">TOTAL BALANCE</div>
+                <span class="balance-label">Total Balance</span>
                 <div class="balance-value">25,480.00 <span style="font-size: 1.5rem; color: var(--muted);">PRN</span></div>
             </div>
 
             <div class="asset-list">
-                <div class="asset-item"><div class="asset-info"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" class="asset-img"><div><div class="asset-name">Priscion</div><div style="font-size:0.7rem; color:var(--muted);">$PRN</div></div></div><div class="asset-amount">25,000.00</div></div>
-                <div class="asset-item"><div class="asset-info"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" class="asset-img"><div><div class="asset-name">Neural Reserve</div><div style="font-size:0.7rem; color:var(--muted);">$NRL</div></div></div><div class="asset-amount">480.00</div></div>
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="../assets/prn.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Priscion</div>
+                            <div class="asset-symbol">$PRN</div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">25,000.00</div>
+                </div>
+
+                <div class="asset-item">
+                    <div class="asset-info">
+                        <img src="../assets/nrl.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Neural Reserve</div>
+                            <div class="asset-symbol">$NRL</div>
+                        </div>
+                    </div>
+                    <div class="asset-amount">480.00</div>
+                </div>
             </div>
         </div>
 
         <div id="stage-card" class="stage hidden" style="text-align: center;">
-            <h2 style="margin-bottom: 30px;">Priscion Digital Card</h2>
-            <img src="../assets/card.png" style="width: 100%; max-width: 500px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);">
+            <h2 style="margin-bottom: 30px;">Priscion Elite Card</h2>
+            <img src="../assets/card.jpg" style="width: 100%; max-width: 500px; border-radius: 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);">
         </div>
     </div>
 
