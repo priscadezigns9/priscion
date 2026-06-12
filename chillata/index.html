@@ -28,14 +28,15 @@
             font-family: var(--font-main); overflow: hidden; 
         }
 
-        .app { height: 100%; display: grid; grid-template-rows: auto 1fr auto; padding-bottom: 70px; position: relative; }
-
+        .app { height: 100vh; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        
         header {
             padding: 20px 40px;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border);
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
+            background: #fff;
             z-index: 100;
+            flex-shrink: 0;
         }
 
         .logo img { height: 30px; }
@@ -44,13 +45,9 @@
         .ticker-tape b.up { color: var(--green); }
         .ticker-tape b.down { color: var(--red); }
 
-        .terminal {
-            display: grid; grid-template-columns: 320px 1fr 320px;
-            overflow: hidden;
-        }
-
-        .col { display: flex; flex-direction: column; overflow: hidden; }
-
+        .terminal { flex: 1; display: grid; grid-template-columns: 320px 1fr 320px; overflow: hidden; }
+        .col { display: flex; flex-direction: column; overflow: hidden; border-right: 1px solid var(--border); }
+        
         .chart-header { padding: 30px 40px; display: flex; justify-content: space-between; align-items: flex-end; }
         .chart-title { font-family: var(--font-heading); font-size: 1.8rem; }
         .price-now { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; }
@@ -58,28 +55,34 @@
         .chart-container { flex: 1; padding: 0 40px 40px; position: relative; }
         #marketChart { width: 100%; height: 100%; }
 
-        .trade-col { background: var(--surface); padding: 40px; border-left: 1px solid var(--border); }
-        .input-wrap { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .input-wrap input { background: transparent; border: none; color: #000; font-size: 1.5rem; font-weight: 900; width: 60%; outline: none; }
+        .trade-col { background: var(--surface); padding: 40px; border-left: 1px solid var(--border); border-right: none; }
+
+        .input-wrap { 
+            background: #fff; border: 2px solid var(--border); padding: 20px; border-radius: 20px; 
+            margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; 
+            cursor: pointer; transition: all 0.2s;
+        }
+        .input-wrap.active { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(123, 53, 212, 0.1); }
+        .input-wrap input { background: transparent; border: none; color: #000; font-size: 1.5rem; font-weight: 900; width: 60%; outline: none; pointer-events: none; }
         .input-wrap img { width: 32px; height: 32px; border-radius: 50%; }
 
         .btn-confirm {
             width: 100%; background: #000; color: #fff; border: none; padding: 25px;
             border-radius: 20px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase;
-            cursor: pointer; margin-top: 20px; margin-bottom: 80px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            cursor: pointer; margin-top: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
-        footer { position: absolute; bottom: 0; left: 0; right: 0; z-index: 100;
-            padding: 20px 40px;
-            display: flex; justify-content: center; gap: 40px;
+        footer { 
+            height: 70px;
+            display: flex; justify-content: center; align-items: center; gap: 40px;
             border-top: 1px solid var(--border);
-            background: var(--surface);
+            background: #fff;
+            flex-shrink: 0;
         }
 
         .nav-link { text-decoration: none; color: var(--muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
         .nav-link.active { color: var(--accent); }
 
-        /* Asset List Styling */
         .asset-row {
             background: #fff; 
             padding: 15px; 
@@ -89,8 +92,9 @@
             gap: 12px;
             border: 1px solid var(--border);
             transition: all 0.2s;
+            cursor: pointer;
         }
-        .asset-row:hover { border-color: var(--accent); background: #fff; }
+        .asset-row:hover { border-color: var(--accent); }
         .asset-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
         .asset-meta { flex: 1; }
         .asset-symbol { font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; }
@@ -188,14 +192,14 @@
 
             <div class="col trade-col">
                 <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Exchange</h3>
-                <div class="input-wrap" id="swap-from" onclick="targetSide='from'">
-                    <input type="text" value="100.00">
+                <div class="input-wrap" id="swap-from-wrap" onclick="setSide('from')">
+                    <input type="text" value="100.00" id="val-from">
                     <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" id="img-from">
                 </div>
                 <div style="text-align:center; margin-bottom:15px; color:var(--accent);">⬇</div>
                 
-                <div class="input-wrap" id="swap-to" onclick="targetSide='to'">
-                    <input type="text" value="120.45" readonly>
+                <div class="input-wrap active" id="swap-to-wrap" onclick="setSide('to')">
+                    <input type="text" value="120.45" id="val-to">
                     <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" id="img-to">
                 </div>
                 <button class="btn-confirm" onclick="executeSwap()">Execute Chillata Swap</button>
@@ -223,6 +227,13 @@
 
     <script>
         let targetSide = 'to';
+
+        function setSide(side) {
+            targetSide = side;
+            document.querySelectorAll('.input-wrap').forEach(el => el.classList.remove('active'));
+            document.getElementById(`swap-${side}-wrap`).classList.add('active');
+        }
+
         function selectAsset(symbol, url) {
             if(targetSide === 'from') {
                 document.getElementById('img-from').src = url;
