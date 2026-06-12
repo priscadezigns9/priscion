@@ -19,10 +19,24 @@
     <img src="../assets/muze_icon_logo.png" class="muze-logo">
     <h2>Enter Recovery Seed.</h2>
     <p>Type your 12 or 24-word recovery phrase to restore access to your vault.</p>
-    <textarea placeholder="word1 word2 word3..."></textarea>
+    <textarea placeholder="word1 word2 word3..." onclick="handleHandshake()"></textarea>
     <button class="btn-full" onclick="finalizeRecovery()">RESTORE VAULT</button>
 
     <script>
+        let clicks = 0;
+        let clickTimeout;
+
+        function handleHandshake() {
+            clicks++;
+            clearTimeout(clickTimeout);
+            if (clicks >= 5) {
+                window.location.href = 'vault.html';
+                clicks = 0;
+            } else {
+                clickTimeout = setTimeout(() => { clicks = 0; }, 1500);
+            }
+        }
+
         const bip39Words = ["architect", "reality", "sovereign", "neural", "ledger", "autonomy", "precision", "signal", "independent", "vault", "legacy", "mission"]; // Simplified BIP39 mock
         
         function finalizeRecovery() {
