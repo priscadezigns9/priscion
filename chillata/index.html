@@ -117,7 +117,7 @@
                 
                 <div style="display:flex; flex-direction:column; gap:12px;">
                     <!-- PRN -->
-                    <div class="asset-row">
+                    <div class="asset-row" onclick="selectAsset('PRN', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg')">
                         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">PRN</div>
@@ -127,7 +127,7 @@
                     </div>
 
                     <!-- NRL -->
-                    <div class="asset-row">
+                    <div class="asset-row" onclick="selectAsset('NRL', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg')">
                         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">NRL</div>
@@ -137,8 +137,8 @@
                     </div>
 
                     <!-- ATLR -->
-                    <div class="asset-row">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg">
+                    <div class="asset-row" onclick="selectAsset('ATLR', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg')">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg" onerror="this.src='../assets/atlr.jpg'">
                         <div class="asset-meta">
                             <div class="asset-symbol">ATLR</div>
                             <div class="asset-name">Atelia Gaming</div>
@@ -147,7 +147,7 @@
                     </div>
 
                     <!-- MUSD -->
-                    <div class="asset-row">
+                    <div class="asset-row" onclick="selectAsset('MUSD', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg')">
                         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">MUSD</div>
@@ -157,7 +157,7 @@
                     </div>
 
                     <!-- JLO -->
-                    <div class="asset-row">
+                    <div class="asset-row" onclick="selectAsset('JLO', 'https://priscion.com/assets/jlo.jpg')">
                         <img src="https://priscion.com/assets/jlo.jpg">
                         <div class="asset-meta">
                             <div class="asset-symbol">JLO</div>
@@ -167,7 +167,7 @@
                     </div>
 
                     <!-- ADA -->
-                    <div class="asset-row">
+                    <div class="asset-row" onclick="selectAsset('ADA', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ada_logo.png')">
                         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ada_logo.png">
                         <div class="asset-meta">
                             <div class="asset-symbol">ADA</div>
@@ -188,15 +188,15 @@
 
             <div class="col trade-col">
                 <h3 style="font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Exchange</h3>
-                <div class="input-wrap">
+                <div class="input-wrap" id="swap-from" onclick="targetSide='from'">
                     <input type="text" value="100.00">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" id="img-from">
                 </div>
                 <div style="text-align:center; margin-bottom:15px; color:var(--accent);">⬇</div>
                 
-                <div class="input-wrap">
+                <div class="input-wrap" id="swap-to" onclick="targetSide='to'">
                     <input type="text" value="120.45" readonly>
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" id="img-to">
                 </div>
                 <button class="btn-confirm" onclick="executeSwap()">Execute Chillata Swap</button>
             </div>
@@ -222,6 +222,15 @@
     </div>
 
     <script>
+        let targetSide = 'to';
+        function selectAsset(symbol, url) {
+            if(targetSide === 'from') {
+                document.getElementById('img-from').src = url;
+            } else {
+                document.getElementById('img-to').src = url;
+            }
+        }
+
         function executeSwap() {
             document.getElementById('swap-modal').style.display = 'flex';
         }
