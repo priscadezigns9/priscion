@@ -102,7 +102,8 @@
             <div class="sliding-content" onclick="event.stopPropagation()">
                 <h2 style="font-weight:900; margin-bottom:10px;">Login</h2>
                 <p style="font-size:0.7rem; color:var(--muted); margin-bottom:30px;">Enter your Handle or Email</p>
-                <input type="text" id="login-input" placeholder="Handle or Email" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px; font-family:inherit; font-size:1rem;">
+                <input type="text" id="login-input" placeholder="Handle or Email" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:12px; font-family:inherit; font-size:1rem;">
+                <input type="password" id="login-pass" placeholder="Password" style="width:100%; padding:20px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px; font-family:inherit; font-size:1rem;">
                 <button class="btn-full" onclick="executeLogin()">LOGIN</button>
                 <button class="btn-outline" style="margin-top:10px; border:none;" onclick="closeModals()">CANCEL</button>
             </div>
@@ -112,7 +113,18 @@
     <script>
         const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
         function neuralLogin() { document.getElementById('modal-login').classList.add('active'); document.getElementById('login-input').focus(); }
-        function executeLogin() { const h = document.getElementById('login-input').value; if(h) { localStorage.setItem('muze_active', 'true'); localStorage.setItem('muze_handle', h); location.reload(); } }
+        function executeLogin() { 
+            const h = document.getElementById('login-input').value; 
+            const p = document.getElementById('login-pass').value;
+            if(h && p) { 
+                // Supabase Handshake Logic (Simulated for this session, using handle as ID)
+                localStorage.setItem('muze_active', 'true'); 
+                localStorage.setItem('muze_handle', h); 
+                location.reload(); 
+            } else {
+                alert('Please enter both handle/email and password.');
+            }
+        }
         function showVaultOptions() { document.getElementById('onboarding-main').style.display = 'none'; document.getElementById('vault-options').style.display = 'block'; }
         function backToOnboardingMain() { document.getElementById('onboarding-main').style.display = 'block'; document.getElementById('vault-options').style.display = 'none'; }
         function showStage(id, el) { document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden')); document.getElementById('stage-' + id).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
