@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MUZE | Procyon Console v2.7</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
+    <style>
+        :root { --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
+        .hidden { display: none !important; }
+        .v-tag { position: fixed; top: 10px; left: 10px; font-size: 0.5rem; font-weight: 900; color: var(--accent); z-index: 20000; }
+        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+        .muze-entrance-logo { height: 80px; margin-bottom: 30px; }
+        h1 { font-weight: 900; font-size: 2.2rem; letter-spacing: -1px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
+        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: left; cursor: pointer; width: 100%; max-width: 350px; margin-bottom: 15px; }
+        .onboarding-card.dark { background: #000; color: #fff; border: none; }
+        .sidebar { width: 280px; height: 100vh; background: #E0F2FE; border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; }
+        .nav-item { padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.85rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px; }
+        .nav-item.active { background: #fff; color: var(--text); border: 1px solid var(--border); }
+        .content { flex: 1; height: 100vh; padding: 60px 80px; overflow-y: auto; position: relative; background: var(--bg); }
+        .top-bar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 60px; }
+        .user-pill { background: #fff; border: 1px solid var(--border); padding: 8px 20px; border-radius: 100px; display: flex; align-items: center; gap: 10px; font-weight: 900; font-size: 0.75rem; }
+        .balance-card { margin-bottom: 40px; text-align: center; background: #fff; padding: 40px; border-radius: 30px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(186, 230, 253, 0.2); }
+        .balance-value { font-size: 4.5rem; font-weight: 900; letter-spacing: -3px; color: var(--accent); }
+        .action-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; }
+        .action-btn { background: var(--muze-blue); color: #fff; width: 65px; height: 65px; border-radius: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.55rem; font-weight: 900; }
+        .action-btn.share { background: #000; }
+        .asset-list { display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
+        .asset-item { background: #fff; border: 1px solid var(--border); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .asset-info { display: flex; align-items: center; gap: 15px; }
+        .asset-img { width: 45px; height: 45px; border-radius: 12px; object-fit: cover; }
+        .sliding-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 20000; display: none; align-items: flex-end; backdrop-filter: blur(10px); }
+        .sliding-content { background: #fff; width: 100%; border-radius: 30px 30px 0 0; padding: 40px 20px; transform: translateY(100%); transition: transform 0.3s ease; }
+        .sliding-modal.active { display: flex; }
+        .sliding-modal.active .sliding-content { transform: translateY(0); }
+        .btn-full { background: var(--accent); color: #fff; border: none; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; cursor: pointer; width: 100%; }
+        .btn-outline { background: #fff; color: #000; border: 1px solid var(--border); padding: 16px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; cursor: pointer; width: 100%; }
+        @media (max-width: 900px) { .sidebar { display: none; } .content { padding: 40px 20px; } .top-bar { justify-content: center; } }
+    </style>
+</head>
+<body>
+    <div class="v-tag">v2.7 PROCYON</div>
+    <div id="layer-entrance" class="layer">
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" class="muze-entrance-logo" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png'">
+        <h1>Welcome to MUZE.</h1>
+        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">The secure bridge to the Procyon Network.</p>
+        <div id="onboarding-main" style="width: 100%; max-width: 350px;">
+            <div class="onboarding-card dark" onclick="neuralLogin()">
+                <h3 style="font-weight:900; margin-bottom:5px;">Neural Login</h3>
+                <p style="font-size:0.7rem; opacity:0.9;">Login with Handle or Email.</p>
+            </div>
+            <div class="onboarding-card" onclick="showVaultOptions()">
+                <h3 style="font-weight:900; margin-bottom:5px;">Vault Setup</h3>
+                <p style="font-size:0.7rem; color:var(--muted);">Create or recover your vault.</p>
+            </div>
+        </div>
+        <div id="vault-options" style="display: none; width: 100%; max-width: 350px;">
+            <button class="btn-full" onclick="location.href='create.html'">CREATE NEW VAULT</button>
+            <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='recover.html'">RECOVER WITH SEED</button>
+            <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='ledger.html'">CONNECT LEDGER</button>
+            <p style="text-align: center; margin-top: 30px; font-size: 0.7rem; color: var(--muted); cursor: pointer;" onclick="backToOnboardingMain()">← BACK</p>
+        </div>
+    </div>
+    <div class="sidebar">
+        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" style="height:35px;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png'"></div>
+        <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
+        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
+    </div>
+    <div class="content">
+        <div class="top-bar">
+            <div class="user-pill" style="cursor: pointer;" onclick="openHandleSwitcher()">
+                <span id="display-handle">prisca.pri</span>
+            </div>
+        </div>
+        <div id="stage-vault" class="stage">
+            <div class="balance-card">
+                <div class="balance-label" style="font-weight:900; font-size:0.6rem; color:var(--muted); letter-spacing:3px;">VAULT BALANCE</div>
+                <div class="balance-value">1,000.0 ADA</div>
+            </div>
+            <div class="action-bar">
+                <div class="action-btn" onclick="alert('Sending interface active.')"><span>↑</span>SEND</div>
+                <div class="action-btn" onclick="openReceiveModal()"><span>↓</span>RECV</div>
+                <div class="action-btn" onclick="alert('Swap active.')"><span>⇆</span>SWAP</div>
+                <div class="action-btn share" onclick="location.href='https://priscion.com/share-to-earn'"><span>✚</span>SHARE TO OWN</div>
+            </div>
+            <div class="asset-list">
+                <div class="asset-item"><div class="asset-info"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" class="asset-img"><div><div class="asset-name">Independent Utility</div><div class="asset-sub">$PRN</div></div></div><div class="asset-amount">50,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" class="asset-img"><div><div class="asset-name">Neural Reserve</div><div class="asset-sub">$NRL</div></div></div><div class="asset-amount">10,000.00</div></div>
+                <div class="asset-item"><div class="asset-info"><div class="asset-img" style="background:#FFD700; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900;">M</div><div><div class="asset-name">Mustard</div><div class="asset-sub">$MUSD</div></div></div><div class="asset-amount">25,000.00</div></div>
+            </div>
+        </div>
+        <div id="stage-card" class="stage hidden" style="text-align: center;">
+            <h2 style="margin-bottom: 20px;">Digital Card</h2>
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" style="width: 100%; max-width: 450px; border-radius: 24px;">
+            <button class="btn-outline" style="margin-top: 40px; color: #FF3B30; border-color: #FF3B30;" onclick="logout()">LOCK VAULT</button>
+        </div>
+    </div>
+    <div id="modal-handles" class="sliding-modal" onclick="closeModals()"><div class="sliding-content" onclick="event.stopPropagation()"><div id="handle-list"></div><button class="btn-full" style="background:#F5F5F5; color:#000; margin-top:20px;" onclick="closeModals()">CLOSE</button></div></div>
+    <div id="modal-receive" class="sliding-modal" onclick="closeModals()"><div class="sliding-content" onclick="event.stopPropagation()"><h2 id="recv-handle" style="font-weight:900;"></h2><p style="font-size:0.7rem; color:var(--muted); margin-bottom:30px;">NEURAL ANCHOR</p><div style="width:200px; height:200px; background:#F9F9F9; margin:0 auto 30px; border-radius:24px; display:flex; align-items:center; justify-content:center; color:#DDD; font-weight:900;">QR CODE</div><button class="btn-full" onclick="closeModals()">DONE</button></div></div>
+    <script>
+        const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
+        function neuralLogin() { const h = prompt('Anchor Handle:'); if(h) { localStorage.setItem('muze_active', 'true'); localStorage.setItem('muze_handle', h); location.reload(); } }
+        function showVaultOptions() { document.getElementById('onboarding-main').style.display = 'none'; document.getElementById('vault-options').style.display = 'block'; }
+        function backToOnboardingMain() { document.getElementById('onboarding-main').style.display = 'block'; document.getElementById('vault-options').style.display = 'none'; }
+        function showStage(id, el) { document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden')); document.getElementById('stage-' + id).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
+        function openHandleSwitcher() { const list = document.getElementById('handle-list'); list.innerHTML = ''; handles.forEach(h => { const active = h === document.getElementById('display-handle').innerText; const div = document.createElement('div'); div.style = "padding:20px; border-radius:18px; border:1px solid #EEE; margin-bottom:10px; cursor:pointer; font-weight:700; display:flex; justify-content:space-between;"; div.innerHTML = `<span>${h}</span>${active ? '✓' : ''}`; div.onclick = () => { document.getElementById('display-handle').innerText = h; localStorage.setItem('muze_handle', h); closeModals(); }; list.appendChild(div); }); document.getElementById('modal-handles').classList.add('active'); }
+        function openReceiveModal() { document.getElementById('recv-handle').innerText = document.getElementById('display-handle').innerText; document.getElementById('modal-receive').classList.add('active'); }
+        function closeModals() { document.querySelectorAll('.sliding-modal').forEach(m => m.classList.remove('active')); }
+        function logout() { localStorage.removeItem('muze_active'); location.reload(); }
+        window.onload = () => { if(localStorage.getItem('muze_active') === 'true') { document.getElementById('layer-entrance').style.display = 'none'; document.getElementById('display-handle').innerText = localStorage.getItem('muze_handle') || 'prisca.pri'; } };
+    </script>
+</body>
+</html>
