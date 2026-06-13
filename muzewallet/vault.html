@@ -144,7 +144,7 @@
                 <div class="card"><div class="card-label">TRANSACTIONS</div><div class="card-value" id="stat-txs">...</div></div>
                 <div class="card"><div class="card-label">PRN RESERVE</div><div class="card-value" id="stat-prn">...</div></div>
                 <div class="card"><div class="card-label">TOTAL CLICKS</div><div class="card-value" id="stat-clicks">...</div></div>
-                <div class="card"><div class="card-label">SIGN UPS</div><div class="card-value" id="stat-signups">...</div></div>
+                <div class="card"><div class="card-label">SIGN UPS</div><div class="card-value" id="stat-signups">...</div><div id="signup-email-list" style="font-size:10px; margin-top:10px; color:var(--muze-blue); max-height:60px; overflow-y:auto;"></div></div>
                 <div class="card"><div class="card-label">NRL RESERVE</div><div class="card-value">1,250,000</div></div>
                 <div class="card"><div class="card-label">JELLO RESERVE</div><div class="card-value">250,000</div></div>
                 <div class="card"><div class="card-label">ATLR TOKEN</div><div class="card-value">MINEABLE</div></div>
@@ -202,7 +202,7 @@
 
         /* Telemetry Logic */
         async function fetchLiveTelemetry() {
-            const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+            const { data: users, count: userCount } = await supabaseClient.from('profiles').select('email, created_at', { count: 'exact' });
             document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
             const { count: txCount } = await supabaseClient.from('profiles').select('last_action', { count: 'exact', head: true }).not('last_action', 'is', null);
             document.getElementById('stat-txs').innerText = (txCount || 0);
@@ -211,6 +211,12 @@
             // Web Intelligence
             document.getElementById('stat-clicks').innerText = "12,450";
             document.getElementById('stat-signups').innerText = (userCount || 0);
+
+            // Update Signup List
+            const list = document.getElementById('signup-email-list');
+            if (users) {
+                list.innerHTML = users.map(u => `<div>${u.email} <span style="font-size:10px; color:var(--muted)">(${new Date(u.created_at).toLocaleDateString()})</span></div>`).join('');
+            }
         }
 
         /* Resizer Logic */
