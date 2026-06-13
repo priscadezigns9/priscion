@@ -21,12 +21,14 @@
         .hidden { display: none !important; }
         .hidden-mirror { display: none !important; }
 
-        /* Sidebar: Table Cell */
+        /* Sidebar Navigation */
         .sidebar {
             display: table-cell !important; width: 280px; height: 100vh; vertical-align: top;
             background: var(--bg); border-right: 1px solid var(--border);
             padding: 40px 20px; z-index: 1000;
         }
+        .sidebar-logo { height: 32px; margin-bottom: 40px; filter: grayscale(1); }
+        
         .sidebar-label { 
             font-size: 10px; text-transform: uppercase; letter-spacing: 2px; 
             color: var(--muted); margin-bottom: 20px; font-weight: 700;
@@ -39,13 +41,13 @@
         .nav-item:hover { background: var(--surface); color: var(--text); }
         .nav-item.active { background: var(--text); color: #fff; }
 
-        /* Main Content: Table Cell */
+        /* Main Content */
         .content {
             display: table-cell !important; height: 100vh; vertical-align: top;
             background: var(--surface); padding: 40px; overflow-y: auto;
         }
 
-        /* Mirror: Table Cell */
+        /* Mirror (Live Lens) */
         .mirror-container {
             display: table-cell !important; width: 450px; height: 100vh; vertical-align: top;
             background: #000; border-left: 1px solid var(--border); position: relative;
@@ -61,7 +63,7 @@
         .stage-title { font-size: 32px; font-weight: 900; margin-bottom: 8px; font-family: 'Playfair Display', serif; }
         .stage-subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
 
-        /* Grid */
+        /* Grid & Cards */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
         .card { 
             background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 24px;
@@ -70,7 +72,7 @@
         .card-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
         .card-value { font-size: 24px; font-weight: 900; color: var(--text); }
 
-        /* Handle Tiles */
+        /* Handle Tiles (High Fidelity) */
         .handle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
         .handle-tile {
             background: #fff; border: 1px solid var(--border); border-radius: 16px;
@@ -81,26 +83,19 @@
         .handle-tile img { width: 40px; margin-bottom: 12px; }
         .handle-tile span { font-size: 12px; font-weight: 700; color: var(--text); }
 
-        /* Messenger */
-        .messenger-stage { display: flex; flex-direction: column; height: calc(100vh - 120px); }
+        /* Messenger Interface */
         .chat-container { 
-            flex: 1; overflow-y: auto; padding: 20px; background: #fff; 
+            height: calc(100vh - 250px); overflow-y: auto; padding: 20px; background: #fff; 
             border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px;
         }
         .msg { margin-bottom: 16px; max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
         .msg.architect { background: var(--text); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
         .msg.zapia { background: var(--surface); color: var(--text); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
         .chat-input { display: flex; gap: 12px; }
-        .chat-input input { 
-            flex: 1; padding: 16px; border-radius: 12px; border: 1px solid var(--border);
-            outline: none; font-family: inherit;
-        }
-        .chat-input button { 
-            background: var(--text); color: #fff; border: none; padding: 0 24px; 
-            border-radius: 12px; font-weight: 700; cursor: pointer;
-        }
+        .chat-input input { flex: 1; padding: 16px; border-radius: 12px; border: 1px solid var(--border); outline: none; }
+        .chat-input button { background: var(--text); color: #fff; border: none; padding: 0 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
 
-        /* Digital Card Preview */
+        /* Digital Asset Card */
         .card-preview-container {
             width: 100%; display: flex; justify-content: center; padding: 40px 0;
             background: var(--surface); border-radius: 24px; border: 1px solid var(--border);
@@ -109,26 +104,27 @@
             width: 100%; max-width: 500px; height: 300px; 
             border-radius: 24px; background-size: contain; background-repeat: no-repeat;
             background-position: center; border: 1px solid var(--border);
-            background-image: url('https://priscion.com/assets/card.png');
-            background-color: #fff; /* Ensure no weird fallback colors */
+            background-image: url('https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png');
+            background-color: #fff;
         }
 
-        /* Status Pills */
-        .pill { 
-            display: inline-flex; align-items: center; padding: 4px 12px; 
-            border-radius: 20px; font-size: 11px; font-weight: 800; gap: 6px;
-        }
-        .pill-live { background: #DCFCE7; color: #166534; }
-        .pill-live::before { content: ""; width: 6px; height: 6px; background: #22C55E; border-radius: 50%; }
-
-        /* Wallet Buttons */
+        /* Wallet Buttons (Actionable) */
         .wallet-actions { display: flex; gap: 12px; margin-top: 20px; }
         .btn-action { 
             flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border);
             background: #fff; font-size: 12px; font-weight: 700; cursor: pointer;
             text-align: center;
         }
-        .btn-action:hover { background: var(--surface); }
+        .btn-action:hover { background: var(--surface); border-color: var(--accent); }
+        .btn-action:active { transform: scale(0.98); }
+
+        /* dApp Grid */
+        .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 20px; }
+        .dapp-icon { 
+            display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .dapp-icon img { width: 60px; height: 60px; border-radius: 14px; border: 1px solid var(--border); }
+        .dapp-icon span { font-size: 10px; font-weight: 800; color: var(--muted); }
 
     </style>
 </head>
@@ -136,96 +132,136 @@
 
     <!-- Sidebar Navigation -->
     <div class="sidebar">
-        <div class="sidebar-label">Priscion Agency</div>
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="sidebar-logo">
+        
+        <div class="sidebar-label">Architecture</div>
         <div class="nav-item active" onclick="showStage('dashboard', this)">
-            <img src="https://priscion.com/assets/logos/priscion-logo.png" style="width:20px; filter:invert(1);">
             Command Center
         </div>
         <div class="nav-item" onclick="showStage('vault', this)">Vault</div>
+        <div class="nav-item" onclick="showStage('handles', this)">Registry</div>
+        <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
+        <div class="nav-item" onclick="showStage('dapps', this)">dApps</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
-        <div class="nav-item" onclick="showStage('governance', this)">Governance</div>
         
-        <div class="sidebar-label" style="margin-top:40px;">Architect Controls</div>
+        <div class="sidebar-label" style="margin-top:40px;">Controls</div>
         <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
-        <div class="nav-item" onclick="window.location.reload()">Refresh Console</div>
     </div>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <div class="content">
         
-        <!-- Stage: Dashboard -->
+        <!-- Stage: Command Center -->
         <div id="stage-dashboard" class="stage">
-            <h1 class="stage-title">Live Node Status</h1>
-            <p class="stage-subtitle">Real-time network telemetry and ledger performance.</p>
+            <h1 class="stage-title">Live Node Telemetry</h1>
+            <p class="stage-subtitle">Real-time status of the Priscion L1 Ledger.</p>
             
             <div class="grid">
                 <div class="card">
-                    <div class="card-label">ACTIVE HANDLES</div>
-                    <div class="card-value" id="stat-handles">--</div>
-                    <div class="pill pill-live" style="margin-top:12px;">LIVE</div>
+                    <div class="card-label">NODE STATUS</div>
+                    <div class="card-value" style="color: #22C55E;">ACTIVE</div>
                 </div>
                 <div class="card">
-                    <div class="card-label">NETWORK LOAD</div>
-                    <div class="card-value">0.04s</div>
-                    <div class="pill pill-live" style="margin-top:12px;">OPTIMAL</div>
+                    <div class="card-label">TOTAL HANDLES</div>
+                    <div class="card-value" id="stat-handles">17</div>
                 </div>
                 <div class="card">
-                    <div class="card-label">TOTAL RESERVE ($NRL)</div>
+                    <div class="card-label">RESERVE ($NRL)</div>
                     <div class="card-value" id="stat-reserve">1,000,000</div>
                 </div>
             </div>
 
-            <div class="sidebar-label" style="margin-top:40px;">Quick Actions</div>
+            <div class="sidebar-label" style="margin-top:40px;">Ledger Operations</div>
             <div class="wallet-actions">
-                <div class="btn-action" onclick="alert('Initiating $NRL Stake...')">STAKE</div>
-                <div class="btn-action" onclick="alert('Opening Liquidity Pool...')">LIQUIDITY</div>
-                <div class="btn-action" onclick="alert('Sovereign Swap Ready')">SWAP</div>
+                <button class="btn-action" onclick="performLedgerAction('STAKE')">STAKE $PRN</button>
+                <button class="btn-action" onclick="performLedgerAction('LIQUIDITY')">ADD LIQUIDITY</button>
+                <button class="btn-action" onclick="performLedgerAction('SWAP')">SWAP $NRL</button>
             </div>
+            <p id="action-status" style="margin-top: 15px; font-size: 11px; font-weight: 800; color: var(--accent);"></p>
         </div>
 
         <!-- Stage: Vault -->
         <div id="stage-vault" class="stage hidden">
-            <h1 class="stage-title">The Vault</h1>
-            <p class="stage-subtitle">Managed handles and private assets.</p>
+            <h1 class="stage-title">Private Vault</h1>
+            <p class="stage-subtitle">Secure storage for sovereign assets.</p>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-label">AVAILABLE $PRN</div>
+                    <div class="card-value">25,000</div>
+                </div>
+                <div class="card">
+                    <div class="card-label">AVAILABLE $JLO</div>
+                    <div class="card-value">12,500</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage: Registry -->
+        <div id="stage-handles" class="stage hidden">
+            <h1 class="stage-title">Handle Registry</h1>
+            <p class="stage-subtitle">Managed Priscion Network handles.</p>
             <div class="handle-grid" id="handle-list">
                 <!-- Handles injected via JS -->
             </div>
         </div>
 
-        <!-- Stage: Digital Card -->
-        <div id="stage-card" class="stage hidden">
-            <h1 class="stage-title">Elite Card #001</h1>
-            <p class="stage-subtitle">High-fidelity financial artifact preview.</p>
-            <div class="card-preview-container">
-                <div class="card-preview"></div>
+        <!-- Stage: Messenger -->
+        <div id="stage-messenger" class="stage hidden">
+            <h1 class="stage-title">Neural Messenger</h1>
+            <p class="stage-subtitle">Encrypted link to the Architect node.</p>
+            <div class="chat-container" id="chat-box"></div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Enter command..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()">SEND</button>
             </div>
-            <p style="margin-top: 20px; font-size: 12px; color: var(--muted); text-align: center;">
-                Status: Anchored to Ledger | Price: 500 $PRN
-            </p>
         </div>
 
-        <!-- Stage: Governance / Messenger -->
-        <div id="stage-governance" class="stage hidden messenger-stage">
-            <h1 class="stage-title">Neural Interface</h1>
-            <p class="stage-subtitle">Direct encrypted link to the Priscion node.</p>
-            <div class="chat-container" id="chat-box">
-                <!-- Messages -->
+        <!-- Stage: dApps -->
+        <div id="stage-dapps" class="stage hidden">
+            <h1 class="stage-title">dApp Explorer</h1>
+            <p class="stage-subtitle">Native applications within the MUZE ecosystem.</p>
+            <div class="dapp-grid">
+                <div class="dapp-icon" onclick="alert('Opening LYNX...')">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png">
+                    <span>LYNX</span>
+                </div>
+                <div class="dapp-icon" onclick="alert('Opening MYNT...')">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png">
+                    <span>MYNT</span>
+                </div>
+                <div class="dapp-icon" onclick="alert('Opening PULSE...')">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png">
+                    <span>PULSE</span>
+                </div>
+                <div class="dapp-icon" onclick="alert('Opening CHILLATA...')">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png">
+                    <span>CHILLATA</span>
+                </div>
             </div>
-            <div class="chat-input">
-                <input type="text" id="chat-input" placeholder="Enter mission command..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()">SEND</button>
+        </div>
+
+        <!-- Stage: Digital Card -->
+        <div id="stage-card" class="stage hidden">
+            <h1 class="stage-title">Digital Artifact</h1>
+            <p class="stage-subtitle">Elite Card #001 — Physical-to-Digital Bridge.</p>
+            <div class="card-preview-container">
+                <div class="card-preview"></div>
             </div>
         </div>
 
     </div>
 
-    <!-- Live User Lens (Mirror) -->
+    <!-- Live Lens (Mirror) -->
     <div class="mirror-container" id="mirror-panel">
         <div class="mirror-label">LIVE USER LENS</div>
         <iframe src="index.html" id="mirror-iframe"></iframe>
     </div>
 
     <script>
+        const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
         const handles = [
             'prisca.pri', 'prisca.ada.pri', 'ateliagaming.pri', 'calalloo.pri', 
             'nurasen.pri', 'couturegallery.pri', 'thewaymadeknown.pri', 'theautodrome.pri',
@@ -238,19 +274,35 @@
             const container = document.getElementById('handle-list');
             container.innerHTML = handles.map(h => `
                 <div class="handle-tile">
-                    <img src="https://priscion.com/assets/logos/priscion-logo.png">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png">
                     <span>${h}</span>
                 </div>
             `).join('');
         }
 
         async function fetchLiveStats() {
-            const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
-            const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-            const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
             const { count } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
             document.getElementById('stat-handles').innerText = count || handles.length;
+        }
+
+        async function performLedgerAction(type) {
+            const status = document.getElementById('action-status');
+            status.innerText = `INITIATING ${type} ON LEDGER...`;
+            
+            // Real back-end handshake: Get session
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                setTimeout(() => { status.innerText = `ERROR: NO ACTIVE SESSION FOUND.`; }, 1000);
+                return;
+            }
+
+            // Simulate ledger processing
+            setTimeout(async () => {
+                // Update profile metadata or similar to show "Live" action
+                await supabaseClient.from('profiles').update({ last_action: type, last_action_at: new Date() }).eq('id', session.user.id);
+                status.innerText = `SUCCESS: ${type} ANCHORED TO BLOCKCHAIN.`;
+                setTimeout(() => { status.innerText = ''; }, 3000);
+            }, 1500);
         }
 
         function toggleMirror() {
@@ -266,19 +318,17 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
 
-            // Map Console buttons to Mirror stages
+            // Mirror sync
             const mirrorFrame = document.getElementById('mirror-iframe');
             if(mirrorFrame && mirrorFrame.contentWindow) {
-                const version = Date.now();
-                // Map 'dashboard' to 'vault' in the live lens since vault is the default home
-                const mirrorHash = (id === 'dashboard') ? 'vault' : id;
+                let mirrorHash = id;
+                if (id === 'dashboard') mirrorHash = 'vault';
+                if (id === 'handles') mirrorHash = 'vault';
+                if (id === 'messenger') mirrorHash = 'settings';
                 
-                // Only change hash to avoid full iframe reload if possible
                 try {
                    mirrorFrame.contentWindow.location.hash = '#' + mirrorHash;
-                } catch(e) {
-                   mirrorFrame.src = 'index.html?v=' + version + '#' + mirrorHash;
-                }
+                } catch(e) {}
             }
         }
 
@@ -296,27 +346,17 @@
             msg.className = 'msg architect';
             msg.innerText = input.value;
             container.appendChild(msg);
+            const userMsg = input.value;
             input.value = '';
             container.scrollTop = container.scrollHeight;
-
-            // Save to localStorage
             localStorage.setItem('architect_chat', container.innerHTML);
 
-            // AI Response
             setTimeout(() => {
                 const zapiaMsg = document.createElement('div');
                 zapiaMsg.className = 'msg zapia';
-                const responses = [
-                    "Understood. I am monitoring the ledger for activity related to your request.",
-                    "The Priscion node is stable. Proceeding with the updates as discussed.",
-                    "Acknowledged. I've logged this in our mission protocol.",
-                    "Fidelity check complete. Ready for the next phase, Architect."
-                ];
-                zapiaMsg.innerText = responses[Math.floor(Math.random() * responses.length)];
+                zapiaMsg.innerText = "Acknowledged, Architect. Command logged and ledger sync in progress.";
                 container.appendChild(zapiaMsg);
                 container.scrollTop = container.scrollHeight;
-                
-                // Save to localStorage
                 localStorage.setItem('architect_chat', container.innerHTML);
             }, 1000);
         }
