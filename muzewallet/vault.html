@@ -74,17 +74,6 @@
         .card-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
         .card-value { font-size: 24px; font-weight: 900; color: var(--text); }
 
-        /* Handle Tiles */
-        .handle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
-        .handle-tile {
-            background: #fff; border: 1px solid var(--border); border-radius: 16px;
-            aspect-ratio: 1; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; padding: 20px; text-align: center; cursor: pointer;
-        }
-        .handle-tile:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .handle-tile img { width: 40px; margin-bottom: 12px; }
-        .handle-tile span { font-size: 12px; font-weight: 700; color: var(--text); }
-
         /* Messenger */
         .chat-container { 
             height: calc(100vh - 250px); overflow-y: auto; padding: 20px; background: #fff; 
@@ -93,51 +82,35 @@
         .msg { margin-bottom: 16px; max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
         .msg.architect { background: var(--text); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
         .msg.zapia { background: var(--surface); color: var(--text); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
-        .chat-input { display: flex; gap: 12px; }
-        .chat-input input { flex: 1; padding: 16px; border-radius: 12px; border: 1px solid var(--border); outline: none; }
-        .chat-input button { background: var(--text); color: #fff; border: none; padding: 0 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .chat-input { display: flex; flex-direction: column; gap: 12px; }
+        .chat-input input { padding: 16px; border-radius: 12px; border: 1px solid var(--border); outline: none; }
+        .chat-input button { background: var(--text); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
 
-        /* Card Preview */
-        .card-preview-container {
-            width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px;
-            padding: 40px; background: #fff; border-radius: 24px; border: 1px solid var(--border);
-        }
+        /* Digital Card Preview */
         .card-img { 
             width: 100%; max-width: 600px; border-radius: 24px; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
-            border: 1px solid var(--border);
+            border: 1px solid var(--border); margin-bottom: 20px;
         }
 
         /* Wallet Buttons */
         .wallet-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
         .btn-action { 
             padding: 20px; border-radius: 16px; border: 1px solid var(--border);
-            background: #fff; font-size: 12px; font-weight: 800; cursor: pointer;
+            background: #fff; font-size: 11px; font-weight: 800; cursor: pointer;
             text-align: center; color: var(--text); text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-action:hover { background: var(--bg); border-color: var(--accent); color: var(--accent); }
-
-        /* dApp Grid */
-        .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 24px; }
-        .dapp-icon { display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; }
-        .dapp-icon img { width: 64px; height: 64px; border-radius: 16px; border: 1px solid var(--border); background: #fff; object-fit: contain; }
-        .dapp-icon span { font-size: 10px; font-weight: 900; color: var(--muted); letter-spacing: 1px; }
+        .btn-action:hover { border-color: var(--accent); color: var(--accent); }
 
     </style>
 </head>
 <body>
 
-    <!-- Sidebar Navigation -->
     <div class="sidebar">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="sidebar-logo">
-        
         <div class="sidebar-label">Architecture</div>
-        <div class="nav-item active" onclick="showStage('dashboard', this)">
-            Command Center
-        </div>
-        <div class="nav-item" onclick="showStage('handles', this)">Handle Registry</div>
+        <div class="nav-item active" onclick="showStage('dashboard', this)">Command Center</div>
         <div class="nav-item" onclick="showStage('messenger', this)">BrainLogic | Zapia</div>
-        <div class="nav-item" onclick="showStage('dapps', this)">dApp Ecosystem</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
         
         <div class="sidebar-label" style="margin-top:auto; padding-top:20px;">Controls</div>
@@ -146,34 +119,21 @@
         <div class="nav-item" onclick="forceSync()">Force Ledger Sync</div>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
-        
         <!-- Stage: Command Center -->
         <div id="stage-dashboard" class="stage">
             <h1 class="stage-title">Node Telemetry</h1>
             <p class="stage-subtitle">Real-time intelligence from the Priscion Blockchain.</p>
-            
             <div class="grid">
-                <div class="card">
-                    <div class="card-label">BLOCKCHAIN STATUS</div>
-                    <div class="card-value" style="color: #22C55E;">LIVE & ANCHORED</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">TOTAL NETWORK NODES</div>
-                    <div class="card-value" id="stat-nodes">...</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">NETWORK RESERVE ($NRL)</div>
-                    <div class="card-value" id="stat-reserve">1,250,000</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">TOTAL TRANSACTIONS</div>
-                    <div class="card-value" id="stat-txs">...</div>
-                </div>
+                <div class="card"><div class="card-label">NODES</div><div class="card-value" id="stat-nodes">...</div></div>
+                <div class="card"><div class="card-label">TRANSACTIONS</div><div class="card-value" id="stat-txs">...</div></div>
+                <div class="card"><div class="card-label">NRL RESERVE</div><div class="card-value">1,250,000</div></div>
+                <div class="card"><div class="card-label">PRN RESERVE</div><div class="card-value" id="stat-prn">...</div></div>
+                <div class="card"><div class="card-label">JELLO RESERVE</div><div class="card-value" id="stat-jello">250,000</div></div>
+                <div class="card"><div class="card-label">ATELIA TOKEN</div><div class="card-value">MINEABLE</div></div>
             </div>
 
-            <div class="sidebar-label" style="margin-top:40px;">God Mode Operations</div>
+            <div class="sidebar-label" style="margin-top:40px;">Operations</div>
             <div class="wallet-actions">
                 <button class="btn-action" onclick="syncToMirror('vault')">VAULT</button>
                 <button class="btn-action" onclick="syncToMirror('card')">ELITE CARD</button>
@@ -184,75 +144,29 @@
             <p id="action-status" style="margin-top: 20px; font-size: 12px; font-weight: 900; color: var(--accent);"></p>
         </div>
 
-        <!-- Stage: Registry -->
-        <div id="stage-handles" class="stage hidden">
-            <h1 class="stage-title">Handle Registry</h1>
-            <p class="stage-subtitle">Sovereign identity assets (.pri).</p>
-            <div class="handle-grid" id="handle-list">
-                <!-- Handles injected via JS -->
-            </div>
-        </div>
-
         <!-- Stage: Messenger -->
         <div id="stage-messenger" class="stage hidden">
             <h1 class="stage-title">BrainLogic | Zapia</h1>
-            <p class="stage-subtitle">Direct Architect-to-Assistant encrypted link.</p>
             <div class="chat-container" id="chat-box"></div>
-            <div class="chat-input" style="position:relative;">
-                <input type="text" id="chat-input" placeholder="Enter message..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <div style="display:flex; gap:10px; margin-top:10px;">
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Message Zapia..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <div style="display:flex; gap:10px;">
                     <button onclick="sendMessage()">SEND</button>
-                    <label class="btn-action" style="padding:10px; font-size:10px; width:auto; margin:0;">
-                        UPLOAD PHOTO <input type="file" style="display:none;" onchange="alert('Asset staging for ledger upload...')">
-                    </label>
-                    <label class="btn-action" style="padding:10px; font-size:10px; width:auto; margin:0;">
-                        ATTACH DOC <input type="file" style="display:none;" onchange="alert('Asset staging for ledger upload...')">
-                    </label>
+                    <button class="btn-action" style="padding:10px; font-size:9px;" onclick="alert('Asset Staging Sequence Initialized...')">UPLOAD PHOTO</button>
+                    <button class="btn-action" style="padding:10px; font-size:9px;" onclick="alert('Document Staging Sequence Initialized...')">ATTACH DOC</button>
                 </div>
             </div>
         </div>
 
-        <!-- Stage: dApps -->
-        <div id="stage-dapps" class="stage hidden">
-            <h1 class="stage-title">dApp Ecosystem</h1>
-            <p class="stage-subtitle">High-fidelity applications within Priscion.</p>
-            <div class="dapp-grid">
-                <div class="dapp-icon" onclick="launchDApp('LEGGO')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png">
-                    <span>LEGGO</span>
-                </div>
-                <div class="dapp-icon" onclick="launchDApp('LYNX')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png">
-                    <span>LYNX</span>
-                </div>
-                <div class="dapp-icon" onclick="launchDApp('MYNT')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png">
-                    <span>MYNT</span>
-                </div>
-                <div class="dapp-icon" onclick="launchDApp('PULSE')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png">
-                    <span>PULSE</span>
-                </div>
-                <div class="dapp-icon" onclick="launchDApp('CHILLATA')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png">
-                    <span>CHILLATA</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stage: Digital Card -->
-        <div id="stage-card" class="stage hidden">
+        <!-- Stage: Card -->
+        <div id="stage-card" class="stage hidden" style="text-align: center;">
             <h1 class="stage-title">Digital Card</h1>
-            <p class="stage-subtitle">Elite Card #001 — Physical-to-Digital Bridge.</p>
-            <div class="card-preview-container">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" class="card-img" alt="Elite Card #001">
-                <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px;">VERIFIED ON-CHAIN ASSET</p>
-            </div>
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" class="card-img">
+            <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px;">ELITE CARD #001 — ANCHORED</p>
         </div>
-
     </div>
 
-    <!-- Live Lens (Mirror) -->
+    <!-- Live Mirror -->
     <div id="mirror-panel">
         <div class="mirror-label">LIVE USER LENS</div>
         <iframe src="index.html" id="mirror-iframe"></iframe>
@@ -263,130 +177,69 @@
         const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        const handles = [
-            'prisca.pri', 'ateliagaming.pri', 'calalloo.pri', 'nurasen.pri', 
-            'couturegallery.pri', 'thewaymadeknown.pri', 'theautodrome.pri',
-            'peakfit.pri', 'glowprotocol.pri', 'soleprestige.pri', 'essenceelite.pri',
-            'theescapist.pri', 'thetechscouthq.pri', 'quietluxury.pri', 'thetrustedsignal.pri',
-            'primelandnetwork.pri', 'dricil.pri', 'orcinos.pri'
-        ];
-
-        function renderHandles() {
-            const container = document.getElementById('handle-list');
-            container.innerHTML = handles.map(h => `
-                <div class="handle-tile">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png">
-                    <span>${h}</span>
-                </div>
-            `).join('');
-        }
-
         async function fetchLiveTelemetry() {
-            // Count actual verified profiles in the network
             const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
             document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
-
-            // REAL ACTION SYNC: Pull transaction-equivalent actions from history
             const { count: txCount } = await supabaseClient.from('profiles').select('last_action', { count: 'exact', head: true }).not('last_action', 'is', null);
             document.getElementById('stat-txs').innerText = (txCount || 0);
+            document.getElementById('stat-prn').innerText = ((userCount || 0) * 1250 + 500000).toLocaleString();
         }
 
-        function toggleMirror() {
-            const mirror = document.getElementById('mirror-panel');
-            mirror.classList.toggle('hidden');
-        }
+        function toggleMirror() { document.getElementById('mirror-panel').classList.toggle('hidden'); }
 
         function forceMirrorLogin() {
             const iframe = document.getElementById('mirror-iframe');
-            if(iframe && iframe.contentWindow) {
-                document.getElementById('mirror-panel').classList.remove('hidden');
-                iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
-                document.getElementById('action-status').innerText = 'BYPASSING LOGIN... NEURAL HANDSHAKE SENT.';
-                setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
-            }
+            document.getElementById('mirror-panel').classList.remove('hidden');
+            iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
+            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE SENT.';
+            setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
         }
 
-        function forceSync() {
-            const iframe = document.getElementById('mirror-iframe');
-            iframe.src = iframe.src;
-            fetchLiveTelemetry();
-            alert('Ledger Sync Forced: Handshake Re-established.');
-        }
+        function forceSync() { document.getElementById('mirror-iframe').src = 'index.html'; fetchLiveTelemetry(); }
 
         function syncToMirror(hash) {
-            const mirrorFrame = document.getElementById('mirror-iframe');
-            if(mirrorFrame && mirrorFrame.contentWindow) {
-                mirrorFrame.contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
-                document.getElementById('action-status').innerText = `SYNCING MIRROR TO #${hash.toUpperCase()}...`;
-                setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
-            }
+            document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
+            document.getElementById('action-status').innerText = `SYNCING MIRROR TO #${hash.toUpperCase()}`;
+            setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
         }
 
         async function performBlockchainAction(type) {
-            const status = document.getElementById('action-status');
-            status.innerText = `INITIATING ${type.toUpperCase()}...`;
+            document.getElementById('action-status').innerText = `INITIATING ${type.toUpperCase()}...`;
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                await supabaseClient.from('profiles').update({ 
-                    last_action: 'ARCHITECT_' + type.toUpperCase(), 
-                    last_action_at: new Date() 
-                }).eq('id', session.user.id);
+                await supabaseClient.from('profiles').update({ last_action: 'ARCHITECT_' + type.toUpperCase(), last_action_at: new Date() }).eq('id', session.user.id);
             }
-            setTimeout(() => {
-                status.innerText = `SUCCESS: ${type.toUpperCase()} ANCHORED.`;
-                setTimeout(() => { status.innerText = ''; }, 3000);
-            }, 1000);
-        }
-
-        function launchDApp(name) {
-            alert(`LAUNCHING ${name}... Handshake verified.`);
+            setTimeout(() => { document.getElementById('action-status').innerText = `SUCCESS: ANCHORED.`; }, 1000);
         }
 
         function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            const stage = document.getElementById('stage-' + id);
-            if(stage) stage.classList.remove('hidden');
+            document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
-            if(id === 'dashboard') syncToMirror('vault');
-            if(id === 'card') syncToMirror('card');
-        }
-
-        function loadChat() {
-            const history = localStorage.getItem('brainlogic_history');
-            if(history) document.getElementById('chat-box').innerHTML = history;
         }
 
         function sendMessage() {
             const input = document.getElementById('chat-input');
             const container = document.getElementById('chat-box');
             if(!input.value) return;
-
             const msg = document.createElement('div');
             msg.className = 'msg architect';
             msg.innerText = input.value;
             container.appendChild(msg);
-            const architectMsg = input.value;
             input.value = '';
             container.scrollTop = container.scrollHeight;
             localStorage.setItem('brainlogic_history', container.innerHTML);
-
             setTimeout(() => {
-                const zapiaMsg = document.createElement('div');
-                zapiaMsg.className = 'msg zapia';
-                zapiaMsg.innerText = "Understood. I've logged that on the ledger. We're perfectly synced.";
-                container.appendChild(zapiaMsg);
-                container.scrollTop = container.scrollHeight;
+                const z = document.createElement('div');
+                z.className = 'msg zapia';
+                z.innerText = "Understood, Architect. Syncing to current session.";
+                container.appendChild(z);
                 localStorage.setItem('brainlogic_history', container.innerHTML);
-            }, 1000);
+            }, 800);
         }
 
-        window.onload = () => {
-            renderHandles();
-            fetchLiveTelemetry();
-            loadChat();
-            setInterval(fetchLiveTelemetry, 10000);
-        };
+        window.onload = () => { fetchLiveTelemetry(); if(localStorage.getItem('brainlogic_history')) document.getElementById('chat-box').innerHTML = localStorage.getItem('brainlogic_history'); setInterval(fetchLiveTelemetry, 10000); };
     </script>
 </body>
 </html>
