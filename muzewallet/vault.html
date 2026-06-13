@@ -2,317 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Architect Console</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
+    <title>GOD MODE | Architect Console</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { 
-            --bg: #FFFFFF; --text: #000; --muted: #64748b; --border: #F1F5F9; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F8FAFC;
-        }
+        :root { --bg: #0A0A0A; --text: #FFF; --muted: #666; --border: #222; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #111; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
+
+        /* Left Panel: Architect Controls */
+        .panel-left { width: 50%; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .panel-right { width: 50%; height: 100vh; position: relative; }
         
-        body { 
-            background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
-            overflow: hidden; width: 100vw; height: 100vh; 
-            display: flex;
-        }
+        .header { height: 70px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
+        .logo { height: 25px; }
 
-        .hidden { display: none !important; }
-
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 280px; height: 100vh;
-            background: var(--bg); border-right: 1px solid var(--border);
-            padding: 40px 20px; z-index: 1000;
-            display: flex; flex-direction: column; flex-shrink: 0;
-        }
-        .sidebar-logo { height: 42px; width: auto; object-fit: contain; margin-bottom: 40px; }
+        .console-main { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 30px; }
         
-        .sidebar-label { 
-            font-size: 10px; text-transform: uppercase; letter-spacing: 2px; 
-            color: var(--muted); margin-bottom: 20px; font-weight: 700;
-        }
-        .nav-item { 
-            padding: 12px 16px; margin-bottom: 8px; border-radius: 12px; 
-            cursor: pointer; font-weight: 600; color: var(--muted);
-            display: flex; align-items: center; gap: 12px; font-size: 14px;
-        }
-        .nav-item:hover { background: var(--surface); color: var(--text); }
-        .nav-item.active { background: var(--text); color: #fff; }
+        .hud-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .hud-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 25px; position: relative; overflow: hidden; }
+        .hud-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: var(--muted); margin-bottom: 10px; }
+        .hud-value { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--muze-blue); }
 
-        /* Main Content */
-        .content {
-            flex: 1; height: 100vh;
-            background: var(--surface); padding: 40px; overflow-y: auto;
-            min-width: 400px;
-        }
+        .signup-list { height: 200px; overflow-y: auto; background: #000; border: 1px solid var(--border); border-radius: 12px; margin-top: 15px; }
+        .signup-item { padding: 12px 15px; border-bottom: 1px solid #111; font-size: 0.75rem; display: flex; justify-content: space-between; }
+        .signup-item span { color: var(--muze-blue); }
 
-        /* Draggable Resizer */
-        .resizer {
-            width: 12px; height: 100vh; background: var(--border);
-            cursor: col-resize; transition: all 0.2s;
-            flex-shrink: 0; position: relative;
-        }
-        .resizer:hover { background: var(--accent); }
-        .resizer::after { content: '||'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 10px; color: var(--muted); font-weight: 900; }
+        .ops-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .op-btn { background: #000; border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 12px; font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; cursor: pointer; text-align: left; transition: 0.2s; }
+        .op-btn:hover { background: var(--muze-blue); color: #000; border-color: var(--muze-blue); }
+        .op-btn.active { background: var(--accent); border-color: var(--accent); }
 
-        /* Mirror (Live Lens) */
-        #mirror-panel {
-            width: 450px; height: 100vh; border-left: 1px solid var(--border);
-            background: #000; position: relative; flex-shrink: 0;
-        }
-        #mirror-panel.hidden { width: 0 !important; display: none; }
-        #mirror-panel iframe { width: 100%; height: 100%; border: none; }
-        .mirror-label {
-            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(0,0,0,0.8); color: #fff; padding: 6px 12px; border-radius: 20px;
-            font-size: 10px; font-weight: 900; letter-spacing: 1px; z-index: 10; white-space: nowrap;
-        }
-
-        /* Stages */
-        .stage-title { font-size: 32px; font-weight: 900; margin-bottom: 8px; font-family: 'Playfair Display', serif; }
-        .stage-subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
-
-        /* Grid & Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .card { 
-            background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 24px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-        }
-        .card-label { font-size: 10px; font-weight: 800; color: var(--muted); margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
-        .card-value { font-size: 22px; font-weight: 900; color: var(--text); }
-
-        /* Messenger */
-        .chat-container { 
-            height: calc(100vh - 280px); overflow-y: auto; padding: 20px; background: #fff; 
-            border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px;
-        }
-        .msg { margin-bottom: 16px; max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 13px; line-height: 1.5; }
-        .msg.architect { background: var(--text); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
-        .msg.zapia { background: var(--surface); color: var(--text); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+        /* Wallet Mirror Frame */
+        #wallet-mirror { width: 100%; height: 100%; border: none; }
         
-        .chat-input { display: flex; flex-direction: column; gap: 10px; }
-        .chat-input input { padding: 16px; border-radius: 12px; border: 1px solid var(--border); outline: none; font-size: 13px; }
-        
-        .action-row { display: flex; gap: 10px; }
-        .btn-send { background: var(--text); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; }
-        .btn-upload { background: #fff; border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px; font-size: 10px; font-weight: 900; cursor: pointer; color: var(--muted); }
-        .btn-upload:hover { border-color: var(--accent); color: var(--accent); }
+        .divider { width: 4px; background: var(--border); cursor: col-resize; position: absolute; left: 50%; height: 100vh; z-index: 1000; transition: background 0.2s; }
+        .divider:hover { background: var(--muze-blue); }
 
-        /* Digital Card Preview */
-        .card-preview-container { text-align: center; padding: 40px; background: #fff; border-radius: 32px; border: 1px solid var(--border); }
-        .card-img { 
-            width: 100%; max-width: 500px; border-radius: 24px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.1); 
-            border: 1px solid var(--border); margin-bottom: 20px;
-        }
-
-        /* Wallet Buttons */
-        .wallet-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 20px; }
-        .btn-op { 
-            padding: 16px; border-radius: 14px; border: 1px solid var(--border);
-            background: #fff; font-size: 10px; font-weight: 800; cursor: pointer;
-            text-align: center; color: var(--text); text-transform: uppercase; letter-spacing: 1px;
-        }
-        .btn-op:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-
+        #proc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .pulse { width: 60px; height: 60px; border-radius: 50%; background: var(--muze-blue); animation: p 1s infinite; }
+        @keyframes p { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
     </style>
 </head>
-<body id="body-main">
+<body>
+    <div id="proc-overlay"><div class="pulse"></div><h2 style="margin-top:30px; font-weight:900; letter-spacing:5px;">ANCHORING...</h2></div>
 
-    <div class="sidebar">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="sidebar-logo">
-        <div class="sidebar-label">Architecture</div>
-        <div class="nav-item active" onclick="showStage('dashboard', this)">Command Center</div>
-        <div class="nav-item" onclick="showStage('messenger', this)">BrainLogic | Zapia</div>
-        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
-        
-        <div class="sidebar-label" style="margin-top:auto; padding-top:20px;">Controls</div>
-        <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
-        <div class="nav-item" onclick="forceMirrorLogin()">Enter MUZE World</div>
-        <div class="nav-item" onclick="forceSync()">Force Ledger Sync</div>
-    </div>
-
-    <div class="content">
-        <!-- Stage: Command Center -->
-        <div id="stage-dashboard" class="stage">
-            <h1 class="stage-title">Node Telemetry</h1>
-            <p class="stage-subtitle">Anchored to the Priscion Blockchain Ledger.</p>
-            <div class="grid">
-                <div class="card"><div class="card-label">NODES</div><div class="card-value" id="stat-nodes">...</div></div>
-                <div class="card"><div class="card-label">TRANSACTIONS</div><div class="card-value" id="stat-txs">...</div></div>
-                <div class="card"><div class="card-label">PRN RESERVE</div><div class="card-value" id="stat-prn">...</div></div>
-                <div class="card"><div class="card-label">TOTAL CLICKS</div><div class="card-value" id="stat-clicks">...</div></div>
-                <div class="card"><div class="card-label">SIGN UPS</div><div class="card-value" id="stat-signups">...</div><div id="signup-email-list" style="font-size:10px; margin-top:10px; color:var(--muze-blue); max-height:60px; overflow-y:auto;"></div></div>
-                <div class="card"><div class="card-label">NRL RESERVE</div><div class="card-value">1,250,000</div></div>
-                <div class="card"><div class="card-label">JELLO RESERVE</div><div class="card-value">250,000</div></div>
-                <div class="card"><div class="card-label">ATLR TOKEN</div><div class="card-value">MINEABLE</div></div>
-            </div>
-
-            <div class="sidebar-label" style="margin-top:40px;">Remote Operations</div>
-            <div class="wallet-actions">
-                <button class="btn-op" onclick="syncToMirror('vault')">VAULT</button>
-                <button class="btn-op" onclick="syncToMirror('card')">ELITE CARD</button>
-                <button class="btn-op" onclick="syncToMirror('settings')">SETTINGS</button>
-                <button class="btn-op" onclick="performBlockchainAction('staking')">STAKING</button>
-                <button class="btn-op" onclick="performBlockchainAction('mint')">MINT NFT</button>
-            </div>
-            <p id="action-status" style="margin-top: 20px; font-size: 11px; font-weight: 900; color: var(--accent); text-transform: uppercase;"></p>
+    <div class="panel-left" id="panel-l">
+        <div class="header">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" class="logo">
+            <div style="font-weight:900; font-size:0.6rem; color:var(--accent); letter-spacing:2px; border:1px solid var(--accent); padding:4px 10px; border-radius:100px;">GOD MODE: ARCHITECT</div>
         </div>
+        
+        <div class="console-main">
+            <div class="hud-grid">
+                <div class="hud-card">
+                    <div class="hud-label">LIVE NODES</div>
+                    <div class="hud-value" id="node-count">...</div>
+                </div>
+                <div class="hud-card">
+                    <div class="hud-label">LEDGER ASSETS</div>
+                    <div class="hud-value">$PRN</div>
+                </div>
+            </div>
 
-        <!-- Stage: Messenger -->
-        <div id="stage-messenger" class="stage hidden">
-            <h1 class="stage-title">BrainLogic</h1>
-            <div class="chat-container" id="chat-box"></div>
-            <div class="chat-input">
-                <input type="text" id="chat-input" placeholder="Message Zapia..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <div class="action-row">
-                    <button class="btn-send" onclick="sendMessage()">SEND</button>
-                    <button class="btn-upload" onclick="triggerFile('photo')">UPLOAD PHOTO</button>
-                    <button class="btn-upload" onclick="triggerFile('doc')">ATTACH DOC</button>
-                    <input type="file" id="file-input" style="display:none;" onchange="handleFileUpload(this)">
+            <div class="hud-card" style="flex:1; display:flex; flex-direction:column;">
+                <div class="hud-label">LIVE SIGNUPS (SUPABASE)</div>
+                <div class="signup-list" id="signup-feed"></div>
+            </div>
+
+            <div class="hud-card">
+                <div class="hud-label">ARCHITECT OPERATIONS</div>
+                <div class="ops-grid">
+                    <button class="op-btn" onclick="mirrorNav('vault')">VAULT MIRROR</button>
+                    <button class="op-btn" onclick="mirrorNav('settings')">SETTINGS MIRROR</button>
+                    <button class="op-btn" onclick="mirrorNav('card')">CARD ARTIFACT</button>
+                    <button class="op-btn" onclick="mirrorNav('dapps')">DAPP EXPLORER</button>
                 </div>
             </div>
         </div>
-
-        <!-- Stage: Card -->
-        <div id="stage-card" class="stage hidden">
-            <h1 class="stage-title">Digital Card</h1>
-            <div class="card-preview-container">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" class="card-img">
-                <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px; margin-top: 20px;">ELITE CARD #001 — PHYSICAL BRIDGE</p>
-            </div>
-        </div>
     </div>
 
-    <!-- Draggable Resizer -->
-    <div class="resizer" id="drag-handle"></div>
+    <div class="divider" id="drag-divider"></div>
 
-    <!-- Live Mirror -->
-    <div id="mirror-panel">
-        <div class="mirror-label">LIVE USER LENS</div>
-        <iframe src="index.html" id="mirror-iframe"></iframe>
+    <div class="panel-right" id="panel-r">
+        <iframe src="index.html?god_mode=true" id="wallet-mirror"></iframe>
     </div>
 
     <script>
         const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
         const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        /* Telemetry Logic */
-        async function fetchLiveTelemetry() {
-            const { data: users, count: userCount } = await supabaseClient.from('profiles').select('email, created_at', { count: 'exact' });
-            document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
-            const { count: txCount } = await supabaseClient.from('profiles').select('last_action', { count: 'exact', head: true }).not('last_action', 'is', null);
-            document.getElementById('stat-txs').innerText = (txCount || 0);
-            document.getElementById('stat-prn').innerText = ((userCount || 0) * 1250 + 500000).toLocaleString();
-
-            // Web Intelligence
-            document.getElementById('stat-clicks').innerText = "12,450";
-            document.getElementById('stat-signups').innerText = (userCount || 0);
-
-            // Update Signup List
-            const list = document.getElementById('signup-email-list');
-            if (users) {
-                list.innerHTML = users.map(u => `
-                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
-                        <span>${u.email}</span>
-                        <span style="font-size:9px; color:var(--muted)">${new Date(u.created_at).toLocaleDateString()}</span>
-                    </div>`).join('');
-            }
+        async function fetchSignups() {
+            const { data, count } = await supabase.from('profiles').select('email, created_at').order('created_at', { ascending: false });
+            document.getElementById('node-count').innerText = count || 0;
+            const feed = document.getElementById('signup-feed');
+            feed.innerHTML = data.map(u => `
+                <div class="signup-item">${u.email} <span>${new Date(u.created_at).toLocaleDateString()}</span></div>
+            `).join('');
         }
 
-        /* Resizer Logic */
-        const resizer = document.getElementById('drag-handle');
-        const mirror = document.getElementById('mirror-panel');
-        let isResizing = false;
+        function mirrorNav(hash) {
+            const mirror = document.getElementById('wallet-mirror');
+            mirror.contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
+            anchorEffect();
+        }
 
-        resizer.addEventListener('mousedown', (e) => { isResizing = true; document.body.style.cursor = 'col-resize'; });
+        function anchorEffect() {
+            const overlay = document.getElementById('proc-overlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.style.display = 'none', 1000);
+        }
+
+        // Draggable Divider
+        const divider = document.getElementById('drag-divider');
+        const leftPanel = document.getElementById('panel-l');
+        const rightPanel = document.getElementById('panel-r');
+        let isDragging = false;
+
+        divider.addEventListener('mousedown', (e) => { isDragging = true; document.body.style.cursor = 'col-resize'; });
         window.addEventListener('mousemove', (e) => {
-            if (!isResizing) return;
-            const width = window.innerWidth - e.clientX;
-            if (width > 200 && width < (window.innerWidth - 350)) {
-                mirror.style.width = width + 'px';
+            if (!isDragging) return;
+            let percentage = (e.clientX / window.innerWidth) * 100;
+            if (percentage > 20 && percentage < 80) {
+                leftPanel.style.width = percentage + '%';
+                rightPanel.style.width = (100 - percentage) + '%';
+                divider.style.left = percentage + '%';
             }
         });
-        window.addEventListener('mouseup', () => { isResizing = false; document.body.style.cursor = 'default'; });
+        window.addEventListener('mouseup', () => { isDragging = false; document.body.style.cursor = 'default'; });
 
-        /* Navigation Logic */
-        function toggleMirror() { mirror.classList.toggle('hidden'); resizer.classList.toggle('hidden'); }
-
-        function forceMirrorLogin() {
-            const iframe = document.getElementById('mirror-iframe');
-            mirror.classList.remove('hidden');
-            resizer.classList.remove('hidden');
-            iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
-            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE: SUCCESS';
-            setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
-        }
-
-        function forceSync() { document.getElementById('mirror-iframe').src = 'index.html'; fetchLiveTelemetry(); }
-
-        function syncToMirror(hash) {
-            document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
-            document.getElementById('action-status').innerText = `SYNCING MIRROR: #${hash.toUpperCase()}`;
-            setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
-        }
-
-        async function performBlockchainAction(type) {
-            document.getElementById('action-status').innerText = `INITIATING ${type.toUpperCase()}...`;
-            // Trigger visual in mirror
-            document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'ACTION', action: type }, '*');
-            
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (session) {
-                await supabaseClient.from('profiles').update({ last_action: 'ARCHITECT_' + type.toUpperCase(), last_action_at: new Date() }).eq('id', session.user.id);
-            }
-            setTimeout(() => { document.getElementById('action-status').innerText = `ANCHORED TO LEDGER`; }, 1000);
-        }
-
-        function showStage(id, el) {
-            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            document.getElementById('stage-' + id).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(el) el.classList.add('active');
-        }
-
-        /* BrainLogic Upload Logic */
-        function triggerFile(type) { document.getElementById('file-input').click(); }
-        function handleFileUpload(input) {
-            if (input.files && input.files[0]) {
-                const name = input.files[0].name;
-                const container = document.getElementById('chat-box');
-                const msg = document.createElement('div');
-                msg.className = 'msg architect';
-                msg.innerHTML = `<b>STAGING FILE:</b> ${name}<br><small>Ready for ledger anchor...</small>`;
-                container.appendChild(msg);
-                container.scrollTop = container.scrollHeight;
-                localStorage.setItem('brainlogic_history', container.innerHTML);
-            }
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const container = document.getElementById('chat-box');
-            if(!input.value) return;
-            const msg = document.createElement('div');
-            msg.className = 'msg architect';
-            msg.innerText = input.value;
-            container.appendChild(msg);
-            input.value = '';
-            container.scrollTop = container.scrollHeight;
-            localStorage.setItem('brainlogic_history', container.innerHTML);
-            setTimeout(() => {
-                const z = document.createElement('div');
-                z.className = 'msg zapia';
-                z.innerText = "Acknowledged. Syncing to current session.";
-                container.appendChild(z);
-                localStorage.setItem('brainlogic_history', container.innerHTML);
-            }, 800);
-        }
-
-        window.onload = () => { fetchLiveTelemetry(); if(localStorage.getItem('brainlogic_history')) document.getElementById('chat-box').innerHTML = localStorage.getItem('brainlogic_history'); setInterval(fetchLiveTelemetry, 10000); };
+        window.onload = fetchSignups;
     </script>
 </body>
 </html>
