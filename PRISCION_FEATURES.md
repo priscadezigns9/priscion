@@ -10,7 +10,7 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Neural Login Storage**: When a Web2 user signs up, their basic profile is stored in Supabase. This allows them to login across devices without immediate seed phrase management.
 
 ## 2. Recovery & Seed Management
-*   **Delayed Discovery**: The recovery phrase (seed) is not forced on the user at signup (to lower friction). 
+*   **Delayed Discovery**: The recovery phrase (seed) is not forced on the user at signup.
 *   **Settings Vault**: The seed is accessible via a secure section in the Settings stage (`#stage-settings`).
 *   **The "Handshake" Protocol**: 
     *   **Click to Reveal**: The recovery phrase is hidden/blurred by default. The user must explicitly click "REVEAL SEED" to view the phrase.
@@ -26,18 +26,25 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Paid Tiers**:
     *   **Standard**: Personal use, basic transactions.
     *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes.
-*   **Onboarding Logic**:
-    *   **Activation Flow**: Clicking "ACTIVATE API" triggers a **Migration Subscription** modal.
-    *   **Payment Stack**: Integrated support for **PayPal**, **Credit Card**, and **$PRN** native settlement.
 
 ## 4. UI/UX Standards
 *   **Fidelity**: High-fidelity UI with **Sky Blue (#F0F9FF)**, **Pure White**, and **Muze Blue (#5AC8FA)**.
 *   **Typography**: **Playfair Display** (Headings/Balances) and **Inter** (UI/Body).
-*   **Centers**: All onboarding layers, cards, and auth forms must be perfectly centered (vertically and horizontally) within the viewport.
+*   **Dark Mode**: A modern, vector-style persistent toggle in the navigation for high-fidelity night work.
+*   **Action Bar**: Must feature SEND, RECV, SWAP, and **⚡ STAKE** buttons. All buttons must trigger immediate visual feedback ("Anchoring...").
+*   **dApp Stage Interaction**: Clicking a dApp tile (PULSE, CHILLATA, etc.) must open the app directly within the MUZE Wallet viewport.
+*   **Asset Categorization**:
+    *   **Vault**: Primary fungible tokens ($PRN, ADA, NRL).
+    *   **Collectibles**: Dedicated gallery for **NFTs and ADA Handles**. By default, it shows the user's `.pri` handle with the Priscion logo.
 *   **Favicon**: Always the **P-Logo** (`/assets/p-logo.png`).
 
 ## 5. Token Economy (The Four-Token Ledger)
 *   **$PRN (Priscion)**: Public Utility. Network fees, NFTs, brand activations.
+*   **$NRL (Neural)**: Reserve/Governance. Private reserve, DAO voting.
+*   **$JLO (Chillata Token)**: The specific token used for private transactions.
+*   **$MUSD (Muze USD)**: Stablecoin. Ecosystem settlement and merchant payouts.
+*   **Jello Messenger**: A private, encrypted messenger integrated into the **Chillata (Jello)** layer.
+*   **Live Logic**: Balances and transaction counts are pulled live from the Supabase `profiles` ledger.
 *   **$NRL (Neural)**: Reserve/Governance. Private reserve, DAO voting.
 *   **$JLO (Chillata Token)**: The specific token used for private transactions.
 *   **$MUSD (Muze USD)**: Stablecoin. Ecosystem settlement and merchant payouts.
@@ -73,15 +80,11 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **P-Logo (Global)**: `assets/p-logo.png`
 
 ### **Asset Imagery**
-*   **Priscion Elite Card**: `assets/card_ai_access.jpg` (Canonical access card).
-*   **Vault Segmentation**: Divided into **Primary Assets** (Tokens/Balances) and **Collectibles** (Sovereign Handles/NFTs).
+*   **Priscion Elite Card**: `assets/card_ai_access.jpg` (High-fidelity AI Access card artifact).
 
 ## 10. Architect Command Center (God Mode)
 *   **Zero-Simulation Mandate**: Hardcoded dashboard numbers are strictly banned. The Command Center must reflect **Live Node Status** and **Anchored Ledger Data**.
 *   **Hard-Anchor Layout**: Implementation of `display: table` structural model in `vault.html` to force immutable side-by-side positioning of the Architect Console and the Live User Mirror.
-*   **God Mode Sovereignty**: 
-    *   **Full Mirroring**: The Architect Console serves as a **Sovereign Mirror** for the Architect's own wallet.
-    *   **Remote Operations**: Console buttons are mapped to navigate the mirror wallet (Vault, Settings, Card, dApps) and trigger the **Anchoring...** protocol.
 *   **Neural Messenger**: Direct P2P link between the Architect and Zapia (Brain Logic AI) integrated into the Console.
 
 ## 11. Sovereign Handle Economy
