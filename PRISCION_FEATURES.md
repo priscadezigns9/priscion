@@ -26,8 +26,11 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Paid Tiers**:
     *   **Standard**: Personal use, basic transactions.
     *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes.
+*   **Buy Crypto Integration**: Users can buy $PRN assets directly within the wallet via **PayPal** or **Credit Card**.
 *   **Payment Stack**: Integrated support for **PayPal**, **Credit Card**, and **$PRN** native settlement.
-*   **API Activation**: Businesses must authenticate via the payment terminal to unlock high-fidelity migration hooks.
+*   **API Activation & Data Collection**: 
+    *   **Logic**: When a business clicks "ACTIVATE API," the system captures their **Sovereign Handle** and **Supabase ID** to link the license.
+    *   **Inquiry Path**: For businesses requiring custom help, the "Sign Up" flow directs them to a contact point for high-fidelity onboarding.
 
 ## 4. UI/UX Standards
 *   **Fidelity**: High-fidelity UI with **Sky Blue (#F0F9FF)**, **Pure White**, and **Muze Blue (#5AC8FA)**.
