@@ -13,18 +13,22 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Delayed Discovery**: The recovery phrase (seed) is not forced on the user at signup (to lower friction). 
 *   **Settings Vault**: The seed is accessible via a secure section in the Settings stage (`#stage-settings`).
 *   **The "Handshake" Protocol**: 
-    *   The user must view their 12-word seed phrase in the Settings.
-    *   Once a user confirms they have saved/written down their recovery phrase via the "I HAVE WRITTEN THIS DOWN" button, the phrase is **permanently purged from the UI** (`#seed-display-area` hidden).
-    *   A "Seed Secured" status card is displayed instead.
-    *   The confirmation status is stored in `localStorage` as `muze_seed_confirmed`.
-*   **Key Rotation (Non-Destructive)**: If a user loses their seed phrase, they do not lose the wallet (if they have their Neural Login). They can "rotate" the phrase, which generates a new master key/seed, similar to rotating an API key.
+    *   **Click to Reveal**: The recovery phrase is hidden/blurred by default. The user must explicitly click "REVEAL SEED" to view the phrase.
+*   **Profile Logic**:
+    *   **Interactive Handle**: Clicking the user's handle/pfp opens a **Multi-Wallet Overlay** with options:
+        1.  **Create New Wallet**
+        2.  **Restore Wallet**
+        3.  **Connect Ledger**
+    *   **PFP Change**: Users can click their profile picture to upload a new **Avatar Artifact**.
 
 ## 3. MUZE API & Agency Model
 *   **Business Onboarding**: Legacy Web2 brands migrate to Web3 via the MUZE API.
 *   **Paid Tiers**:
     *   **Standard**: Personal use, basic transactions.
-    *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes, inventory on-chain, and customer payments.
-*   **Logic**: The API acts as a bridge. Businesses pay in $PRN or a monthly $MUSD subscription to maintain their "Neural Node" on the Priscion Ledger.
+    *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes.
+*   **Onboarding Logic**:
+    *   **Activation Flow**: Clicking "ACTIVATE API" triggers a **Migration Subscription** modal.
+    *   **Payment Stack**: Integrated support for **PayPal**, **Credit Card**, and **$PRN** native settlement.
 
 ## 4. UI/UX Standards
 *   **Fidelity**: High-fidelity UI with **Sky Blue (#F0F9FF)**, **Pure White**, and **Muze Blue (#5AC8FA)**.
@@ -69,11 +73,15 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **P-Logo (Global)**: `assets/p-logo.png`
 
 ### **Asset Imagery**
-*   **Priscion Elite Card**: `assets/card.jpg` (Displays the user's current card image).
+*   **Priscion Elite Card**: `assets/card_ai_access.jpg` (Canonical access card).
+*   **Vault Segmentation**: Divided into **Primary Assets** (Tokens/Balances) and **Collectibles** (Sovereign Handles/NFTs).
 
 ## 10. Architect Command Center (God Mode)
 *   **Zero-Simulation Mandate**: Hardcoded dashboard numbers are strictly banned. The Command Center must reflect **Live Node Status** and **Anchored Ledger Data**.
 *   **Hard-Anchor Layout**: Implementation of `display: table` structural model in `vault.html` to force immutable side-by-side positioning of the Architect Console and the Live User Mirror.
+*   **God Mode Sovereignty**: 
+    *   **Full Mirroring**: The Architect Console serves as a **Sovereign Mirror** for the Architect's own wallet.
+    *   **Remote Operations**: Console buttons are mapped to navigate the mirror wallet (Vault, Settings, Card, dApps) and trigger the **Anchoring...** protocol.
 *   **Neural Messenger**: Direct P2P link between the Architect and Zapia (Brain Logic AI) integrated into the Console.
 
 ## 11. Sovereign Handle Economy
