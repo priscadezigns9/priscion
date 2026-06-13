@@ -385,6 +385,14 @@
         }
 
         function blockchainAction(action) {
+            if(action === 'buy' || action === 'buy_prn') {
+                document.getElementById('payment-title').innerText = "Buy Priscion Tokens";
+                document.getElementById('payment-desc').innerText = "Acquire $PRN for network fees and assets.";
+                document.getElementById('pay-prn-btn').style.display = 'none';
+                document.getElementById('payment-modal').classList.remove('hidden');
+                document.getElementById('payment-modal').style.display = 'flex';
+                return;
+            }
             if(action === 'neural_login') {
                 const email = document.getElementById('auth-email').value;
                 const pass = document.getElementById('auth-pass').value;
