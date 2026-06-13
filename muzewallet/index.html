@@ -109,12 +109,40 @@
             <p id="auth-desc" style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Enter your sovereign credentials.</p>
             
             <div id="auth-fields" style="display:flex; flex-direction:column; gap:15px;">
-                <input type="email" placeholder="Email Address" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
-                <input type="password" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+                <input type="email" id="auth-email" placeholder="Email Address" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+                <input type="password" id="auth-pass" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
             </div>
             
             <button onclick="blockchainAction('neural_login')" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">CONTINUE</button>
             <button onclick="hideAuth()" style="background:none; border:none; color:var(--muted); font-size:0.7rem; font-weight:900; margin-top:15px; width:100%; cursor:pointer;">GO BACK</button>
+        </div>
+    </div>
+
+    <div id="layer-wizard" class="layer" style="background:#fff; z-index:7005; display:none; flex-direction:column; align-items:center; justify-content:center; padding:40px;">
+        <div class="settings-card" style="width:100%; max-width:400px;">
+            <div id="wizard-step-1">
+                <h3 style="font-weight:900; margin-bottom:10px;">Step 1: Secure Your Seed</h3>
+                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Write down these 12 words in order. This is the only way to recover your vault.</p>
+                <div id="wizard-seed-display" style="background:var(--surface); padding:20px; border-radius:12px; font-family:monospace; border:1px dashed var(--muze-blue); margin-bottom:20px; font-size:0.9rem; line-height:1.6; text-align:center;"></div>
+                <button onclick="wizardStep(2)" style="background:var(--text); color:var(--bg); border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; cursor:pointer;">I HAVE WRITTEN IT DOWN</button>
+            </div>
+            
+            <div id="wizard-step-2" style="display:none;">
+                <h3 style="font-weight:900; margin-bottom:10px;">Step 2: Verify Identity</h3>
+                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Enter the following words from your seed to verify your backup.</p>
+                <div style="display:flex; flex-direction:column; gap:15px;">
+                    <div><label style="font-size:10px; font-weight:900; color:var(--muted); letter-spacing:1px;">WORD #3</label><input type="text" id="verify-3" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);"></div>
+                    <div><label style="font-size:10px; font-weight:900; color:var(--muted); letter-spacing:1px;">WORD #7</label><input type="text" id="verify-7" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);"></div>
+                </div>
+                <button onclick="wizardVerify()" style="background:var(--text); color:var(--bg); border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">VERIFY SEED</button>
+            </div>
+            
+            <div id="wizard-step-3" style="display:none;">
+                <h3 style="font-weight:900; margin-bottom:10px;">Step 3: Secure Vault</h3>
+                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Set a strong password to encrypt your vault on this device.</p>
+                <input type="password" id="vault-pass-set" placeholder="Vault Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+                <button onclick="wizardFinalize()" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">ACTIVATE VAULT</button>
+            </div>
         </div>
     </div>
 
@@ -251,7 +279,7 @@
         const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        function bypass() { localStorage.setItem('muze_v6_active', 'true'); location.reload(); }
+        function bypass() { localStorage.setItem('muze_v7_active', 'true'); location.reload(); }
         
         function toggleDark() { 
             document.body.classList.toggle('dark');
@@ -298,10 +326,51 @@
         }
 
         function logout() {
-            localStorage.removeItem('muze_v6_active');
+            localStorage.removeItem('muze_v7_active');
             localStorage.removeItem('muze_handle');
             localStorage.removeItem('muze_seed');
             location.reload();
+        }
+
+        let currentSeed = [];
+        function wizardStep(step) {
+            document.getElementById('wizard-step-1').style.display = step === 1 ? 'block' : 'none';
+            document.getElementById('wizard-step-2').style.display = step === 2 ? 'block' : 'none';
+            document.getElementById('wizard-step-3').style.display = step === 3 ? 'block' : 'none';
+            
+            if(step === 1) {
+                const words = ['alpha','beta','gamma','delta','epsilon','zeta','eta','theta','iota','kappa','lambda','mu','neon','logic','pulse','vault','ledger','prn','ada','sovereign','neural','anchor','matrix','orbit'];
+                currentSeed = Array.from({length: 12}, () => words[Math.floor(Math.random()*words.length)]);
+                document.getElementById('wizard-seed-display').innerText = currentSeed.join(' | ');
+            }
+        }
+
+        function wizardVerify() {
+            const w3 = document.getElementById('verify-3').value.trim().toLowerCase();
+            const w7 = document.getElementById('verify-7').value.trim().toLowerCase();
+            if(w3 === currentSeed[2] && w7 === currentSeed[6]) {
+                wizardStep(3);
+            } else {
+                alert("Verification failed. Please check your written seed.");
+            }
+        }
+
+        function wizardFinalize() {
+            const pass = document.getElementById('vault-pass-set').value;
+            if(!pass) { alert("Vault password required."); return; }
+            
+            const o = document.getElementById('proc-overlay');
+            document.getElementById('proc-status').innerText = "FINALIZING...";
+            document.getElementById('proc-text').innerText = "ENCRYPTING VAULT ON LEDGER...";
+            o.style.display = 'flex';
+            
+            setTimeout(() => {
+                o.style.display = 'none';
+                localStorage.setItem('muze_v7_active', 'true');
+                localStorage.setItem('muze_handle', 'new.vault.pri');
+                localStorage.setItem('muze_seed', currentSeed.join(' | '));
+                location.reload();
+            }, 2500);
         }
 
         function blockchainAction(action) {
@@ -317,7 +386,7 @@
                 
                 setTimeout(() => {
                     o.style.display = 'none';
-                    localStorage.setItem('muze_v6_active', 'true');
+                    localStorage.setItem('muze_v7_active', 'true');
                     localStorage.setItem('muze_handle', email.split('@')[0] + '.pri');
                     localStorage.setItem('muze_seed', 'orbit | crystal | anchor | neural | logic | priscion | pulse | vault | ledger | handle | asset | elite');
                     location.reload();
@@ -325,19 +394,9 @@
                 return;
             }
             if(action === 'vault_create') {
-                const o = document.getElementById('proc-overlay');
-                document.getElementById('proc-status').innerText = "GENERATING...";
-                document.getElementById('proc-text').innerText = "MINTING SOVEREIGN SEED...";
-                o.style.display = 'flex';
-                
-                setTimeout(() => {
-                    o.style.display = 'none';
-                    const newSeed = Array.from({length: 12}, () => ['alpha','beta','gamma','delta','epsilon','zeta','eta','theta','iota','kappa','lambda','mu'][Math.floor(Math.random()*12)]).join(' | ');
-                    localStorage.setItem('muze_v6_active', 'true');
-                    localStorage.setItem('muze_handle', 'new.vault.pri');
-                    localStorage.setItem('muze_seed', newSeed);
-                    location.reload(); 
-                }, 2500);
+                document.getElementById('layer-auth').style.display = 'none';
+                document.getElementById('layer-wizard').style.display = 'flex';
+                wizardStep(1);
                 return;
             }
             if(action === 'vault_restore_confirm') {
@@ -351,7 +410,7 @@
                 
                 setTimeout(() => {
                     o.style.display = 'none';
-                    localStorage.setItem('muze_v6_active', 'true');
+                    localStorage.setItem('muze_v7_active', 'true');
                     localStorage.setItem('muze_handle', 'restored.pri');
                     localStorage.setItem('muze_seed', seed.split(' ').join(' | '));
                     location.reload();
@@ -366,7 +425,7 @@
                 
                 setTimeout(() => {
                     o.style.display = 'none';
-                    localStorage.setItem('muze_v6_active', 'true');
+                    localStorage.setItem('muze_v7_active', 'true');
                     localStorage.setItem('muze_handle', 'ledger.pri');
                     localStorage.setItem('muze_seed', '[PROTECTED BY LEDGER DEVICE]');
                     location.reload();
@@ -500,13 +559,14 @@
         });
 
         window.onload = () => { 
-            const active = localStorage.getItem('muze_v6_active');
+            const active = localStorage.getItem('muze_v7_active');
             const handle = localStorage.getItem('muze_handle') || 'prisca.pri';
             const seed = localStorage.getItem('muze_seed') || 'orbit | crystal | anchor | neural | logic | priscion | pulse | vault | ledger | handle | asset | elite';
             
             if(active === 'true') {
                 document.getElementById('layer-entrance').style.display = 'none';
                 document.getElementById('layer-auth').style.display = 'none';
+                document.getElementById('layer-wizard').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'flex';
                 
                 // Dynamic Data Injection
