@@ -120,6 +120,12 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
     *   **Fiat-to-Asset Swap**: Real-time conversion into **$MUSD** for instant real-world spending at legacy terminals.
 *   **Physical Key**: Optional NFC-embedded physical card acting as a "Physical Proof of Key" to the digital Vault.
 
+## 14. God Mode (The Architect Console)
+*   **Persistent Synchronization**: The God Mode HUD (Traffic, Revenue, System Pulse) is synchronized with **Supabase** autonomously.
+*   **Autonomous Sync Agent**: A background subagent (`autonomous_core/god_mode_sync.py`) runs every 6 hours via cron to fetch live user data and network health, ensuring the HUD is current even when the user is not actively in a session.
+*   **Live Traffic HUD**: Real-time clicks and session counts pulled directly from the Supabase profile registry.
+*   **Revenue Shield**: Real-time earnings visualization based on ecosystem activity and $PRN/ADA distribution.
+
 ---
 *Last Updated: June 13, 2026*
 
