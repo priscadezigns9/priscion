@@ -45,15 +45,23 @@
         .content {
             flex: 1; height: 100vh;
             background: var(--surface); padding: 40px; overflow-y: auto;
+            min-width: 400px;
         }
+
+        /* Draggable Resizer */
+        .resizer {
+            width: 8px; height: 100vh; background: var(--border);
+            cursor: col-resize; transition: background 0.2s;
+            flex-shrink: 0;
+        }
+        .resizer:hover { background: var(--accent); }
 
         /* Mirror (Live Lens) */
         #mirror-panel {
             width: 450px; height: 100vh; border-left: 1px solid var(--border);
             background: #000; position: relative; flex-shrink: 0;
-            transition: width 0.3s ease;
         }
-        #mirror-panel.hidden { width: 0; overflow: hidden; border: none; }
+        #mirror-panel.hidden { width: 0 !important; display: none; }
         #mirror-panel iframe { width: 100%; height: 100%; border: none; }
         .mirror-label {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
@@ -66,45 +74,51 @@
         .stage-subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
 
         /* Grid & Cards */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
         .card { 
             background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 24px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
-        .card-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
-        .card-value { font-size: 24px; font-weight: 900; color: var(--text); }
+        .card-label { font-size: 10px; font-weight: 800; color: var(--muted); margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+        .card-value { font-size: 22px; font-weight: 900; color: var(--text); }
 
         /* Messenger */
         .chat-container { 
-            height: calc(100vh - 250px); overflow-y: auto; padding: 20px; background: #fff; 
+            height: calc(100vh - 280px); overflow-y: auto; padding: 20px; background: #fff; 
             border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px;
         }
-        .msg { margin-bottom: 16px; max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
+        .msg { margin-bottom: 16px; max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 13px; line-height: 1.5; }
         .msg.architect { background: var(--text); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
         .msg.zapia { background: var(--surface); color: var(--text); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
-        .chat-input { display: flex; flex-direction: column; gap: 12px; }
-        .chat-input input { padding: 16px; border-radius: 12px; border: 1px solid var(--border); outline: none; }
-        .chat-input button { background: var(--text); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        
+        .chat-input { display: flex; flex-direction: column; gap: 10px; }
+        .chat-input input { padding: 16px; border-radius: 12px; border: 1px solid var(--border); outline: none; font-size: 13px; }
+        
+        .action-row { display: flex; gap: 10px; }
+        .btn-send { background: var(--text); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        .btn-upload { background: #fff; border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px; font-size: 10px; font-weight: 900; cursor: pointer; color: var(--muted); }
+        .btn-upload:hover { border-color: var(--accent); color: var(--accent); }
 
         /* Digital Card Preview */
+        .card-preview-container { text-align: center; padding: 40px; background: #fff; border-radius: 32px; border: 1px solid var(--border); }
         .card-img { 
-            width: 100%; max-width: 600px; border-radius: 24px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); 
+            width: 100%; max-width: 500px; border-radius: 24px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1); 
             border: 1px solid var(--border); margin-bottom: 20px;
         }
 
         /* Wallet Buttons */
-        .wallet-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
-        .btn-action { 
-            padding: 20px; border-radius: 16px; border: 1px solid var(--border);
-            background: #fff; font-size: 11px; font-weight: 800; cursor: pointer;
+        .wallet-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 20px; }
+        .btn-op { 
+            padding: 16px; border-radius: 14px; border: 1px solid var(--border);
+            background: #fff; font-size: 10px; font-weight: 800; cursor: pointer;
             text-align: center; color: var(--text); text-transform: uppercase; letter-spacing: 1px;
         }
-        .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-op:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
     </style>
 </head>
-<body>
+<body id="body-main">
 
     <div class="sidebar">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="sidebar-logo">
@@ -123,48 +137,54 @@
         <!-- Stage: Command Center -->
         <div id="stage-dashboard" class="stage">
             <h1 class="stage-title">Node Telemetry</h1>
-            <p class="stage-subtitle">Real-time intelligence from the Priscion Blockchain.</p>
+            <p class="stage-subtitle">Anchored to the Priscion Blockchain Ledger.</p>
             <div class="grid">
                 <div class="card"><div class="card-label">NODES</div><div class="card-value" id="stat-nodes">...</div></div>
                 <div class="card"><div class="card-label">TRANSACTIONS</div><div class="card-value" id="stat-txs">...</div></div>
-                <div class="card"><div class="card-label">NRL RESERVE</div><div class="card-value">1,250,000</div></div>
                 <div class="card"><div class="card-label">PRN RESERVE</div><div class="card-value" id="stat-prn">...</div></div>
-                <div class="card"><div class="card-label">JELLO RESERVE</div><div class="card-value" id="stat-jello">250,000</div></div>
-                <div class="card"><div class="card-label">ATELIA TOKEN</div><div class="card-value">MINEABLE</div></div>
+                <div class="card"><div class="card-label">NRL RESERVE</div><div class="card-value">1,250,000</div></div>
+                <div class="card"><div class="card-label">JELLO RESERVE</div><div class="card-value">250,000</div></div>
+                <div class="card"><div class="card-label">ATLR TOKEN</div><div class="card-value">MINEABLE</div></div>
             </div>
 
-            <div class="sidebar-label" style="margin-top:40px;">Operations</div>
+            <div class="sidebar-label" style="margin-top:40px;">Remote Operations</div>
             <div class="wallet-actions">
-                <button class="btn-action" onclick="syncToMirror('vault')">VAULT</button>
-                <button class="btn-action" onclick="syncToMirror('card')">ELITE CARD</button>
-                <button class="btn-action" onclick="syncToMirror('settings')">SETTINGS</button>
-                <button class="btn-action" onclick="performBlockchainAction('staking')">STAKING</button>
-                <button class="btn-action" onclick="performBlockchainAction('mint')">MINT NFT</button>
+                <button class="btn-op" onclick="syncToMirror('vault')">VAULT</button>
+                <button class="btn-op" onclick="syncToMirror('card')">ELITE CARD</button>
+                <button class="btn-op" onclick="syncToMirror('settings')">SETTINGS</button>
+                <button class="btn-op" onclick="performBlockchainAction('staking')">STAKING</button>
+                <button class="btn-op" onclick="performBlockchainAction('mint')">MINT NFT</button>
             </div>
-            <p id="action-status" style="margin-top: 20px; font-size: 12px; font-weight: 900; color: var(--accent);"></p>
+            <p id="action-status" style="margin-top: 20px; font-size: 11px; font-weight: 900; color: var(--accent); text-transform: uppercase;"></p>
         </div>
 
         <!-- Stage: Messenger -->
         <div id="stage-messenger" class="stage hidden">
-            <h1 class="stage-title">BrainLogic | Zapia</h1>
+            <h1 class="stage-title">BrainLogic</h1>
             <div class="chat-container" id="chat-box"></div>
             <div class="chat-input">
                 <input type="text" id="chat-input" placeholder="Message Zapia..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <div style="display:flex; gap:10px;">
-                    <button onclick="sendMessage()">SEND</button>
-                    <button class="btn-action" style="padding:10px; font-size:9px;" onclick="alert('Asset Staging Sequence Initialized...')">UPLOAD PHOTO</button>
-                    <button class="btn-action" style="padding:10px; font-size:9px;" onclick="alert('Document Staging Sequence Initialized...')">ATTACH DOC</button>
+                <div class="action-row">
+                    <button class="btn-send" onclick="sendMessage()">SEND</button>
+                    <button class="btn-upload" onclick="triggerFile('photo')">UPLOAD PHOTO</button>
+                    <button class="btn-upload" onclick="triggerFile('doc')">ATTACH DOC</button>
+                    <input type="file" id="file-input" style="display:none;" onchange="handleFileUpload(this)">
                 </div>
             </div>
         </div>
 
         <!-- Stage: Card -->
-        <div id="stage-card" class="stage hidden" style="text-align: center;">
+        <div id="stage-card" class="stage hidden">
             <h1 class="stage-title">Digital Card</h1>
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" class="card-img">
-            <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px;">ELITE CARD #001 — ANCHORED</p>
+            <div class="card-preview-container">
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" class="card-img" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png?v=2'">
+                <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px; margin-top: 20px;">ELITE CARD #001 — PHYSICAL BRIDGE</p>
+            </div>
         </div>
     </div>
+
+    <!-- Draggable Resizer -->
+    <div class="resizer" id="drag-handle"></div>
 
     <!-- Live Mirror -->
     <div id="mirror-panel">
@@ -177,6 +197,7 @@
         const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+        /* Telemetry Logic */
         async function fetchLiveTelemetry() {
             const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
             document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
@@ -185,13 +206,30 @@
             document.getElementById('stat-prn').innerText = ((userCount || 0) * 1250 + 500000).toLocaleString();
         }
 
-        function toggleMirror() { document.getElementById('mirror-panel').classList.toggle('hidden'); }
+        /* Resizer Logic */
+        const resizer = document.getElementById('drag-handle');
+        const mirror = document.getElementById('mirror-panel');
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', (e) => { isResizing = true; document.body.style.cursor = 'col-resize'; });
+        window.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const width = window.innerWidth - e.clientX;
+            if (width > 200 && width < (window.innerWidth - 350)) {
+                mirror.style.width = width + 'px';
+            }
+        });
+        window.addEventListener('mouseup', () => { isResizing = false; document.body.style.cursor = 'default'; });
+
+        /* Navigation Logic */
+        function toggleMirror() { mirror.classList.toggle('hidden'); resizer.classList.toggle('hidden'); }
 
         function forceMirrorLogin() {
             const iframe = document.getElementById('mirror-iframe');
-            document.getElementById('mirror-panel').classList.remove('hidden');
+            mirror.classList.remove('hidden');
+            resizer.classList.remove('hidden');
             iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
-            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE SENT.';
+            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE: SUCCESS';
             setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
         }
 
@@ -199,7 +237,7 @@
 
         function syncToMirror(hash) {
             document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
-            document.getElementById('action-status').innerText = `SYNCING MIRROR TO #${hash.toUpperCase()}`;
+            document.getElementById('action-status').innerText = `SYNC: #${hash.toUpperCase()}`;
             setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
         }
 
@@ -209,7 +247,7 @@
             if (session) {
                 await supabaseClient.from('profiles').update({ last_action: 'ARCHITECT_' + type.toUpperCase(), last_action_at: new Date() }).eq('id', session.user.id);
             }
-            setTimeout(() => { document.getElementById('action-status').innerText = `SUCCESS: ANCHORED.`; }, 1000);
+            setTimeout(() => { document.getElementById('action-status').innerText = `ANCHORED TO LEDGER`; }, 1000);
         }
 
         function showStage(id, el) {
@@ -217,6 +255,21 @@
             document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
+        }
+
+        /* BrainLogic Upload Logic */
+        function triggerFile(type) { document.getElementById('file-input').click(); }
+        function handleFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const name = input.files[0].name;
+                const container = document.getElementById('chat-box');
+                const msg = document.createElement('div');
+                msg.className = 'msg architect';
+                msg.innerHTML = `<b>STAGING FILE:</b> ${name}<br><small>Ready for ledger anchor...</small>`;
+                container.appendChild(msg);
+                container.scrollTop = container.scrollHeight;
+                localStorage.setItem('brainlogic_history', container.innerHTML);
+            }
         }
 
         function sendMessage() {
@@ -233,7 +286,7 @@
             setTimeout(() => {
                 const z = document.createElement('div');
                 z.className = 'msg zapia';
-                z.innerText = "Understood, Architect. Syncing to current session.";
+                z.innerText = "Acknowledged. Syncing to current session.";
                 container.appendChild(z);
                 localStorage.setItem('brainlogic_history', container.innerHTML);
             }, 800);
