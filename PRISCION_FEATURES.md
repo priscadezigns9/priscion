@@ -14,31 +14,28 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Settings Vault**: The seed is accessible via a secure section in the Settings stage (`#stage-settings`).
 *   **The "Handshake" Protocol**: 
     *   **Click to Reveal**: The recovery phrase is hidden/blurred by default. The user must explicitly click "REVEAL SEED" to view the phrase.
-    *   Once a user confirms they have saved/written down their recovery phrase via the "I HAVE WRITTEN THIS DOWN" button, the phrase is **permanently purged from the UI** (`#seed-display-area` hidden).
-    *   A "Seed Secured" status card is displayed instead.
-    *   The confirmation status is stored in `localStorage` as `muze_seed_confirmed`.
-*   **Key Rotation (Non-Destructive)**: If a user loses their seed phrase, they do not lose the wallet (if they have their Neural Login). They can "rotate" the phrase, which generates a new master key/seed, similar to rotating an API key.
+*   **Profile Logic**:
+    *   **Interactive Handle**: Clicking the user's handle/pfp opens a **Multi-Wallet Overlay** with options:
+        1.  **Create New Wallet**
+        2.  **Restore Wallet**
+        3.  **Connect Ledger**
+    *   **PFP Change**: Users can click their profile picture to upload a new **Avatar Artifact**.
 
 ## 3. MUZE API & Agency Model
 *   **Business Onboarding**: Legacy Web2 brands migrate to Web3 via the MUZE API.
 *   **Paid Tiers**:
     *   **Standard**: Personal use, basic transactions.
     *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes.
-*   **API Activation**: The activation interface is hidden behind a secure "ACTIVATE API" toggle within Settings.
 
 ## 4. UI/UX Standards
 *   **Fidelity**: High-fidelity UI with **Sky Blue (#F0F9FF)**, **Pure White**, and **Muze Blue (#5AC8FA)**.
 *   **Typography**: **Playfair Display** (Headings/Balances) and **Inter** (UI/Body).
 *   **Dark Mode**: A modern, vector-style persistent toggle in the navigation for high-fidelity night work.
-*   **Profile Logic**: Clicking the user's handle/pfp opens a **Multi-Wallet Overlay** with options:
-    1.  **Create New Wallet**
-    2.  **Restore Wallet**
-    3.  **Connect Ledger**
-*   **Action Bar**: Must feature SEND, RECV, SWAP, and **⚡ STAKE** buttons.
+*   **Action Bar**: Must feature SEND, RECV, SWAP, and **⚡ STAKE** buttons. All buttons must trigger immediate visual feedback ("Anchoring...").
 *   **dApp Stage Interaction**: Clicking a dApp tile (PULSE, CHILLATA, etc.) must open the app directly within the MUZE Wallet viewport.
 *   **Asset Categorization**:
     *   **Vault**: Primary fungible tokens ($PRN, ADA, NRL).
-    *   **Collectibles**: Dedicated gallery for **NFTs and ADA Handles**.
+    *   **Collectibles**: Dedicated gallery for **NFTs and ADA Handles**. By default, it shows the user's `.pri` handle with the Priscion logo.
 *   **Favicon**: Always the **P-Logo** (`/assets/p-logo.png`).
 
 ## 5. Token Economy (The Four-Token Ledger)
@@ -46,6 +43,7 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **$NRL (Neural)**: Reserve/Governance. Private reserve, DAO voting.
 *   **$JLO (Chillata Token)**: The specific token used for private transactions.
 *   **$MUSD (Muze USD)**: Stablecoin. Ecosystem settlement and merchant payouts.
+*   **Jello Messenger**: A private, encrypted messenger integrated into the **Chillata (Jello)** layer.
 *   **Live Logic**: Balances and transaction counts are pulled live from the Supabase `profiles` ledger.
 *   **$NRL (Neural)**: Reserve/Governance. Private reserve, DAO voting.
 *   **$JLO (Chillata Token)**: The specific token used for private transactions.
