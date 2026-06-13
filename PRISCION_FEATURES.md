@@ -26,6 +26,8 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Paid Tiers**:
     *   **Standard**: Personal use, basic transactions.
     *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes.
+*   **Payment Stack**: Integrated support for **PayPal**, **Credit Card**, and **$PRN** native settlement.
+*   **API Activation**: Businesses must authenticate via the payment terminal to unlock high-fidelity migration hooks.
 
 ## 4. UI/UX Standards
 *   **Fidelity**: High-fidelity UI with **Sky Blue (#F0F9FF)**, **Pure White**, and **Muze Blue (#5AC8FA)**.
@@ -74,7 +76,7 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 
 ## 9. Brand & Visual Assets
 ### **Primary Logos**
-*   **MUZE Logo**: `assets/muze_logo.png`
+*   **MUZE Logo**: `assets/muze_icon_logo.png` (Canonical Wallet Icon).
 *   **PRISCION Logo**: `assets/muze_icon_logo.png`
 *   **PULSE Logo**: `assets/pulse_logo.png`
 *   **P-Logo (Global)**: `assets/p-logo.png`
