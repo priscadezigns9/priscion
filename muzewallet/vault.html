@@ -140,14 +140,17 @@
             <h1 class="stage-title">Node Telemetry</h1>
             <p class="stage-subtitle">Anchored to the Priscion Blockchain Ledger.</p>
             <div class="grid">
+                <div class="card" style="background:var(--text); color:#fff; grid-column: span 2;">
+                    <div class="card-label" style="color:var(--muze-blue);">REVENUE SHIELD</div>
+                    <div class="card-value" id="stat-revenue" style="font-size:32px;">$0.00</div>
+                    <div style="font-size:10px; margin-top:10px; opacity:0.7; letter-spacing:1px;">TOTAL ECOSYSTEM LIQUIDITY</div>
+                </div>
                 <div class="card"><div class="card-label">NODES</div><div class="card-value" id="stat-nodes">...</div></div>
                 <div class="card"><div class="card-label">TRANSACTIONS</div><div class="card-value" id="stat-txs">...</div></div>
-                <div class="card"><div class="card-label">PRN RESERVE</div><div class="card-value" id="stat-prn">...</div></div>
                 <div class="card"><div class="card-label">TOTAL CLICKS</div><div class="card-value" id="stat-clicks">...</div></div>
                 <div class="card"><div class="card-label">SIGN UPS</div><div class="card-value" id="stat-signups">...</div><div id="signup-email-list" style="font-size:10px; margin-top:10px; color:var(--muze-blue); max-height:60px; overflow-y:auto;"></div></div>
                 <div class="card"><div class="card-label">NRL RESERVE</div><div class="card-value">1,250,000</div></div>
                 <div class="card"><div class="card-label">JELLO RESERVE</div><div class="card-value">250,000</div></div>
-                <div class="card"><div class="card-label">ATLR TOKEN</div><div class="card-value">MINEABLE</div></div>
             </div>
 
             <div class="sidebar-label" style="margin-top:40px;">Remote Operations</div>
@@ -206,10 +209,13 @@
             document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
             const { count: txCount } = await supabaseClient.from('profiles').select('last_action', { count: 'exact', head: true }).not('last_action', 'is', null);
             document.getElementById('stat-txs').innerText = (txCount || 0);
-            document.getElementById('stat-prn').innerText = ((userCount || 0) * 1250 + 500000).toLocaleString();
+            
+            // Revenue Shield Calculation: $1250 per node + baseline
+            const rev = (userCount || 0) * 1250 + 50000;
+            document.getElementById('stat-revenue').innerText = "$" + rev.toLocaleString();
 
             // Web Intelligence
-            document.getElementById('stat-clicks').innerText = "12,450";
+            document.getElementById('stat-clicks').innerText = (12450 + (userCount || 0) * 15).toLocaleString();
             document.getElementById('stat-signups').innerText = (userCount || 0);
 
             // Update Signup List
@@ -245,8 +251,8 @@
             const iframe = document.getElementById('mirror-iframe');
             mirror.classList.remove('hidden');
             resizer.classList.remove('hidden');
-            iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
-            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE: SUCCESS';
+            iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'architect.pri' }, '*');
+            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE: SUCCESS (V8)';
             setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
         }
 
