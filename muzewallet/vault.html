@@ -111,7 +111,7 @@
     <!-- SIDEBAR -->
     <div class="sidebar">
         <div style="padding: 10px 20px 40px; cursor: pointer; text-align: center;" onclick="location.reload()">
-            <img src="../assets/muze_icon_logo.png" style="height: 30px;">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_word_logo.png" style="height: 30px;">
         </div>
         
         <div class="sidebar-label">GOD MODE</div>
@@ -123,11 +123,10 @@
         <div class="sidebar-label">LENS VIEW</div>
         <div class="nav-item" style="color: var(--muze-blue);" onclick="toggleMirror()"><span>TOGGLE MIRROR</span></div>
 
-        <div class="sidebar-label">MUZE CONSOLE</div>
-        <div class="nav-item" onclick="showStage('vault', this)"><span>Vault</span></div>
-        <div class="nav-item" onclick="showStage('card', this)"><span>Digital Card</span></div>
-        <div class="nav-item" onclick="showStage('dapps', this)"><span>Network DApps</span></div>
-        <div class="nav-item" onclick="showStage('settings', this)"><span>Settings</span></div>
+        <div class="sidebar-label">REMOTE OPERATIONS</div>
+        <div class="nav-item" onclick="remoteNav('vault', this)"><span>Vault Mirror</span></div>
+        <div class="nav-item" onclick="remoteNav('card', this)"><span>Digital Card Mirror</span></div>
+        <div class="nav-item" onclick="remoteNav('settings', this)"><span>Settings Mirror</span></div>
 
         <div style="margin-top: 100px; padding: 10px;">
             <button style="width:100%; background:#000; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.6rem; cursor:pointer; text-transform: uppercase; letter-spacing: 1px;" onclick="location.href='index.html'">LOCK</button>
@@ -168,7 +167,7 @@
                     <h2>Agency Hub</h2>
                     <p class="subtitle">Migration Pipeline: Web2 Brands to Web3 Infrastructure.</p>
                     <div style="background: var(--surface); padding: 40px; border-radius: 30px; border: 1px solid var(--border); text-align: center;">
-                        <img src="../assets/muze_icon_logo.png" style="height: 50px; margin-bottom: 20px; opacity: 0.2;">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height: 50px; margin-bottom: 20px; opacity: 0.2;">
                         <h3 style="font-weight: 900; margin-bottom: 10px;">Migration Pipeline Empty</h3>
                         <p style="font-size: 0.85rem; color: var(--muted);">When a business migrates, their brand node, smart contracts, and anchored inventory will manifest here.</p>
                     </div>
@@ -206,10 +205,33 @@
         </div>
     </div>
 
+    <!-- Anchoring Overlay -->
+    <div id="proc-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; color:#fff; font-family:monospace; flex-direction:column; align-items:center; justify-content:center; gap:20px;">
+        <div style="font-size:1.2rem; font-weight:900; letter-spacing:4px; animation: pulse 1s infinite;">ANCHORING...</div>
+        <div style="font-size:0.7rem; opacity:0.5;">Synching Sovereign Identity to Mirror...</div>
+    </div>
+
+    <style>
+        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+    </style>
+
     <script>
         function toggleMirror() {
             const mirror = document.getElementById('mirror-panel');
             mirror.style.display = (mirror.style.display === 'none') ? 'table-cell' : 'none';
+        }
+
+        function remoteNav(hash, el) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            if(el) el.classList.add('active');
+            
+            const mirrorFrame = document.getElementById('mirror-iframe');
+            mirrorFrame.contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
+            
+            // Anchoring Protocol Effect
+            const overlay = document.getElementById('proc-overlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => { overlay.style.display = 'none'; }, 800);
         }
 
         function showStage(id, el) {
@@ -239,7 +261,7 @@
             ];
             grid.innerHTML = handles.map(h => `
                 <div class="handle-tile">
-                    <img src="https://priscion.com/assets/p-logo.png" alt="Logo">
+                    <img src="https://priscion.chttps://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png" alt="Logo">
                     <h4>${h}</h4>
                     <span>.pri</span>
                 </div>
