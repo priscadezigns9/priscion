@@ -82,7 +82,7 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **P-Logo (Global)**: `assets/p-logo.png`
 
 ### **Asset Imagery**
-*   **Priscion Elite Card**: `assets/card.jpg` (Displays the user's current card image).
+*   **Priscion Elite Card**: `assets/card_ai_access.jpg` (High-fidelity AI Access card artifact).
 
 ## 10. Architect Command Center (God Mode)
 *   **Zero-Simulation Mandate**: Hardcoded dashboard numbers are strictly banned. The Command Center must reflect **Live Node Status** and **Anchored Ledger Data**.
