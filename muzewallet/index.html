@@ -101,7 +101,7 @@
     </div>
 
     <div class="sidebar">
-        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" style="height:35px; object-fit:contain;"></div>
+        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:35px; object-fit:contain;"></div>
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApps</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
@@ -191,9 +191,26 @@
                 <button class="reveal-btn" id="reveal-btn" onclick="revealSeed()">REVEAL SEED</button>
             </div>
             <div class="settings-card">
-                <h4 style="font-weight:900;">Developer API</h4>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h4 style="font-weight:900;">Developer API</h4>
+                    <span id="api-status-tag" style="font-size:10px; font-weight:900; color:var(--muted);">STATUS: INACTIVE</span>
+                </div>
                 <p style="font-size:0.8rem; color:var(--muted); margin-top:10px; line-height: 1.4;">Enable high-fidelity business nodes and migration hooks for autonomous brands.</p>
                 <button class="reveal-btn" style="background:var(--accent); color:#fff;" onclick="blockchainAction('api_init')">ACTIVATE API</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="layer" style="background:rgba(255,255,255,0.95); backdrop-filter:blur(10px);">
+        <div class="settings-card" style="max-width:400px; text-align:center;">
+            <h3 style="font-weight:900; margin-bottom:20px;">Activate Developer API</h3>
+            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:30px;">Subscription required for High-Fidelity Business Nodes.</p>
+            
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <button class="reveal-btn" style="background:#0070BA; color:#fff; border:none;" onclick="processPayment('PayPal')">Pay with PayPal</button>
+                <button class="reveal-btn" style="background:#000; color:#fff; border:none;" onclick="processPayment('Credit Card')">Pay with Credit Card</button>
+                <button class="reveal-btn" style="background:var(--accent); color:#fff; border:none;" onclick="processPayment('PRN')">Pay with $PRN</button>
+                <button class="reveal-btn" style="background:none; color:var(--muted); border:1px solid var(--border);" onclick="closePayment()">Cancel</button>
             </div>
         </div>
     </div>
@@ -221,6 +238,10 @@
         }
 
         function blockchainAction(action) {
+            if(action === 'api_init') {
+                document.getElementById('payment-modal').style.display = 'flex';
+                return;
+            }
             const o = document.getElementById('proc-overlay');
             const txt = document.getElementById('proc-text');
             txt.innerText = `INITIATING ${action.toUpperCase()} ON PRISCION LEDGER...`;
@@ -282,6 +303,25 @@
         });
 
         window.onclick = () => { document.getElementById('handle-menu').style.display = 'none'; };
+
+        function closePayment() { document.getElementById('payment-modal').style.display = 'none'; }
+        
+        function processPayment(method) {
+            closePayment();
+            const o = document.getElementById('proc-overlay');
+            o.style.display = 'flex';
+            const statusText = document.querySelector('#proc-overlay div:first-child');
+            const subText = document.querySelector('#proc-overlay div:last-child');
+            statusText.innerText = "AUTHENTICATING " + method.toUpperCase() + "...";
+            subText.innerText = "Anchoring API License to Ledger...";
+            
+            setTimeout(() => {
+                o.style.display = 'none';
+                alert("Developer API Activated successfully via " + method + "!");
+                document.getElementById('api-status-tag').innerText = "STATUS: ACTIVE (PAID)";
+                document.getElementById('api-status-tag').style.color = "var(--muze-blue)";
+            }, 2500);
+        }
 
         async function fetchLiveBalance() {
             const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
