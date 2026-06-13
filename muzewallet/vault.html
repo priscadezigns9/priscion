@@ -50,11 +50,12 @@
 
         /* Draggable Resizer */
         .resizer {
-            width: 8px; height: 100vh; background: var(--border);
-            cursor: col-resize; transition: background 0.2s;
-            flex-shrink: 0;
+            width: 12px; height: 100vh; background: var(--border);
+            cursor: col-resize; transition: all 0.2s;
+            flex-shrink: 0; position: relative;
         }
         .resizer:hover { background: var(--accent); }
+        .resizer::after { content: '||'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 10px; color: var(--muted); font-weight: 900; }
 
         /* Mirror (Live Lens) */
         #mirror-panel {
@@ -177,7 +178,7 @@
         <div id="stage-card" class="stage hidden">
             <h1 class="stage-title">Digital Card</h1>
             <div class="card-preview-container">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" class="card-img" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png?v=2'">
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png?v=GodModeLive" class="card-img">
                 <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px; margin-top: 20px;">ELITE CARD #001 — PHYSICAL BRIDGE</p>
             </div>
         </div>
@@ -237,12 +238,15 @@
 
         function syncToMirror(hash) {
             document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
-            document.getElementById('action-status').innerText = `SYNC: #${hash.toUpperCase()}`;
+            document.getElementById('action-status').innerText = `SYNCING MIRROR: #${hash.toUpperCase()}`;
             setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
         }
 
         async function performBlockchainAction(type) {
             document.getElementById('action-status').innerText = `INITIATING ${type.toUpperCase()}...`;
+            // Trigger visual in mirror
+            document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'ACTION', action: type }, '*');
+            
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 await supabaseClient.from('profiles').update({ last_action: 'ARCHITECT_' + type.toUpperCase(), last_action_at: new Date() }).eq('id', session.user.id);
