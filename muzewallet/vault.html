@@ -19,6 +19,7 @@
         }
 
         .hidden { display: none !important; }
+        .hidden-mirror { display: none !important; }
 
         /* Sidebar: Table Cell */
         .sidebar {
@@ -26,263 +27,235 @@
             background: var(--bg); border-right: 1px solid var(--border);
             padding: 40px 20px; z-index: 1000;
         }
-        .sidebar-label {
-            font-size: 0.6rem; font-weight: 900; color: var(--muted); letter-spacing: 2px;
-            text-transform: uppercase; padding: 25px 20px 10px; border-top: 1px solid var(--border);
-            margin-top: 20px;
+        .sidebar-label { 
+            font-size: 10px; text-transform: uppercase; letter-spacing: 2px; 
+            color: var(--muted); margin-bottom: 20px; font-weight: 700;
         }
-        .sidebar-label:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
-        .nav-item {
-            padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem;
-            color: var(--muted); cursor: pointer; display: flex; align-items: center;
-            gap: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s;
+        .nav-item { 
+            padding: 12px 16px; margin-bottom: 8px; border-radius: 12px; 
+            cursor: pointer; font-weight: 600; color: var(--muted);
+            display: flex; align-items: center; gap: 12px; font-size: 14px;
         }
         .nav-item:hover { background: var(--surface); color: var(--text); }
-        .nav-item.active { background: #000; color: #fff; }
+        .nav-item.active { background: var(--text); color: #fff; }
 
-        /* Main Wrapper: Table Cell with nested table */
-        .main-wrapper { 
-            display: table-cell !important; vertical-align: top;
-            height: 100vh; width: 100%;
+        /* Main Content: Table Cell */
+        .content {
+            display: table-cell !important; height: 100vh; vertical-align: top;
+            background: var(--surface); padding: 40px; overflow-y: auto;
         }
-        
-        .sub-layout { display: table !important; width: 100%; height: 100vh; table-layout: fixed !important; }
-        
-        /* Architect View (Left/Flexible) */
-        .content { 
-            display: table-cell !important; vertical-align: top;
-            padding: 60px 60px; background: #fff; position: relative; 
-            border-right: 1px solid var(--border); overflow-y: auto;
+
+        /* Mirror: Table Cell */
+        .mirror-container {
+            display: table-cell !important; width: 450px; height: 100vh; vertical-align: top;
+            background: #000; border-left: 1px solid var(--border); position: relative;
         }
-        
-        /* Lens View / User Mirror (Right/Fixed Width) */
-        .mirror-container { 
-            display: table-cell !important; width: 450px; vertical-align: top;
-            background: #fff; overflow: hidden; position: relative; border-left: 4px solid #000; 
+        .mirror-container iframe { width: 100%; height: 100%; border: none; }
+        .mirror-label {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); color: #fff; padding: 6px 12px; border-radius: 20px;
+            font-size: 10px; font-weight: 900; letter-spacing: 1px; z-index: 10;
         }
-        
-        .mirror-header { padding: 15px 25px; border-bottom: 1px solid var(--border); background: #fff; display: flex; justify-content: space-between; align-items: center; }
-        .mirror-label { font-size: 0.65rem; font-weight: 900; letter-spacing: 1.5px; color: var(--text); text-transform: uppercase; }
-        .mirror-badge { background: #E0F2FE; color: #0369a1; padding: 5px 12px; border-radius: 100px; font-size: 0.55rem; font-weight: 900; }
-        #mirror-iframe { width: 100%; height: calc(100vh - 50px); border: none; background: #F0F9FF; }
 
-        h2 { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: -1.5px; font-size: 2.8rem; margin-bottom: 10px; color: #000; }
-        p.subtitle { color: var(--muted); margin-bottom: 50px; font-size: 0.95rem; font-weight: 500; }
+        /* Stages */
+        .stage-title { font-size: 32px; font-weight: 900; margin-bottom: 8px; font-family: 'Playfair Display', serif; }
+        .stage-subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
 
-        /* Stats & UI Cards */
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 40px; }
-        .stat-card { background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); }
-        .stat-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; display: block; }
-        .stat-value { font-size: 1.8rem; font-weight: 900; color: #000; }
-
-        .console-box { background: #000; color: #10b981; padding: 25px; border-radius: 20px; font-family: monospace; font-size: 0.8rem; line-height: 1.6; border: 1px solid #333; margin-top: 20px; }
-
-        /* Handle Tile Design */
-        .handle-tile { 
-            background: #fff; border: 1px solid var(--border); padding: 30px 20px; border-radius: 20px; 
-            text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            aspect-ratio: 1 / 1; transition: all 0.3s; cursor: pointer;
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .card { 
+            background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
-        .handle-tile:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: var(--accent); }
-        .handle-tile img { width: 40px; height: 40px; margin-bottom: 15px; opacity: 0.8; }
-        .handle-tile h4 { font-weight: 900; font-size: 0.85rem; color: #000; margin-bottom: 4px; }
-        .handle-tile span { font-size: 0.6rem; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+        .card-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
+        .card-value { font-size: 24px; font-weight: 900; color: var(--text); }
 
-        /* Messenger UI */
-        .chat-container { height: 500px; display: flex; flex-direction: column; background: var(--surface); border-radius: 24px; border: 1px solid var(--border); overflow: hidden; }
-        .chat-messages { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; font-size: 0.85rem; line-height: 1.5; }
-        .msg.zapia { background: #000; color: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg.architect { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chat-input { padding: 20px; background: #fff; border-top: 1px solid var(--border); display: flex; gap: 10px; }
-        .chat-input input { flex: 1; border: 1px solid var(--border); padding: 12px 20px; border-radius: 100px; font-size: 0.85rem; outline: none; }
-        .chat-input button { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; cursor: pointer; }
+        /* Handle Tiles */
+        .handle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
+        .handle-tile {
+            background: #fff; border: 1px solid var(--border); border-radius: 16px;
+            aspect-ratio: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 20px; text-align: center; cursor: pointer;
+        }
+        .handle-tile:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .handle-tile img { width: 40px; margin-bottom: 12px; }
+        .handle-tile span { font-size: 12px; font-weight: 700; color: var(--text); }
 
-        /* God Mode Wallet */
-        .wallet-panel { background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 40px; margin-top: 40px; }
-        .wallet-balance { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px; }
-        .wallet-actions { display: flex; flex-wrap: wrap; gap: 15px; }
-        .wallet-btn { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; min-width: 100px; }
-        .wallet-btn.outline { background: #fff; color: #000; border: 1px solid #000; }
-        .wallet-btn.stake { background: var(--accent); color: #fff; }
+        /* Messenger */
+        .messenger-stage { display: flex; flex-direction: column; height: calc(100vh - 120px); }
+        .chat-container { 
+            flex: 1; overflow-y: auto; padding: 20px; background: #fff; 
+            border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px;
+        }
+        .msg { margin-bottom: 16px; max-width: 80%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
+        .msg.architect { background: var(--text); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+        .msg.zapia { background: var(--surface); color: var(--text); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+        .chat-input { display: flex; gap: 12px; }
+        .chat-input input { 
+            flex: 1; padding: 16px; border-radius: 12px; border: 1px solid var(--border);
+            outline: none; font-family: inherit;
+        }
+        .chat-input button { 
+            background: var(--text); color: #fff; border: none; padding: 0 24px; 
+            border-radius: 12px; font-weight: 700; cursor: pointer;
+        }
 
+        /* Digital Card Preview */
+        .card-preview-container {
+            width: 100%; display: flex; justify-content: center; padding: 40px 0;
+            background: var(--surface); border-radius: 24px; border: 1px solid var(--border);
+        }
         .card-preview { 
             width: 100%; max-width: 500px; height: 300px; 
             border-radius: 24px; background-size: contain; background-repeat: no-repeat;
             background-position: center; border: 1px solid var(--border);
-            background-image: url('../assets/card.png');
+            background-image: url('https://priscion.com/assets/card.png');
+            background-color: #fff; /* Ensure no weird fallback colors */
         }
 
-        @media (max-width: 1200px) {
-            .sidebar { width: 80px; padding: 20px 10px; }
-            .sidebar-label, .nav-item span { display: none; }
-            .nav-item { justify-content: center; }
-            .mirror-container { width: 350px; }
+        /* Status Pills */
+        .pill { 
+            display: inline-flex; align-items: center; padding: 4px 12px; 
+            border-radius: 20px; font-size: 11px; font-weight: 800; gap: 6px;
         }
+        .pill-live { background: #DCFCE7; color: #166534; }
+        .pill-live::before { content: ""; width: 6px; height: 6px; background: #22C55E; border-radius: 50%; }
+
+        /* Wallet Buttons */
+        .wallet-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .btn-action { 
+            flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border);
+            background: #fff; font-size: 12px; font-weight: 700; cursor: pointer;
+            text-align: center;
+        }
+        .btn-action:hover { background: var(--surface); }
+
     </style>
 </head>
 <body>
 
-    <!-- SIDEBAR -->
+    <!-- Sidebar Navigation -->
     <div class="sidebar">
-        <div style="padding: 10px 20px 40px; cursor: pointer; text-align: center;" onclick="location.reload()">
-            <img src="../assets/muze_icon_logo.png" style="height: 30px;">
+        <div class="sidebar-label">Priscion Agency</div>
+        <div class="nav-item active" onclick="showStage('dashboard', this)">
+            <img src="https://priscion.com/assets/logos/priscion-logo.png" style="width:20px; filter:invert(1);">
+            Command Center
         </div>
+        <div class="nav-item" onclick="showStage('vault', this)">Vault</div>
+        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
+        <div class="nav-item" onclick="showStage('governance', this)">Governance</div>
         
-        <div class="sidebar-label">GOD MODE</div>
-        <div class="nav-item active" onclick="showStage('main', this)"><span>Command Center</span></div>
-        <div class="nav-item" onclick="showStage('handles', this)"><span>Handles Ledger</span></div>
-        <div class="nav-item" onclick="showStage('agency', this)"><span>Agency Hub</span></div>
-        <div class="nav-item" onclick="showStage('messenger', this)"><span>Messenger</span></div>
-
-        <div class="sidebar-label">LENS VIEW</div>
-        <div class="nav-item" style="color: var(--muze-blue);" onclick="toggleMirror()"><span>TOGGLE MIRROR</span></div>
-
-        <div class="sidebar-label">MUZE CONSOLE</div>
-        <div class="nav-item" onclick="showStage('vault', this)"><span>Vault</span></div>
-        <div class="nav-item" onclick="showStage('card', this)"><span>Digital Card</span></div>
-        <div class="nav-item" onclick="showStage('dapps', this)"><span>Network DApps</span></div>
-        <div class="nav-item" onclick="showStage('settings', this)"><span>Settings</span></div>
-
-        <div style="margin-top: 100px; padding: 10px;">
-            <button style="width:100%; background:#000; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.6rem; cursor:pointer; text-transform: uppercase; letter-spacing: 1px;" onclick="location.href='index.html'">LOCK</button>
-        </div>
+        <div class="sidebar-label" style="margin-top:40px;">Architect Controls</div>
+        <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
+        <div class="nav-item" onclick="window.location.reload()">Refresh Console</div>
     </div>
 
-    <!-- MAIN CONTENT + MIRROR -->
-    <div class="main-wrapper">
-        <div class="sub-layout">
+    <!-- Main Content Area -->
+    <div class="content">
+        
+        <!-- Stage: Dashboard -->
+        <div id="stage-dashboard" class="stage">
+            <h1 class="stage-title">Live Node Status</h1>
+            <p class="stage-subtitle">Real-time network telemetry and ledger performance.</p>
             
-            <div class="content" id="architect-content">
-                <!-- STAGE: COMMAND CENTER -->
-                <div id="stage-main" class="stage">
-                    <h2>Command Center</h2>
-                    <p class="subtitle">Live Node Status & Anchored Ledger Data.</p>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-label">Network Revenue</span>
-                            <div class="stat-value" id="stat-revenue">$0.00</div>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-label">Anchored Handles</span>
-                            <div class="stat-value" id="stat-handles">...</div>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-label">Active Leads</span>
-                            <div class="stat-value" id="stat-leads">...</div>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-label">Node Health</span>
-                            <div class="stat-value" style="color: #10b981;">100%</div>
-                        </div>
-                    </div>
-
-                    <div class="wallet-panel">
-                        <span class="stat-label">GOD MODE WALLET</span>
-                        <div class="wallet-balance">500,000.00 <span style="font-size: 1rem; color: var(--muted);">ADA</span></div>
-                        <div class="wallet-actions">
-                            <button class="wallet-btn" onclick="alert('Sending assets...')">SEND</button>
-                            <button class="wallet-btn outline" onclick="alert('Ready to receive.')">RECEIVE</button>
-                            <button class="wallet-btn outline" onclick="alert('Launching Sovereign Swap...')">SWAP</button>
-                            <button class="wallet-btn stake" onclick="alert('Staking Protocol Initialized.')">STAKE</button>
-                            <button class="wallet-btn outline" onclick="alert('Adding Liquidity to $PRN Pool...')">LIQUIDITY</button>
-                        </div>
-                    </div>
-
-                    <div class="console-box" id="console-output">> MUZE L1 CORE... [READY]<br>> NODE HANDSHAKE... [ACTIVE]<br>> ARCHITECT CONNECTED<br>> SYNCING LEDGER DATA... [COMPLETE]</div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-label">ACTIVE HANDLES</div>
+                    <div class="card-value" id="stat-handles">--</div>
+                    <div class="pill pill-live" style="margin-top:12px;">LIVE</div>
                 </div>
-
-                <!-- STAGE: HANDLES LEDGER -->
-                <div id="stage-handles" class="stage hidden">
-                    <h2>Handles Ledger</h2>
-                    <p class="subtitle">Sovereign Identity Assets Anchored to the Ledger.</p>
-                    <div id="handles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px;"></div>
+                <div class="card">
+                    <div class="card-label">NETWORK LOAD</div>
+                    <div class="card-value">0.04s</div>
+                    <div class="pill pill-live" style="margin-top:12px;">OPTIMAL</div>
                 </div>
-                
-                <!-- STAGE: AGENCY HUB -->
-                <div id="stage-agency" class="stage hidden">
-                    <h2>Agency Hub</h2>
-                    <p class="subtitle">Migration Pipeline: Web2 Brands to Web3 Infrastructure.</p>
-                    <div style="background: var(--surface); padding: 40px; border-radius: 30px; border: 1px solid var(--border); text-align: center;">
-                        <img src="../assets/muze_icon_logo.png" style="height: 50px; margin-bottom: 20px; opacity: 0.2;">
-                        <h3 style="font-weight: 900; margin-bottom: 10px;">Migration Pipeline Empty</h3>
-                        <p style="font-size: 0.85rem; color: var(--muted);">When a business migrates, their brand node, smart contracts, and anchored inventory will manifest here.</p>
-                    </div>
+                <div class="card">
+                    <div class="card-label">TOTAL RESERVE ($NRL)</div>
+                    <div class="card-value" id="stat-reserve">1,000,000</div>
                 </div>
-
-                <!-- STAGE: MESSENGER -->
-                <div id="stage-messenger" class="stage hidden">
-                    <h2>Messenger</h2>
-                    <p class="subtitle">Direct Neural Link to Zapia (Brain Logic AI).</p>
-                    <div class="chat-container">
-                        <div class="chat-messages" id="chat-messages">
-                            <div class="msg zapia">Greetings, Architect. I am synchronized and ready for deployment. How shall we proceed with the Priscion expansion?</div>
-                        </div>
-                        <div class="chat-input">
-                            <input type="text" id="chat-input-field" placeholder="Send a message to Zapia..." onkeypress="if(event.key === 'Enter') sendMessage()">
-                            <button onclick="sendMessage()">SEND</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="stage-vault" class="stage hidden">
-                    <h2>Vault Console</h2>
-                    <p class="subtitle">Mirroring User Vault Controls.</p>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-label">Vault Balance</span>
-                            <div class="stat-value">25,480.00 ADA</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div id="stage-card" class="stage hidden">
-                    <h2>Elite Card</h2>
-                    <p class="subtitle">Managing the Physical-to-Digital Bridge.</p>
-                    <div class="card-preview"></div>
-                </div>
-                
-                <div id="stage-dapps" class="stage hidden"><h2>Network DApp Registry</h2></div>
-                <div id="stage-settings" class="stage hidden"><h2>Architect Settings</h2></div>
             </div>
 
-            <div class="mirror-container" id="mirror-panel">
-                <div class="mirror-header">
-                    <span class="mirror-label">Live User Lens</span>
-                    <span class="mirror-badge">MIRROR ACTIVE</span>
-                </div>
-                <iframe src="index.html" id="mirror-iframe"></iframe>
+            <div class="sidebar-label" style="margin-top:40px;">Quick Actions</div>
+            <div class="wallet-actions">
+                <div class="btn-action" onclick="alert('Initiating $NRL Stake...')">STAKE</div>
+                <div class="btn-action" onclick="alert('Opening Liquidity Pool...')">LIQUIDITY</div>
+                <div class="btn-action" onclick="alert('Sovereign Swap Ready')">SWAP</div>
             </div>
-
         </div>
+
+        <!-- Stage: Vault -->
+        <div id="stage-vault" class="stage hidden">
+            <h1 class="stage-title">The Vault</h1>
+            <p class="stage-subtitle">Managed handles and private assets.</p>
+            <div class="handle-grid" id="handle-list">
+                <!-- Handles injected via JS -->
+            </div>
+        </div>
+
+        <!-- Stage: Digital Card -->
+        <div id="stage-card" class="stage hidden">
+            <h1 class="stage-title">Elite Card #001</h1>
+            <p class="stage-subtitle">High-fidelity financial artifact preview.</p>
+            <div class="card-preview-container">
+                <div class="card-preview"></div>
+            </div>
+            <p style="margin-top: 20px; font-size: 12px; color: var(--muted); text-align: center;">
+                Status: Anchored to Ledger | Price: 500 $PRN
+            </p>
+        </div>
+
+        <!-- Stage: Governance / Messenger -->
+        <div id="stage-governance" class="stage hidden messenger-stage">
+            <h1 class="stage-title">Neural Interface</h1>
+            <p class="stage-subtitle">Direct encrypted link to the Priscion node.</p>
+            <div class="chat-container" id="chat-box">
+                <!-- Messages -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Enter mission command..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button onclick="sendMessage()">SEND</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Live User Lens (Mirror) -->
+    <div class="mirror-container" id="mirror-panel">
+        <div class="mirror-label">LIVE USER LENS</div>
+        <iframe src="index.html" id="mirror-iframe"></iframe>
     </div>
 
     <script>
-        const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        const handles = [
+            'prisca.pri', 'prisca.ada.pri', 'ateliagaming.pri', 'calalloo.pri', 
+            'nurasen.pri', 'couturegallery.pri', 'thewaymadeknown.pri', 'theautodrome.pri',
+            'peakfit.pri', 'glowprotocol.pri', 'soleprestige.pri', 'essenceelite.pri',
+            'theescapist.pri', 'thetechscouthq.pri', 'quietluxury.pri', 'thetrustedsignal.pri',
+            'primelandnetwork.pri'
+        ];
+
+        function renderHandles() {
+            const container = document.getElementById('handle-list');
+            container.innerHTML = handles.map(h => `
+                <div class="handle-tile">
+                    <img src="https://priscion.com/assets/logos/priscion-logo.png">
+                    <span>${h}</span>
+                </div>
+            `).join('');
+        }
 
         async function fetchLiveStats() {
-            try {
-                // Fetch Handles (Profiles)
-                const { count: handlesCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-                document.getElementById('stat-handles').innerText = handlesCount || 0;
+            const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
+            const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+            const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-                // Fetch Leads
-                const { count: leadsCount } = await supabaseClient.from('leads').select('*', { count: 'exact', head: true });
-                document.getElementById('stat-leads').innerText = leadsCount || 0;
-                
-                // Revenue Logic (Placeholder for now until revenue table exists)
-                document.getElementById('stat-revenue').innerText = '$0.00';
-            } catch (e) {
-                console.error("Ledger Sync Error:", e);
-            }
+            const { count } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+            document.getElementById('stat-handles').innerText = count || handles.length;
         }
 
         function toggleMirror() {
             const mirror = document.getElementById('mirror-panel');
-            mirror.style.display = (mirror.style.display === 'none') ? 'table-cell' : 'none';
+            mirror.classList.toggle('hidden-mirror');
         }
 
         function showStage(id, el) {
@@ -293,61 +266,43 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
 
-            if(id === 'handles') renderHandles();
-            
             // Map Console buttons to Mirror stages
             const mirrorFrame = document.getElementById('mirror-iframe');
             if(mirrorFrame && mirrorFrame.contentWindow) {
                 const version = Date.now();
-                mirrorFrame.src = 'index.html?v=' + version + '#' + id;
+                // Map 'dashboard' to 'vault' in the live lens since vault is the default home
+                const mirrorHash = (id === 'dashboard') ? 'vault' : id;
+                
+                // Only change hash to avoid full iframe reload if possible
                 try {
-                   mirrorFrame.contentWindow.location.hash = '#' + id;
-                } catch(e) {}
+                   mirrorFrame.contentWindow.location.hash = '#' + mirrorHash;
+                } catch(e) {
+                   mirrorFrame.src = 'index.html?v=' + version + '#' + mirrorHash;
+                }
             }
-        }
-
-        function renderHandles() {
-            const grid = document.getElementById('handles-grid');
-            const handles = [
-                'priscion', 'zapia', 'muze', 'pulse', 'mynt', 'chillata', 'jello', 'lynx', 
-                'prisca', 'ateliagaming', 'calalloo', 'nurasen', 'thewaymadeknown'
-            ];
-            grid.innerHTML = handles.map(h => `
-                <div class="handle-tile">
-                    <img src="../assets/muze_icon_logo.png" alt="Logo">
-                    <h4>${h}</h4>
-                    <span>.pri</span>
-                </div>
-            `).join('');
         }
 
         function loadChat() {
-            const saved = localStorage.getItem('architect_chat');
-            if (saved) {
-                const container = document.getElementById('chat-messages');
-                container.innerHTML = saved;
-                container.scrollTop = container.scrollHeight;
-            }
+            const history = localStorage.getItem('architect_chat');
+            if(history) document.getElementById('chat-box').innerHTML = history;
         }
 
         function sendMessage() {
-            const input = document.getElementById('chat-input-field');
-            const container = document.getElementById('chat-messages');
-            if(!input.value.trim()) return;
+            const input = document.getElementById('chat-input');
+            const container = document.getElementById('chat-box');
+            if(!input.value) return;
 
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg architect';
-            userMsg.innerText = input.value;
-            container.appendChild(userMsg);
-            
-            const val = input.value;
+            const msg = document.createElement('div');
+            msg.className = 'msg architect';
+            msg.innerText = input.value;
+            container.appendChild(msg);
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
             // Save to localStorage
             localStorage.setItem('architect_chat', container.innerHTML);
 
-            // AI Response simulation
+            // AI Response
             setTimeout(() => {
                 const zapiaMsg = document.createElement('div');
                 zapiaMsg.className = 'msg zapia';
