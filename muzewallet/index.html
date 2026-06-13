@@ -23,8 +23,13 @@
         .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
         .muze-entrance-logo { height: 60px; width: auto; object-fit: contain; margin-bottom: 30px; cursor: pointer; }
         
+        /* Processing Overlay */
+        #proc-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 6000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .pulse-box { width: 80px; height: 80px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
+
         /* Sidebar Navigation */
-        .sidebar { width: 280px; height: 100vh; background: var(--surface); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; z-index: 100; flex-shrink: 0; }
+        .sidebar { width: 260px; height: 100vh; background: var(--surface); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; z-index: 100; flex-shrink: 0; }
         .sidebar-logo { height: 35px; width: auto; object-fit: contain; margin-bottom: 40px; cursor: pointer; }
         .nav-item { padding: 14px 20px; border-radius: 16px; margin-bottom: 8px; cursor: pointer; font-weight: 700; color: var(--muted); font-size: 14px; }
         .nav-item:hover { background: var(--bg); color: var(--text); }
@@ -51,6 +56,12 @@
     </style>
 </head>
 <body>
+
+    <div id="proc-overlay">
+        <div class="pulse-box"></div>
+        <h2 style="margin-top: 20px; font-weight: 900; letter-spacing: 2px;">ANCHORING TO LEDGER...</h2>
+        <p id="proc-text" style="color: var(--muted); margin-top: 10px; font-size: 12px; font-weight: 700;">SYNCHRONIZING NEURAL BLOCKCHAIN</p>
+    </div>
 
     <div id="layer-entrance" class="layer">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="muze-entrance-logo" id="muze-logo">
@@ -105,7 +116,8 @@
         <!-- Stage: Card -->
         <div id="stage-card" class="stage hidden" style="text-align: center;">
             <h2 style="margin-bottom: 30px;">Digital Card</h2>
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" style="width: 100%; max-width: 500px; border-radius: 24px; box-shadow: 0 20px 50px rgba(186, 230, 253, 0.4);">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png?v=GodModeLive" style="width: 100%; max-width: 500px; border-radius: 24px; box-shadow: 0 20px 50px rgba(186, 230, 253, 0.4);">
+            <p style="margin-top: 20px; font-weight: 900; letter-spacing: 2px; color: var(--muted); font-size: 10px;">VERIFIED ARTIFACT #001</p>
         </div>
 
         <!-- Stage: Settings -->
@@ -122,7 +134,8 @@
 
         function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            document.getElementById('stage-' + id).classList.remove('hidden');
+            const stage = document.getElementById('stage-' + id);
+            if (stage) stage.classList.remove('hidden');
             if(el) {
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
                 el.classList.add('active');
@@ -153,6 +166,12 @@
                 const navId = 'nav-' + event.data.hash;
                 const el = document.getElementById(navId);
                 showStage(event.data.hash, el);
+            }
+            if (event.data.type === 'ACTION') {
+                const overlay = document.getElementById('proc-overlay');
+                document.getElementById('proc-text').innerText = `PERFORMING ${event.data.action.toUpperCase()}...`;
+                overlay.style.display = 'flex';
+                setTimeout(() => { overlay.style.display = 'none'; }, 2000);
             }
         });
 
