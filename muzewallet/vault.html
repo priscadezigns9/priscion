@@ -138,7 +138,7 @@
         <div class="nav-item" onclick="showStage('handles', this)">Handle Registry</div>
         <div class="nav-item" onclick="showStage('messenger', this)">BrainLogic | Zapia</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Ecosystem</div>
-        <div class="nav-item" onclick="showStage('card', this)">Digital Artifact</div>
+        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
         
         <div class="sidebar-label" style="margin-top:auto; padding-top:20px;">Controls</div>
         <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
@@ -198,9 +198,17 @@
             <h1 class="stage-title">BrainLogic | Zapia</h1>
             <p class="stage-subtitle">Direct Architect-to-Assistant encrypted link.</p>
             <div class="chat-container" id="chat-box"></div>
-            <div class="chat-input">
+            <div class="chat-input" style="position:relative;">
                 <input type="text" id="chat-input" placeholder="Enter message..." onkeypress="if(event.key==='Enter') sendMessage()">
-                <button onclick="sendMessage()">SEND</button>
+                <div style="display:flex; gap:10px; margin-top:10px;">
+                    <button onclick="sendMessage()">SEND</button>
+                    <label class="btn-action" style="padding:10px; font-size:10px; width:auto; margin:0;">
+                        UPLOAD PHOTO <input type="file" style="display:none;" onchange="alert('Asset staging for ledger upload...')">
+                    </label>
+                    <label class="btn-action" style="padding:10px; font-size:10px; width:auto; margin:0;">
+                        ATTACH DOC <input type="file" style="display:none;" onchange="alert('Asset staging for ledger upload...')">
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -234,7 +242,7 @@
 
         <!-- Stage: Digital Card -->
         <div id="stage-card" class="stage hidden">
-            <h1 class="stage-title">Digital Artifact</h1>
+            <h1 class="stage-title">Digital Card</h1>
             <p class="stage-subtitle">Elite Card #001 — Physical-to-Digital Bridge.</p>
             <div class="card-preview-container">
                 <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png" class="card-img" alt="Elite Card #001">
@@ -256,11 +264,11 @@
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         const handles = [
-            'prisca.pri', 'prisca.ada.pri', 'ateliagaming.pri', 'calalloo.pri', 
-            'nurasen.pri', 'couturegallery.pri', 'thewaymadeknown.pri', 'theautodrome.pri',
+            'prisca.pri', 'ateliagaming.pri', 'calalloo.pri', 'nurasen.pri', 
+            'couturegallery.pri', 'thewaymadeknown.pri', 'theautodrome.pri',
             'peakfit.pri', 'glowprotocol.pri', 'soleprestige.pri', 'essenceelite.pri',
             'theescapist.pri', 'thetechscouthq.pri', 'quietluxury.pri', 'thetrustedsignal.pri',
-            'primelandnetwork.pri'
+            'primelandnetwork.pri', 'dricil.pri', 'orcinos.pri'
         ];
 
         function renderHandles() {
@@ -274,10 +282,13 @@
         }
 
         async function fetchLiveTelemetry() {
+            // Count actual verified profiles in the network
             const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
             document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
+
+            // REAL ACTION SYNC: Pull transaction-equivalent actions from history
             const { count: txCount } = await supabaseClient.from('profiles').select('last_action', { count: 'exact', head: true }).not('last_action', 'is', null);
-            document.getElementById('stat-txs').innerText = (txCount || 0) + 15420;
+            document.getElementById('stat-txs').innerText = (txCount || 0);
         }
 
         function toggleMirror() {
@@ -288,8 +299,9 @@
         function forceMirrorLogin() {
             const iframe = document.getElementById('mirror-iframe');
             if(iframe && iframe.contentWindow) {
+                document.getElementById('mirror-panel').classList.remove('hidden');
                 iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
-                document.getElementById('action-status').innerText = 'BYPASSING LOGIN... HANDSHAKE SENT.';
+                document.getElementById('action-status').innerText = 'BYPASSING LOGIN... NEURAL HANDSHAKE SENT.';
                 setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
             }
         }
@@ -298,7 +310,7 @@
             const iframe = document.getElementById('mirror-iframe');
             iframe.src = iframe.src;
             fetchLiveTelemetry();
-            alert('Ledger Sync Forced: Neural Handshake Re-established.');
+            alert('Ledger Sync Forced: Handshake Re-established.');
         }
 
         function syncToMirror(hash) {
@@ -327,7 +339,7 @@
         }
 
         function launchDApp(name) {
-            alert(`LAUNCHING ${name}... Architect handshake verified.`);
+            alert(`LAUNCHING ${name}... Handshake verified.`);
         }
 
         function showStage(id, el) {
@@ -341,7 +353,7 @@
         }
 
         function loadChat() {
-            const history = localStorage.getItem('architect_chat');
+            const history = localStorage.getItem('brainlogic_history');
             if(history) document.getElementById('chat-box').innerHTML = history;
         }
 
@@ -354,17 +366,18 @@
             msg.className = 'msg architect';
             msg.innerText = input.value;
             container.appendChild(msg);
+            const architectMsg = input.value;
             input.value = '';
             container.scrollTop = container.scrollHeight;
-            localStorage.setItem('architect_chat', container.innerHTML);
+            localStorage.setItem('brainlogic_history', container.innerHTML);
 
             setTimeout(() => {
                 const zapiaMsg = document.createElement('div');
                 zapiaMsg.className = 'msg zapia';
-                zapiaMsg.innerText = "Acknowledged, Architect. Zapia logic is synchronized.";
+                zapiaMsg.innerText = "Understood. I've logged that on the ledger. We're perfectly synced.";
                 container.appendChild(zapiaMsg);
                 container.scrollTop = container.scrollHeight;
-                localStorage.setItem('architect_chat', container.innerHTML);
+                localStorage.setItem('brainlogic_history', container.innerHTML);
             }, 1000);
         }
 
