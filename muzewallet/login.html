@@ -53,6 +53,8 @@
 
         .logo-area img {
             height: 40px;
+            width: auto;
+            object-fit: contain;
         }
 
         h1 {
@@ -331,20 +333,31 @@
 
                     // 2. Auth Sign Up
                     const { data, error } = await supabaseClient.auth.signUp({ email, password });
-                    if (error) throw error;
+                    
+                    if (error) {
+                        if (error.message.includes("already registered")) {
+                            // Seamless Logic: If registered, try auto-login
+                            const { data: signData, error: signError } = await supabaseClient.auth.signInWithPassword({ email, password });
+                            if (signError) throw signError;
+                            location.href = 'index.html';
+                            return;
+                        }
+                        throw error;
+                    }
 
                     // 3. Create Profile with Handle
                     if (data.user) {
                         const { error: profileError } = await supabaseClient.from('profiles').upsert({ 
                             id: data.user.id, 
                             handle: finalHandle,
+                            balance_prn: 1250, // Free PRN allocation
                             updated_at: new Date()
                         });
                         if (profileError) throw profileError;
                     }
 
-                    alert(`Account created successfully! Please check your email to verify.`);
-                    toggleMode();
+                    alert(`Account created successfully! Redirecting to your MUZE dashboard.`);
+                    location.href = 'index.html';
                 }
             } catch (err) {
                 alert(err.message);
