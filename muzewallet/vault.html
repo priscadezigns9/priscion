@@ -2,138 +2,276 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GOD MODE | Architect Console</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MUZE | Architect Console</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --bg: #0A0A0A; --text: #FFF; --muted: #666; --border: #222; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #111; }
+        :root { 
+            --bg: #FFFFFF; --text: #000; --muted: #64748b; --border: #F1F5F9; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F8FAFC;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; height: 100vh; overflow: hidden; }
-
-        /* Left Panel: Architect Controls */
-        .panel-left { width: 50%; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .panel-right { width: 50%; height: 100vh; position: relative; }
         
-        .header { height: 70px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
-        .logo { height: 25px; }
+        body { 
+            background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
+            overflow: hidden; width: 100vw; height: 100vh; 
+            display: table !important; table-layout: fixed !important;
+        }
 
-        .console-main { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 30px; }
+        .hidden { display: none !important; }
+
+        /* Sidebar: Table Cell */
+        .sidebar {
+            display: table-cell !important; width: 280px; height: 100vh; vertical-align: top;
+            background: var(--bg); border-right: 1px solid var(--border);
+            padding: 40px 20px; z-index: 1000;
+        }
+        .sidebar-label {
+            font-size: 0.6rem; font-weight: 900; color: var(--muted); letter-spacing: 2px;
+            text-transform: uppercase; padding: 25px 20px 10px; border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+        .sidebar-label:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
+        .nav-item {
+            padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem;
+            color: var(--muted); cursor: pointer; display: flex; align-items: center;
+            gap: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s;
+        }
+        .nav-item:hover { background: var(--surface); color: var(--text); }
+        .nav-item.active { background: #000; color: #fff; }
+
+        /* Main Wrapper: Table Cell with nested table */
+        .main-wrapper { 
+            display: table-cell !important; vertical-align: top;
+            height: 100vh; width: 100%;
+        }
         
-        .hud-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .hud-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 25px; position: relative; overflow: hidden; }
-        .hud-label { font-size: 0.6rem; font-weight: 900; letter-spacing: 2px; color: var(--muted); margin-bottom: 10px; }
-        .hud-value { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--muze-blue); }
-
-        .signup-list { height: 200px; overflow-y: auto; background: #000; border: 1px solid var(--border); border-radius: 12px; margin-top: 15px; }
-        .signup-item { padding: 12px 15px; border-bottom: 1px solid #111; font-size: 0.75rem; display: flex; justify-content: space-between; }
-        .signup-item span { color: var(--muze-blue); }
-
-        .ops-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .op-btn { background: #000; border: 1px solid var(--border); color: #fff; padding: 15px; border-radius: 12px; font-weight: 900; font-size: 0.65rem; letter-spacing: 1px; cursor: pointer; text-align: left; transition: 0.2s; }
-        .op-btn:hover { background: var(--muze-blue); color: #000; border-color: var(--muze-blue); }
-        .op-btn.active { background: var(--accent); border-color: var(--accent); }
-
-        /* Wallet Mirror Frame */
-        #wallet-mirror { width: 100%; height: 100%; border: none; }
+        .sub-layout { display: table !important; width: 100%; height: 100vh; table-layout: fixed !important; }
         
-        .divider { width: 4px; background: var(--border); cursor: col-resize; position: absolute; left: 50%; height: 100vh; z-index: 1000; transition: background 0.2s; }
-        .divider:hover { background: var(--muze-blue); }
+        /* Architect View (Left/Flexible) */
+        .content { 
+            display: table-cell !important; vertical-align: top;
+            padding: 60px 60px; background: #fff; position: relative; 
+            border-right: 1px solid var(--border); overflow-y: auto;
+        }
+        
+        /* Lens View / User Mirror (Right/Fixed Width) */
+        .mirror-container { 
+            display: table-cell !important; width: 450px; vertical-align: top;
+            background: #fff; overflow: hidden; position: relative; border-left: 4px solid #000; 
+        }
+        
+        .mirror-header { padding: 15px 25px; border-bottom: 1px solid var(--border); background: #fff; display: flex; justify-content: space-between; align-items: center; }
+        .mirror-label { font-size: 0.65rem; font-weight: 900; letter-spacing: 1.5px; color: var(--text); text-transform: uppercase; }
+        .mirror-badge { background: #E0F2FE; color: #0369a1; padding: 5px 12px; border-radius: 100px; font-size: 0.55rem; font-weight: 900; }
+        #mirror-iframe { width: 100%; height: calc(100vh - 50px); border: none; background: #F0F9FF; }
 
-        #proc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .pulse { width: 60px; height: 60px; border-radius: 50%; background: var(--muze-blue); animation: p 1s infinite; }
-        @keyframes p { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(2); opacity: 0; } }
+        h2 { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: -1.5px; font-size: 2.8rem; margin-bottom: 10px; color: #000; }
+        p.subtitle { color: var(--muted); margin-bottom: 50px; font-size: 0.95rem; font-weight: 500; }
+
+        /* Stats & UI Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 60px; }
+        .stat-card { background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); }
+        .stat-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; display: block; }
+        .stat-value { font-size: 1.8rem; font-weight: 900; color: #000; }
+
+        .console-box { background: #000; color: #10b981; padding: 25px; border-radius: 20px; font-family: monospace; font-size: 0.8rem; line-height: 1.6; border: 1px solid #333; }
+
+        /* Handle Tile Design */
+        .handle-tile { 
+            background: #fff; border: 1px solid var(--border); padding: 30px 20px; border-radius: 20px; 
+            text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            aspect-ratio: 1 / 1; transition: all 0.3s; cursor: pointer;
+        }
+        .handle-tile:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: var(--accent); }
+        .handle-tile img { width: 40px; height: 40px; margin-bottom: 15px; opacity: 0.8; }
+        .handle-tile h4 { font-weight: 900; font-size: 0.85rem; color: #000; margin-bottom: 4px; }
+        .handle-tile span { font-size: 0.6rem; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* Messenger UI */
+        .chat-container { height: 500px; display: flex; flex-direction: column; background: var(--surface); border-radius: 24px; border: 1px solid var(--border); overflow: hidden; }
+        .chat-messages { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; font-size: 0.85rem; line-height: 1.5; }
+        .msg.zapia { background: #000; color: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .msg.architect { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-input { padding: 20px; background: #fff; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .chat-input input { flex: 1; border: 1px solid var(--border); padding: 12px 20px; border-radius: 100px; font-size: 0.85rem; outline: none; }
+        .chat-input button { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; cursor: pointer; }
+
+        @media (max-width: 1200px) {
+            .sidebar { width: 80px; padding: 20px 10px; }
+            .sidebar-label, .nav-item span { display: none; }
+            .nav-item { justify-content: center; }
+            .mirror-container { width: 350px; }
+        }
     </style>
 </head>
 <body>
-    <div id="proc-overlay"><div class="pulse"></div><h2 style="margin-top:30px; font-weight:900; letter-spacing:5px;">ANCHORING...</h2></div>
 
-    <div class="panel-left" id="panel-l">
-        <div class="header">
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_word_logo.png" class="logo">
-            <div style="font-weight:900; font-size:0.6rem; color:var(--accent); letter-spacing:2px; border:1px solid var(--accent); padding:4px 10px; border-radius:100px;">GOD MODE: ARCHITECT</div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div style="padding: 10px 20px 40px; cursor: pointer; text-align: center;" onclick="location.reload()">
+            <img src="../assets/muze_icon_logo.png" style="height: 30px;">
         </div>
         
-        <div class="console-main">
-            <div class="hud-grid">
-                <div class="hud-card">
-                    <div class="hud-label">LIVE NODES</div>
-                    <div class="hud-value" id="node-count">...</div>
-                </div>
-                <div class="hud-card">
-                    <div class="hud-label">LEDGER ASSETS</div>
-                    <div class="hud-value">$PRN</div>
-                </div>
-            </div>
+        <div class="sidebar-label">GOD MODE</div>
+        <div class="nav-item active" onclick="showStage('main', this)"><span>Command Center</span></div>
+        <div class="nav-item" onclick="showStage('handles', this)"><span>Handles Ledger</span></div>
+        <div class="nav-item" onclick="showStage('agency', this)"><span>Agency Hub</span></div>
+        <div class="nav-item" onclick="showStage('messenger', this)"><span>Messenger</span></div>
 
-            <div class="hud-card" style="flex:1; display:flex; flex-direction:column;">
-                <div class="hud-label">LIVE SIGNUPS (SUPABASE)</div>
-                <div class="signup-list" id="signup-feed"></div>
-            </div>
+        <div class="sidebar-label">LENS VIEW</div>
+        <div class="nav-item" style="color: var(--muze-blue);" onclick="toggleMirror()"><span>TOGGLE MIRROR</span></div>
 
-            <div class="hud-card">
-                <div class="hud-label">ARCHITECT OPERATIONS</div>
-                <div class="ops-grid">
-                    <button class="op-btn" onclick="mirrorNav('vault')">VAULT MIRROR</button>
-                    <button class="op-btn" onclick="mirrorNav('settings')">SETTINGS MIRROR</button>
-                    <button class="op-btn" onclick="mirrorNav('card')">CARD ARTIFACT</button>
-                    <button class="op-btn" onclick="mirrorNav('dapps')">DAPP EXPLORER</button>
-                </div>
-            </div>
+        <div class="sidebar-label">MUZE CONSOLE</div>
+        <div class="nav-item" onclick="showStage('vault', this)"><span>Vault</span></div>
+        <div class="nav-item" onclick="showStage('card', this)"><span>Digital Card</span></div>
+        <div class="nav-item" onclick="showStage('dapps', this)"><span>Network DApps</span></div>
+        <div class="nav-item" onclick="showStage('settings', this)"><span>Settings</span></div>
+
+        <div style="margin-top: 100px; padding: 10px;">
+            <button style="width:100%; background:#000; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.6rem; cursor:pointer; text-transform: uppercase; letter-spacing: 1px;" onclick="location.href='index.html'">LOCK</button>
         </div>
     </div>
 
-    <div class="divider" id="drag-divider"></div>
+    <!-- MAIN CONTENT + MIRROR -->
+    <div class="main-wrapper">
+        <div class="sub-layout">
+            
+            <div class="content" id="architect-content">
+                <!-- STAGE: COMMAND CENTER -->
+                <div id="stage-main" class="stage">
+                    <h2>Command Center</h2>
+                    <p class="subtitle">Real-time oversight of the Priscion Ecosystem.</p>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-label">Network Revenue</span>
+                            <div class="stat-value" id="stat-revenue">$142,500</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Anchored Handles</span>
+                            <div class="stat-value" id="stat-handles">1,402</div>
+                        </div>
+                    </div>
+                    <div class="console-box" id="console-output">> MUZE L1 CORE... [READY]<br>> NODE HANDSHAKE... [ACTIVE]<br>> ARCHITECT CONNECTED</div>
+                </div>
 
-    <div class="panel-right" id="panel-r">
-        <iframe src="index.html?god_mode=true" id="wallet-mirror"></iframe>
+                <!-- STAGE: HANDLES LEDGER -->
+                <div id="stage-handles" class="stage hidden">
+                    <h2>Handles Ledger</h2>
+                    <p class="subtitle">Sovereign Identity Assets Anchored to the Ledger.</p>
+                    <div id="handles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px;"></div>
+                </div>
+                
+                <!-- STAGE: AGENCY HUB -->
+                <div id="stage-agency" class="stage hidden">
+                    <h2>Agency Hub</h2>
+                    <p class="subtitle">Migration Pipeline: Web2 Brands to Web3 Infrastructure.</p>
+                    <div style="background: var(--surface); padding: 40px; border-radius: 30px; border: 1px solid var(--border); text-align: center;">
+                        <img src="../assets/muze_icon_logo.png" style="height: 50px; margin-bottom: 20px; opacity: 0.2;">
+                        <h3 style="font-weight: 900; margin-bottom: 10px;">Migration Pipeline Empty</h3>
+                        <p style="font-size: 0.85rem; color: var(--muted);">When a business migrates, their brand node, smart contracts, and anchored inventory will manifest here.</p>
+                    </div>
+                </div>
+
+                <!-- STAGE: MESSENGER -->
+                <div id="stage-messenger" class="stage hidden">
+                    <h2>Messenger</h2>
+                    <p class="subtitle">Direct Neural Link to Zapia (Brain Logic AI).</p>
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="msg zapia">Greetings, Architect. I am synchronized and ready for deployment. How shall we proceed with the Priscion expansion?</div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chat-input-field" placeholder="Send a message to Zapia..." onkeypress="if(event.key === 'Enter') sendMessage()">
+                            <button onclick="sendMessage()">SEND</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="stage-vault" class="stage hidden"><h2>Vault Console</h2></div>
+                <div id="stage-card" class="stage hidden"><h2>Elite Card Management</h2></div>
+                <div id="stage-dapps" class="stage hidden"><h2>Network DApp Registry</h2></div>
+                <div id="stage-settings" class="stage hidden"><h2>Architect Settings</h2></div>
+            </div>
+
+            <div class="mirror-container" id="mirror-panel">
+                <div class="mirror-header">
+                    <span class="mirror-label">Live User Lens</span>
+                    <span class="mirror-badge">MIRROR ACTIVE</span>
+                </div>
+                <iframe src="index.html" id="mirror-iframe"></iframe>
+            </div>
+
+        </div>
     </div>
 
     <script>
-        const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        function toggleMirror() {
+            const mirror = document.getElementById('mirror-panel');
+            mirror.style.display = (mirror.style.display === 'none') ? 'table-cell' : 'none';
+        }
 
-        async function fetchSignups() {
-            const { data, count } = await supabase.from('profiles').select('email, created_at').order('created_at', { ascending: false });
-            document.getElementById('node-count').innerText = count || 0;
-            const feed = document.getElementById('signup-feed');
-            feed.innerHTML = data.map(u => `
-                <div class="signup-item">${u.email} <span>${new Date(u.created_at).toLocaleDateString()}</span></div>
+        function showStage(id, el) {
+            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
+            const stage = document.getElementById('stage-' + id);
+            if(stage) stage.classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(el) el.classList.add('active');
+
+            if(id === 'handles') renderHandles();
+            
+            // Map Console buttons to Mirror stages
+            const mirrorFrame = document.getElementById('mirror-iframe');
+            if(id === 'vault') mirrorFrame.src = 'index.html#vault';
+            if(id === 'card') mirrorFrame.src = 'index.html#card';
+            if(id === 'settings') mirrorFrame.src = 'index.html#settings';
+        }
+
+        function renderHandles() {
+            const grid = document.getElementById('handles-grid');
+            // User requested: priscion.pri, zapia.pri, muze.pri, pulse.pri, mynt.pri, chillata.pri, jello.pri, lynx.pri
+            // and existing: prisca.pri, etc. (removed pricey.pri)
+            const handles = [
+                'priscion', 'zapia', 'muze', 'pulse', 'mynt', 'chillata', 'jello', 'lynx', 
+                'prisca', 'ateliagaming', 'calalloo', 'nurasen', 'thewaymadeknown'
+            ];
+            grid.innerHTML = handles.map(h => `
+                <div class="handle-tile">
+                    <img src="https://priscion.com/assets/p-logo.png" alt="Logo">
+                    <h4>${h}</h4>
+                    <span>.pri</span>
+                </div>
             `).join('');
         }
 
-        function mirrorNav(hash) {
-            const mirror = document.getElementById('wallet-mirror');
-            mirror.contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
-            anchorEffect();
+        function sendMessage() {
+            const input = document.getElementById('chat-input-field');
+            const container = document.getElementById('chat-messages');
+            if(!input.value.trim()) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'msg architect';
+            userMsg.innerText = input.value;
+            container.appendChild(userMsg);
+            
+            const val = input.value;
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // AI Response simulation
+            setTimeout(() => {
+                const zapiaMsg = document.createElement('div');
+                zapiaMsg.className = 'msg zapia';
+                zapiaMsg.innerText = "Acknowledged, Architect. I am processing the request for '" + val + "'. Priscion logic remains stable.";
+                container.appendChild(zapiaMsg);
+                container.scrollTop = container.scrollHeight;
+            }, 1000);
         }
 
-        function anchorEffect() {
-            const overlay = document.getElementById('proc-overlay');
-            overlay.style.display = 'flex';
-            setTimeout(() => overlay.style.display = 'none', 1000);
-        }
-
-        // Draggable Divider
-        const divider = document.getElementById('drag-divider');
-        const leftPanel = document.getElementById('panel-l');
-        const rightPanel = document.getElementById('panel-r');
-        let isDragging = false;
-
-        divider.addEventListener('mousedown', (e) => { isDragging = true; document.body.style.cursor = 'col-resize'; });
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            let percentage = (e.clientX / window.innerWidth) * 100;
-            if (percentage > 20 && percentage < 80) {
-                leftPanel.style.width = percentage + '%';
-                rightPanel.style.width = (100 - percentage) + '%';
-                divider.style.left = percentage + '%';
-            }
-        });
-        window.addEventListener('mouseup', () => { isDragging = false; document.body.style.cursor = 'default'; });
-
-        window.onload = fetchSignups;
+        renderHandles();
     </script>
 </body>
 </html>
+
