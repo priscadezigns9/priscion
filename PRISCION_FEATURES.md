@@ -123,8 +123,9 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 ## 14. God Mode (The Architect Console)
 *   **Persistent Synchronization**: The God Mode HUD (Traffic, Revenue, System Pulse) is synchronized with **Supabase** autonomously.
 *   **Autonomous Sync Agent**: A background subagent (`autonomous_core/god_mode_sync.py`) runs every 6 hours via cron to fetch live user data and network health, ensuring the HUD is current even when the user is not actively in a session.
-*   **Live Traffic HUD**: Real-time clicks and session counts pulled directly from the Supabase profile registry.
-*   **Revenue Shield**: Real-time earnings visualization based on ecosystem activity and $PRN/ADA distribution.
+*   **Revenue Shield Visualization**: A high-fidelity financial engine in the Architect Console that aggregates ecosystem liquidity ($1,250 per node + baseline) and visualizes the network's financial pulse.
+*   **Neural Handshake (v8)**: Architect access utilizes the `muze_v8_active` session protocol, ensuring a secure and verified entry into the global telemetry hub via `architect.pri`.
+*   **Live Traffic HUD**: Real-time clicks, session counts, and sign-up telemetry (Email/Timestamp) pulled directly from the Supabase profile registry.
 
 ---
 *Last Updated: June 13, 2026*
