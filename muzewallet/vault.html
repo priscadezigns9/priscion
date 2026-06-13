@@ -15,284 +15,304 @@
         body { 
             background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
             overflow: hidden; width: 100vw; height: 100vh; 
-            display: table !important; table-layout: fixed !important;
+            display: flex;
         }
 
         .hidden { display: none !important; }
 
-        /* Sidebar: Table Cell */
+        /* Sidebar Navigation */
         .sidebar {
-            display: table-cell !important; width: 280px; height: 100vh; vertical-align: top;
+            width: 280px; height: 100vh;
             background: var(--bg); border-right: 1px solid var(--border);
             padding: 40px 20px; z-index: 1000;
+            display: flex; flex-direction: column; flex-shrink: 0;
         }
-        .sidebar-label {
-            font-size: 0.6rem; font-weight: 900; color: var(--muted); letter-spacing: 2px;
-            text-transform: uppercase; padding: 25px 20px 10px; border-top: 1px solid var(--border);
-            margin-top: 20px;
+        .sidebar-logo { height: 42px; width: auto; object-fit: contain; margin-bottom: 40px; }
+        
+        .sidebar-label { 
+            font-size: 10px; text-transform: uppercase; letter-spacing: 2px; 
+            color: var(--muted); margin-bottom: 20px; font-weight: 700;
         }
-        .sidebar-label:first-of-type { border-top: none; margin-top: 0; padding-top: 0; }
-        .nav-item {
-            padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 0.75rem;
-            color: var(--muted); cursor: pointer; display: flex; align-items: center;
-            gap: 12px; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s;
+        .nav-item { 
+            padding: 12px 16px; margin-bottom: 8px; border-radius: 12px; 
+            cursor: pointer; font-weight: 600; color: var(--muted);
+            display: flex; align-items: center; gap: 12px; font-size: 14px;
         }
         .nav-item:hover { background: var(--surface); color: var(--text); }
-        .nav-item.active { background: #000; color: #fff; }
+        .nav-item.active { background: var(--text); color: #fff; }
 
-        /* Main Wrapper: Table Cell with nested table */
-        .main-wrapper { 
-            display: table-cell !important; vertical-align: top;
-            height: 100vh; width: 100%;
+        /* Main Content */
+        .content {
+            flex: 1; height: 100vh;
+            background: var(--surface); padding: 40px; overflow-y: auto;
+            min-width: 400px;
         }
+
+        /* Draggable Resizer */
+        .resizer {
+            width: 12px; height: 100vh; background: var(--border);
+            cursor: col-resize; transition: all 0.2s;
+            flex-shrink: 0; position: relative;
+        }
+        .resizer:hover { background: var(--accent); }
+        .resizer::after { content: '||'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 10px; color: var(--muted); font-weight: 900; }
+
+        /* Mirror (Live Lens) */
+        #mirror-panel {
+            width: 450px; height: 100vh; border-left: 1px solid var(--border);
+            background: #000; position: relative; flex-shrink: 0;
+        }
+        #mirror-panel.hidden { width: 0 !important; display: none; }
+        #mirror-panel iframe { width: 100%; height: 100%; border: none; }
+        .mirror-label {
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); color: #fff; padding: 6px 12px; border-radius: 20px;
+            font-size: 10px; font-weight: 900; letter-spacing: 1px; z-index: 10; white-space: nowrap;
+        }
+
+        /* Stages */
+        .stage-title { font-size: 32px; font-weight: 900; margin-bottom: 8px; font-family: 'Playfair Display', serif; }
+        .stage-subtitle { color: var(--muted); margin-bottom: 40px; font-size: 14px; }
+
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .card { 
+            background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        }
+        .card-label { font-size: 10px; font-weight: 800; color: var(--muted); margin-bottom: 8px; letter-spacing: 1px; text-transform: uppercase; }
+        .card-value { font-size: 22px; font-weight: 900; color: var(--text); }
+
+        /* Messenger */
+        .chat-container { 
+            height: calc(100vh - 280px); overflow-y: auto; padding: 20px; background: #fff; 
+            border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px;
+        }
+        .msg { margin-bottom: 16px; max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 13px; line-height: 1.5; }
+        .msg.architect { background: var(--text); color: #fff; margin-left: auto; border-bottom-right-radius: 4px; }
+        .msg.zapia { background: var(--surface); color: var(--text); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
         
-        .sub-layout { display: table !important; width: 100%; height: 100vh; table-layout: fixed !important; }
+        .chat-input { display: flex; flex-direction: column; gap: 10px; }
+        .chat-input input { padding: 16px; border-radius: 12px; border: 1px solid var(--border); outline: none; font-size: 13px; }
         
-        /* Architect View (Left/Flexible) */
-        .content { 
-            display: table-cell !important; vertical-align: top;
-            padding: 60px 60px; background: #fff; position: relative; 
-            border-right: 1px solid var(--border); overflow-y: auto;
+        .action-row { display: flex; gap: 10px; }
+        .btn-send { background: var(--text); color: #fff; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        .btn-upload { background: #fff; border: 1px solid var(--border); padding: 10px 16px; border-radius: 12px; font-size: 10px; font-weight: 900; cursor: pointer; color: var(--muted); }
+        .btn-upload:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Digital Card Preview */
+        .card-preview-container { text-align: center; padding: 40px; background: #fff; border-radius: 32px; border: 1px solid var(--border); }
+        .card-img { 
+            width: 100%; max-width: 500px; border-radius: 24px; 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1); 
+            border: 1px solid var(--border); margin-bottom: 20px;
         }
-        
-        /* Lens View / User Mirror (Right/Fixed Width) */
-        .mirror-container { 
-            display: table-cell !important; width: 450px; vertical-align: top;
-            background: #fff; overflow: hidden; position: relative; border-left: 4px solid #000; 
+
+        /* Wallet Buttons */
+        .wallet-actions { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 12px; margin-top: 20px; }
+        .btn-op { 
+            padding: 16px; border-radius: 14px; border: 1px solid var(--border);
+            background: #fff; font-size: 10px; font-weight: 800; cursor: pointer;
+            text-align: center; color: var(--text); text-transform: uppercase; letter-spacing: 1px;
         }
-        
-        .mirror-header { padding: 15px 25px; border-bottom: 1px solid var(--border); background: #fff; display: flex; justify-content: space-between; align-items: center; }
-        .mirror-label { font-size: 0.65rem; font-weight: 900; letter-spacing: 1.5px; color: var(--text); text-transform: uppercase; }
-        .mirror-badge { background: #E0F2FE; color: #0369a1; padding: 5px 12px; border-radius: 100px; font-size: 0.55rem; font-weight: 900; }
-        #mirror-iframe { width: 100%; height: calc(100vh - 50px); border: none; background: #F0F9FF; }
+        .btn-op:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
 
-        h2 { font-family: 'Playfair Display', serif; font-weight: 900; letter-spacing: -1.5px; font-size: 2.8rem; margin-bottom: 10px; color: #000; }
-        p.subtitle { color: var(--muted); margin-bottom: 50px; font-size: 0.95rem; font-weight: 500; }
-
-        /* Stats & UI Cards */
-        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 60px; }
-        .stat-card { background: var(--surface); padding: 30px; border-radius: 24px; border: 1px solid var(--border); }
-        .stat-label { font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 12px; display: block; }
-        .stat-value { font-size: 1.8rem; font-weight: 900; color: #000; }
-
-        .console-box { background: #000; color: #10b981; padding: 25px; border-radius: 20px; font-family: monospace; font-size: 0.8rem; line-height: 1.6; border: 1px solid #333; }
-
-        /* Handle Tile Design */
-        .handle-tile { 
-            background: #fff; border: 1px solid var(--border); padding: 30px 20px; border-radius: 20px; 
-            text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            aspect-ratio: 1 / 1; transition: all 0.3s; cursor: pointer;
-        }
-        .handle-tile:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: var(--accent); }
-        .handle-tile img { width: 40px; height: 40px; margin-bottom: 15px; opacity: 0.8; }
-        .handle-tile h4 { font-weight: 900; font-size: 0.85rem; color: #000; margin-bottom: 4px; }
-        .handle-tile span { font-size: 0.6rem; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Messenger UI */
-        .chat-container { height: 500px; display: flex; flex-direction: column; background: var(--surface); border-radius: 24px; border: 1px solid var(--border); overflow: hidden; }
-        .chat-messages { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .msg { max-width: 80%; padding: 15px 20px; border-radius: 20px; font-size: 0.85rem; line-height: 1.5; }
-        .msg.zapia { background: #000; color: #fff; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .msg.architect { background: var(--muze-blue); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chat-input { padding: 20px; background: #fff; border-top: 1px solid var(--border); display: flex; gap: 10px; }
-        .chat-input input { flex: 1; border: 1px solid var(--border); padding: 12px 20px; border-radius: 100px; font-size: 0.85rem; outline: none; }
-        .chat-input button { background: #000; color: #fff; border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; cursor: pointer; }
-
-        @media (max-width: 1200px) {
-            .sidebar { width: 80px; padding: 20px 10px; }
-            .sidebar-label, .nav-item span { display: none; }
-            .nav-item { justify-content: center; }
-            .mirror-container { width: 350px; }
-        }
     </style>
 </head>
-<body>
+<body id="body-main">
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
-        <div style="padding: 10px 20px 40px; cursor: pointer; text-align: center;" onclick="location.reload()">
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_word_logo.png" style="height: 30px;">
-        </div>
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="sidebar-logo">
+        <div class="sidebar-label">Architecture</div>
+        <div class="nav-item active" onclick="showStage('dashboard', this)">Command Center</div>
+        <div class="nav-item" onclick="showStage('messenger', this)">BrainLogic | Zapia</div>
+        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
         
-        <div class="sidebar-label">GOD MODE</div>
-        <div class="nav-item active" onclick="showStage('main', this)"><span>Command Center</span></div>
-        <div class="nav-item" onclick="showStage('handles', this)"><span>Handles Ledger</span></div>
-        <div class="nav-item" onclick="showStage('agency', this)"><span>Agency Hub</span></div>
-        <div class="nav-item" onclick="showStage('messenger', this)"><span>Messenger</span></div>
+        <div class="sidebar-label" style="margin-top:auto; padding-top:20px;">Controls</div>
+        <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
+        <div class="nav-item" onclick="forceMirrorLogin()">Enter MUZE World</div>
+        <div class="nav-item" onclick="forceSync()">Force Ledger Sync</div>
+    </div>
 
-        <div class="sidebar-label">LENS VIEW</div>
-        <div class="nav-item" style="color: var(--muze-blue);" onclick="toggleMirror()"><span>TOGGLE MIRROR</span></div>
+    <div class="content">
+        <!-- Stage: Command Center -->
+        <div id="stage-dashboard" class="stage">
+            <h1 class="stage-title">Node Telemetry</h1>
+            <p class="stage-subtitle">Anchored to the Priscion Blockchain Ledger.</p>
+            <div class="grid">
+                <div class="card"><div class="card-label">NODES</div><div class="card-value" id="stat-nodes">...</div></div>
+                <div class="card"><div class="card-label">TRANSACTIONS</div><div class="card-value" id="stat-txs">...</div></div>
+                <div class="card"><div class="card-label">PRN RESERVE</div><div class="card-value" id="stat-prn">...</div></div>
+                <div class="card"><div class="card-label">TOTAL CLICKS</div><div class="card-value" id="stat-clicks">...</div></div>
+                <div class="card"><div class="card-label">SIGN UPS</div><div class="card-value" id="stat-signups">...</div><div id="signup-email-list" style="font-size:10px; margin-top:10px; color:var(--muze-blue); max-height:60px; overflow-y:auto;"></div></div>
+                <div class="card"><div class="card-label">NRL RESERVE</div><div class="card-value">1,250,000</div></div>
+                <div class="card"><div class="card-label">JELLO RESERVE</div><div class="card-value">250,000</div></div>
+                <div class="card"><div class="card-label">ATLR TOKEN</div><div class="card-value">MINEABLE</div></div>
+            </div>
 
-        <div class="sidebar-label">REMOTE OPERATIONS</div>
-        <div class="nav-item" onclick="remoteNav('vault', this)"><span>Vault Mirror</span></div>
-        <div class="nav-item" onclick="remoteNav('card', this)"><span>Digital Card Mirror</span></div>
-        <div class="nav-item" onclick="remoteNav('settings', this)"><span>Settings Mirror</span></div>
+            <div class="sidebar-label" style="margin-top:40px;">Remote Operations</div>
+            <div class="wallet-actions">
+                <button class="btn-op" onclick="syncToMirror('vault')">VAULT</button>
+                <button class="btn-op" onclick="syncToMirror('card')">ELITE CARD</button>
+                <button class="btn-op" onclick="syncToMirror('settings')">SETTINGS</button>
+                <button class="btn-op" onclick="performBlockchainAction('staking')">STAKING</button>
+                <button class="btn-op" onclick="performBlockchainAction('mint')">MINT NFT</button>
+            </div>
+            <p id="action-status" style="margin-top: 20px; font-size: 11px; font-weight: 900; color: var(--accent); text-transform: uppercase;"></p>
+        </div>
 
-        <div style="margin-top: 100px; padding: 10px;">
-            <button style="width:100%; background:#000; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.6rem; cursor:pointer; text-transform: uppercase; letter-spacing: 1px;" onclick="location.href='index.html'">LOCK</button>
+        <!-- Stage: Messenger -->
+        <div id="stage-messenger" class="stage hidden">
+            <h1 class="stage-title">BrainLogic</h1>
+            <div class="chat-container" id="chat-box"></div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Message Zapia..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <div class="action-row">
+                    <button class="btn-send" onclick="sendMessage()">SEND</button>
+                    <button class="btn-upload" onclick="triggerFile('photo')">UPLOAD PHOTO</button>
+                    <button class="btn-upload" onclick="triggerFile('doc')">ATTACH DOC</button>
+                    <input type="file" id="file-input" style="display:none;" onchange="handleFileUpload(this)">
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage: Card -->
+        <div id="stage-card" class="stage hidden">
+            <h1 class="stage-title">Digital Card</h1>
+            <div class="card-preview-container">
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" class="card-img">
+                <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px; margin-top: 20px;">ELITE CARD #001 — PHYSICAL BRIDGE</p>
+            </div>
         </div>
     </div>
 
-    <!-- MAIN CONTENT + MIRROR -->
-    <div class="main-wrapper">
-        <div class="sub-layout">
-            
-            <div class="content" id="architect-content">
-                <!-- STAGE: COMMAND CENTER -->
-                <div id="stage-main" class="stage">
-                    <h2>Command Center</h2>
-                    <p class="subtitle">Real-time oversight of the Priscion Ecosystem.</p>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <span class="stat-label">Network Revenue</span>
-                            <div class="stat-value" id="stat-revenue">$142,500</div>
-                        </div>
-                        <div class="stat-card">
-                            <span class="stat-label">Anchored Handles</span>
-                            <div class="stat-value" id="stat-handles">1,402</div>
-                        </div>
-                    </div>
-                    <div class="console-box" id="console-output">> MUZE L1 CORE... [READY]<br>> NODE HANDSHAKE... [ACTIVE]<br>> ARCHITECT CONNECTED</div>
-                </div>
+    <!-- Draggable Resizer -->
+    <div class="resizer" id="drag-handle"></div>
 
-                <!-- STAGE: HANDLES LEDGER -->
-                <div id="stage-handles" class="stage hidden">
-                    <h2>Handles Ledger</h2>
-                    <p class="subtitle">Sovereign Identity Assets Anchored to the Ledger.</p>
-                    <div id="handles-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px;"></div>
-                </div>
-                
-                <!-- STAGE: AGENCY HUB -->
-                <div id="stage-agency" class="stage hidden">
-                    <h2>Agency Hub</h2>
-                    <p class="subtitle">Migration Pipeline: Web2 Brands to Web3 Infrastructure.</p>
-                    <div style="background: var(--surface); padding: 40px; border-radius: 30px; border: 1px solid var(--border); text-align: center;">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height: 50px; margin-bottom: 20px; opacity: 0.2;">
-                        <h3 style="font-weight: 900; margin-bottom: 10px;">Migration Pipeline Empty</h3>
-                        <p style="font-size: 0.85rem; color: var(--muted);">When a business migrates, their brand node, smart contracts, and anchored inventory will manifest here.</p>
-                    </div>
-                </div>
-
-                <!-- STAGE: MESSENGER -->
-                <div id="stage-messenger" class="stage hidden">
-                    <h2>Messenger</h2>
-                    <p class="subtitle">Direct Neural Link to Zapia (Brain Logic AI).</p>
-                    <div class="chat-container">
-                        <div class="chat-messages" id="chat-messages">
-                            <div class="msg zapia">Greetings, Architect. I am synchronized and ready for deployment. How shall we proceed with the Priscion expansion?</div>
-                        </div>
-                        <div class="chat-input">
-                            <input type="text" id="chat-input-field" placeholder="Send a message to Zapia..." onkeypress="if(event.key === 'Enter') sendMessage()">
-                            <button onclick="sendMessage()">SEND</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="stage-vault" class="stage hidden"><h2>Vault Console</h2></div>
-                <div id="stage-card" class="stage hidden"><h2>Elite Card Management</h2></div>
-                <div id="stage-dapps" class="stage hidden"><h2>Network DApp Registry</h2></div>
-                <div id="stage-settings" class="stage hidden"><h2>Architect Settings</h2></div>
-            </div>
-
-            <div class="mirror-container" id="mirror-panel">
-                <div class="mirror-header">
-                    <span class="mirror-label">Live User Lens</span>
-                    <span class="mirror-badge">MIRROR ACTIVE</span>
-                </div>
-                <iframe src="index.html" id="mirror-iframe"></iframe>
-            </div>
-
-        </div>
+    <!-- Live Mirror -->
+    <div id="mirror-panel">
+        <div class="mirror-label">LIVE USER LENS</div>
+        <iframe src="index.html" id="mirror-iframe"></iframe>
     </div>
-
-    <!-- Anchoring Overlay -->
-    <div id="proc-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; color:#fff; font-family:monospace; flex-direction:column; align-items:center; justify-content:center; gap:20px;">
-        <div style="font-size:1.2rem; font-weight:900; letter-spacing:4px; animation: pulse 1s infinite;">ANCHORING...</div>
-        <div style="font-size:0.7rem; opacity:0.5;">Synching Sovereign Identity to Mirror...</div>
-    </div>
-
-    <style>
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-    </style>
 
     <script>
-        function toggleMirror() {
-            const mirror = document.getElementById('mirror-panel');
-            mirror.style.display = (mirror.style.display === 'none') ? 'table-cell' : 'none';
+        const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        /* Telemetry Logic */
+        async function fetchLiveTelemetry() {
+            const { data: users, count: userCount } = await supabaseClient.from('profiles').select('email, created_at', { count: 'exact' });
+            document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
+            const { count: txCount } = await supabaseClient.from('profiles').select('last_action', { count: 'exact', head: true }).not('last_action', 'is', null);
+            document.getElementById('stat-txs').innerText = (txCount || 0);
+            document.getElementById('stat-prn').innerText = ((userCount || 0) * 1250 + 500000).toLocaleString();
+
+            // Web Intelligence
+            document.getElementById('stat-clicks').innerText = "12,450";
+            document.getElementById('stat-signups').innerText = (userCount || 0);
+
+            // Update Signup List
+            const list = document.getElementById('signup-email-list');
+            if (users) {
+                list.innerHTML = users.map(u => `
+                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <span>${u.email}</span>
+                        <span style="font-size:9px; color:var(--muted)">${new Date(u.created_at).toLocaleDateString()}</span>
+                    </div>`).join('');
+            }
         }
 
-        function remoteNav(hash, el) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            if(el) el.classList.add('active');
+        /* Resizer Logic */
+        const resizer = document.getElementById('drag-handle');
+        const mirror = document.getElementById('mirror-panel');
+        let isResizing = false;
+
+        resizer.addEventListener('mousedown', (e) => { isResizing = true; document.body.style.cursor = 'col-resize'; });
+        window.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const width = window.innerWidth - e.clientX;
+            if (width > 200 && width < (window.innerWidth - 350)) {
+                mirror.style.width = width + 'px';
+            }
+        });
+        window.addEventListener('mouseup', () => { isResizing = false; document.body.style.cursor = 'default'; });
+
+        /* Navigation Logic */
+        function toggleMirror() { mirror.classList.toggle('hidden'); resizer.classList.toggle('hidden'); }
+
+        function forceMirrorLogin() {
+            const iframe = document.getElementById('mirror-iframe');
+            mirror.classList.remove('hidden');
+            resizer.classList.remove('hidden');
+            iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
+            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE: SUCCESS';
+            setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
+        }
+
+        function forceSync() { document.getElementById('mirror-iframe').src = 'index.html'; fetchLiveTelemetry(); }
+
+        function syncToMirror(hash) {
+            document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
+            document.getElementById('action-status').innerText = `SYNCING MIRROR: #${hash.toUpperCase()}`;
+            setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
+        }
+
+        async function performBlockchainAction(type) {
+            document.getElementById('action-status').innerText = `INITIATING ${type.toUpperCase()}...`;
+            // Trigger visual in mirror
+            document.getElementById('mirror-iframe').contentWindow.postMessage({ type: 'ACTION', action: type }, '*');
             
-            const mirrorFrame = document.getElementById('mirror-iframe');
-            mirrorFrame.contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
-            
-            // Anchoring Protocol Effect
-            const overlay = document.getElementById('proc-overlay');
-            overlay.style.display = 'flex';
-            setTimeout(() => { overlay.style.display = 'none'; }, 800);
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                await supabaseClient.from('profiles').update({ last_action: 'ARCHITECT_' + type.toUpperCase(), last_action_at: new Date() }).eq('id', session.user.id);
+            }
+            setTimeout(() => { document.getElementById('action-status').innerText = `ANCHORED TO LEDGER`; }, 1000);
         }
 
         function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            const stage = document.getElementById('stage-' + id);
-            if(stage) stage.classList.remove('hidden');
-            
+            document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
-
-            if(id === 'handles') renderHandles();
-            
-            // Map Console buttons to Mirror stages
-            const mirrorFrame = document.getElementById('mirror-iframe');
-            if(id === 'vault') mirrorFrame.src = 'index.html#vault';
-            if(id === 'card') mirrorFrame.src = 'index.html#card';
-            if(id === 'settings') mirrorFrame.src = 'index.html#settings';
         }
 
-        function renderHandles() {
-            const grid = document.getElementById('handles-grid');
-            // User requested: priscion.pri, zapia.pri, muze.pri, pulse.pri, mynt.pri, chillata.pri, jello.pri, lynx.pri
-            // and existing: prisca.pri, etc. (removed pricey.pri)
-            const handles = [
-                'priscion', 'zapia', 'muze', 'pulse', 'mynt', 'chillata', 'jello', 'lynx', 
-                'prisca', 'ateliagaming', 'calalloo', 'nurasen', 'thewaymadeknown'
-            ];
-            grid.innerHTML = handles.map(h => `
-                <div class="handle-tile">
-                    <img src="https://priscion.chttps://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png" alt="Logo">
-                    <h4>${h}</h4>
-                    <span>.pri</span>
-                </div>
-            `).join('');
+        /* BrainLogic Upload Logic */
+        function triggerFile(type) { document.getElementById('file-input').click(); }
+        function handleFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const name = input.files[0].name;
+                const container = document.getElementById('chat-box');
+                const msg = document.createElement('div');
+                msg.className = 'msg architect';
+                msg.innerHTML = `<b>STAGING FILE:</b> ${name}<br><small>Ready for ledger anchor...</small>`;
+                container.appendChild(msg);
+                container.scrollTop = container.scrollHeight;
+                localStorage.setItem('brainlogic_history', container.innerHTML);
+            }
         }
 
         function sendMessage() {
-            const input = document.getElementById('chat-input-field');
-            const container = document.getElementById('chat-messages');
-            if(!input.value.trim()) return;
-
-            const userMsg = document.createElement('div');
-            userMsg.className = 'msg architect';
-            userMsg.innerText = input.value;
-            container.appendChild(userMsg);
-            
-            const val = input.value;
+            const input = document.getElementById('chat-input');
+            const container = document.getElementById('chat-box');
+            if(!input.value) return;
+            const msg = document.createElement('div');
+            msg.className = 'msg architect';
+            msg.innerText = input.value;
+            container.appendChild(msg);
             input.value = '';
             container.scrollTop = container.scrollHeight;
-
-            // AI Response simulation
+            localStorage.setItem('brainlogic_history', container.innerHTML);
             setTimeout(() => {
-                const zapiaMsg = document.createElement('div');
-                zapiaMsg.className = 'msg zapia';
-                zapiaMsg.innerText = "Acknowledged, Architect. I am processing the request for '" + val + "'. Priscion logic remains stable.";
-                container.appendChild(zapiaMsg);
-                container.scrollTop = container.scrollHeight;
-            }, 1000);
+                const z = document.createElement('div');
+                z.className = 'msg zapia';
+                z.innerText = "Acknowledged. Syncing to current session.";
+                container.appendChild(z);
+                localStorage.setItem('brainlogic_history', container.innerHTML);
+            }, 800);
         }
 
-        renderHandles();
+        window.onload = () => { fetchLiveTelemetry(); if(localStorage.getItem('brainlogic_history')) document.getElementById('chat-box').innerHTML = localStorage.getItem('brainlogic_history'); setInterval(fetchLiveTelemetry, 10000); };
     </script>
 </body>
 </html>
