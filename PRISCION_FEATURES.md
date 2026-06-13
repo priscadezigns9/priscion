@@ -10,10 +10,10 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Neural Login Storage**: When a Web2 user signs up, their basic profile is stored in Supabase. This allows them to login across devices without immediate seed phrase management.
 
 ## 2. Recovery & Seed Management
-*   **Delayed Discovery**: The recovery phrase (seed) is not forced on the user at signup (to lower friction). 
+*   **Delayed Discovery**: The recovery phrase (seed) is not forced on the user at signup.
 *   **Settings Vault**: The seed is accessible via a secure section in the Settings stage (`#stage-settings`).
 *   **The "Handshake" Protocol**: 
-    *   The user must view their 12-word seed phrase in the Settings.
+    *   **Click to Reveal**: The recovery phrase is hidden/blurred by default. The user must explicitly click "REVEAL SEED" to view the phrase.
     *   Once a user confirms they have saved/written down their recovery phrase via the "I HAVE WRITTEN THIS DOWN" button, the phrase is **permanently purged from the UI** (`#seed-display-area` hidden).
     *   A "Seed Secured" status card is displayed instead.
     *   The confirmation status is stored in `localStorage` as `muze_seed_confirmed`.
@@ -23,17 +23,30 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 *   **Business Onboarding**: Legacy Web2 brands migrate to Web3 via the MUZE API.
 *   **Paid Tiers**:
     *   **Standard**: Personal use, basic transactions.
-    *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes, inventory on-chain, and customer payments.
-*   **Logic**: The API acts as a bridge. Businesses pay in $PRN or a monthly $MUSD subscription to maintain their "Neural Node" on the Priscion Ledger.
+    *   **Developer/Business API**: A **paid feature** (Subscription-based). Enables businesses to use the MUZE infrastructure for their own brand nodes.
+*   **API Activation**: The activation interface is hidden behind a secure "ACTIVATE API" toggle within Settings.
 
 ## 4. UI/UX Standards
 *   **Fidelity**: High-fidelity UI with **Sky Blue (#F0F9FF)**, **Pure White**, and **Muze Blue (#5AC8FA)**.
 *   **Typography**: **Playfair Display** (Headings/Balances) and **Inter** (UI/Body).
-*   **Centers**: All onboarding layers, cards, and auth forms must be perfectly centered (vertically and horizontally) within the viewport.
+*   **Dark Mode**: A modern, vector-style persistent toggle in the navigation for high-fidelity night work.
+*   **Profile Logic**: Clicking the user's handle/pfp opens a **Multi-Wallet Overlay** with options:
+    1.  **Create New Wallet**
+    2.  **Restore Wallet**
+    3.  **Connect Ledger**
+*   **Action Bar**: Must feature SEND, RECV, SWAP, and **⚡ STAKE** buttons.
+*   **dApp Stage Interaction**: Clicking a dApp tile (PULSE, CHILLATA, etc.) must open the app directly within the MUZE Wallet viewport.
+*   **Asset Categorization**:
+    *   **Vault**: Primary fungible tokens ($PRN, ADA, NRL).
+    *   **Collectibles**: Dedicated gallery for **NFTs and ADA Handles**.
 *   **Favicon**: Always the **P-Logo** (`/assets/p-logo.png`).
 
 ## 5. Token Economy (The Four-Token Ledger)
 *   **$PRN (Priscion)**: Public Utility. Network fees, NFTs, brand activations.
+*   **$NRL (Neural)**: Reserve/Governance. Private reserve, DAO voting.
+*   **$JLO (Chillata Token)**: The specific token used for private transactions.
+*   **$MUSD (Muze USD)**: Stablecoin. Ecosystem settlement and merchant payouts.
+*   **Live Logic**: Balances and transaction counts are pulled live from the Supabase `profiles` ledger.
 *   **$NRL (Neural)**: Reserve/Governance. Private reserve, DAO voting.
 *   **$JLO (Chillata Token)**: The specific token used for private transactions.
 *   **$MUSD (Muze USD)**: Stablecoin. Ecosystem settlement and merchant payouts.
