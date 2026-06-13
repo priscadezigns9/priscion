@@ -436,8 +436,15 @@
                 
                 setTimeout(() => {
                     o.style.display = 'none';
+                    // MANDATORY: Ledger connection requires a wizard-like verification or a pre-existing handle
+                    // For now, if no handle exists, we must force them to name the ledger identity
+                    const existingHandle = localStorage.getItem('muze_handle');
+                    if(!existingHandle) {
+                        const ledgerName = prompt("Enter a name for this Ledger identity (e.g. my-ledger):");
+                        if(!ledgerName) { location.reload(); return; }
+                        localStorage.setItem('muze_handle', ledgerName.toLowerCase().replace('.pri','') + '.pri');
+                    }
                     localStorage.setItem('muze_v8_active', 'true');
-                    localStorage.setItem('muze_handle', 'ledger.pri');
                     localStorage.setItem('muze_seed', '[PROTECTED BY LEDGER DEVICE]');
                     location.reload();
                 }, 3000);
