@@ -223,7 +223,7 @@
         </div>
     </div>
 
-    <div id="payment-modal" class="layer" style="background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); display:none;">
+    <div id="payment-modal" class="layer hidden" style="background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); z-index:8000;">
         <div class="settings-card" style="max-width:400px; text-align:center;">
             <h3 id="payment-title" style="font-weight:900; margin-bottom:20px;">Activate Developer API</h3>
             <p id="payment-desc" style="font-size:0.85rem; color:var(--muted); margin-bottom:30px;">Subscription required for High-Fidelity Business Nodes.</p>
@@ -299,6 +299,7 @@
                 document.getElementById('payment-title').innerText = "Activate Developer API";
                 document.getElementById('payment-desc').innerText = "Subscription required for High-Fidelity Business Nodes.";
                 document.getElementById('pay-prn-btn').style.display = 'block';
+                document.getElementById('payment-modal').classList.remove('hidden');
                 document.getElementById('payment-modal').style.display = 'flex';
                 return;
             }
@@ -306,6 +307,7 @@
                 document.getElementById('payment-title').innerText = "Buy $PRN Assets";
                 document.getElementById('payment-desc').innerText = "Select payment method to acquire Priscion assets.";
                 document.getElementById('pay-prn-btn').style.display = 'none';
+                document.getElementById('payment-modal').classList.remove('hidden');
                 document.getElementById('payment-modal').style.display = 'flex';
                 return;
             }
@@ -378,7 +380,10 @@
 
         window.onclick = () => { document.getElementById('handle-menu').style.display = 'none'; };
 
-        function closePayment() { document.getElementById('payment-modal').style.display = 'none'; }
+        function closePayment() { 
+            document.getElementById('payment-modal').classList.add('hidden');
+            document.getElementById('payment-modal').style.display = 'none'; 
+        }
         
         function processPayment(method) {
             const isBuy = document.getElementById('payment-title').innerText.includes("Buy");
