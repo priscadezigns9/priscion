@@ -27,7 +27,7 @@
             background: var(--bg); border-right: 1px solid var(--border);
             padding: 40px 20px; z-index: 1000;
         }
-        .sidebar-logo { height: 32px; margin-bottom: 40px; filter: grayscale(1); }
+        .sidebar-logo { height: 40px; margin-bottom: 40px; }
         
         .sidebar-label { 
             font-size: 10px; text-transform: uppercase; letter-spacing: 2px; 
@@ -72,7 +72,7 @@
         .card-label { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 12px; }
         .card-value { font-size: 24px; font-weight: 900; color: var(--text); }
 
-        /* Handle Tiles (High Fidelity) */
+        /* Handle Tiles (Using Priscion P Logo) */
         .handle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
         .handle-tile {
             background: #fff; border: 1px solid var(--border); border-radius: 16px;
@@ -109,11 +109,11 @@
         }
 
         /* Wallet Buttons (Actionable) */
-        .wallet-actions { display: flex; gap: 12px; margin-top: 20px; }
+        .wallet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
         .btn-action { 
-            flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border);
-            background: #fff; font-size: 12px; font-weight: 700; cursor: pointer;
-            text-align: center;
+            padding: 20px; border-radius: 16px; border: 1px solid var(--border);
+            background: #fff; font-size: 14px; font-weight: 700; cursor: pointer;
+            text-align: center; color: var(--text); text-transform: uppercase; letter-spacing: 1px;
         }
         .btn-action:hover { background: var(--surface); border-color: var(--accent); }
         .btn-action:active { transform: scale(0.98); }
@@ -136,70 +136,52 @@
         
         <div class="sidebar-label">Architecture</div>
         <div class="nav-item active" onclick="showStage('dashboard', this)">
-            Command Center
+            MUZE Console
         </div>
-        <div class="nav-item" onclick="showStage('vault', this)">Vault</div>
-        <div class="nav-item" onclick="showStage('handles', this)">Registry</div>
-        <div class="nav-item" onclick="showStage('messenger', this)">Messenger</div>
-        <div class="nav-item" onclick="showStage('dapps', this)">dApps</div>
+        <div class="nav-item" onclick="showStage('handles', this)">Priscion Registry</div>
+        <div class="nav-item" onclick="showStage('messenger', this)">Neural Messenger</div>
+        <div class="nav-item" onclick="showStage('dapps', this)">dApp Store</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
         
-        <div class="sidebar-label" style="margin-top:40px;">Controls</div>
+        <div class="sidebar-label" style="margin-top:40px;">Operations</div>
         <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
+        <div class="nav-item" onclick="window.location.reload()">Force Sync</div>
     </div>
 
     <!-- Main Content -->
     <div class="content">
         
-        <!-- Stage: Command Center -->
+        <!-- Stage: MUZE Console (Formerly Dashboard) -->
         <div id="stage-dashboard" class="stage">
-            <h1 class="stage-title">Live Node Telemetry</h1>
-            <p class="stage-subtitle">Real-time status of the Priscion L1 Ledger.</p>
+            <h1 class="stage-title">MUZE Console</h1>
+            <p class="stage-subtitle">Live architect-level controls for the Priscion Node.</p>
             
             <div class="grid">
                 <div class="card">
                     <div class="card-label">NODE STATUS</div>
-                    <div class="card-value" style="color: #22C55E;">ACTIVE</div>
+                    <div class="card-value" style="color: #22C55E;">LIVE</div>
                 </div>
                 <div class="card">
-                    <div class="card-label">TOTAL HANDLES</div>
-                    <div class="card-value" id="stat-handles">17</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">RESERVE ($NRL)</div>
-                    <div class="card-value" id="stat-reserve">1,000,000</div>
+                    <div class="card-label">RESERVE $NRL</div>
+                    <div class="card-value">1,000,000</div>
                 </div>
             </div>
 
-            <div class="sidebar-label" style="margin-top:40px;">Ledger Operations</div>
+            <div class="sidebar-label" style="margin-top:40px;">MUZE Operations (Live Mode)</div>
             <div class="wallet-actions">
-                <button class="btn-action" onclick="performLedgerAction('STAKE')">STAKE $PRN</button>
-                <button class="btn-action" onclick="performLedgerAction('LIQUIDITY')">ADD LIQUIDITY</button>
-                <button class="btn-action" onclick="performLedgerAction('SWAP')">SWAP $NRL</button>
+                <button class="btn-action" onclick="performLiveAction('vault')">Vault</button>
+                <button class="btn-action" onclick="performLiveAction('handles')">Handles</button>
+                <button class="btn-action" onclick="performLiveAction('staking')">Staking</button>
+                <button class="btn-action" onclick="performLiveAction('liquidity')">Liquidity</button>
+                <button class="btn-action" onclick="performLiveAction('swap')">Swap</button>
             </div>
             <p id="action-status" style="margin-top: 15px; font-size: 11px; font-weight: 800; color: var(--accent);"></p>
         </div>
 
-        <!-- Stage: Vault -->
-        <div id="stage-vault" class="stage hidden">
-            <h1 class="stage-title">Private Vault</h1>
-            <p class="stage-subtitle">Secure storage for sovereign assets.</p>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-label">AVAILABLE $PRN</div>
-                    <div class="card-value">25,000</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">AVAILABLE $JLO</div>
-                    <div class="card-value">12,500</div>
-                </div>
-            </div>
-        </div>
-
         <!-- Stage: Registry -->
         <div id="stage-handles" class="stage hidden">
-            <h1 class="stage-title">Handle Registry</h1>
-            <p class="stage-subtitle">Managed Priscion Network handles.</p>
+            <h1 class="stage-title">Priscion Registry</h1>
+            <p class="stage-subtitle">Managed network handles and sub-domains.</p>
             <div class="handle-grid" id="handle-list">
                 <!-- Handles injected via JS -->
             </div>
@@ -208,7 +190,7 @@
         <!-- Stage: Messenger -->
         <div id="stage-messenger" class="stage hidden">
             <h1 class="stage-title">Neural Messenger</h1>
-            <p class="stage-subtitle">Encrypted link to the Architect node.</p>
+            <p class="stage-subtitle">Secure peer-to-peer command line.</p>
             <div class="chat-container" id="chat-box"></div>
             <div class="chat-input">
                 <input type="text" id="chat-input" placeholder="Enter command..." onkeypress="if(event.key==='Enter') sendMessage()">
@@ -218,8 +200,8 @@
 
         <!-- Stage: dApps -->
         <div id="stage-dapps" class="stage hidden">
-            <h1 class="stage-title">dApp Explorer</h1>
-            <p class="stage-subtitle">Native applications within the MUZE ecosystem.</p>
+            <h1 class="stage-title">dApp Store</h1>
+            <p class="stage-subtitle">Native applications running on the Priscion Ledger.</p>
             <div class="dapp-grid">
                 <div class="dapp-icon" onclick="alert('Opening LYNX...')">
                     <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png">
@@ -274,35 +256,35 @@
             const container = document.getElementById('handle-list');
             container.innerHTML = handles.map(h => `
                 <div class="handle-tile">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png">
                     <span>${h}</span>
                 </div>
             `).join('');
         }
 
-        async function fetchLiveStats() {
-            const { count } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-            document.getElementById('stat-handles').innerText = count || handles.length;
-        }
-
-        async function performLedgerAction(type) {
+        async function performLiveAction(target) {
             const status = document.getElementById('action-status');
-            status.innerText = `INITIATING ${type} ON LEDGER...`;
+            status.innerText = `SYNCING MIRROR TO: ${target.toUpperCase()}...`;
             
-            // Real back-end handshake: Get session
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) {
-                setTimeout(() => { status.innerText = `ERROR: NO ACTIVE SESSION FOUND.`; }, 1000);
-                return;
+            // Mirror sync
+            const mirrorFrame = document.getElementById('mirror-iframe');
+            if(mirrorFrame && mirrorFrame.contentWindow) {
+                // If it's vault or card, use the direct hash
+                // For others like staking/liquidity, it might stay on vault but show status
+                const mirrorHash = target === 'vault' || target === 'card' || target === 'settings' ? target : 'vault';
+                try {
+                   mirrorFrame.contentWindow.location.hash = '#' + mirrorHash;
+                } catch(e) {}
             }
 
-            // Simulate ledger processing
-            setTimeout(async () => {
-                // Update profile metadata or similar to show "Live" action
-                await supabaseClient.from('profiles').update({ last_action: type, last_action_at: new Date() }).eq('id', session.user.id);
-                status.innerText = `SUCCESS: ${type} ANCHORED TO BLOCKCHAIN.`;
-                setTimeout(() => { status.innerText = ''; }, 3000);
-            }, 1500);
+            // Backend log
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (session) {
+                await supabaseClient.from('profiles').update({ last_action: 'CONSOLE_SYNC_' + target.toUpperCase(), last_action_at: new Date() }).eq('id', session.user.id);
+            }
+            
+            setTimeout(() => { status.innerText = `MIRROR STATUS: ${target.toUpperCase()} ACTIVE`; }, 500);
+            setTimeout(() => { status.innerText = ''; }, 3000);
         }
 
         function toggleMirror() {
@@ -346,7 +328,6 @@
             msg.className = 'msg architect';
             msg.innerText = input.value;
             container.appendChild(msg);
-            const userMsg = input.value;
             input.value = '';
             container.scrollTop = container.scrollHeight;
             localStorage.setItem('architect_chat', container.innerHTML);
@@ -354,7 +335,7 @@
             setTimeout(() => {
                 const zapiaMsg = document.createElement('div');
                 zapiaMsg.className = 'msg zapia';
-                zapiaMsg.innerText = "Acknowledged, Architect. Command logged and ledger sync in progress.";
+                zapiaMsg.innerText = "Acknowledged, Architect. Console sync complete.";
                 container.appendChild(zapiaMsg);
                 container.scrollTop = container.scrollHeight;
                 localStorage.setItem('architect_chat', container.innerHTML);
@@ -363,9 +344,7 @@
 
         window.onload = () => {
             renderHandles();
-            fetchLiveStats();
             loadChat();
-            setInterval(fetchLiveStats, 30000); 
         };
     </script>
 </body>
