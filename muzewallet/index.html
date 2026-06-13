@@ -250,7 +250,7 @@
         const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        function bypass() { localStorage.setItem('muze_active', 'true'); location.reload(); }
+        function bypass() { localStorage.setItem('muze_v2_active', 'true'); location.reload(); }
         
         function toggleDark() { 
             document.body.classList.toggle('dark');
@@ -280,17 +280,17 @@
                     <button class="action-btn" style="width:100%; justify-content:center; background:none; border:1px solid var(--border); color:var(--text);">⚓ CONNECT LEDGER</button>
                 `;
             }
-            document.getElementById('layer-entrance').classList.add('hidden');
-            document.getElementById('layer-auth').classList.remove('hidden');
+            document.getElementById('layer-entrance').style.display = 'none';
+            document.getElementById('layer-auth').style.display = 'flex';
         }
 
         function hideAuth() {
-            document.getElementById('layer-auth').classList.add('hidden');
-            document.getElementById('layer-entrance').classList.remove('hidden');
+            document.getElementById('layer-auth').style.display = 'none';
+            document.getElementById('layer-entrance').style.display = 'flex';
         }
 
         function logout() {
-            localStorage.removeItem('muze_active');
+            localStorage.removeItem('muze_v2_active');
             location.reload();
         }
 
@@ -412,11 +412,11 @@
         });
 
         window.onload = () => { 
-            if(localStorage.getItem('muze_active') === 'true') {
-                document.getElementById('layer-entrance').classList.add('hidden');
-                document.getElementById('layer-auth').classList.add('hidden');
+            if(localStorage.getItem('muze_v2_active') === 'true') {
+                document.getElementById('layer-entrance').style.display = 'none';
+                document.getElementById('layer-auth').style.display = 'none';
             } else {
-                document.getElementById('layer-entrance').classList.remove('hidden');
+                document.getElementById('layer-entrance').style.display = 'flex';
             }
             if(localStorage.getItem('muze_dark') === 'true') toggleDark();
             fetchLiveBalance();
