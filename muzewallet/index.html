@@ -140,7 +140,7 @@
                     <div class="pfp" id="user-pfp">P</div>
                     <div class="pfp-edit">+</div>
                 </div>
-                <div class="user-pill"><span>prisca.pri</span></div>
+                <div class="user-pill"><span id="display-handle-pill">prisca.pri</span></div>
                 <div class="handle-menu" id="handle-menu">
                     <div class="menu-item" onclick="blockchainAction('wallet_create')"><span>✦</span> CREATE NEW WALLET</div>
                     <div class="menu-item" onclick="blockchainAction('wallet_restore')"><span>↺</span> RESTORE WALLET</div>
@@ -186,7 +186,7 @@
             <div class="collectibles-grid">
                 <div class="collectible-card" onclick="blockchainAction('view_handle')">
                     <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="collectible-img">
-                    <div class="collectible-label">prisca.pri</div>
+                    <div class="collectible-label" id="display-handle-vault">prisca.pri</div>
                 </div>
             </div>
         </div>
@@ -296,6 +296,38 @@
         }
 
         function blockchainAction(action) {
+            if(action === 'neural_login') {
+                const email = document.querySelector('#auth-fields input[type="email"]').value;
+                const pass = document.querySelector('#auth-fields input[type="password"]').value;
+                if(!email || !pass) { alert("Sovereign credentials required."); return; }
+                
+                const o = document.getElementById('proc-overlay');
+                document.getElementById('proc-status').innerText = "AUTHENTICATING...";
+                document.getElementById('proc-text').innerText = "VERIFYING NEURAL SIGNATURE...";
+                o.style.display = 'flex';
+                
+                setTimeout(() => {
+                    o.style.display = 'none';
+                    localStorage.setItem('muze_v5_active', 'true');
+                    localStorage.setItem('muze_handle', email.split('@')[0] + '.pri');
+                    location.reload();
+                }, 2000);
+                return;
+            }
+            if(action === 'vault_create') {
+                const o = document.getElementById('proc-overlay');
+                document.getElementById('proc-status').innerText = "GENERATING...";
+                document.getElementById('proc-text').innerText = "MINTING SOVEREIGN SEED...";
+                o.style.display = 'flex';
+                
+                setTimeout(() => {
+                    o.style.display = 'none';
+                    localStorage.setItem('muze_v5_active', 'true');
+                    localStorage.setItem('muze_handle', 'new.vault.pri');
+                    location.reload(); 
+                }, 2500);
+                return;
+            }
             if(action === 'api_init') {
                 document.getElementById('payment-title').innerText = "Activate Developer API";
                 document.getElementById('payment-desc').innerText = "Subscription required for High-Fidelity Business Nodes.";
@@ -424,10 +456,16 @@
 
         window.onload = () => { 
             const active = localStorage.getItem('muze_v5_active');
+            const handle = localStorage.getItem('muze_handle') || 'prisca.pri';
+            
             if(active === 'true') {
                 document.getElementById('layer-entrance').style.display = 'none';
                 document.getElementById('layer-auth').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'flex';
+                
+                // Dynamic Handle Injection
+                if(document.getElementById('display-handle-pill')) document.getElementById('display-handle-pill').innerText = handle;
+                if(document.getElementById('display-handle-vault')) document.getElementById('display-handle-vault').innerText = handle;
             } else {
                 document.getElementById('layer-entrance').style.display = 'flex';
                 document.getElementById('main-ui').style.display = 'none';
