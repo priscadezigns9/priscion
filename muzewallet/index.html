@@ -114,7 +114,7 @@
                 <input type="password" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
             </div>
             
-            <button onclick="bypass()" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">CONTINUE</button>
+            <button onclick="blockchainAction('neural_login')" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">CONTINUE</button>
             <button onclick="hideAuth()" style="background:none; border:none; color:var(--muted); font-size:0.7rem; font-weight:900; margin-top:15px; width:100%; cursor:pointer;">GO BACK</button>
         </div>
     </div>
@@ -223,7 +223,7 @@
         </div>
     </div>
 
-    <div id="payment-modal" class="layer" style="background:rgba(255,255,255,0.95); backdrop-filter:blur(10px);">
+    <div id="payment-modal" class="layer" style="background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); display:none;">
         <div class="settings-card" style="max-width:400px; text-align:center;">
             <h3 id="payment-title" style="font-weight:900; margin-bottom:20px;">Activate Developer API</h3>
             <p id="payment-desc" style="font-size:0.85rem; color:var(--muted); margin-bottom:30px;">Subscription required for High-Fidelity Business Nodes.</p>
@@ -275,9 +275,9 @@
                 title.innerText = "Vault Setup";
                 desc.innerText = "Create or recover your digital vault.";
                 fields.innerHTML = `
-                    <button class="action-btn" style="width:100%; justify-content:center; margin-bottom:10px; background:var(--text); color:var(--bg);">✦ CREATE NEW VAULT</button>
-                    <button class="action-btn" style="width:100%; justify-content:center; margin-bottom:10px; background:none; border:1px solid var(--border); color:var(--text);">↺ RECOVER FROM SEED</button>
-                    <button class="action-btn" style="width:100%; justify-content:center; background:none; border:1px solid var(--border); color:var(--text);">⚓ CONNECT LEDGER</button>
+                    <button class="action-btn" onclick="blockchainAction('vault_create')" style="width:100%; justify-content:center; margin-bottom:10px; background:var(--text); color:var(--bg);">✦ CREATE NEW VAULT</button>
+                    <button class="action-btn" onclick="blockchainAction('vault_restore')" style="width:100%; justify-content:center; margin-bottom:10px; background:none; border:1px solid var(--border); color:var(--text);">↺ RECOVER FROM SEED</button>
+                    <button class="action-btn" onclick="blockchainAction('ledger_connect')" style="width:100%; justify-content:center; background:none; border:1px solid var(--border); color:var(--text);">⚓ CONNECT LEDGER</button>
                 `;
             }
             document.getElementById('layer-entrance').style.display = 'none';
@@ -315,7 +315,12 @@
             status.innerText = "ANCHORING...";
             txt.innerText = `INITIATING ${action.toUpperCase()} ON PRISCION LEDGER...`;
             o.style.display = 'flex';
-            setTimeout(() => o.style.display = 'none', 2000);
+            setTimeout(() => {
+                o.style.display = 'none';
+                if(['vault_create', 'vault_restore', 'ledger_connect', 'neural_login'].includes(action)) {
+                    bypass();
+                }
+            }, 2000);
         }
 
         function revealSeed() {
