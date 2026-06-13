@@ -4,10 +4,12 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
 
 ## 1. MUZE Wallet: Onboarding & Authentication
 *   **Dual-Path Entry**: 
-    *   **Neural Login (Web2 Path)**: Primary onboarding for non-technical users. Uses **Email and Password**. Data is anchored to the `profiles` table in **Supabase**.
+    *   **Neural Login (Web2 Path)**: Primary onboarding for non-technical users. Features a **Login / Signup** toggle for handle creation (`name.pri`). Uses **Email and Password**. Data is anchored to the `profiles` table in **Supabase**.
     *   **Vault Setup (Web3 Path)**: For advanced users. Options for Create, Recover (Seed), and Ledger.
+*   **Strict Onboarding Protocol (v8)**: 
+    *   **Vault Wizard**: Mandatory 3-step sequence for all new vaults: **Step 1: Display Seed** -> **Step 2: Verify Seed** (requires manual input of words #3 and #7) -> **Step 3: Secure Vault** (sets local encryption password).
+    *   **Ledger Identity Gate**: Connecting a Ledger requires the user to explicitly name their hardware-gated identity (e.g. `my-ledger.pri`) to ensure dynamic handle injection.
 *   **Sovereign Password**: Users create a vault password during setup. This password is used for local encryption and the "Neural Handshake."
-*   **Neural Login Storage**: When a Web2 user signs up, their basic profile is stored in Supabase. This allows them to login across devices without immediate seed phrase management.
 
 ## 2. Recovery & Seed Management
 *   **Delayed Discovery**: The recovery phrase (seed) is not forced on the user at signup.
@@ -109,6 +111,15 @@ This is the canonical document for the Priscion L1 Ecosystem. It serves as the p
     3.  **Handle Issuance**: Verified business handle anchoring.
 *   **Pipeline Visibility**: The Hub provides real-time status of migrations in progress and node health for managed brands.
 
+## 13. Digital Card Infrastructure
+*   **The Artifact**: `assets/card_ai_access.jpg`. A physical-to-digital high-fidelity representation of the user's sovereign identity.
+*   **Access Token**: The card acts as a verification handshake for the **Developer API** and **Elite AI Access**.
+*   **Real-World (IRL) Bridge**: 
+    *   **Mobile NFC/QR**: MUZE Wallet on mobile uses NFC and secure QR codes for merchant-point-of-sale taps.
+    *   **Merchant Node**: Terminal-based settlement where merchants receive stable value while users spend sovereign assets.
+    *   **Fiat-to-Asset Swap**: Real-time conversion into **$MUSD** for instant real-world spending at legacy terminals.
+*   **Physical Key**: Optional NFC-embedded physical card acting as a "Physical Proof of Key" to the digital Vault.
+
 ---
-*Last Updated: June 12, 2026*
+*Last Updated: June 13, 2026*
 
