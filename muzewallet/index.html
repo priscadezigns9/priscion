@@ -89,7 +89,7 @@
 <body>
     <div id="proc-overlay">
         <div class="pulse-box"></div>
-        <h2 style="margin-top: 25px; font-weight: 900; letter-spacing: 4px;">ANCHORING...</h2>
+        <h2 id="proc-status" style="margin-top: 25px; font-weight: 900; letter-spacing: 4px;">ANCHORING...</h2>
         <p id="proc-text" style="font-size: 10px; font-weight: 900; margin-top: 10px; opacity: 0.5; letter-spacing: 2px;">LEDGER SYNCHRONIZATION IN PROGRESS</p>
     </div>
 
@@ -254,7 +254,9 @@
                 return;
             }
             const o = document.getElementById('proc-overlay');
+            const status = document.getElementById('proc-status');
             const txt = document.getElementById('proc-text');
+            status.innerText = "ANCHORING...";
             txt.innerText = `INITIATING ${action.toUpperCase()} ON PRISCION LEDGER...`;
             o.style.display = 'flex';
             setTimeout(() => o.style.display = 'none', 2000);
@@ -321,11 +323,11 @@
             const isBuy = document.getElementById('payment-title').innerText.includes("Buy");
             closePayment();
             const o = document.getElementById('proc-overlay');
-            o.style.display = 'flex';
-            const statusText = document.querySelector('#proc-overlay div:first-child');
-            const subText = document.querySelector('#proc-overlay div:last-child');
+            const statusText = document.getElementById('proc-status');
+            const subText = document.getElementById('proc-text');
             statusText.innerText = "AUTHENTICATING " + method.toUpperCase() + "...";
             subText.innerText = isBuy ? "Acquiring Priscion Assets..." : "Anchoring API License to Ledger...";
+            o.style.display = 'flex';
             
             setTimeout(() => {
                 o.style.display = 'none';
