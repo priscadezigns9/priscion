@@ -21,7 +21,7 @@
         
         /* Entrance Layer */
         .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .muze-entrance-logo { height: 60px; margin-bottom: 30px; cursor: pointer; }
+        .muze-entrance-logo { height: 60px; width: auto; object-fit: contain; margin-bottom: 30px; cursor: pointer; }
         h2 { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
         .layer p { color: var(--muted); font-size: 0.8rem; margin-bottom: 30px; line-height: 1.5; max-width: 280px; margin-left: auto; margin-right: auto; }
         
@@ -143,8 +143,8 @@
         <!-- STAGE: VAULT -->
         <div id="stage-vault" class="stage">
             <div class="balance-card">
-                <span class="balance-label">Total Vault Balance</span>
-                <div class="balance-value">25,480.00 <span style="font-size: 1.5rem; color: var(--muted); letter-spacing: 0;">ADA</span></div>
+                <span class="balance-label">Total PRN Balance</span>
+                <div class="balance-value"><span id="prn-balance">0</span> <span style="font-size: 1.5rem; color: var(--muted); letter-spacing: 0;">$PRN</span></div>
             </div>
 
             <div class="action-bar">
@@ -315,8 +315,32 @@
             location.reload();
         }
 
+        async function fetchLiveBalance(userId) {
+            const { data, error } = await supabaseClient
+                .from('profiles')
+                .select('balance_prn')
+                .eq('id', userId)
+                .single();
+            
+            if (data) {
+                document.getElementById('prn-balance').innerText = data.balance_prn.toLocaleString();
+            }
+        }
+
         window.onload = async () => {
             document.getElementById('muze-logo').onclick = handleLogoClick;
+
+            // God Mode Handshake: Listen for architect bypass
+            window.addEventListener('message', async (event) => {
+                if (event.data.type === 'GOD_MODE_HANDSHAKE') {
+                    localStorage.setItem('muze_active', 'true');
+                    localStorage.setItem('muze_handle', event.data.handle || 'prisca.pri');
+                    location.reload();
+                }
+                if (event.data.type === 'NAVIGATE') {
+                    showStage(event.data.hash);
+                }
+            });
 
             // Neural Persistence: Check Supabase session
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -326,6 +350,7 @@
             const isSeedConfirmed = localStorage.getItem('muze_seed_confirmed') === 'true';
 
             if (session) {
+                await fetchLiveBalance(session.user.id);
                 // User has active Supabase session
                 if (!isActive || !handle) {
                     // Sync profile to localStorage if missing
