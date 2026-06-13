@@ -215,7 +215,11 @@
             // Update Signup List
             const list = document.getElementById('signup-email-list');
             if (users) {
-                list.innerHTML = users.map(u => `<div>${u.email} <span style="font-size:10px; color:var(--muted)">(${new Date(u.created_at).toLocaleDateString()})</span></div>`).join('');
+                list.innerHTML = users.map(u => `
+                    <div style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <span>${u.email}</span>
+                        <span style="font-size:9px; color:var(--muted)">${new Date(u.created_at).toLocaleDateString()}</span>
+                    </div>`).join('');
             }
         }
 
