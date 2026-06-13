@@ -93,11 +93,30 @@
         <p id="proc-text" style="font-size: 10px; font-weight: 900; margin-top: 10px; opacity: 0.5; letter-spacing: 2px;">LEDGER SYNCHRONIZATION IN PROGRESS</p>
     </div>
 
-    <div id="layer-entrance" class="layer">
+    <div id="layer-entrance" class="layer" style="background:#fff;">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:90px; margin-bottom:40px;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 15px;">MUZE World.</h2>
-        <p style="color: var(--muted); margin-bottom: 40px; font-size: 0.9rem;">Architecting your independent digital identity.</p>
-        <button onclick="bypass()" style="background:var(--text); color:var(--bg); border:none; padding:22px 50px; border-radius:100px; font-weight:900; font-size:0.8rem; letter-spacing:3px; cursor:pointer; width:320px;">ENTER VAULT</button>
+        <h2 style="font-size: 2rem; margin-bottom: 10px; font-weight: 900;">MUZE World.</h2>
+        <p style="color: var(--muted); margin-bottom: 50px; font-size: 0.85rem; max-width: 300px; text-align: center;">Choose your path to independent digital identity.</p>
+        
+        <div style="display:flex; flex-direction:column; gap:15px; width:320px;">
+            <button onclick="showAuth('login')" style="background:var(--text); color:var(--bg); border:none; padding:20px; border-radius:18px; font-weight:900; font-size:0.75rem; letter-spacing:2px; cursor:pointer; width:100%;">NEURAL LOGIN (WEB2)</button>
+            <button onclick="showAuth('setup')" style="background:none; color:var(--text); border:1px solid var(--border); padding:20px; border-radius:18px; font-weight:900; font-size:0.75rem; letter-spacing:2px; cursor:pointer; width:100%;">VAULT SETUP (WEB3)</button>
+        </div>
+    </div>
+
+    <div id="layer-auth" class="layer hidden" style="background:#fff;">
+        <div class="settings-card" style="width:360px;">
+            <h3 id="auth-title" style="font-weight:900; margin-bottom:10px;">Neural Login</h3>
+            <p id="auth-desc" style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Enter your sovereign credentials.</p>
+            
+            <div id="auth-fields" style="display:flex; flex-direction:column; gap:15px;">
+                <input type="email" placeholder="Email Address" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+                <input type="password" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+            </div>
+            
+            <button onclick="bypass()" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">CONTINUE</button>
+            <button onclick="hideAuth()" style="background:none; border:none; color:var(--muted); font-size:0.7rem; font-weight:900; margin-top:15px; width:100%; cursor:pointer;">GO BACK</button>
+        </div>
     </div>
 
     <div class="sidebar">
@@ -236,6 +255,36 @@
             const isDark = document.body.classList.contains('dark');
             localStorage.setItem('muze_dark', isDark);
             document.getElementById('mode-icon').innerHTML = isDark ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>' : '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>';
+        }
+
+        function showAuth(type) {
+            const title = document.getElementById('auth-title');
+            const desc = document.getElementById('auth-desc');
+            const fields = document.getElementById('auth-fields');
+            
+            if(type === 'login') {
+                title.innerText = "Neural Login";
+                desc.innerText = "Enter your sovereign credentials.";
+                fields.innerHTML = `
+                    <input type="email" placeholder="Email Address" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); margin-bottom:15px;">
+                    <input type="password" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+                `;
+            } else {
+                title.innerText = "Vault Setup";
+                desc.innerText = "Create or recover your digital vault.";
+                fields.innerHTML = `
+                    <button class="action-btn" style="width:100%; justify-content:center; margin-bottom:10px; background:var(--text); color:var(--bg);">✦ CREATE NEW VAULT</button>
+                    <button class="action-btn" style="width:100%; justify-content:center; margin-bottom:10px; background:none; border:1px solid var(--border); color:var(--text);">↺ RECOVER FROM SEED</button>
+                    <button class="action-btn" style="width:100%; justify-content:center; background:none; border:1px solid var(--border); color:var(--text);">⚓ CONNECT LEDGER</button>
+                `;
+            }
+            document.getElementById('layer-entrance').classList.add('hidden');
+            document.getElementById('layer-auth').classList.remove('hidden');
+        }
+
+        function hideAuth() {
+            document.getElementById('layer-auth').classList.add('hidden');
+            document.getElementById('layer-entrance').classList.remove('hidden');
         }
 
         function blockchainAction(action) {
