@@ -299,6 +299,17 @@
                 fields.innerHTML = `
                     <input type="email" id="auth-email" placeholder="Email Address" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); margin-bottom:15px;">
                     <input type="password" id="auth-pass" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+                    <p style="font-size:10px; color:var(--muted); margin-top:15px; text-align:center;">Don't have a handle? <span onclick="showAuth('signup')" style="color:var(--muze-blue); cursor:pointer; font-weight:900;">Create Handle</span></p>
+                `;
+            } else if(type === 'signup') {
+                title.innerText = "Create Handle";
+                desc.innerText = "Claim your sovereign name on the ledger.";
+                fields.innerHTML = `
+                    <input type="text" id="signup-handle" placeholder="Choose handle (e.g. name)" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); margin-bottom:15px;">
+                    <input type="email" id="signup-email" placeholder="Email Address" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); margin-bottom:15px;">
+                    <input type="password" id="signup-pass" placeholder="Create Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
+                    <button onclick="blockchainAction('neural_signup')" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:15px; cursor:pointer;">CREATE HANDLE</button>
+                    <p style="font-size:10px; color:var(--muted); margin-top:15px; text-align:center;">Already have one? <span onclick="showAuth('login')" style="color:var(--muze-blue); cursor:pointer; font-weight:900;">Login</span></p>
                 `;
             } else if(type === 'setup') {
                 title.innerText = "Vault Setup";
@@ -430,6 +441,26 @@
                     localStorage.setItem('muze_seed', '[PROTECTED BY LEDGER DEVICE]');
                     location.reload();
                 }, 3000);
+                return;
+            }
+            if(action === 'neural_signup') {
+                const handle = document.getElementById('signup-handle').value.trim();
+                const email = document.getElementById('signup-email').value;
+                const pass = document.getElementById('signup-pass').value;
+                if(!handle || !email || !pass) { alert("All fields are required to claim a handle."); return; }
+                
+                const o = document.getElementById('proc-overlay');
+                document.getElementById('proc-status').innerText = "REGISTERING...";
+                document.getElementById('proc-text').innerText = "CLAIMING SOVEREIGN HANDLE ON LEDGER...";
+                o.style.display = 'flex';
+                
+                setTimeout(() => {
+                    o.style.display = 'none';
+                    localStorage.setItem('muze_v8_active', 'true');
+                    localStorage.setItem('muze_handle', handle.toLowerCase().replace('.pri','') + '.pri');
+                    localStorage.setItem('muze_seed', 'orbit | crystal | anchor | neural | logic | priscion | pulse | vault | ledger | handle | asset | elite');
+                    location.reload();
+                }, 2500);
                 return;
             }
             if(action === 'api_init') {
