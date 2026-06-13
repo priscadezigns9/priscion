@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUZE | User Console</title>
-    <link rel="icon" type="image/png" href="https://priscion.com/assets/p-logo.png">
+    <link rel="icon" type="image/png" href="https://priscion.chttps://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -95,7 +95,7 @@
                 BACK TO HUB
             </a>
         </div>
-        <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" id="muze-logo">
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="muze-entrance-logo" id="muze-logo">
         
         <div id="onboarding-main" style="width: 100%; max-width: 450px;">
             <h2 class="playfair">Welcome to MUZE</h2>
@@ -124,7 +124,7 @@
 
     <!-- MAIN DASHBOARD -->
     <div class="sidebar">
-        <div style="padding:10px 10px 40px;"><img src="../assets/muze_icon_logo.png" style="height:35px;"></div>
+        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_word_logo.png" style="height:35px;"></div>
         <div class="nav-item active" id="nav-vault" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" id="nav-card" onclick="showStage('card', this)">Digital Card</div>
         <div class="nav-item" id="nav-settings" onclick="showStage('settings', this)">Settings</div>
@@ -159,7 +159,7 @@
             <div class="asset-list">
                 <div class="asset-item">
                     <div class="asset-info">
-                        <img src="../assets/prn.jpg" class="asset-img">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" class="asset-img">
                         <div>
                             <div class="asset-name">Priscion Utility</div>
                             <div class="asset-symbol">$PRN</div>
@@ -170,7 +170,7 @@
 
                 <div class="asset-item">
                     <div class="asset-info">
-                        <img src="../assets/nrl.jpg" class="asset-img">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" class="asset-img">
                         <div>
                             <div class="asset-name">Neural Reserve</div>
                             <div class="asset-symbol">$NRL</div>
@@ -180,17 +180,17 @@
                 </div>
             </div>
 
-            <div class="section-header">Sovereign Handles (.pri)</div>
+            <div class="section-header">Collectibles</div>
             <div class="handle-grid">
                 <div class="handle-nft">
-                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
-                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="handle-nft-icon">
                     <div class="handle-nft-name">prisca</div>
                     <div class="handle-nft-suffix">.pri</div>
                 </div>
                 <div class="handle-nft">
-                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
-                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="handle-nft-icon">
                     <div class="handle-nft-name">pricey</div>
                     <div class="handle-nft-suffix">.pri</div>
                 </div>
@@ -200,7 +200,7 @@
         <!-- STAGE: CARD -->
         <div id="stage-card" class="stage hidden" style="text-align: center;">
             <h2 style="margin-bottom: 30px;">Priscion Elite Card</h2>
-            <img src="https://share.zapia.com/3zbj84lihry8lo9v476pt9" style="width: 100%; max-width: 500px; border-radius: 24px; box-shadow: 0 20px 50px rgba(186, 230, 253, 0.4);">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/mahttps://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" style="width: 100%; max-width: 500px; border-radius: 24px; box-shadow: 0 20px 50px rgba(186, 230, 253, 0.4);">
         </div>
 
         <!-- STAGE: SETTINGS (High-Fidelity Shard Protocol) -->
@@ -303,6 +303,18 @@
             localStorage.removeItem('muze_handle');
             location.reload();
         }
+
+        // Remote Navigation Handlers
+        window.addEventListener('hashchange', () => {
+            const hash = location.hash.replace('#', '');
+            if(hash) showStage(hash, document.querySelector(`.nav-item[onclick*="${hash}"]`));
+        });
+
+        window.addEventListener('message', (e) => {
+            if(e.data.type === 'NAVIGATE') {
+                showStage(e.data.hash, document.querySelector(`.nav-item[onclick*="${e.data.hash}"]`));
+            }
+        });
 
         window.onload = async () => {
             document.getElementById('muze-logo').onclick = handleLogoClick;
