@@ -11,15 +11,18 @@
         :root { 
             --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F0F9FF;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; }
+        body.dark {
+            --bg: #0A0A0A; --text: #FFF; --muted: #666; --border: #222; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #111;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
 
         h2, .balance-value { font-family: 'Playfair Display', serif; }
 
         .hidden { display: none !important; }
-        .layer { position: fixed; inset: 0; background: #fff; z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
 
-        #proc-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.95); z-index: 6000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        #proc-overlay { position: fixed; inset: 0; background: rgba(var(--bg),0.95); z-index: 6000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .pulse-box { width: 80px; height: 80px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
 
@@ -29,28 +32,35 @@
 
         .content { flex: 1; height: 100vh; padding: 40px 60px; overflow-y: auto; position: relative; width: 100%; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .user-profile { display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .pfp { width: 40px; height: 40px; border-radius: 50%; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.8rem; overflow: hidden; }
+        .pfp img { width: 100%; height: 100%; object-fit: cover; }
         .user-pill { background: var(--surface); border: 1px solid var(--muze-blue); padding: 8px 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; color: var(--muze-blue); }
 
         .balance-card { margin-bottom: 40px; text-align: center; }
         .balance-value { font-size: clamp(2rem, 8vw, 4rem); letter-spacing: -1px; }
         .action-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; flex-wrap: wrap; }
-        .action-btn { background: #000; color: #fff; width: 65px; height: 65px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.6rem; font-weight: 900; gap: 5px; }
+        .action-btn { background: var(--text); color: var(--bg); width: 65px; height: 65px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.6rem; font-weight: 900; gap: 5px; border: none; }
 
         .asset-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto; }
-        .asset-item { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+        .asset-item { background: var(--bg); border: 1px solid var(--border); padding: 25px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
         .asset-img { width: 45px; height: 45px; border-radius: 12px; object-fit: contain; }
 
         .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; width: 100%; }
-        .dapp-card { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: center; cursor: pointer; transition: transform 0.2s; }
-        .dapp-card:hover { transform: translateY(-5px); }
+        .dapp-card { background: var(--bg); border: 1px solid var(--border); padding: 25px; border-radius: 24px; text-align: center; cursor: pointer; transition: transform 0.2s; }
+        .dapp-card:hover { transform: translateY(-5px); border-color: var(--muze-blue); }
         .dapp-card img { height: 50px; margin-bottom: 15px; object-fit: contain; width: 100%; }
         .dapp-card h4 { font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; }
 
-        .settings-card { background: #fff; border: 1px solid var(--border); padding: 30px; border-radius: 24px; margin-bottom: 20px; }
-        .api-tier { display: inline-block; padding: 4px 12px; border-radius: 100px; font-size: 10px; font-weight: 900; letter-spacing: 1px; background: #000; color: #fff; margin-bottom: 15px; }
+        .settings-card { background: var(--bg); border: 1px solid var(--border); padding: 30px; border-radius: 24px; margin-bottom: 20px; }
+        .api-btn { background: var(--text); color: var(--bg); border: none; padding: 12px 25px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; cursor: pointer; margin-top: 15px; }
 
-        .card-display { width: 100%; max-width: 500px; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.1); margin: 0 auto; background: #000; }
-        .card-display img { width: 100%; display: block; }
+        .card-display { width: 100%; max-width: 500px; aspect-ratio: 1.58; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.1); margin: 0 auto; background: #000; position: relative; }
+        .card-display img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s; }
+        .card-display img.loaded { opacity: 1; }
+        .card-loader { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; }
+
+        .dark-mode-toggle { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
     </style>
 </head>
 <body>
@@ -62,24 +72,35 @@
     <div id="layer-entrance" class="layer">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:80px; margin-bottom:40px;">
         <h2>MUZE World.</h2>
-        <button onclick="bypass()" style="background:#000; color:#fff; border:none; padding:18px 40px; border-radius:100px; font-weight:900; font-size:0.75rem; letter-spacing:2px; cursor:pointer; width:300px;">ENTER VAULT</button>
+        <button onclick="bypass()" style="background:var(--text); color:var(--bg); border:none; padding:18px 40px; border-radius:100px; font-weight:900; font-size:0.75rem; letter-spacing:2px; cursor:pointer; width:300px;">ENTER VAULT</button>
     </div>
 
     <div class="sidebar">
-        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" style="height:35px; object-fit:contain;"></div>
+        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:35px; object-fit:contain;"></div>
         <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApps</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
         <div class="nav-item" onclick="showStage('settings', this)">Settings</div>
+        
+        <div style="margin-top: auto; padding: 20px;">
+            <div class="dark-mode-toggle" onclick="toggleDark()">
+                <span id="dark-status">🌙 DARK MODE</span>
+            </div>
+        </div>
     </div>
 
     <div class="content">
-        <div class="top-bar"><div class="user-pill"><span id="display-handle">prisca.pri</span></div></div>
+        <div class="top-bar">
+            <div class="user-profile" onclick="manageWallets()">
+                <div class="pfp" id="user-pfp">P</div>
+                <div class="user-pill"><span id="display-handle">prisca.pri</span></div>
+            </div>
+        </div>
 
         <div id="stage-vault" class="stage">
             <div class="balance-card">
                 <div style="font-size: 10px; font-weight:900; color:var(--muted); letter-spacing:3px; margin-bottom:10px;">LEDGER BALANCE</div>
-                <div class="balance-value"><span id="prn-balance-val">50,000</span> <span style="font-size:1.5rem; color:var(--muted)">$PRN</span></div>
+                <div class="balance-value"><span id="prn-balance-val">...</span> <span style="font-size:1.5rem; color:var(--muted)">$PRN</span></div>
             </div>
             <div class="action-bar">
                 <div class="action-btn">↑ SEND</div>
@@ -89,50 +110,79 @@
             <div class="asset-list">
                 <div class="asset-item">
                     <div style="display:flex; align-items:center; gap:20px;">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png" class="asset-img">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" class="asset-img">
                         <div><div style="font-weight:900;">Priscion</div><div style="font-size:10px; color:var(--muted)">$PRN (MAINNET)</div></div>
                     </div>
-                    <div style="font-weight:900; font-size:1.2rem;">50,000.00</div>
+                    <div style="font-weight:900; font-size:1.2rem;" id="prn-asset-val">...</div>
+                </div>
+                <div class="asset-item">
+                    <div style="display:flex; align-items:center; gap:20px;">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" class="asset-img">
+                        <div><div style="font-weight:900;">Neural Reserve</div><div style="font-size:10px; color:var(--muted)">$NRL</div></div>
+                    </div>
+                    <div style="font-weight:900; font-size:1.2rem;">2,500.00</div>
                 </div>
             </div>
         </div>
 
         <div id="stage-dapps" class="stage hidden">
             <div class="dapp-grid">
-                <div class="dapp-card"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png"><h4>PULSE</h4></div>
-                <div class="dapp-card"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png"><h4>CHILLATA</h4></div>
-                <div class="dapp-card"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png"><h4>MYNT</h4></div>
-                <div class="dapp-card"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png"><h4>LEGGO BROWSER</h4></div>
+                <div class="dapp-card" onclick="openApp('pulse')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png"><h4>PULSE</h4></div>
+                <div class="dapp-card" onclick="openApp('chillata')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png"><h4>CHILLATA</h4></div>
+                <div class="dapp-card" onclick="openApp('mynt')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png"><h4>MYNT</h4></div>
+                <div class="dapp-card" onclick="openApp('leggo')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png"><h4>LEGO BROWSER</h4></div>
             </div>
         </div>
 
         <div id="stage-card" class="stage hidden">
             <div class="card-display">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png?v=FinalFidelity" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png'">
+                <div class="card-loader">SYNCING ARTIFACT...</div>
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card.png?v=HF_Restoration" onload="this.classList.add('loaded'); this.previousElementSibling.style.display='none';">
             </div>
         </div>
 
         <div id="stage-settings" class="stage hidden">
             <div class="settings-card">
-                <div class="api-tier">BUSINESS API (PAID)</div>
-                <h4 style="font-weight:900;">Agency Node Onboarding</h4>
-                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 10px; line-height:1.5;">Connect your business to the Priscion Ledger. Standard API fees apply.</p>
-                <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:20px;">
-                    <div style="font-size:10px; font-weight:900; color:var(--muted); margin-bottom:10px;">RECOVERY SEED (PROTECTED)</div>
-                    <div style="background:var(--surface); padding:20px; border-radius:15px; font-family:monospace; border:1px dashed var(--muze-blue);">orbit | crystal | anchor | neural | logic | priscion | pulse | vault | ledger | handle | asset | elite</div>
-                </div>
+                <h4 style="font-weight:900;">Business API</h4>
+                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 10px; line-height:1.5;">Onboard businesses and developers to the Priscion Ledger infrastructure.</p>
+                <button class="api-btn" onclick="alert('Proceeding to API Onboard...')">ACTIVATE API ACCESS</button>
+            </div>
+            <div class="settings-card">
+                <div style="font-size:10px; font-weight:900; color:var(--muted); margin-bottom:10px;">RECOVERY SEED (PROTECTED)</div>
+                <div style="background:var(--surface); padding:20px; border-radius:15px; font-family:monospace; border:1px dashed var(--muze-blue);">orbit | crystal | anchor | neural | logic | priscion | pulse | vault | ledger | handle | asset | elite</div>
             </div>
         </div>
     </div>
 
     <script>
+        const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
         function bypass() { localStorage.setItem('muze_active', 'true'); location.reload(); }
+        function toggleDark() { 
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            document.getElementById('dark-status').innerText = isDark ? '☀️ LIGHT MODE' : '🌙 DARK MODE';
+            localStorage.setItem('muze_dark', isDark);
+        }
+        function manageWallets() { alert("Connect to Ledger / Create New Wallet interface active."); }
+        function openApp(app) { alert(`Opening ${app.toUpperCase()}... Handshake initiated.`); }
+
         function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
             document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
         }
+
+        async function fetchLiveBalance() {
+            const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+            const liveBalance = ((userCount || 0) * 1250 + 50000).toLocaleString();
+            document.getElementById('prn-balance-val').innerText = liveBalance;
+            document.getElementById('prn-asset-val').innerText = liveBalance;
+        }
+
         window.addEventListener('message', (e) => {
             if(e.data.type === 'GOD_MODE_HANDSHAKE') bypass();
             if(e.data.type === 'NAVIGATE') showStage(e.data.hash, document.querySelector(`.nav-item[onclick*="${e.data.hash}"]`));
@@ -142,7 +192,12 @@
                 setTimeout(() => o.style.display = 'none', 2000);
             }
         });
-        window.onload = () => { if(localStorage.getItem('muze_active') === 'true') document.getElementById('layer-entrance').style.display = 'none'; };
+
+        window.onload = () => { 
+            if(localStorage.getItem('muze_active') === 'true') document.getElementById('layer-entrance').style.display = 'none';
+            if(localStorage.getItem('muze_dark') === 'true') toggleDark();
+            fetchLiveBalance();
+        };
     </script>
 </body>
 </html>
