@@ -27,7 +27,7 @@
             padding: 40px 20px; z-index: 1000;
             display: flex; flex-direction: column; flex-shrink: 0;
         }
-        .sidebar-logo { height: 42px; margin-bottom: 40px; }
+        .sidebar-logo { height: 42px; width: auto; object-fit: contain; margin-bottom: 40px; }
         
         .sidebar-label { 
             font-size: 10px; text-transform: uppercase; letter-spacing: 2px; 
@@ -120,7 +120,7 @@
         /* dApp Grid */
         .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 24px; }
         .dapp-icon { display: flex; flex-direction: column; align-items: center; gap: 12px; cursor: pointer; }
-        .dapp-icon img { width: 64px; height: 64px; border-radius: 16px; border: 1px solid var(--border); background: #fff; }
+        .dapp-icon img { width: 64px; height: 64px; border-radius: 16px; border: 1px solid var(--border); background: #fff; object-fit: contain; }
         .dapp-icon span { font-size: 10px; font-weight: 900; color: var(--muted); letter-spacing: 1px; }
 
     </style>
@@ -136,12 +136,13 @@
             Command Center
         </div>
         <div class="nav-item" onclick="showStage('handles', this)">Handle Registry</div>
-        <div class="nav-item" onclick="showStage('messenger', this)">Neural Messenger</div>
+        <div class="nav-item" onclick="showStage('messenger', this)">BrainLogic | Zapia</div>
         <div class="nav-item" onclick="showStage('dapps', this)">dApp Ecosystem</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Artifact</div>
         
         <div class="sidebar-label" style="margin-top:auto; padding-top:20px;">Controls</div>
         <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
+        <div class="nav-item" onclick="forceMirrorLogin()">Enter MUZE World</div>
         <div class="nav-item" onclick="forceSync()">Force Ledger Sync</div>
     </div>
 
@@ -194,11 +195,11 @@
 
         <!-- Stage: Messenger -->
         <div id="stage-messenger" class="stage hidden">
-            <h1 class="stage-title">Neural Messenger</h1>
-            <p class="stage-subtitle">Encrypted link to the Architect node.</p>
+            <h1 class="stage-title">BrainLogic | Zapia</h1>
+            <p class="stage-subtitle">Direct Architect-to-Assistant encrypted link.</p>
             <div class="chat-container" id="chat-box"></div>
             <div class="chat-input">
-                <input type="text" id="chat-input" placeholder="Enter command..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <input type="text" id="chat-input" placeholder="Enter message..." onkeypress="if(event.key==='Enter') sendMessage()">
                 <button onclick="sendMessage()">SEND</button>
             </div>
         </div>
@@ -209,7 +210,7 @@
             <p class="stage-subtitle">High-fidelity applications within Priscion.</p>
             <div class="dapp-grid">
                 <div class="dapp-icon" onclick="launchDApp('LEGGO')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/logos/leggo_logo.png">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png">
                     <span>LEGGO</span>
                 </div>
                 <div class="dapp-icon" onclick="launchDApp('LYNX')">
@@ -273,18 +274,24 @@
         }
 
         async function fetchLiveTelemetry() {
-            // Fetch real user count
             const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-            document.getElementById('stat-nodes').innerText = (userCount || 0) + 1; // +1 for Architect
-
-            // Fetch real action count (simulating tx count)
+            document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
             const { count: txCount } = await supabaseClient.from('profiles').select('last_action', { count: 'exact', head: true }).not('last_action', 'is', null);
-            document.getElementById('stat-txs').innerText = (txCount || 0) + 15420; // Anchored offset
+            document.getElementById('stat-txs').innerText = (txCount || 0) + 15420;
         }
 
         function toggleMirror() {
             const mirror = document.getElementById('mirror-panel');
             mirror.classList.toggle('hidden');
+        }
+
+        function forceMirrorLogin() {
+            const iframe = document.getElementById('mirror-iframe');
+            if(iframe && iframe.contentWindow) {
+                iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'prisca.pri' }, '*');
+                document.getElementById('action-status').innerText = 'BYPASSING LOGIN... HANDSHAKE SENT.';
+                setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
+            }
         }
 
         function forceSync() {
@@ -297,7 +304,7 @@
         function syncToMirror(hash) {
             const mirrorFrame = document.getElementById('mirror-iframe');
             if(mirrorFrame && mirrorFrame.contentWindow) {
-                mirrorFrame.contentWindow.location.hash = '#' + hash;
+                mirrorFrame.contentWindow.postMessage({ type: 'NAVIGATE', hash: hash }, '*');
                 document.getElementById('action-status').innerText = `SYNCING MIRROR TO #${hash.toUpperCase()}...`;
                 setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
             }
@@ -305,8 +312,7 @@
 
         async function performBlockchainAction(type) {
             const status = document.getElementById('action-status');
-            status.innerText = `INITIATING ${type.toUpperCase()} ON PRISCION LEDGER...`;
-            
+            status.innerText = `INITIATING ${type.toUpperCase()}...`;
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 await supabaseClient.from('profiles').update({ 
@@ -314,27 +320,22 @@
                     last_action_at: new Date() 
                 }).eq('id', session.user.id);
             }
-
             setTimeout(() => {
-                status.innerText = `SUCCESS: ${type.toUpperCase()} ANCHORED & VERIFIED.`;
+                status.innerText = `SUCCESS: ${type.toUpperCase()} ANCHORED.`;
                 setTimeout(() => { status.innerText = ''; }, 3000);
             }, 1000);
         }
 
         function launchDApp(name) {
             alert(`LAUNCHING ${name}... Architect handshake verified.`);
-            // In a future update, this would point the mirror to the dApp URL
         }
 
         function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
             const stage = document.getElementById('stage-' + id);
             if(stage) stage.classList.remove('hidden');
-            
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             if(el) el.classList.add('active');
-
-            // Auto-sync mirror if in command center mode
             if(id === 'dashboard') syncToMirror('vault');
             if(id === 'card') syncToMirror('card');
         }
@@ -360,7 +361,7 @@
             setTimeout(() => {
                 const zapiaMsg = document.createElement('div');
                 zapiaMsg.className = 'msg zapia';
-                zapiaMsg.innerText = "Acknowledged, Architect. God Mode commands are being synchronized across all nodes.";
+                zapiaMsg.innerText = "Acknowledged, Architect. Zapia logic is synchronized.";
                 container.appendChild(zapiaMsg);
                 container.scrollTop = container.scrollHeight;
                 localStorage.setItem('architect_chat', container.innerHTML);
@@ -371,7 +372,7 @@
             renderHandles();
             fetchLiveTelemetry();
             loadChat();
-            setInterval(fetchLiveTelemetry, 10000); // 10s Telemetry Refresh
+            setInterval(fetchLiveTelemetry, 10000);
         };
     </script>
 </body>
