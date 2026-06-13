@@ -21,11 +21,7 @@
 
         .hidden { display: none !important; }
         .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
-        #proc-overlay { position: fixed; inset: 0; background: #fff; z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .pulse-box { width: 80px; height: 80px; background: var(--muze-blue); border-radius: 20px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } 100% { transform: scale(0.95); opacity: 0.8; } }
-
-        #proc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 6000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); color: #fff; }
+        #proc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); color: #fff; text-align: center; }
         .pulse-box { width: 80px; height: 80px; border-radius: 50%; background: var(--muze-blue); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
 
@@ -96,7 +92,7 @@
         <p id="proc-text" style="font-size: 10px; font-weight: 900; margin-top: 10px; opacity: 0.5; letter-spacing: 2px;">LEDGER SYNCHRONIZATION IN PROGRESS</p>
     </div>
 
-    <div id="layer-entrance" class="layer" style="background:#fff; z-index:7000; display:flex;">
+    <div id="layer-entrance" class="layer" style="background:#fff; z-index:7000;">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:90px; margin-bottom:40px;">
         <h2 style="font-size: 2rem; margin-bottom: 10px; font-weight: 900;">MUZE World.</h2>
         <p style="color: var(--muted); margin-bottom: 50px; font-size: 0.85rem; max-width: 300px; text-align: center;">Choose your path to independent digital identity.</p>
@@ -283,12 +279,14 @@
                     <button class="action-btn" onclick="blockchainAction('ledger_connect')" style="width:100%; justify-content:center; background:none; border:1px solid var(--border); color:var(--text);">⚓ CONNECT LEDGER</button>
                 `;
             }
-            document.getElementById('layer-entrance').style.display = 'none';
+            document.getElementById('layer-entrance').classList.add('hidden');
+            document.getElementById('layer-auth').classList.remove('hidden');
             document.getElementById('layer-auth').style.display = 'flex';
         }
 
         function hideAuth() {
-            document.getElementById('layer-auth').style.display = 'none';
+            document.getElementById('layer-auth').classList.add('hidden');
+            document.getElementById('layer-entrance').classList.remove('hidden');
             document.getElementById('layer-entrance').style.display = 'flex';
         }
 
@@ -426,9 +424,10 @@
 
         window.onload = () => { 
             if(localStorage.getItem('muze_v2_active') === 'true') {
-                document.getElementById('layer-entrance').style.display = 'none';
-                document.getElementById('layer-auth').style.display = 'none';
+                document.getElementById('layer-entrance').classList.add('hidden');
+                document.getElementById('layer-auth').classList.add('hidden');
             } else {
+                document.getElementById('layer-entrance').classList.remove('hidden');
                 document.getElementById('layer-entrance').style.display = 'flex';
             }
             if(localStorage.getItem('muze_dark') === 'true') toggleDark();
