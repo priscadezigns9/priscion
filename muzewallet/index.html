@@ -4,221 +4,242 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MUZE | User Console</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
+    <link rel="icon" type="image/png" href="https://priscion.com/assets/p-logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { 
-            --bg: #fff; --text: #000; --muted: #AAA; --border: #EEE; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F0F9FF;
+            --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff;
         }
-        body.dark {
-            --bg: #0A0A0A; --text: #FFF; --muted: #666; --border: #222; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #111;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: background 0.3s, color 0.3s; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; }
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; display: flex; opacity: 0; }
+        body.loaded { opacity: 1; }
 
-        h2, .balance-value { font-family: 'Playfair Display', serif; }
-
+        h1, h2, h3, .playfair { font-family: 'Playfair Display', serif; }
+        
         .hidden { display: none !important; }
-        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
-
-        #proc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 6000; display: none; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(10px); color: #fff; }
-        .pulse-box { width: 80px; height: 80px; border-radius: 50%; background: var(--muze-blue); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
-
-        .sidebar { width: 280px; height: 100vh; background: var(--bg); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
-        .nav-item { padding: 15px 20px; border-radius: 15px; font-weight: 600; font-size: 0.85rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 12px; }
-        .nav-item.active { background: var(--surface); color: var(--text); border: 1px solid rgba(90, 200, 250, 0.2); }
-
-        .content { flex: 1; height: 100vh; padding: 40px 60px; overflow-y: auto; position: relative; width: 100%; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         
-        .user-profile { display: flex; align-items: center; gap: 15px; cursor: pointer; position: relative; }
-        .pfp-wrap { position: relative; }
-        .pfp { width: 44px; height: 44px; border-radius: 50%; background: var(--surface); border: 2px solid var(--muze-blue); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; overflow: hidden; }
-        .pfp img { width: 100%; height: 100%; object-fit: cover; }
-        .pfp-edit { position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; background: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; border: 2px solid var(--bg); }
-        .user-pill { background: var(--surface); border: 1px solid var(--muze-blue); padding: 8px 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; color: var(--muze-blue); }
-
-        .handle-menu { position: absolute; top: 110%; right: 0; background: var(--bg); border: 1px solid var(--border); border-radius: 24px; padding: 12px; width: 240px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 500; display: none; flex-direction: column; gap: 4px; }
-        .menu-item { padding: 14px 18px; border-radius: 12px; font-size: 0.75rem; font-weight: 900; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 10px; }
-        .menu-item:hover { background: var(--surface); color: var(--muze-blue); }
-        .menu-item span { opacity: 0.5; font-size: 1.2rem; }
-
-        .balance-card { margin-bottom: 40px; text-align: center; }
-        .balance-value { font-size: clamp(2rem, 8vw, 4rem); letter-spacing: -1px; }
+        /* Entrance Layer */
+        .layer { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .muze-entrance-logo { height: 60px; margin-bottom: 30px; cursor: pointer; }
+        h2 { font-weight: 900; font-size: 1.8rem; letter-spacing: -0.5px; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
+        .layer p { color: var(--muted); font-size: 0.8rem; margin-bottom: 30px; line-height: 1.5; max-width: 280px; margin-left: auto; margin-right: auto; }
         
-        .action-bar { display: flex; justify-content: center; gap: 15px; margin-bottom: 60px; flex-wrap: wrap; }
-        .action-btn { background: var(--text); color: var(--bg); width: 68px; height: 68px; border-radius: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.6rem; font-weight: 900; gap: 5px; border: none; }
-        .action-btn.stake { background: var(--accent); color: #fff; }
+        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 15px 25px; border-radius: 16px; text-align: left; cursor: pointer; width: 100%; max-width: 350px; margin-bottom: 12px; margin-left: auto; margin-right: auto; display: flex; flex-direction: column; }
+        .onboarding-card.dark { background: #000; color: #fff; border: none; }
+        .onboarding-card h3 { font-size: 1rem; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .onboarding-card p { margin-bottom: 0 !important; font-size: 0.7rem !important; opacity: 0.8; line-height: 1.3; }
+        .onboarding-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(186, 230, 253, 0.4); border-color: var(--accent); }
 
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: 40px; }
-        .section-title { font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; color: var(--muted); }
+        .btn-full { width: 100%; background: var(--accent); color: #fff; border: none; padding: 22px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 3px; cursor: pointer; text-transform: uppercase; }
+        .btn-outline { width: 100%; background: #fff; color: #000; border: 1px solid var(--border); padding: 20px; border-radius: 100px; font-weight: 900; font-size: 0.75rem; letter-spacing: 2px; cursor: pointer; text-transform: uppercase; margin-bottom: 10px; }
+        .btn-link { margin-top: 25px; font-size: 0.75rem; font-weight: 900; color: var(--muted); cursor: pointer; text-decoration: none; display: block; letter-spacing: 2px; text-transform: uppercase; }
 
-        .asset-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 650px; margin: 0 auto; }
-        .asset-item { background: var(--bg); border: 1px solid var(--border); padding: 25px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; }
-        .asset-img { width: 45px; height: 45px; border-radius: 12px; object-fit: contain; }
+        /* Dashboard UI */
+        .sidebar { width: 300px; height: 100vh; background: #E0F2FE; border-right: 1px solid var(--border); padding: 50px 30px; display: flex; flex-direction: column; gap: 10px; }
+        .nav-item { padding: 15px 25px; border-radius: 15px; font-weight: 700; font-size: 0.85rem; color: var(--muted); cursor: pointer; display: flex; align-items: center; gap: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-item.active { background: #fff; color: var(--text); border: 1px solid var(--border); }
+        .content { flex: 1; height: 100vh; padding: 80px 100px; overflow-y: auto; background: var(--bg); }
+        
+        .balance-card { margin-bottom: 60px; text-align: center; background: #fff; padding: 50px; border-radius: 40px; border: 1px solid var(--border); box-shadow: 0 15px 40px rgba(186, 230, 253, 0.2); }
+        .balance-label { font-size: 0.7rem; font-weight: 900; color: var(--muted); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .balance-value { font-family: 'Playfair Display', serif; font-size: 4.5rem; font-weight: 900; letter-spacing: -3px; color: var(--accent); }
+        
+        .action-bar { display: flex; justify-content: center; gap: 20px; margin-bottom: 60px; }
+        .action-btn { background: var(--muze-blue); color: #fff; width: 75px; height: 75px; border-radius: 25px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-size: 0.6rem; font-weight: 900; box-shadow: 0 10px 20px rgba(90, 200, 250, 0.2); }
+        .action-btn:hover { transform: translateY(-3px); }
+        .action-btn.share { background: #000; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .action-btn.buy { background: #0070BA; box-shadow: 0 10px 20px rgba(0,112,186,0.2); }
 
-        .collectibles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; margin-top: 20px; }
-        .collectible-card { background: var(--bg); border: 1px solid var(--border); border-radius: 28px; overflow: hidden; position: relative; aspect-ratio: 1; display: flex; flex-direction: column; cursor: pointer; }
-        .collectible-img { width: 100%; height: 100%; object-fit: contain; padding: 40px; }
-        .collectible-label { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); color: #fff; padding: 15px; font-size: 0.7rem; font-weight: 900; text-align: center; backdrop-filter: blur(8px); }
+        .section-header { font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
 
-        .dapp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; width: 100%; }
-        .dapp-card { background: var(--bg); border: 1px solid var(--border); padding: 25px; border-radius: 28px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .dapp-card:hover { transform: translateY(-5px); border-color: var(--muze-blue); box-shadow: 0 10px 30px rgba(90, 200, 250, 0.1); }
-        .dapp-card img { height: 50px; margin-bottom: 15px; object-fit: contain; width: 100%; }
-        .dapp-card h4 { font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; }
+        .asset-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 600px; margin: 0 auto 40px; }
+        .asset-item { background: #fff; border: 1px solid var(--border); padding: 25px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .asset-item:hover { border-color: var(--accent); transform: scale(1.02); }
+        .asset-info { display: flex; align-items: center; gap: 20px; }
+        .asset-img { width: 45px; height: 45px; border-radius: 12px; background: #f0f0f0; object-fit: cover; }
+        .asset-name { font-weight: 900; font-size: 1rem; }
+        .asset-symbol { font-size: 0.7rem; font-weight: 900; color: var(--muted); text-transform: uppercase; }
+        .asset-amount { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.4rem; }
 
-        .app-viewer { position: fixed; inset: 0; background: var(--bg); z-index: 5500; display: none; flex-direction: column; }
-        .app-header { height: 70px; padding: 0 30px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-        .app-frame { flex: 1; border: none; width: 100%; height: 100%; }
+        /* Handle NFTs Grid */
+        .handle-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; width: 100%; max-width: 800px; margin: 0 auto; }
+        .handle-nft { background: #fff; border: 1px solid var(--border); border-radius: 24px; padding: 20px; text-align: center; cursor: pointer; position: relative; overflow: hidden; box-shadow: 0 5px 15px rgba(186, 230, 253, 0.1); }
+        .handle-nft:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(186, 230, 253, 0.3); }
+        .handle-nft .logo-bg { position: absolute; top: -10px; right: -10px; opacity: 0.05; width: 80px; }
+        .handle-nft-icon { width: 40px; height: 40px; margin-bottom: 15px; }
+        .handle-nft-name { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.1rem; color: var(--text); }
+        .handle-nft-suffix { font-size: 0.65rem; font-weight: 900; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; }
 
-        .settings-card { background: var(--bg); border: 1px solid var(--border); padding: 35px; border-radius: 28px; margin-bottom: 20px; }
-        .reveal-btn { background: var(--text); color: var(--bg); border: none; padding: 12px 24px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; cursor: pointer; margin-top: 20px; }
+        /* Panel Stages */
+        .stage { animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card-display { width: 100%; max-width: 500px; aspect-ratio: 1.58; border-radius: 24px; overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.15); margin: 0 auto; background: #000; position: relative; }
-        .card-display img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.8s; }
-        .card-display img.loaded { opacity: 1; }
+        /* Settings Card */
+        .settings-card { background: #fff; border: 1px solid var(--border); border-radius: 30px; padding: 40px; max-width: 600px; margin: 0 auto; text-align: left; }
+        .secret-box { background: #f8fafc; border: 1px solid var(--border); padding: 20px; border-radius: 15px; margin-top: 20px; font-family: monospace; font-size: 0.9rem; position: relative; overflow: hidden; }
 
-        .payment-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 7000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .payment-box { background: var(--bg); width: 90%; max-width: 400px; border-radius: 32px; padding: 40px; text-align: center; }
-        .pay-btn { width: 100%; padding: 18px; border-radius: 100px; border: none; font-weight: 900; font-size: 0.8rem; margin-top: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-
-        /* Modern Toggle */
-        .toggle-btn { width: 44px; height: 44px; border-radius: 12px; background: var(--surface); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid var(--border); }
-        .toggle-btn svg { width: 22px; height: 22px; fill: var(--text); }
+        #v-trigger { position: fixed; bottom: 20px; right: 20px; font-size: 0.5rem; font-weight: 900; color: #EEE; opacity: 0; pointer-events: none; }
+        #v-trigger.active { opacity: 1; pointer-events: auto; color: var(--muze-blue); text-decoration: none; }
     </style>
 </head>
 <body>
-    <div id="proc-overlay">
-        <div class="pulse-box"></div>
-        <h2 style="margin-top: 25px; font-weight: 900; letter-spacing: 4px;">ANCHORING...</h2>
-        <p id="proc-text" style="font-size: 10px; font-weight: 900; margin-top: 10px; opacity: 0.5; letter-spacing: 2px;">LEDGER SYNCHRONIZATION IN PROGRESS</p>
-    </div>
 
-    <div id="layer-entrance" class="layer">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:90px; margin-bottom:40px; object-fit: contain;">
-        <h2 style="font-size: 2.5rem; margin-bottom: 15px;">MUZE World.</h2>
-        <p style="color: var(--muted); margin-bottom: 40px; font-size: 0.9rem;">Architecting your independent digital identity.</p>
-        <button onclick="bypass()" style="background:var(--text); color:var(--bg); border:none; padding:22px 50px; border-radius:100px; font-weight:900; font-size:0.8rem; letter-spacing:3px; cursor:pointer; width:320px;">ENTER VAULT</button>
-    </div>
+    <a href="#" id="v-trigger" onclick="const p=prompt('ARCHITECT ACCESS:'); if(p==='alice') location.href='vault.html'; return false;">ARCHITECT LOGIN</a>
 
-    <div class="sidebar">
-        <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_word_logo.png" style="height:35px; object-fit:contain;"></div>
-        <div class="nav-item active" onclick="showStage('vault', this)">Vault</div>
-        <div class="nav-item" onclick="showStage('dapps', this)">dApps</div>
-        <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
-        <div class="nav-item" onclick="showStage('settings', this)">Settings</div>
+    <!-- ENTRANCE LAYER (Dual-Path Entry) -->
+    <div class="layer" id="layer-entrance">
+        <div style="position: absolute; top: 40px; left: 40px;">
+            <a href="../index.html" style="text-decoration: none; color: var(--muted); font-size: 0.7rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                BACK TO HUB
+            </a>
+        </div>
+        <img src="../assets/muze_icon_logo.png" class="muze-entrance-logo" id="muze-logo">
         
-        <div style="margin-top: auto; padding: 20px;">
-            <div class="toggle-btn" onclick="toggleDark()" title="Toggle Dark Mode">
-                <svg id="mode-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+        <div id="onboarding-main" style="width: 100%; max-width: 450px;">
+            <h2 class="playfair">Welcome to MUZE</h2>
+            <p>Access your sovereign assets and the Priscion Network.</p>
+            
+            <div class="onboarding-card dark" onclick="location.href='login.html'">
+                <h3>Neural Login (Web2)</h3>
+                <p>Create an account with a handle and email. Ideal for newcomers.</p>
             </div>
+            
+            <div class="onboarding-card" onclick="showVaultOptions()">
+                <h3>Vault Setup (Web3)</h3>
+                <p>For sovereign users. Connect a hardware wallet or use a seed phrase.</p>
+            </div>
+        </div>
+
+        <div id="vault-options" class="hidden" style="width: 100%; max-width: 400px;">
+            <h2 class="playfair">Vault Setup</h2>
+            <p>Select your sovereign entry method.</p>
+            <button class="btn-full" onclick="location.href='create.html'">CREATE NEW VAULT</button>
+            <button class="btn-outline" style="margin-top: 15px;" onclick="location.href='ledger.html'">CONNECT LEDGER</button>
+            <button class="btn-outline" onclick="location.href='recover.html'">RECOVER WITH SEED</button>
+            <div class="btn-link" onclick="backToMain()">← BACK</div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div class="sidebar">
+        <div style="padding:10px 10px 40px;"><img src="../assets/muze_icon_logo.png" style="height:35px;"></div>
+        <div class="nav-item active" id="nav-vault" onclick="showStage('vault', this)">Vault</div>
+        <div class="nav-item" id="nav-card" onclick="showStage('card', this)">Digital Card</div>
+        <div class="nav-item" id="nav-settings" onclick="showStage('settings', this)">Settings</div>
+        <div style="margin-top: auto; padding: 20px;">
+            <button class="btn-full" style="background:#fff; color:#000; border:1px solid var(--border);" onclick="logout()">LOCK</button>
         </div>
     </div>
 
     <div class="content">
-        <div class="top-bar">
-            <div class="user-profile" id="profile-container">
-                <div class="pfp-wrap" onclick="changePfp(event)">
-                    <div class="pfp" id="user-pfp">P</div>
-                    <div class="pfp-edit">+</div>
-                </div>
-                <div class="user-pill"><span>prisca.pri</span></div>
-                <div class="handle-menu" id="handle-menu">
-                    <div class="menu-item" onclick="blockchainAction('wallet_create')"><span>✦</span> CREATE NEW WALLET</div>
-                    <div class="menu-item" onclick="blockchainAction('wallet_restore')"><span>↺</span> RESTORE WALLET</div>
-                    <div class="menu-item" onclick="blockchainAction('ledger_connect')"><span>⚓</span> CONNECT LEDGER</div>
-                </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+            <div style="background: #fff; border: 1px solid var(--border); padding: 8px 20px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px;">
+                <span id="active-handle-display">...</span>
             </div>
         </div>
 
+        <!-- STAGE: VAULT -->
         <div id="stage-vault" class="stage">
             <div class="balance-card">
-                <div style="font-size: 10px; font-weight:900; color:var(--muted); letter-spacing:4px; margin-bottom:12px;">LEDGER BALANCE</div>
-                <div class="balance-value"><span id="prn-balance-val">...</span> <span style="font-size:1.6rem; color:var(--muted)">$PRN</span></div>
-            </div>
-            <div class="action-bar">
-                <div class="action-btn" onclick="blockchainAction('send')">↑ SEND</div>
-                <div class="action-btn" onclick="blockchainAction('receive')">↓ RECV</div>
-                <div class="action-btn" onclick="blockchainAction('swap')" style="background:var(--surface); color:var(--muze-blue); border:1px solid var(--muze-blue)">⇆ SWAP</div>
-                <div class="action-btn stake" onclick="blockchainAction('staking')">⚡ STAKE</div>
+                <span class="balance-label">Total Vault Balance</span>
+                <div class="balance-value">25,480.00 <span style="font-size: 1.5rem; color: var(--muted); letter-spacing: 0;">ADA</span></div>
             </div>
 
-            <div class="section-header"><div class="section-title">PRIMARY ASSETS</div></div>
+            <div class="action-bar">
+                <div class="action-btn"><span>↑</span>SEND</div>
+                <div class="action-btn"><span>↓</span>RECV</div>
+                <div class="action-btn" onclick="alert('Launching Chillata Swap...')"><span>⇆</span>SWAP</div>
+                <div class="action-btn share" onclick="location.href='../share-to-earn'"><span>✚</span>EARN</div>
+                <div class="action-btn buy"><span>$</span>BUY</div>
+            </div>
+
+            <div class="section-header">Primary Assets</div>
             <div class="asset-list">
                 <div class="asset-item">
-                    <div style="display:flex; align-items:center; gap:20px;">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" class="asset-img">
-                        <div><div style="font-weight:900;">Priscion</div><div style="font-size:10px; color:var(--muted)">$PRN (MAINNET)</div></div>
+                    <div class="asset-info">
+                        <img src="../assets/prn.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Priscion Utility</div>
+                            <div class="asset-symbol">$PRN</div>
+                        </div>
                     </div>
-                    <div style="font-weight:900; font-size:1.2rem;" class="live-prn">...</div>
+                    <div class="asset-amount">50,000.00</div>
                 </div>
+
                 <div class="asset-item">
-                    <div style="display:flex; align-items:center; gap:20px;">
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" class="asset-img">
-                        <div><div style="font-weight:900;">Neural Reserve</div><div style="font-size:10px; color:var(--muted)">$NRL</div></div>
+                    <div class="asset-info">
+                        <img src="../assets/nrl.jpg" class="asset-img">
+                        <div>
+                            <div class="asset-name">Neural Reserve</div>
+                            <div class="asset-symbol">$NRL</div>
+                        </div>
                     </div>
-                    <div style="font-weight:900; font-size:1.2rem;">2,500.00</div>
+                    <div class="asset-amount">10,000.00</div>
                 </div>
             </div>
 
-            <div class="section-header"><div class="section-title">COLLECTIBLES & HANDLES</div></div>
-            <div class="collectibles-grid">
-                <div class="collectible-card" onclick="blockchainAction('view_handle')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="collectible-img">
-                    <div class="collectible-label">prisca.pri</div>
+            <div class="section-header">Sovereign Handles (.pri)</div>
+            <div class="handle-grid">
+                <div class="handle-nft">
+                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <div class="handle-nft-name">prisca</div>
+                    <div class="handle-nft-suffix">.pri</div>
+                </div>
+                <div class="handle-nft">
+                    <img src="../assets/muze_icon_logo.png" class="logo-bg">
+                    <img src="../assets/muze_icon_logo.png" class="handle-nft-icon">
+                    <div class="handle-nft-name">pricey</div>
+                    <div class="handle-nft-suffix">.pri</div>
                 </div>
             </div>
         </div>
 
-        <div id="stage-dapps" class="stage hidden">
-            <div class="dapp-grid">
-                <div class="dapp-card" onclick="openApp('pulse')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png"><h4>PULSE</h4></div>
-                <div class="dapp-card" onclick="openApp('chillata')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png"><h4>CHILLATA</h4></div>
-                <div class="dapp-card" onclick="openApp('mynt')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png"><h4>MYNT</h4></div>
-                <div class="dapp-card" onclick="openApp('leggo')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png"><h4>LEGO BROWSER</h4></div>
-            </div>
+        <!-- STAGE: CARD -->
+        <div id="stage-card" class="stage hidden" style="text-align: center;">
+            <h2 style="margin-bottom: 30px;">Priscion Elite Card</h2>
+            <img src="https://share.zapia.com/3zbj84lihry8lo9v476pt9" style="width: 100%; max-width: 500px; border-radius: 24px; box-shadow: 0 20px 50px rgba(186, 230, 253, 0.4);">
         </div>
 
-        <div id="stage-card" class="stage hidden">
-            <div class="card-display">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" onload="this.classList.add('loaded')">
-            </div>
-        </div>
-
+        <!-- STAGE: SETTINGS (High-Fidelity Shard Protocol) -->
         <div id="stage-settings" class="stage hidden">
+            <h2 style="margin-bottom: 30px;">Vault Settings</h2>
             <div class="settings-card">
-                <h4 style="font-weight:900;">Recovery Seed</h4>
-                <div id="seed-display" style="filter: blur(12px); background:var(--surface); padding:25px; border-radius:18px; font-family:monospace; border:1px dashed var(--muze-blue); margin-top:20px; transition: 0.6s; font-size: 0.9rem; line-height: 1.6;">orbit | crystal | anchor | neural | logic | priscion | pulse | vault | ledger | handle | asset | elite</div>
-                <button class="reveal-btn" id="reveal-btn" onclick="revealSeed()">REVEAL SEED</button>
-            </div>
-            <div class="settings-card">
-                <h4 style="font-weight:900;">Developer API Migration</h4>
-                <p style="font-size:0.8rem; color:var(--muted); margin-top:10px; line-height: 1.4;">Migrate your Web2 business node to the Priscion L1 Ledger.</p>
-                <button class="reveal-btn" style="background:var(--accent); color:#fff;" onclick="showPayment()">ACTIVATE API & SUBSCRIBE</button>
-            </div>
-        </div>
-    </div>
+                <h3 style="font-weight:900;">Sovereign Identity</h3>
+                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 5px;">Manage your recovery shard and security.</p>
+                
+                <div id="shard-setup-area" style="margin-top: 30px;">
+                    <label style="font-size: 0.7rem; font-weight:900; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);">Recovery Shard Status</label>
+                    
+                    <!-- Flow 1: Generate -->
+                    <div id="shard-unassigned">
+                        <p style="font-size: 0.8rem; margin: 15px 0;">No recovery shard anchored. Generate one to secure your sovereign assets.</p>
+                        <button class="btn-full" style="font-size: 0.6rem; padding: 15px;" onclick="initiateShardGeneration()">GENERATE RECOVERY SHARD</button>
+                    </div>
 
-    <div class="payment-modal" id="payment-modal">
-        <div class="payment-box">
-            <h2 style="margin-bottom:10px;">Migration Hub</h2>
-            <p style="font-size:0.8rem; color:var(--muted); margin-bottom:30px;">Select your preferred onboarding method.</p>
-            <button class="pay-btn" style="background:#FFC439; color:#111;" onclick="blockchainAction('paypal_checkout')">PAYPAL</button>
-            <button class="pay-btn" style="background:#000; color:#fff;" onclick="blockchainAction('cc_checkout')">CREDIT CARD</button>
-            <button class="pay-btn" style="background:var(--muze-blue); color:#000;" onclick="blockchainAction('prn_checkout')">PAY WITH $PRN</button>
-            <button onclick="document.getElementById('payment-modal').style.display='none'" style="background:none; border:none; margin-top:20px; color:var(--muted); font-weight:900; font-size:0.7rem; cursor:pointer;">CANCEL</button>
-        </div>
-    </div>
+                    <!-- Flow 2: Display & Confirm -->
+                    <div id="shard-display-area" class="hidden">
+                        <div class="secret-box">
+                            <div id="new-shard-text" style="font-size: 0.8rem; line-height: 1.4;">...</div>
+                        </div>
+                        <p style="font-size: 0.7rem; color: var(--muted); margin-top: 15px;">Write these words down exactly. You will need them to verify the handshake.</p>
+                        <button class="btn-full" style="margin-top: 15px; background: #000;" onclick="confirmShardSaved()">I HAVE WRITTEN THIS DOWN</button>
+                    </div>
 
-    <div class="app-viewer" id="app-viewer">
-        <div class="app-header">
-            <div style="font-weight:900; letter-spacing:2px; font-size:0.8rem;" id="app-name">APP</div>
-            <button onclick="closeApp()" style="background:#000; color:#fff; border:none; padding:10px 20px; border-radius:100px; font-size:11px; font-weight:900; cursor:pointer;">CLOSE</button>
+                    <!-- Flow 3: Secured -->
+                    <div id="shard-secured" class="hidden">
+                        <div style="background: #ecfdf5; border: 1px solid #10b981; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 10px;">
+                            <span style="color: #10b981; font-weight: 900;">✓</span>
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #065f46;">VAULT ANCHORED & SECURED</span>
+                        </div>
+                        <p style="font-size: 0.7rem; color: var(--muted); margin-top: 15px;">Your shard is hidden and anchored to the ledger. It cannot be recovered through the UI.</p>
+                        <button class="btn-full" style="background: #f1f5f9; color: #64748b; margin-top: 15px; font-size: 0.6rem; padding: 10px;" onclick="resetShardRequest()">ROTATE MASTER SHARD</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <iframe src="" class="app-frame" id="app-frame"></iframe>
     </div>
 
     <script>
@@ -226,99 +247,107 @@
         const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        function bypass() { localStorage.setItem('muze_active', 'true'); location.reload(); }
-        
-        function toggleDark() { 
-            document.body.classList.toggle('dark');
-            const isDark = document.body.classList.contains('dark');
-            localStorage.setItem('muze_dark', isDark);
-            document.getElementById('mode-icon').innerHTML = isDark ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>' : '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>';
+        let logoClicks = 0;
+        let logoTimeout;
+
+        function handleLogoClick() {
+            logoClicks++;
+            clearTimeout(logoTimeout);
+            if (logoClicks >= 5) { document.getElementById('v-trigger').classList.add('active'); }
+            logoTimeout = setTimeout(() => { logoClicks = 0; }, 3000);
         }
 
-        function showPayment() { document.getElementById('payment-modal').style.display = 'flex'; }
-
-        function blockchainAction(action) {
-            document.getElementById('payment-modal').style.display = 'none';
-            const o = document.getElementById('proc-overlay');
-            const txt = document.getElementById('proc-text');
-            txt.innerText = `INITIATING ${action.toUpperCase()} ON PRISCION LEDGER...`;
-            o.style.display = 'flex';
-            setTimeout(() => o.style.display = 'none', 2000);
+        function showVaultOptions() {
+            document.getElementById('onboarding-main').classList.add('hidden');
+            document.getElementById('vault-options').classList.remove('hidden');
         }
 
-        function revealSeed() {
-            const seed = document.getElementById('seed-display');
-            const btn = document.getElementById('reveal-btn');
-            if (seed.style.filter === 'none') {
-                seed.style.filter = 'blur(12px)';
-                btn.innerText = 'REVEAL SEED';
-            } else {
-                seed.style.filter = 'none';
-                btn.innerText = 'HIDE SEED';
-            }
+        function backToMain() {
+            document.getElementById('vault-options').classList.add('hidden');
+            document.getElementById('onboarding-main').classList.remove('hidden');
         }
-
-        function changePfp(e) {
-            e.stopPropagation();
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = (event) => {
-                const file = event.target.files[0];
-                const reader = new FileReader();
-                reader.onload = (re) => {
-                    document.getElementById('user-pfp').innerHTML = `<img src="${re.target.result}">`;
-                    blockchainAction('avatar_artifact_update');
-                };
-                reader.readAsDataURL(file);
-            };
-            input.click();
-        }
-
-        function openApp(app) {
-            const viewer = document.getElementById('app-viewer');
-            const frame = document.getElementById('app-frame');
-            const name = document.getElementById('app-name');
-            name.innerText = app.toUpperCase();
-            frame.src = `../${app}/index.html`;
-            viewer.style.display = 'flex';
-        }
-
-        function closeApp() { document.getElementById('app-viewer').style.display = 'none'; document.getElementById('app-frame').src = ''; }
 
         function showStage(id, el) {
             document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
             document.getElementById('stage-' + id).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(el) el.classList.add('active');
+            el.classList.add('active');
         }
 
-        document.getElementById('profile-container').addEventListener('click', (e) => {
-            const menu = document.getElementById('handle-menu');
-            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-            e.stopPropagation();
-        });
-
-        window.onclick = () => { document.getElementById('handle-menu').style.display = 'none'; };
-
-        async function fetchLiveBalance() {
-            const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-            const liveBalance = ((userCount || 0) * 1250 + 50000).toLocaleString();
-            document.getElementById('prn-balance-val').innerText = liveBalance;
-            document.querySelectorAll('.live-prn').forEach(el => el.innerText = liveBalance);
+        function initiateShardGeneration() {
+            const words = ["alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta", "iota", "kappa", "lambda", "mu"];
+            const selected = [];
+            for(let i=0; i<12; i++) selected.push(words[Math.floor(Math.random()*words.length)]);
+            document.getElementById('new-shard-text').innerText = selected.join(' ');
+            document.getElementById('shard-unassigned').classList.add('hidden');
+            document.getElementById('shard-display-area').classList.remove('hidden');
         }
 
-        window.addEventListener('message', (e) => {
-            if(e.data.type === 'GOD_MODE_HANDSHAKE') bypass();
-            if(e.data.type === 'NAVIGATE') showStage(e.data.hash, document.querySelector(`.nav-item[onclick*="${e.data.hash}"]`));
-            if(e.data.type === 'ACTION') blockchainAction(e.data.action);
-        });
+        function confirmShardSaved() {
+            document.getElementById('shard-display-area').classList.add('hidden');
+            document.getElementById('shard-secured').classList.remove('hidden');
+            localStorage.setItem('muze_seed_confirmed', 'true');
+        }
 
-        window.onload = () => { 
-            if(localStorage.getItem('muze_active') === 'true') document.getElementById('layer-entrance').style.display = 'none';
-            if(localStorage.getItem('muze_dark') === 'true') toggleDark();
-            fetchLiveBalance();
+        function resetShardRequest() {
+            if(confirm("Are you sure you want to rotate your master shard? This cannot be undone.")) {
+                document.getElementById('shard-secured').classList.add('hidden');
+                document.getElementById('shard-unassigned').classList.remove('hidden');
+                localStorage.removeItem('muze_seed_confirmed');
+            }
+        }
+
+        async function logout() {
+            await supabaseClient.auth.signOut();
+            localStorage.removeItem('muze_active');
+            localStorage.removeItem('muze_handle');
+            location.reload();
+        }
+
+        window.onload = async () => {
+            document.getElementById('muze-logo').onclick = handleLogoClick;
+
+            // Neural Persistence: Check Supabase session
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            
+            const isActive = localStorage.getItem('muze_active') === 'true';
+            const handle = localStorage.getItem('muze_handle');
+            const isSeedConfirmed = localStorage.getItem('muze_seed_confirmed') === 'true';
+
+            if (session) {
+                // User has active Supabase session
+                if (!isActive || !handle) {
+                    // Sync profile to localStorage if missing
+                    const { data: profile } = await supabaseClient
+                        .from('profiles')
+                        .select('handle')
+                        .eq('id', session.user.id)
+                        .single();
+                    
+                    const finalHandle = (profile && profile.handle) ? profile.handle : session.user.email.split('@')[0] + '.pri';
+                    localStorage.setItem('muze_active', 'true');
+                    localStorage.setItem('muze_handle', finalHandle);
+                }
+                
+                document.getElementById('active-handle-display').innerText = localStorage.getItem('muze_handle');
+                document.getElementById('layer-entrance').style.display = 'none';
+                
+                if (isSeedConfirmed) {
+                    document.getElementById('shard-unassigned').classList.add('hidden');
+                    document.getElementById('shard-secured').classList.remove('hidden');
+                }
+            } else {
+                // No session: Show entrance layer
+                document.getElementById('layer-entrance').style.display = 'flex';
+                // Clear local stale session if any
+                localStorage.removeItem('muze_active');
+                localStorage.removeItem('muze_handle');
+            }
+            
+            // Fade in body
+            document.body.classList.add('loaded');
         };
     </script>
 </body>
 </html>
+
