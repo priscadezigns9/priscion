@@ -79,5 +79,5 @@ This is the canonical document for the Prisicon L1 Ecosystem. It serves as the p
 *   **$PRN Coin Asset**: https://priscion.com/assets/prn.jpg
 *   **Neural Reserve Asset**: https://priscion.com/assets/nrl.jpg
 *   **Atelia Gaming Asset**: https://priscion.com/assets/atlr.jpg
-*   **Jello Layer Asset**: https://priscion.com/assets/jello.png
-*   **Muze USD Asset**: https://priscion.com/assets/musd.png
+*   **Jello Layer Asset**: https://priscion.com/assets/jlo.jpg
+*   **Muze USD Asset**: https://priscion.com/assets/musd.jpg
