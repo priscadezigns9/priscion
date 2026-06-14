@@ -42,25 +42,15 @@
 
         .btn-execute { width: 100%; background: #000; color: #fff; border: none; padding: 25px; border-radius: 100px; font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; margin-top: 20px; }
 
-        /* Messenger Styles */
-        .messenger-col { flex: 1; display: flex; flex-direction: column; height: 100%; }
-        .chat-feed { flex: 1; overflow-y: auto; padding: 40px; display: flex; flex-direction: column; gap: 20px; }
-        .chat-bubble { max-width: 60%; padding: 18px 24px; border-radius: 24px; font-size: 0.9rem; line-height: 1.5; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
-        .chat-bubble.in { background: var(--surface); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid var(--border); }
-        .chat-bubble.out { background: var(--accent); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chat-input-bar { height: 100px; border-top: 1px solid var(--border); padding: 0 40px; display: flex; align-items: center; gap: 20px; }
-        .chat-input { flex: 1; height: 50px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; padding: 0 25px; outline: none; font-size: 0.85rem; }
-        .chat-send { width: 50px; height: 50px; background: #000; color: #fff; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 900; }
     </style>
 </head>
 <body>
     <div class="app">
         <header>
             <div style="display:flex; align-items:center; gap:40px;">
-                <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" style="height:25px;"></div>
+                <div class="logo"><img src="https://priscion.com/assets/chillata_logo.png" style="height:25px;"></div>
                 <div class="nav-tabs">
-                    <div class="nav-tab active" id="tab-swap" onclick="switchMode('swap')">Swap</div>
-                    <div class="nav-tab" id="tab-messenger" onclick="switchMode('messenger')">Messenger</div>
+                    <div class="nav-tab active" id="tab-swap">Sovereign Swap</div>
                 </div>
             </div>
             <div style="font-size: 0.5rem; font-weight: 900; background: var(--accent); color: #fff; padding: 5px 12px; border-radius: 20px;">JELLO LAYER v2.4</div>
@@ -70,17 +60,25 @@
         <div class="terminal" id="mode-swap">
             <div class="col" style="padding: 30px;">
                 <span class="label">Sovereign Assets</span>
-                <button class="asset-btn" onclick="applyAsset('PRN', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg">
+                <button class="asset-btn" onclick="applyAsset('PRN', 'https://priscion.com/assets/prn.jpg')">
+                    <img src="https://priscion.com/assets/prn.jpg">
                     <div class="asset-meta"><h4>PRN</h4><p>Priscion Utility</p></div>
                 </button>
-                <button class="asset-btn" onclick="applyAsset('NRL', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg">
+                <button class="asset-btn" onclick="applyAsset('NRL', 'https://priscion.com/assets/nrl.jpg')">
+                    <img src="https://priscion.com/assets/nrl.jpg">
                     <div class="asset-meta"><h4>NRL</h4><p>Neural Reserve</p></div>
                 </button>
-                <button class="asset-btn" onclick="applyAsset('ATLR', 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg')">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg">
+                <button class="asset-btn" onclick="applyAsset('ATLR', 'https://priscion.com/assets/atlr.jpg')">
+                    <img src="https://priscion.com/assets/atlr.jpg">
                     <div class="asset-meta"><h4>ATLR</h4><p>Atelia Gaming</p></div>
+                </button>
+                <button class="asset-btn" onclick="applyAsset('JLLO', 'https://priscion.com/assets/jello.png')">
+                    <img src="https://priscion.com/assets/jello.png">
+                    <div class="asset-meta"><h4>JLLO</h4><p>Jello Layer</p></div>
+                </button>
+                <button class="asset-btn" onclick="applyAsset('MUSD', 'https://priscion.com/assets/musd.png')">
+                    <img src="https://priscion.com/assets/musd.png">
+                    <div class="asset-meta"><h4>MUSD</h4><p>Muze USD</p></div>
                 </button>
             </div>
             <div class="col main-col">
@@ -93,7 +91,7 @@
                     <input type="number" value="100" id="val-from">
                     <div style="display:flex; align-items:center; gap:10px;">
                         <span style="font-weight:900; font-size:0.8rem;" id="sym-from">PRN</span>
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/prn.jpg" id="img-from">
+                        <img src="https://priscion.com/assets/prn.jpg" id="img-from">
                     </div>
                 </div>
                 <div style="text-align:center; padding:10px; color:var(--accent); font-size:1.5rem; font-weight:900;">↓</div>
@@ -101,51 +99,16 @@
                     <input type="number" value="120" id="val-to">
                     <div style="display:flex; align-items:center; gap:10px;">
                         <span style="font-weight:900; font-size:0.8rem;" id="sym-to">NRL</span>
-                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" id="img-to">
+                        <img src="https://priscion.com/assets/nrl.jpg" id="img-to">
                     </div>
                 </div>
                 <button class="btn-execute" onclick="this.innerText='SWAP ANCHORED'; setTimeout(()=>this.innerText='EXECUTE SWAP', 2000)">Execute Swap</button>
             </div>
         </div>
 
-        <!-- MODE: MESSENGER -->
-        <div class="messenger-col hidden" id="mode-messenger">
-            <div class="chat-feed" id="chat-feed">
-                <div class="chat-bubble in">Jello Layer Handshake Established. Welcome to the private messenger.</div>
-                <div class="chat-bubble in">All messages are anchored to your neural identity.</div>
-            </div>
-            <div class="chat-input-bar">
-                <input type="text" class="chat-input" placeholder="Message on the Jello layer..." id="chat-input">
-                <button class="chat-send" onclick="sendMessage()">↑</button>
-            </div>
-        </div>
     </div>
 
     <script>
-        function switchMode(mode) {
-            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + mode).classList.add('active');
-            if (mode === 'swap') {
-                document.getElementById('mode-swap').classList.remove('hidden');
-                document.getElementById('mode-messenger').classList.add('hidden');
-            } else {
-                document.getElementById('mode-swap').classList.add('hidden');
-                document.getElementById('mode-messenger').classList.remove('hidden');
-            }
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const feed = document.getElementById('chat-feed');
-            if (!input.value) return;
-            const bubble = document.createElement('div');
-            bubble.className = 'chat-bubble out';
-            bubble.innerText = input.value;
-            feed.appendChild(bubble);
-            input.value = '';
-            feed.scrollTop = feed.scrollHeight;
-        }
-
         let currentFocus = 'from';
         function focusBox(side) {
             currentFocus = side;
