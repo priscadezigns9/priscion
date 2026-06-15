@@ -11,7 +11,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root { 
-            --bg: #FDF8F2; --text: #1A1A1A; --muted: #666666; --border: #E5E7EB; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #FFFFFF;
+            --bg: #FFFFFF; --text: #1A1A1A; --muted: #666666; --border: #E5E7EB; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #FFFFFF;
         }
         body.dark {
             --bg: #0A0A0A; --text: #FFFFFF; --muted: #94A3B8; --border: #1E293B; --surface: #111827;
@@ -61,7 +61,7 @@
 
     <!-- MAIN HUB -->
     <div id="layer-hub" class="layer visible">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo-main">
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" class="logo-main">
         <h1 class="playfair">Welcome to MUZE.</h1>
         <p style="color:var(--muted); margin-bottom:40px;">The secure bridge to the Priscion Network.</p>
         <div style="width:100%; max-width:380px;">
@@ -92,6 +92,7 @@
             <input type="text" id="login-id" placeholder="Email or Handle" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="login-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
             <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-id').value)">ACCESS VAULT</button>
+            <button class="btn btn-secondary" onclick="goToFlow('create_v1')" style="margin-top:10px;">CREATE AN ACCOUNT</button>
             <div style="margin:20px 0; border-top:1px solid var(--border); position:relative;"><span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--bg); padding:0 15px; font-size:10px; font-weight:900; color:var(--muted);">OR</span></div>
             <button class="btn btn-secondary" onclick="alert('Gmail Handshake Initialized...')">CONTINUE WITH GMAIL</button>
             <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
@@ -175,7 +176,7 @@
     <!-- DASHBOARD -->
     <div id="main-ui" class="dashboard">
         <div class="sidebar">
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:40px; margin-bottom:40px;">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" style="height:40px; margin-bottom:40px;">
             <div class="nav-item active">Vault</div>
             <div class="nav-item">Pulse</div>
             <div class="nav-item">ID</div>
