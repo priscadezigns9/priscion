@@ -26,7 +26,7 @@
         .visible { transform: translateY(0); pointer-events: all; opacity: 1; }
         
         .logo-main { height: 80px; margin-bottom: 30px; }
-        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 32px; border-radius: 28px; text-align: left; cursor: pointer; width: 100%; max-width: 380px; margin-bottom: 16px; transition: 0.3s; }
+        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 24px; border-radius: 24px; text-align: left; cursor: pointer; width: 100%; max-width: 380px; margin-bottom: 12px; transition: 0.3s; }
         .onboarding-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .onboarding-card.dark { background: #000; color: #fff; border: none; }
         
@@ -48,7 +48,7 @@
         .asset-list { display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
         .asset-item { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
         
-        #proc-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        #proc-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 20000; display: none; align-items: center; justify-content: center; flex-direction: column; }
         .loader { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
@@ -60,32 +60,30 @@
         <div class="playfair" style="font-weight:900; font-size:1.2rem;">SYNCING...</div>
     </div>
 
-    <!-- Hub Layer -->
+    <!-- MAIN HUB (v2.7 Style Restoration) -->
     <div id="layer-hub" class="layer visible">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo-main">
         <h1 class="playfair">Welcome to MUZE.</h1>
         <p style="color:var(--muted); margin-bottom:40px;">The secure bridge to the Priscion Network.</p>
         
-        <div id="hub-main" style="width:100%; max-width:380px;">
-            <div class="onboarding-card dark" onclick="goToFlow('login-choice')">
-                <h3 style="font-weight:900; margin-bottom:4px;">Neural Login</h3>
-                <p style="font-size:0.75rem; opacity:0.8;">Access your sovereign digital life.</p>
-            </div>
-            <div class="onboarding-card" onclick="goToFlow('vault-choice')">
-                <h3 style="font-weight:900; margin-bottom:4px;">Vault Setup</h3>
-                <p style="font-size:0.75rem; color:var(--muted);">Initialize or recover your vault.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Login Choice -->
-    <div id="flow-login-choice" class="layer hidden">
         <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Neural Login</h1>
-            <p style="color:var(--muted); margin-bottom:40px;">Choose your entry method.</p>
-            <button class="btn btn-primary" onclick="goToFlow('login-form')">SIGN IN (EMAIL/HANDLE)</button>
-            <button class="btn btn-secondary" onclick="goToFlow('create_v3')">CREATE ACCOUNT</button>
-            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK TO HUB</p>
+            <!-- Neural Login (Existing Users) -->
+            <div class="onboarding-card dark" onclick="goToFlow('login-form')">
+                <h3 style="font-weight:900; margin-bottom:4px;">Neural Login</h3>
+                <p style="font-size:0.75rem; opacity:0.8;">Sign in with your Email or Handle.</p>
+            </div>
+            
+            <!-- Create New Vault (New Users) -->
+            <div class="onboarding-card" onclick="goToFlow('create_v1')">
+                <h3 style="font-weight:900; margin-bottom:4px;">Create New Vault</h3>
+                <p style="font-size:0.75rem; color:var(--muted);">Initialize your account & get 10 $PRN.</p>
+            </div>
+
+            <!-- Recover Vault -->
+            <div class="onboarding-card" onclick="goToFlow('recover')">
+                <h3 style="font-weight:900; margin-bottom:4px;">Recover (Seed)</h3>
+                <p style="font-size:0.75rem; color:var(--muted);">Restore access via your 12-word phrase.</p>
+            </div>
         </div>
     </div>
 
@@ -97,23 +95,11 @@
             <input type="text" id="login-id" placeholder="Email or Handle" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="login-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
             <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-id').value)">ACCESS VAULT</button>
-            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('login-choice')">← BACK</p>
-        </div>
-    </div>
-
-    <!-- Vault Setup Choice -->
-    <div id="flow-vault-choice" class="layer hidden">
-        <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Vault Setup</h1>
-            <p style="color:var(--muted); margin-bottom:40px;">Initialize your encrypted vault.</p>
-            <button class="btn btn-primary" onclick="goToFlow('create_v1')">CREATE NEW VAULT</button>
-            <button class="btn btn-secondary" onclick="goToFlow('recover')">RECOVER WITH SEED</button>
-            <button class="btn btn-secondary" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
             <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK TO HUB</p>
         </div>
     </div>
 
-    <!-- Create Flow: 4-Step Sovereign Protocol -->
+    <!-- CREATE FLOW: Step 1 (Seeds) -->
     <div id="flow-create_v1" class="layer hidden">
         <div style="width:100%; max-width:400px;">
             <h1 class="playfair" style="margin-bottom:10px;">Security Seed</h1>
@@ -133,9 +119,11 @@
                 <div style="font-size:12px; font-weight:800; padding:10px;">12. bridge</div>
             </div>
             <button class="btn btn-primary" onclick="goToFlow('create_v2')">I HAVE SAVED THEM</button>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
         </div>
     </div>
 
+    <!-- CREATE FLOW: Step 2 (Verification) -->
     <div id="flow-create_v2" class="layer hidden">
         <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Verify Shards</h1>
@@ -146,16 +134,18 @@
         </div>
     </div>
 
+    <!-- CREATE FLOW: Step 3 (Email & Password) -->
     <div id="flow-create_v3" class="layer hidden">
         <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Neural Account</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Initialize your profile on the Prisicon Ledger.</p>
+            <p style="color:var(--muted); margin-bottom:30px;">Create your account with email and password.</p>
             <input type="email" id="setup-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
-            <input type="password" id="setup-pass" placeholder="Create Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v4'); else alert('Please fill all fields');">CONTINUE</button>
+            <input type="password" id="setup-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
+            <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v4'); else alert('Required');">CONTINUE</button>
         </div>
     </div>
 
+    <!-- CREATE FLOW: Step 4 (Handle & Finalize) -->
     <div id="flow-create_v4" class="layer hidden">
         <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Claim Handle</h1>
@@ -168,24 +158,24 @@
         </div>
     </div>
 
-    <!-- Recover Flow -->
+    <!-- RECOVER FLOW -->
     <div id="flow-recover" class="layer hidden">
         <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Recover Vault</h1>
             <p style="color:var(--muted); margin-bottom:30px;">Enter your 12-word seed phrase.</p>
             <textarea id="r-seed" placeholder="word1 word2..." style="width:100%; height:120px; padding:20px; border-radius:20px; border:1px solid var(--border); font-family:inherit; margin-bottom:20px; font-weight:600;" onclick="godHandshake()"></textarea>
             <button class="btn btn-primary" onclick="finalizeLogin('recovered.pri')">RECOVER</button>
-            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('vault-choice')">← BACK</p>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
         </div>
     </div>
 
-    <!-- Dashboard -->
+    <!-- DASHBOARD -->
     <div id="main-ui" style="display:none;" class="dashboard">
         <div class="sidebar">
             <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:40px; margin-bottom:40px;">
             <div class="nav-item active">Vault</div>
-            <div class="nav-item" onclick="alert('Exploring the Ledger...')">Pulse</div>
-            <div class="nav-item" onclick="alert('Digital Identity Assets active.')">ID</div>
+            <div class="nav-item" onclick="alert('Exploring...')">Pulse</div>
+            <div class="nav-item" onclick="alert('Digital ID...')">ID</div>
             <div style="flex:1;"></div>
             <div class="nav-item" onclick="logout()" style="color:#ff3b30;">Logout</div>
         </div>
@@ -225,7 +215,7 @@
                 if(localStorage.getItem('muze_balance_prn') === null) {
                     localStorage.setItem('muze_balance_prn', '10');
                     localStorage.setItem('muze_balance_ada', '0');
-                    alert("Welcome to the Prisicon Ledger! A welcome drop of 10 $PRN has been deposited into your vault.");
+                    alert("Welcome! 10 $PRN has been deposited into your vault.");
                 }
                 
                 showDashboard();
