@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | User Console v2.7.2</title>
+    <title>MUZE | User Console v2.7.5</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -36,7 +36,7 @@
         .btn-accent { background: var(--accent); color: #fff; }
 
         /* DASHBOARD */
-        .dashboard { display: flex; flex-direction: row; height: 100vh; width: 100vw; background: var(--bg); }
+        .dashboard { display: none; flex-direction: row; height: 100vh; width: 100vw; background: var(--bg); }
         .sidebar { width: 300px; background: var(--surface); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; }
         .content { flex: 1; padding: 60px 80px; overflow-y: auto; }
         .nav-item { padding: 15px 24px; border-radius: 16px; font-weight: 700; font-size: 0.9rem; color: var(--muted); cursor: pointer; transition: 0.3s; }
@@ -59,7 +59,7 @@
         <div class="playfair" style="font-weight:900; font-size:1.2rem;">SYNCING...</div>
     </div>
 
-    <!-- MAIN HUB (v2.7 Canonical Design) -->
+    <!-- MAIN HUB -->
     <div id="layer-hub" class="layer visible">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo-main">
         <h1 class="playfair">Welcome to MUZE.</h1>
@@ -67,11 +67,15 @@
         <div style="width:100%; max-width:380px;">
             <div class="onboarding-card dark" onclick="goToFlow('login-form')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Neural Login</h3>
-                <p style="font-size:0.75rem; opacity:0.8;">Sign in with your Email or Handle.</p>
+                <p style="font-size:0.75rem; opacity:0.8;">Sign in with Email, Handle, or Gmail.</p>
             </div>
             <div class="onboarding-card" onclick="goToFlow('create_v1')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Create New Vault</h3>
                 <p style="font-size:0.75rem; color:var(--muted);">Initialize account & claim 10 $PRN.</p>
+            </div>
+            <div class="onboarding-card" onclick="goToFlow('ledger')">
+                <h3 style="font-weight:900; margin-bottom:4px;">Connect Ledger</h3>
+                <p style="font-size:0.75rem; color:var(--muted);">Hardware wallet secure handshake.</p>
             </div>
             <div class="onboarding-card" onclick="goToFlow('recover')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Recover (Seed)</h3>
@@ -88,11 +92,13 @@
             <input type="text" id="login-id" placeholder="Email or Handle" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="login-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
             <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-id').value)">ACCESS VAULT</button>
+            <div style="margin:20px 0; border-top:1px solid var(--border); position:relative;"><span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--bg); padding:0 15px; font-size:10px; font-weight:900; color:var(--muted);">OR</span></div>
+            <button class="btn btn-secondary" onclick="alert('Gmail Handshake Initialized...')">CONTINUE WITH GMAIL</button>
             <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
         </div>
     </div>
 
-    <!-- CREATE VAULT FLOW (Logic Fix: Fixed Seed -> Verification -> Account -> Handle) -->
+    <!-- CREATE VAULT FLOW -->
     <div id="flow-create_v1" class="layer hidden">
         <div style="width:100%; max-width:400px;">
             <h1 class="playfair">Security Seed</h1>
@@ -122,6 +128,7 @@
         <div style="width:100%; max-width:380px;">
             <h1 class="playfair">Neural Account</h1>
             <p style="color:var(--muted); margin-bottom:30px;">Create account credentials.</p>
+            <button class="btn btn-secondary" style="margin-bottom:20px;" onclick="document.getElementById('setup-email').value='priscillanarine@gmail.com'; alert('Gmail Linked.')">LINK GMAIL ACCOUNT</button>
             <input type="email" id="setup-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="setup-pass" placeholder="Create Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
             <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v4'); else alert('Email and Password required');">CONTINUE</button>
@@ -140,7 +147,21 @@
         </div>
     </div>
 
-    <!-- RECOVER FLOW (God Mode Handshake Site) -->
+    <!-- LEDGER FLOW -->
+    <div id="flow-ledger" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
+            <h1 class="playfair">Ledger Nano</h1>
+            <p style="color:var(--muted); margin-bottom:40px;">Connect your hardware device.</p>
+            <div style="background:var(--surface); border:1px solid var(--border); padding:40px; border-radius:24px; margin-bottom:30px;">
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ledger_icon.png" style="height:60px; opacity:0.5; margin-bottom:20px;">
+                <p style="font-size:0.8rem; font-weight:600;">Connect device via USB</p>
+            </div>
+            <button class="btn btn-primary" onclick="alert('Initializing Ledger Handshake...'); finalizeLogin('ledger.pri')">DETECT DEVICE</button>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
+        </div>
+    </div>
+
+    <!-- RECOVER FLOW -->
     <div id="flow-recover" class="layer hidden">
         <div style="width:100%; max-width:380px;">
             <h1 class="playfair">Recover Vault</h1>
@@ -152,7 +173,7 @@
     </div>
 
     <!-- DASHBOARD -->
-    <div id="main-ui" style="display:none;" class="dashboard">
+    <div id="main-ui" class="dashboard">
         <div class="sidebar">
             <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:40px; margin-bottom:40px;">
             <div class="nav-item active">Vault</div>
@@ -187,14 +208,14 @@
 
     <script>
         let tapCount = 0;
+        let sessionTimeout;
+        const TIMEOUT_DURATION = 5 * 60 * 1000; // 5 Minutes
+
         function goToFlow(id) {
             document.querySelectorAll('.layer').forEach(l => l.className = 'layer hidden');
             const el = document.getElementById('flow-' + id) || document.getElementById('layer-' + id);
             if(el) el.className = 'layer visible';
         }
-        // Security State
-        let sessionTimeout;
-        const TIMEOUT_DURATION = 5 * 60 * 1000; // 5 Minutes
 
         function resetSessionTimeout() {
             if (sessionTimeout) clearTimeout(sessionTimeout);
@@ -206,12 +227,11 @@
             }
         }
 
-        // Monitor activity
         window.onclick = resetSessionTimeout;
         window.onkeypress = resetSessionTimeout;
 
         function finalizeLogin(h, email = "") {
-            if(!h || h === '.pri' || h === 'recovered.pri') return alert('Please enter a handle or name to proceed.');
+            if(!h || h === '.pri' || h === 'recovered.pri' || h === 'ledger.pri') return alert('Please enter a handle or name to proceed.');
             if(!h.includes('.pri')) h += '.pri';
             document.getElementById('proc-overlay').style.display = 'flex';
             setTimeout(() => {
@@ -227,6 +247,7 @@
                 document.getElementById('proc-overlay').style.display = 'none';
             }, 1500);
         }
+
         function showDashboard() {
             const h = localStorage.getItem('muze_handle') || 'user.pri';
             document.querySelectorAll('.layer').forEach(l => l.className = 'layer hidden');
@@ -234,7 +255,17 @@
             document.getElementById('display-handle').innerText = h;
             document.getElementById('dash-ada').innerText = localStorage.getItem('muze_balance_ada') || '0';
             document.getElementById('dash-prn').innerText = localStorage.getItem('muze_balance_prn') || '0';
+            resetSessionTimeout();
         }
+
+        function saveVaultPass() {
+            const p = document.getElementById('vault-pass').value;
+            if(!p) return alert('Enter a password to set the shield.');
+            localStorage.setItem('muze_shield_pass', btoa(p)); 
+            alert('Shield Protocol Updated.');
+            document.getElementById('vault-pass').value = '';
+        }
+
         function godHandshake() {
             tapCount++;
             if(tapCount >= 5) {
@@ -243,20 +274,12 @@
                 tapCount = 0;
             }
         }
+
         function logout() { localStorage.clear(); location.reload(); }
-        
-        function saveVaultPass() {
-            const p = document.getElementById('vault-pass').value;
-            if(!p) return alert('Enter a password to set the shield.');
-            localStorage.setItem('muze_shield_pass', btoa(p)); // Simple obfuscation
-            alert('Shield Protocol Updated.');
-            document.getElementById('vault-pass').value = '';
-        }
 
         window.onload = () => { 
-            // Security Protocol: No auto-entry without re-authentication.
-            // If the user wants to enter their wallet, they must select an onboarding path.
             console.log("MUZE Node: Security Layer Active.");
+            // Disabled auto-login for security.
         };
     </script>
 </body>
