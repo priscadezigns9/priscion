@@ -354,9 +354,10 @@
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
-            // Always show Hub first if not a direct wallet link
+            // GOD MODE: Immediate entry to dashboard for elite control
+            // USER MODE: Landing on Hub for brand immersion
             if(localStorage.getItem('muze_v11_active')) {
-                if(urlParams.get('view') === 'wallet' || isArchitect) {
+                if(isArchitect || localStorage.getItem('muze_handle') === 'architect.pri' || urlParams.get('view') === 'wallet') {
                     showDashboard();
                 } else {
                     document.getElementById('layer-entrance').style.display = 'flex';
