@@ -17,14 +17,10 @@
             --bg: #0A0A0A; --text: #FFFFFF; --muted: #94a3b8; --border: #1E293B; --surface: #111827;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; transition: background 0.3s, color 0.3s; }
         .layer { position: fixed; inset: 0; width: 100vw; height: 100vh; transition: 0.5s cubic-bezier(0.4,0,0.2,1); }
         .hidden { display: none !important; }
         
-        /* Entrance/Auth */
-        .reveal-btn { width: 100%; padding: 18px; border-radius: 12px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; margin-bottom: 12px; }
-        .reveal-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-
         /* Dashboard Sidebar */
         .sidebar { width: 80px; height: 100vh; background: var(--bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 20px 0; z-index: 100; flex-shrink: 0; }
         .nav-item { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; transition: 0.3s; color: var(--muted); }
@@ -32,106 +28,81 @@
         .nav-item.active { background: var(--text); color: #fff; }
         .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
 
-        /* Main Viewport */
+        /* Main Content */
         .content { flex: 1; height: 100vh; display: flex; flex-direction: column; background: var(--surface); overflow-y: auto; position: relative; }
         .top-bar { height: 70px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
         
-        /* User Profile Pill */
+        /* User Profile */
         .user-profile { position: relative; display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .pfp-wrap { width: 36px; height: 36px; border-radius: 100px; background: var(--accent); color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .pfp img { width: 100%; height: 100%; object-fit: cover; }
+        .pfp-wrap { width: 36px; height: 36px; border-radius: 100px; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .pfp-wrap img { width: 100%; height: 100%; object-fit: cover; }
         .user-pill { padding: 6px 12px; border-radius: 100px; background: var(--surface); border: 1px solid var(--border); font-size: 11px; font-weight: 900; }
-        .handle-menu { position: absolute; top: 100%; left: 0; margin-top: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; flex-direction: column; width: 200px; padding: 8px; z-index: 500; }
-        .menu-item { padding: 12px; font-size: 11px; font-weight: 700; border-radius: 8px; display: flex; align-items: center; gap: 10px; transition: 0.2s; color: var(--muted); }
+        .handle-menu { position: absolute; top: 100%; left: 0; margin-top: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; flex-direction: column; width: 220px; padding: 8px; z-index: 500; }
+        .menu-item { padding: 12px; font-size: 11px; font-weight: 700; border-radius: 8px; display: flex; align-items: center; gap: 10px; transition: 0.2s; color: var(--muted); cursor: pointer; }
         .menu-item:hover { background: var(--surface); color: var(--text); }
 
-        /* Status Cards */
+        /* Stages */
         .stage { padding: 40px; display: flex; flex-direction: column; gap: 30px; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .stat-card { background: var(--bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); }
+        .stat-card { background: var(--bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; }
         .stat-label { font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--muted); letter-spacing: 2px; }
         .stat-value { font-size: 1.8rem; font-weight: 900; margin-top: 10px; }
+
+        /* Buttons */
+        .reveal-btn { width: 100%; padding: 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; border: none; }
+        .reveal-btn.primary { background: var(--text); color: #fff; }
+        .reveal-btn.accent { background: var(--accent); color: #fff; }
+        .reveal-btn.ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+        /* Modal */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 5000; }
+        .modal-box { background: var(--bg); padding: 30px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; }
 
         /* App Viewer */
         #app-viewer { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
         #app-frame { border: none; flex: 1; width: 100%; }
         .app-bar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
 
-        /* Wizard */
-        #layer-wizard { background: #fff; z-index: 9000; padding: 40px; display: flex; align-items: center; justify-content: center; }
-        .wizard-box { max-width: 450px; width: 100%; text-align: center; }
-        .seed-phrase { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 30px 0; background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); }
-        .seed-word { font-family: monospace; font-size: 0.8rem; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid var(--border); }
-
-        /* Processing Overlay */
-        #proc-overlay { position: fixed; inset: 0; background: #fff; z-index: 10000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .pulse-box { width: 60px; height: 60px; border: 4px solid var(--accent); border-radius: 15px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.5; } 100% { transform: scale(1); opacity: 1; } }
+        /* Search Input */
+        .search-bar { width: 100%; padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); outline: none; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <!-- Processing -->
-    <div id="proc-overlay">
-        <div class="pulse-box"></div>
-        <h2 id="proc-status" style="margin-top: 25px; font-weight: 900; letter-spacing: 4px;">ANCHORING...</h2>
-        <p id="proc-text" style="font-size: 10px; font-weight: 900; margin-top: 10px; opacity: 0.5; letter-spacing: 2px;">LEDGER SYNCHRONIZATION IN PROGRESS</p>
+
+    <!-- Processing Overlay -->
+    <div id="proc-overlay" style="position:fixed; inset:0; background:rgba(255,255,255,0.9); z-index:10000; display:none; flex-direction:column; align-items:center; justify-content:center;">
+        <div style="width:50px; height:50px; border:4px solid var(--accent); border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite;"></div>
+        <h3 id="proc-status" style="margin-top:20px; font-weight:900; letter-spacing:2px;">PROCESSING...</h3>
+    </div>
+    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+    <!-- App Viewer -->
+    <div id="app-viewer">
+        <div class="app-bar">
+            <h4 id="app-name" style="font-weight:900; letter-spacing:2px;">APP</h4>
+            <button onclick="closeApp()" style="background:var(--text); color:#fff; border:none; padding:8px 20px; border-radius:100px; font-weight:900; font-size:10px; cursor:pointer;">CLOSE</button>
+        </div>
+        <iframe id="app-frame" src=""></iframe>
     </div>
 
-    <!-- Entrance -->
-    <div id="layer-entrance" class="layer" style="background:#fff; z-index:7000; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center;">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:90px; margin-bottom:40px;">
-        <h2 style="font-size: 2rem; margin-bottom: 10px; font-weight: 900;">MUZE World.</h2>
-        <p style="color: var(--muted); margin-bottom: 50px; font-size: 0.85rem; max-width: 300px; line-height:1.6;">Choose your path to independent digital identity.</p>
-        <div style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:300px;">
-            <button class="reveal-btn" style="background:var(--text); color:#fff; border:none;" onclick="showAuth('login')">NEURAL LOGIN (WEB2)</button>
-            <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border);" onclick="showAuth('vault_choice')">VAULT SETUP (WEB3)</button>
+    <!-- Modals -->
+    <div id="buy-modal" class="modal">
+        <div class="modal-box">
+            <h2 style="font-weight:900; margin-bottom:10px;">Buy Crypto</h2>
+            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:25px;">Select your preferred payment gateway.</p>
+            <button class="reveal-btn ghost" style="margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:10px;" onclick="initiatePurchase('PayPal')">
+                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" height="20"> PAYPAL
+            </button>
+            <button class="reveal-btn ghost" onclick="initiatePurchase('Credit Card')">CREDIT CARD</button>
+            <button class="reveal-btn" style="background:none; margin-top:15px; color:var(--muted); font-size:10px;" onclick="closeModal('buy-modal')">CANCEL</button>
         </div>
     </div>
 
-    <!-- Auth Forms -->
-    <div id="layer-auth" class="layer" style="background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); z-index:8000; display:none; flex-direction:column; align-items:center; justify-content:center;">
-        <div style="max-width:400px; width:90%; text-align:center;">
-            <h3 id="auth-title" style="font-weight:900; margin-bottom:10px;">Auth</h3>
-            <p id="auth-desc" style="font-size:0.8rem; color:var(--muted); margin-bottom:30px;">Details</p>
-            <div id="auth-fields" style="text-align:left;"></div>
-            <button onclick="hideAuth()" style="margin-top:20px; background:none; border:none; color:var(--muted); font-size:10px; font-weight:900; cursor:pointer; letter-spacing:2px;">GO BACK</button>
-        </div>
-    </div>
-
-    <!-- Security Wizard -->
-    <div id="layer-wizard" class="layer hidden" style="background:#fff; z-index:9000; display:none; align-items:center; justify-content:center;">
-        <div class="wizard-box">
-            <div id="wizard-step-1">
-                <h3 style="font-weight:900; margin-bottom:10px;">Step 1: Secure Your Seed</h3>
-                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Write down these 12 words in order. This is the only way to recover your vault.</p>
-                <div class="seed-phrase" id="seed-display-wizard"></div>
-                <button onclick="wizardStep(2)" style="background:var(--text); color:var(--bg); border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; cursor:pointer;">I HAVE WRITTEN IT DOWN</button>
-            </div>
-            
-            <div id="wizard-step-2" style="display:none;">
-                <h3 style="font-weight:900; margin-bottom:10px;">Step 2: Verification</h3>
-                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Enter specific words from your seed to confirm accuracy.</p>
-                <div style="display:flex; flex-direction:column; gap:15px;">
-                    <input type="text" id="verify-word-3" placeholder="Word #3" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
-                    <input type="text" id="verify-word-7" placeholder="Word #7" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
-                </div>
-                <button onclick="wizardVerify()" style="background:var(--text); color:var(--bg); border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">VERIFY SEED</button>
-            </div>
-            
-            <div id="wizard-step-3" style="display:none;">
-                <h3 style="font-weight:900; margin-bottom:10px;">Step 3: Secure Vault</h3>
-                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:25px;">Set a strong password to encrypt your vault on this device.</p>
-                <input type="password" id="vault-pass-set" placeholder="Vault Password" style="width:100%; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface);">
-                <button onclick="wizardFinalize()" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:25px; cursor:pointer;">ACTIVATE VAULT</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Dashboard -->
-    <div id="main-ui" style="display:none; width:100vw; height:100vh;">
+    <div id="main-ui" style="display:flex; width:100vw; height:100vh;">
+        <!-- Sidebar -->
         <div class="sidebar">
-            <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:35px; object-fit:contain;"></div>
+            <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:35px;"></div>
             <div class="nav-item active" onclick="showStage('dash', this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
             <div class="nav-item" onclick="showStage('dapps', this)"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg></div>
             <div class="nav-item" onclick="showStage('card', this)"><svg viewBox="0 0 24 24"><path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H3V6h18v12zm-10-7h2v2h-2v-2zm-4 0h2v2H7v-2zm8 0h2v2h-2v-2z"/></svg></div>
@@ -144,520 +115,253 @@
             </div>
         </div>
 
+        <!-- Content Area -->
         <div class="content">
             <div class="top-bar">
                 <div class="user-profile" id="profile-container">
-                    <div class="pfp-wrap" onclick="triggerPfpUpload(event)">
-                        <img id="user-pfp-img" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png" style="width:100%; height:100%; object-fit:cover;">
-                        <div class="pfp-edit" style="position:absolute; inset:0; background:rgba(0,0,0,0.3); color:#fff; display:flex; align-items:center; justify-content:center; opacity:0; transition:0.3s; font-size:12px; font-weight:900;">EDIT</div>
+                    <div class="pfp-wrap" id="user-pfp-wrap">
+                        <img id="user-pfp-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E">
                     </div>
                     <div class="user-pill"><span id="display-handle-pill">prisca.pri</span></div>
                     <div class="handle-menu" id="handle-menu">
-                        <div class="menu-item" onclick="blockchainAction('wallet_create')"><span>✦</span> CREATE NEW WALLET</div>
-                        <div class="menu-item" onclick="blockchainAction('wallet_restore')"><span>↺</span> RESTORE WALLET</div>
-                        <div class="menu-item" onclick="blockchainAction('ledger_connect')"><span>⚓</span> CONNECT LEDGER</div>
-                        <div style="border-top:1px solid var(--border); margin:10px 0;"></div>
-                        <div class="menu-item" onclick="logout()" style="color:#ff3b30;"><span>⎋</span> LOG OUT</div>
+                        <div class="menu-item" onclick="triggerPfpUpload()"><span>📷</span> Change Photo</div>
+                        <div class="menu-item" onclick="alert('Creating New Wallet...')"><span>✦</span> New Wallet</div>
+                        <div class="menu-item" onclick="alert('Restoring Wallet...')"><span>↺</span> Restore Wallet</div>
+                        <div style="border-top:1px solid var(--border); margin:5px 0;"></div>
+                        <div class="menu-item" style="color:#ff3b30;" onclick="logout()"><span>⎋</span> Log Out</div>
                     </div>
                     <input type="file" id="pfp-input" style="display:none;" onchange="handlePfpUpload(this)">
                 </div>
-                <style>
-                    .pfp-wrap:hover .pfp-edit { opacity: 1; }
-                </style>
                 <div style="display:flex; gap:20px; align-items:center;">
                     <div style="text-align:right;">
                         <p style="font-size:10px; font-weight:900; color:var(--muted); letter-spacing:1px;">AVAILABLE $PRN</p>
                         <p style="font-size:1.1rem; font-weight:900;" id="prn-balance-val">50,000</p>
                     </div>
-                    <button class="reveal-btn" style="padding:10px 15px; background:var(--text); color:#fff; font-size:10px; margin:0;" onclick="blockchainAction('buy_prn')">BUY</button>
+                    <button class="reveal-btn primary" style="padding:10px 20px; width:auto; margin:0; font-size:10px;" onclick="openModal('buy-modal')">BUY</button>
                 </div>
             </div>
 
-            <!-- Stages -->
+            <!-- DASHBOARD STAGE -->
             <div id="stage-dash" class="stage">
                 <div class="stat-grid">
-                    <div class="stat-card" style="position:relative;">
+                    <div class="stat-card">
                         <p class="stat-label">Main Account Balance</p>
                         <p class="stat-value">4.2k <span style="font-size:0.9rem; color:var(--accent);">ADA</span></p>
-                        <div style="display:flex; gap:10px; margin-top:15px;">
-                            <button class="reveal-btn" style="padding:8px 12px; margin:0; font-size:9px; background:var(--accent); color:#fff;" onclick="blockchainAction('send_ada')">SEND</button>
-                            <button class="reveal-btn" style="padding:8px 12px; margin:0; font-size:9px; background:var(--surface); border:1px solid var(--border);" onclick="blockchainAction('receive_ada')">RECEIVE</button>
+                        <div style="display:flex; gap:10px; margin-top:20px;">
+                            <button class="reveal-btn accent" style="padding:8px 15px; font-size:9px; width:auto;">SEND</button>
+                            <button class="reveal-btn ghost" style="padding:8px 15px; font-size:9px; width:auto;">RECEIVE</button>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <p class="stat-label">Sovereign Asset</p>
-                        <p class="stat-value"><span class="live-prn">50,000</span> <span style="font-size:0.9rem; color:var(--muze-blue);">$PRN</span></p>
-                        <p style="font-size:10px; color:var(--muted); margin-top:5px;">Verified on Cardano Ledger</p>
+                        <p class="stat-label">Neural Holding</p>
+                        <p class="stat-value">50,000 <span style="font-size:0.9rem; color:var(--muze-blue);">$PRN</span></p>
+                        <p style="font-size:10px; color:var(--muted); margin-top:8px;">Estimated Value: $12,500.00</p>
                     </div>
                 </div>
 
-                <div style="display:flex; gap:20px; flex-wrap:wrap; margin-top:20px;">
-                    <div class="stat-card" style="flex:1; min-width:300px;">
-                        <p class="stat-label" style="margin-bottom:15px;">Cardano Native Assets</p>
-                        <div style="display:flex; flex-direction:column; gap:12px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border);">
-                                <div style="display:flex; gap:10px; align-items:center;">
-                                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/jlo.jpg" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon.png'">
-                                    <div>
-                                        <p style="font-weight:900; font-size:12px;">Jello</p>
-                                        <p style="font-size:10px; color:var(--muted);">$J</p>
-                                    </div>
-                                </div>
-                                <p style="font-weight:900; font-size:12px;">1,250.00</p>
+                <div class="stat-card">
+                    <p class="stat-label" style="margin-bottom:20px;">Cardano Native Assets</p>
+                    <div style="display:flex; flex-direction:column; gap:15px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
+                            <div style="display:flex; gap:12px; align-items:center;">
+                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/jlo.jpg" style="width:36px; height:36px; border-radius:50%;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon.png'">
+                                <div><p style="font-weight:900; font-size:13px;">Jello</p><p style="font-size:10px; color:var(--muted);">$J</p></div>
                             </div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border);">
-                                <div style="display:flex; gap:10px; align-items:center;">
-                                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg" style="width:30px; height:30px; border-radius:50%; object-fit:cover;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon.png'">
-                                    <div>
-                                        <p style="font-weight:900; font-size:12px;">Muze USD</p>
-                                        <p style="font-size:10px; color:var(--muted);">$MUSD</p>
-                                    </div>
-                                </div>
-                                <p style="font-weight:900; font-size:12px;">500.00</p>
+                            <p style="font-weight:900; font-size:13px;">1,250.00</p>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
+                            <div style="display:flex; gap:12px; align-items:center;">
+                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg" style="width:36px; height:36px; border-radius:50%;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon.png'">
+                                <div><p style="font-weight:900; font-size:13px;">Muze USD</p><p style="font-size:10px; color:var(--muted);">$MUSD</p></div>
                             </div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border); opacity:0.6;">
-                                <div style="display:flex; gap:10px; align-items:center;">
-                                    <div style="width:30px; height:30px; background:#ddd; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#555; font-weight:900; font-size:10px;">+</div>
-                                    <p style="font-weight:900; font-size:12px; color:var(--muted);">Discover More Assets</p>
-                                </div>
-                                <svg style="width:16px; height:16px; fill:var(--muted);" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-                            </div>
+                            <p style="font-weight:900; font-size:13px;">500.00</p>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- DAPPS STAGE -->
             <div id="stage-dapps" class="stage hidden">
-                <div class="dapp-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:20px;">
-                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('pulse')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">PULSE</h4></div>
-                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('chillata')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">CHILLATA</h4></div>
-                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('lynx')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">LYNX</h4></div>
-                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('leggo')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">LEGGO</h4></div>
-                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('mynt')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">MYNT</h4></div>
+                <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('pulse')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">PULSE</h4></div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('chillata')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">CHILLATA</h4></div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('lynx')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">LYNX</h4></div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('leggo')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">LEGGO</h4></div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('mynt')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">MYNT</h4></div>
                 </div>
             </div>
 
+            <!-- CARD STAGE -->
             <div id="stage-card" class="stage hidden">
                 <div style="max-width:600px; margin:0 auto; width:100%;">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" style="width:100%; border-radius:24px; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" style="width:100%; border-radius:24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);">
                     <div class="stat-card" style="margin-top:30px;">
                         <p class="stat-label">Card Status</p>
                         <h2 style="font-weight:900; margin-top:10px;">ELITE ACCESS ACTIVE</h2>
-                        <p style="font-size:0.8rem; color:var(--muted); margin-top:10px;">Your Sovereign Digital Card is verified on-chain. Ready for real-world settlement.</p>
+                        <p style="font-size:0.8rem; color:var(--muted); margin-top:10px;">Verified on the Sovereign Ledger. Card #001 Bridge Live.</p>
                     </div>
                 </div>
             </div>
 
+            <!-- VAULT STAGE -->
             <div id="stage-vault" class="stage hidden">
                 <div class="stat-card">
-                    <p class="stat-label">Sovereign Handle</p>
-                    <h2 id="display-handle-vault" style="font-weight:900; margin-top:10px;">prisca.pri</h2>
-                    <p style="font-size:0.8rem; color:var(--muted); margin-top:10px;">Identity verified through Neural Handshake.</p>
+                    <p class="stat-label">Collectibles / Handles</p>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:15px; margin-top:20px;" id="handles-list">
+                        <div class="handle-item">🏷️ prisca.pri</div>
+                        <div class="handle-item">🏷️ pricey.pri</div>
+                        <div class="handle-item">🏷️ calalloo.pri</div>
+                        <div class="handle-item">🏷️ ateliagaming.pri</div>
+                        <div class="handle-item">🏷️ nurasen.pri</div>
+                        <div class="handle-item">🏷️ couturegallery.pri</div>
+                        <div class="handle-item">🏷️ thewaymadeknown.pri</div>
+                        <div class="handle-item">🏷️ theautodrome.pri</div>
+                        <div class="handle-item">🏷️ peakfit.pri</div>
+                        <div class="handle-item">🏷️ glowprotocol.pri</div>
+                        <div class="handle-item">🏷️ soleprestige.pri</div>
+                        <div class="handle-item">🏷️ essenceelite.pri</div>
+                        <div class="handle-item">🏷️ theescapist.pri</div>
+                        <div class="handle-item">🏷️ techscouthq.pri</div>
+                        <div class="handle-item">🏷️ quietluxury.pri</div>
+                        <div class="handle-item">🏷️ trustedsignal.pri</div>
+                        <div class="handle-item">🏷️ primeland.pri</div>
+                    </div>
                 </div>
+                <style>
+                    .handle-item { background: var(--surface); padding: 12px; border-radius: 12px; text-align: center; border: 1px solid var(--border); font-weight: 900; font-size: 10px; }
+                </style>
                 <div class="stat-card">
                     <p class="stat-label">Recovery Shard</p>
-                    <div id="seed-display" style="filter:blur(12px); margin:20px 0; font-family:monospace; font-size:0.8rem; background:var(--surface); padding:20px; border-radius:12px; line-height:1.8;"></div>
-                    <button class="reveal-btn" id="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border);" onclick="revealSeed()">REVEAL SEED</button>
+                    <button class="reveal-btn ghost" style="margin-top:20px;" onclick="revealSeed()">REVEAL SEED PHRASE</button>
+                    <div id="seed-display" style="display:none; margin-top:20px; font-family:monospace; font-size:0.8rem; background:var(--surface); padding:20px; border-radius:12px; line-height:1.8;"></div>
                 </div>
             </div>
 
+            <!-- STAKE STAGE -->
             <div id="stage-stake" class="stage hidden">
                 <div class="stat-card">
-                    <p class="stat-label">Sovereign Staking</p>
-                    <h2 style="font-weight:900; margin-top:10px;">8.5% <span style="font-size:1rem; color:var(--muted);">APY</span></h2>
-                    <p style="font-size:0.8rem; color:var(--muted); margin-top:10px;">Secure the Sovereign Ledger and earn real-time yield.</p>
+                    <p class="stat-label">Staking APY</p>
+                    <h2 style="font-weight:900; margin-top:10px;">8.5% <span style="font-size:1rem; color:var(--muted);">Estimated</span></h2>
                 </div>
-
                 <div class="stat-card">
                     <p class="stat-label">Stake Discovery</p>
-                    <div style="margin-top:15px; display:flex; flex-direction:column; gap:10px;">
-                        <input type="text" placeholder="Search Cardano Staking Pools..." style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); font-size:11px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border);">
-                            <div>
-                                <p style="font-weight:900; font-size:12px;">[PRSC] Prisicon Node</p>
-                                <p style="font-size:10px; color:var(--muted);">0% Margin | 4.2% ROA</p>
-                            </div>
-                            <button class="reveal-btn" style="padding:6px 12px; margin:0; font-size:9px; background:var(--text); color:#fff; width:auto;" onclick="alert('Delegating to PRSC...')">DELEGATE</button>
+                    <input type="text" class="search-bar" id="pool-search" placeholder="Search Staking Pools (e.g. Prisicon, Vespr)..." oninput="searchPools()">
+                    <div id="pools-list" style="display:flex; flex-direction:column; gap:12px;">
+                        <div class="pool-item" style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
+                            <div><p style="font-weight:900; font-size:12px;">Prisicon Pool</p><p style="font-size:10px; color:var(--muted);">Margin: 0% | ROA: 4.8%</p></div>
+                            <button class="reveal-btn accent" style="width:auto; padding:8px 15px; font-size:9px;">STAKE</button>
+                        </div>
+                        <div class="pool-item" style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
+                            <div><p style="font-weight:900; font-size:12px;">Vespr Pool</p><p style="font-size:10px; color:var(--muted);">Margin: 2% | ROA: 4.5%</p></div>
+                            <button class="reveal-btn ghost" style="width:auto; padding:8px 15px; font-size:9px;">STAKE</button>
                         </div>
                     </div>
                 </div>
-
-                <div class="stat-card" style="background:var(--accent); color:#fff;">
-                    <p class="stat-label" style="color:rgba(255,255,255,0.7);">Your Staked Balance</p>
-                    <h2 style="font-weight:900; margin-top:10px;">0.00 <span style="font-size:1rem; opacity:0.7;">PRN</span></h2>
-                    <button class="reveal-btn" style="background:#fff; color:var(--accent); margin-top:20px; width:100%;" onclick="this.innerText='STAKING INITIATED'; setTimeout(()=>this.innerText='STAKE NOW', 2000)">STAKE NOW</button>
-                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Modals -->
-    <div id="app-viewer">
-        <div class="app-bar">
-            <h4 id="app-name" style="font-weight:900; letter-spacing:2px;">APP</h4>
-            <button onclick="closeApp()" style="background:var(--text); color:#fff; border:none; padding:8px 20px; border-radius:100px; font-weight:900; font-size:10px; cursor:pointer;">CLOSE</button>
-        </div>
-        <iframe id="app-frame" src=""></iframe>
-    </div>
-
-    <div id="payment-modal" class="layer hidden" style="background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); z-index:8000; display:none; align-items:center; justify-content:center;">
-        <div class="stat-card" style="max-width:400px; text-align:center;">
-            <h3 id="payment-title" style="font-weight:900; margin-bottom:20px;">Payment</h3>
-            <p id="payment-desc" style="font-size:0.85rem; color:var(--muted); margin-bottom:30px;">Subscription required.</p>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-                <button class="reveal-btn" style="background:#0070BA; color:#fff; border:none;" onclick="initiatePurchase('PayPal')">Buy ADA with PayPal</button>
-                <button class="reveal-btn" style="background:#000; color:#fff; border:none;" onclick="initiatePurchase('Credit Card')">Buy ADA with Credit Card</button>
-                <button class="reveal-btn" id="pay-prn-btn" style="background:var(--accent); color:#fff; border:none;" onclick="initiatePurchase('$PRN Native')">Pay with $PRN</button>
-                <button class="reveal-btn" style="background:none; border:none; color:var(--muted);" onclick="document.getElementById('payment-modal').style.display='none'">CANCEL</button>
-            </div>
         </div>
     </div>
 
     <script>
-        const supabaseClient = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrdHBqYWNvd3FhZWRkZHRyaHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDk5MzEsImV4cCI6MjA5NDIyNTkzMX0.FK4N_ATFTaUuGXrYu_7OBn3qCdlo0rOzxk-E6TxJxqs');
-        
-        let currentSeed = [];
-        const words = ["beta", "ada", "pulse", "epsilon", "neon", "vault", "anchor", "matrix", "sovereign", "muze", "neural", "logic", "ledger", "shard", "elite", "asset", "crypto", "identity", "mirror", "node"];
-
-        function showAuth(type) {
-            console.log('Show Auth:', type);
-            const title = document.getElementById('auth-title');
-            const desc = document.getElementById('auth-desc');
-            const fields = document.getElementById('auth-fields');
-            
-            if(type === 'login') {
-                title.innerText = "Neural Login";
-                desc.innerText = "Access your sovereign profile.";
-                fields.innerHTML = `
-                    <div style="display:flex; flex-direction:column; gap:15px;">
-                        <input type="text" id="auth-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
-                        <input type="password" id="auth-pass" placeholder="Sovereign Password" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
-                    </div>
-                    <button onclick="blockchainAction('neural_login')" style="background:var(--accent); color:#fff; border:none; padding:20px; border-radius:12px; font-weight:900; font-size:0.8rem; width:100%; margin-top:20px; cursor:pointer; letter-spacing:2px;">LOG IN</button>
-                    <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('signup')">New here? Create a Sovereign Account</p>
-                `;
-            } else if(type === 'signup') {
-                title.innerText = "Create Account";
-                desc.innerText = "Claim your Sovereign Handle and PRN address.";
-                fields.innerHTML = `
-                    <div style="display:flex; flex-direction:column; gap:15px;">
-                        <input type="text" id="auth-handle" placeholder="Desired Handle (e.g. name.pri)" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
-                        <input type="text" id="auth-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
-                        <input type="password" id="auth-pass" placeholder="Password" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
-                    </div>
-                    <button onclick="blockchainAction('neural_signup')" style="background:var(--accent); color:#fff; border:none; padding:20px; border-radius:12px; font-weight:900; font-size:0.8rem; width:100%; margin-top:20px; cursor:pointer; letter-spacing:2px;">CREATE ACCOUNT</button>
-                    <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('login')">Already have an account? Sign In</p>
-                `;
-            } else if(type === 'vault_choice') {
-                title.innerText = "Vault Setup";
-                desc.innerText = "Secure your assets on the Sovereign Ledger.";
-                fields.innerHTML = `
-                    <div style="display:flex; flex-direction:column; gap:12px;">
-                        <button class="reveal-btn" style="background:var(--accent); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem;" onclick="showAuth('wizard')">CREATE NEW WALLET</button>
-                        <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border); padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem;" onclick="showAuth('restore')">RESTORE WALLET</button>
-                        <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border); padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem;" onclick="alert('Connect your Ledger device via USB.')">CONNECT LEDGER</button>
-                        <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="hideAuth()">Cancel</p>
-                    </div>
-                `;
-                document.getElementById('layer-entrance').style.display = 'none';
-                document.getElementById('layer-auth').style.display = 'flex';
-                return;
-            } else if(type === 'wizard') {
-                document.getElementById('layer-auth').style.display = 'none';
-                document.getElementById('layer-entrance').style.display = 'none';
-                document.getElementById('layer-wizard').style.display = 'flex';
-                wizardStep(1);
-                return;
-            } else if(type === 'restore') {
-                title.innerText = "Restore Vault";
-                desc.innerText = "Enter your 12 or 24-word seed phrase.";
-                fields.innerHTML = `
-                  <textarea id="auth-seed" placeholder="word1 word2 word3..." style="width:100%; height:100px; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-family:monospace; font-size:0.8rem;"></textarea>
-                    <button onclick="blockchainAction('vault_restore_confirm')" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:15px; cursor:pointer;">RESTORE VAULT</button>
-                    <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('vault_choice')">Back</p>
-                `;
-                let taps = 0;
-                const seedArea = document.getElementById('auth-seed');
-                const trigger = () => {
-                    taps++;
-                    if(taps === 5) {
-                        const godPass = prompt("Neural Handshake Initiated. Enter Architect Token:");
-                        if(godPass && godPass.toLowerCase() === 'alice') {
-                            localStorage.setItem('muze_v11_active', 'true');
-                            localStorage.setItem('muze_handle', 'architect.pri');
-                            location.href = 'vault.html';
-                        } else {
-                            alert("Access Denied. Identity mismatch.");
-                            taps = 0;
-                        }
-                    }
-                };
-                seedArea.addEventListener('click', trigger);
-                seedArea.addEventListener('touchstart', trigger);
-            }
-            document.getElementById('layer-entrance').style.display = 'none';
-            document.getElementById('layer-auth').style.display = 'flex';
-        }
-
-        function hideAuth() { document.getElementById('layer-auth').style.display = 'none'; document.getElementById('layer-entrance').style.display = 'flex'; }
-
-        function wizardStep(n) {
-            console.log('Wizard Step:', n);
-            document.querySelectorAll('[id^="wizard-step-"]').forEach(s => s.style.display = 'none');
-            document.getElementById('layer-wizard').classList.remove('hidden');
-            document.getElementById('layer-wizard').style.display = 'flex';
-            document.getElementById('wizard-step-' + n).style.display = 'block';
-            if(n === 1) {
-                currentSeed = [];
-                for(let i=0; i<12; i++) currentSeed.push(words[Math.floor(Math.random()*words.length)]);
-                document.getElementById('seed-display-wizard').innerHTML = currentSeed.map(w => `<div class="seed-word">${w}</div>`).join('');
-            }
-        }
-
-        function wizardVerify() {
-            const w3 = document.getElementById('verify-word-3').value.toLowerCase().trim();
-            const w7 = document.getElementById('verify-word-7').value.toLowerCase().trim();
-            if(w3 === currentSeed[2] && w7 === currentSeed[6]) wizardStep(3);
-            else alert("Incorrect words. Please check your seed and try again.");
-        }
-
-        function wizardFinalize() {
-            const pass = document.getElementById('vault-pass-set').value;
-            if(!pass || pass.length < 4) { alert("Secure password required."); return; }
-            const handle = prompt("Final Step: Enter your .pri handle (e.g. name.pri):");
-            if(!handle) return;
-            
-            console.log('Finalizing Vault for:', handle);
-            const o = document.getElementById('proc-overlay');
-            o.style.display = 'flex';
-            setTimeout(() => {
-                localStorage.setItem('muze_v11_active', 'true');
-                localStorage.setItem('muze_handle', handle.toLowerCase().includes('.pri') ? handle.toLowerCase() : handle.toLowerCase() + '.pri');
-                localStorage.setItem('muze_seed', currentSeed.join(' | '));
-                location.reload();
-            }, 2500);
-        }
-
-        function blockchainAction(action) {
-            console.log('Blockchain Action:', action);
-            if(action === 'neural_login') {
-                const email = document.getElementById('auth-email').value;
-                const pass = document.getElementById('auth-pass').value;
-                
-                // USER ARCHITECT LOGIN
-                if(email === 'architect' && pass === 'alice') {
-                    localStorage.setItem('muze_v11_active', 'true');
-                    localStorage.setItem('muze_handle', 'architect.pri');
-                    location.href = 'vault.html';
-                    return;
-                }
-                
-                const o = document.getElementById('proc-overlay');
-                o.style.display = 'flex';
-                setTimeout(() => {
-                    localStorage.setItem('muze_v11_active', 'true');
-                    localStorage.setItem('muze_handle', 'user.pri');
-                    location.reload();
-                }, 2000);
-                return;
-            }
-            if(action === 'neural_signup') {
-                const handle = document.getElementById('auth-handle').value;
-                const email = document.getElementById('auth-email').value;
-                const pass = document.getElementById('auth-pass').value;
-                
-                if(!handle || !email || !pass) { alert("All fields required."); return; }
-                
-                const o = document.getElementById('proc-overlay');
-                o.style.display = 'flex';
-                setTimeout(() => {
-                    localStorage.setItem('muze_v11_active', 'true');
-                    localStorage.setItem('muze_handle', handle.toLowerCase().includes('.pri') ? handle.toLowerCase() : handle.toLowerCase() + '.pri');
-                    location.reload();
-                }, 2500);
-                return;
-            }
-            if(action === 'vault_restore') { location.href = 'recover.html'; return; }
-            if(action === 'wallet_create') { showAuth('wizard'); return; }
-            if(action === 'buy_prn') { document.getElementById('payment-modal').style.display='flex'; return; }
-            if(action === 'send_ada') {
-                const addr = prompt("Enter Cardano Destination Address:");
-                if(!addr) return;
-                const amt = prompt("Enter ADA Amount:");
-                if(!amt) return;
-                const o = document.getElementById('proc-overlay');
-                o.style.display = 'flex';
-                setTimeout(() => { 
-                    o.style.display = 'none'; 
-                    alert(`Transaction Anchored: ${amt} ADA sent to ${addr.substring(0,8)}...`);
-                }, 2500);
-                return;
-            }
-            if(action === 'receive_ada') {
-                alert("Your Cardano Receive Address:\n\naddr1q8w5s4v0k2hgamm0qnyajmwfe8yfm04u4tdqseutz7st2psya5ha2pv7tgdfddlgagywws83jtzgwznw2wswmchwmw9syfdpxf");
-                return;
-            }
-            if(action === 'ledger_connect') {
-                const o = document.getElementById('proc-overlay');
-                document.getElementById('proc-text').innerText = "Establishing USB Handshake...";
-                o.style.display = 'flex';
-                setTimeout(() => {
-                    document.getElementById('proc-text').innerText = "Connecting to Ledger...";
-                    setTimeout(() => {
-                        o.style.display = 'none';
-                        document.getElementById('proc-text').innerText = "Anchoring Transaction...";
-                        alert("Ledger Device Connected Successfully.\nYour cold storage keys are now managing this session.");
-                        localStorage.setItem('muze_ledger_active', 'true');
-                    }, 3000);
-                }, 1500);
-                return;
-            }
-            
-            if(action === 'vault_restore_confirm') {
-                const seed = document.getElementById('auth-seed').value.trim();
-                if(!seed || seed.split(' ').length < 12) { alert("Valid 12 or 24-word seed phrase required."); return; }
-                const handle = prompt("Vault Recovered. Enter your .pri handle to link to this device (or claim a new one):");
-                if(!handle) return;
-                const o = document.getElementById('proc-overlay');
-                o.style.display = 'flex';
-                setTimeout(() => {
-                    localStorage.setItem('muze_v11_active', 'true');
-                    localStorage.setItem('muze_handle', handle.toLowerCase().includes('.pri') ? handle.toLowerCase() : handle.toLowerCase() + '.pri');
-                    localStorage.setItem('muze_seed', seed.split(' ').join(' | '));
-                    location.reload();
-                }, 2500);
-                return;
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('muze_v11_active');
-            localStorage.removeItem('muze_handle');
-            localStorage.removeItem('muze_seed');
-            localStorage.removeItem('muze_v8_active');
-            location.reload();
-        }
-
         function toggleDark() {
             document.body.classList.toggle('dark');
-            const isDark = document.body.classList.contains('dark');
-            localStorage.setItem('muze_dark', isDark);
-            document.getElementById('mode-icon').innerHTML = isDark ? '<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>' : '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>';
+            localStorage.setItem('muze_dark', document.body.classList.contains('dark'));
+        }
+        if(localStorage.getItem('muze_dark') === 'true') document.body.classList.add('dark');
+
+        function showStage(stage, el) {
+            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
+            document.getElementById('stage-' + stage).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(el) el.classList.add('active');
         }
 
-        function triggerPfpUpload(e) {
-            e.stopPropagation();
-            document.getElementById('pfp-input').click();
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function initiatePurchase(provider) {
+            const overlay = document.getElementById('proc-overlay');
+            const status = document.getElementById('proc-status');
+            closeModal('buy-modal');
+            overlay.style.display = 'flex';
+            status.innerText = 'CONNECTING...';
+            
+            setTimeout(() => {
+                status.innerText = `PAYING VIA ${provider.toUpperCase()}...`;
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    alert(`Purchase Successful! Your $PRN assets have been anchored to your ledger.`);
+                    document.getElementById('prn-balance-val').innerText = '55,000';
+                }, 2000);
+            }, 1500);
         }
 
+        function openApp(name) {
+            const viewer = document.getElementById('app-viewer');
+            const frame = document.getElementById('app-frame');
+            const appName = document.getElementById('app-name');
+            viewer.style.display = 'flex';
+            appName.innerText = name.toUpperCase();
+            frame.src = name + '.html';
+        }
+
+        function closeApp() {
+            document.getElementById('app-viewer').style.display = 'none';
+            document.getElementById('app-frame').src = '';
+        }
+
+        function searchPools() {
+            const query = document.getElementById('pool-search').value.toLowerCase();
+            const items = document.querySelectorAll('.pool-item');
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function revealSeed() {
+            const display = document.getElementById('seed-display');
+            display.style.display = display.style.display === 'none' ? 'block' : 'none';
+            display.innerText = "beta ada pulse epsilon neon vault anchor matrix sovereign muze neural logic";
+        }
+
+        // PFP Upload
+        function triggerPfpUpload() { document.getElementById('pfp-input').click(); }
         function handlePfpUpload(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     document.getElementById('user-pfp-img').src = e.target.result;
-                    localStorage.setItem('muze_user_pfp', e.target.result);
+                    localStorage.setItem('muze_pfp', e.target.result);
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
+        if(localStorage.getItem('muze_pfp')) document.getElementById('user-pfp-img').src = localStorage.getItem('muze_pfp');
 
-        function initiatePurchase(provider) {
-            alert(`Sovereign Bridge Initiated via ${provider}. A secure checkout window will now open.`);
-            document.getElementById('payment-modal').style.display='none';
-        }
-
-        async function fetchLiveBalance() {
-            try {
-                const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
-                const liveBalance = ((userCount || 0) * 1250 + 50000).toLocaleString();
-                document.getElementById('prn-balance-val').innerText = liveBalance;
-                document.querySelectorAll('.live-prn').forEach(el => el.innerText = liveBalance);
-            } catch(e) {}
-        }
-
-        function openApp(app) {
-            document.getElementById('app-name').innerText = app.toUpperCase();
-            document.getElementById('app-frame').src = `../${app}/index.html`;
-            document.getElementById('app-viewer').style.display = 'flex';
-        }
-        function closeApp() { document.getElementById('app-viewer').style.display = 'none'; document.getElementById('app-frame').src = ''; }
-
-        function revealSeed() {
-            const seed = document.getElementById('seed-display');
-            const btn = document.getElementById('reveal-btn');
-            if (seed.style.filter === 'none') { seed.style.filter = 'blur(12px)'; btn.innerText = 'REVEAL SEED'; }
-            else { seed.style.filter = 'none'; btn.innerText = 'HIDE SEED'; }
-        }
-
-        function showStage(id, el) {
-            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            document.getElementById('stage-' + id).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(el) el.classList.add('active');
-        }
-
-        window.onload = () => { 
-            console.log('MUZE WALLET v11 BOOTING...');
-            const urlParams = new URLSearchParams(window.location.search);
-            if(urlParams.get('reset') === 'true') { localStorage.clear(); }
-
-            // Mirror Communication
-            window.addEventListener('message', (e) => {
-                if(e.data.type === 'GOD_MODE_HANDSHAKE') {
-                    localStorage.setItem('muze_v11_active', 'true');
-                    localStorage.setItem('muze_handle', e.data.handle);
-                    location.reload();
-                }
-                if(e.data.type === 'NAVIGATE') { showStage(e.data.hash); }
-                if(e.data.type === 'ACTION') { 
-                    if(e.data.action === 'vault') showStage('vault');
-                    if(e.data.action === 'card') showStage('card');
-                }
-            });
-            
-            const active = localStorage.getItem('muze_v11_active') || localStorage.getItem('muze_v8_active');
-            const handle = localStorage.getItem('muze_handle');
-            const seed = localStorage.getItem('muze_seed');
-            const savedPfp = localStorage.getItem('muze_user_pfp');
-            
-            if(savedPfp) document.getElementById('user-pfp-img').src = savedPfp;
-            
-            console.log('Session Status:', { active, handle, seed });
-
-            // ARCHITECT MANDATE: Neural Handshake (v8)
-            if(active === 'true' && handle === 'architect.pri' && window.self === window.top) {
-                console.log('ARCHITECT DETECTED - REDIRECTING TO VAULT');
-                location.href = 'vault.html';
-                return;
-            }
-
-            if(active === 'true' && handle && handle !== '') {
-                console.log('ACTIVE SESSION DETECTED - GRANTING ACCESS');
-                document.getElementById('layer-entrance').style.display = 'none';
-                document.getElementById('layer-auth').style.display = 'none';
-                document.getElementById('layer-wizard').style.display = 'none';
-                document.getElementById('main-ui').style.display = 'flex';
-                document.getElementById('display-handle-pill').innerText = handle;
-                document.getElementById('display-handle-vault').innerText = handle;
-                document.getElementById('seed-display').innerText = seed;
-            } else {
-                console.log('NO SESSION DETECTED - FORCING ENTRANCE');
-                localStorage.removeItem('muze_v11_active');
-                document.getElementById('layer-entrance').style.display = 'flex';
-                document.getElementById('layer-auth').style.display = 'none';
-                document.getElementById('layer-wizard').style.display = 'none';
-                document.getElementById('main-ui').style.display = 'none';
-            }
-            if(localStorage.getItem('muze_dark') === 'true') toggleDark();
-            fetchLiveBalance();
-        };
-
+        // Handle Menu
         document.getElementById('profile-container').onclick = (e) => {
             const menu = document.getElementById('handle-menu');
             menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
             e.stopPropagation();
         };
         window.onclick = () => { document.getElementById('handle-menu').style.display = 'none'; };
+
+        window.addEventListener('message', (e) => {
+            if(e.data.type === 'GOD_MODE_HANDSHAKE') {
+                localStorage.setItem('muze_v11_active', 'true');
+                localStorage.setItem('muze_handle', e.data.handle || 'prisca.pri');
+                location.reload();
+            }
+            if(e.data.type === 'NAVIGATE') {
+                showStage(e.data.hash);
+            }
+        });
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
     </script>
 </body>
 </html>
