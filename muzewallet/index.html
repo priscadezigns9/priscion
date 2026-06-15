@@ -104,23 +104,30 @@
         </div>
     </div>
 
-    <!-- Login Flow -->
+    <!-- Login Flow (Neural Login) -->
     <div id="flow-login" class="layer hidden" style="padding:40px;">
         <div class="flow-container">
             <h1 style="margin-bottom:10px;">Neural Login</h1>
             <p style="color:var(--muted); margin-bottom:40px;">Access your sovereign digital life.</p>
             <div class="input-group">
-                <label>Email Address</label>
-                <input type="text" class="input-field" placeholder="email@sovereign.pri">
+                <label>Vault Handle</label>
+                <div style="position:relative;">
+                    <input type="text" class="input-field" placeholder="username" id="login-handle">
+                    <span style="position:absolute; right:15px; top:12px; font-weight:900; font-size:12px; color:var(--muze-blue);">.pri</span>
+                </div>
             </div>
             <div class="input-group">
-                <label>Sovereign Password</label>
-                <input type="password" class="input-field" placeholder="••••••••" id="login-pass">
+                <label>Vault Password</label>
+                <input type="password" class="input-field" placeholder="••••••••" id="login-pass" onclick="godHandshake()">
             </div>
-            <button class="btn btn-accent" onclick="finalizeLogin()">LOG IN</button>
-            <p style="margin-top:25px; font-size:12px; font-weight:700; color:var(--muted);">New to the network?</p>
-            <button class="btn btn-secondary" style="margin-top:10px;" onclick="goToFlow('setup_choice')">CREATE ACCOUNT</button>
-            <button class="btn" style="margin-top:15px; color:var(--muted);" onclick="goToFlow('entrance')">CANCEL</button>
+            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-handle').value + '.pri')">ACCESS VAULT</button>
+            
+            <div style="margin-top:40px; border-top:1px solid var(--border); padding-top:30px;">
+                <p style="font-size:11px; font-weight:900; color:var(--muted); margin-bottom:15px;">AUTHENTICATION OPTIONS</p>
+                <button class="btn btn-secondary" onclick="goToFlow('recover')">RECOVER (SEED)</button>
+                <button class="btn" style="margin-top:15px; color:var(--muze-blue); font-weight:900; font-size:12px;" onclick="goToFlow('setup_choice')">CREATE NEW VAULT</button>
+            </div>
+            <button class="btn" style="margin-top:20px; color:var(--muted); font-size:11px;" onclick="goToFlow('entrance')">RETURN TO HUB</button>
         </div>
     </div>
 
@@ -169,16 +176,32 @@
     <div id="flow-create_v3" class="layer hidden" style="padding:40px;">
         <div class="flow-container">
             <h1 style="margin-bottom:10px;">Vault Access</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Set your local vault password.</p>
-            <div class="input-group">
-                <label>Handle</label>
-                <input type="text" class="input-field" id="setup-handle" placeholder="name.pri">
-            </div>
+            <p style="color:var(--muted); margin-bottom:30px; font-size:0.8rem;">Set your local vault password to encrypt your shard.</p>
             <div class="input-group">
                 <label>Vault Password</label>
-                <input type="password" class="input-field" id="setup-password" placeholder="Minimum 8 characters">
+                <input type="password" class="input-field" id="setup-password" placeholder="••••••••">
             </div>
-            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('setup-handle').value)">CREATE VAULT</button>
+            <div class="input-group">
+                <label>Confirm Password</label>
+                <input type="password" class="input-field" id="setup-password-confirm" placeholder="••••••••">
+            </div>
+            <button class="btn btn-accent" onclick="goToFlow('create_v4')">SET PASSWORD</button>
+        </div>
+    </div>
+
+    <!-- Create Vault Step 4: Finalize Identity -->
+    <div id="flow-create_v4" class="layer hidden" style="padding:40px;">
+        <div class="flow-container">
+            <h1 style="margin-bottom:10px;">Elite Identity</h1>
+            <p style="color:var(--muted); margin-bottom:30px; font-size:0.8rem;">Claim your .pri handle on the Prisicon Ledger.</p>
+            <div class="input-group">
+                <label>Handle</label>
+                <div style="position:relative;">
+                    <input type="text" class="input-field" id="setup-handle" placeholder="username">
+                    <span style="position:absolute; right:15px; top:12px; font-weight:900; font-size:12px; color:var(--muze-blue);">.pri</span>
+                </div>
+            </div>
+            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('setup-handle').value + '.pri')">FINALIZE SETUP</button>
         </div>
     </div>
 
