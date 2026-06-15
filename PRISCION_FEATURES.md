@@ -4,8 +4,8 @@ This is the canonical document for the Prisicon L1 Ecosystem. It serves as the p
 
 ## 1. MUZE Wallet: Onboarding & Authentication
 *   **Dual-Path Entry**: 
-    *   **Neural Login (Web2 Path)**: Primary onboarding for non-technical users. Features a **Login / Signup** toggle for handle creation (`name.pri`). Uses **Email and Password**. Data is anchored to the `profiles` table in **Supabase**.
-    *   **Vault Setup (Web3 Path)**: For advanced users. Options for Create, Recover (Seed), and Ledger.
+    *   **Neural Login (Web2 Path)**: Primary onboarding for non-technical users. Features a **Login / Signup** toggle for handle creation (`name.pri`). Uses **Email and Password**. Data is anchored to the `profiles` table in **Supabase**. **Free Handle & PRN Address**: New signups automatically receive a Sovereign Handle and a native PRN receive address.
+    *   **Vault Setup (Web3 Path / "Secure My Wallet")**: For advanced users. Options for **Create New Wallet**, **Restore Wallet**, and **Connect Ledger**.
 *   **Strict Onboarding Protocol (v9)**: 
     *   **Vault Wizard**: Mandatory 3-step sequence for all new vaults: **Step 1: Display Seed** -> **Step 2: Verify Seed** (requires manual input of words #3 and #7) -> **Step 3: Secure Vault** (sets local encryption password).
     *   **God Mode Handshake**: Architect access is gated behind a recovery-seed-box trigger. **Path: Vault Setup (Web3) -> Recover (Seed) -> Tap inside recovery seed text box 5 times.**
@@ -18,7 +18,16 @@ This is the canonical document for the Prisicon L1 Ecosystem. It serves as the p
 *   **Profile Logic**:
     *   **Interactive Handle**: Clicking the user's handle/pfp opens a **Multi-Wallet Overlay** with options: Create, Restore, or Connect Ledger.
 
-## 3. MUZE API & Agency Model
+## 3. Sovereign Exchange & Staking (CHILLATA)
+*   **Dual-Mode Interface**:
+    *   **Sovereign Swap**: High-fidelity terminal for exchanging $PRN, $JLLO, $MUSD, $NRL, and $ATLR.
+    *   **Liquidity Pools**: Interface for anchoring assets to the ledger. Users earn a 0.2% share of swap fees. Supported pools: PRN/NRL, PRN/MUSD.
+*   **Yield Engine**: Users can stake assets directly to secure the ledger. Target yield: **12.5% APY** in $PRN rewards.
+*   **Asset Categorization**:
+    *   **Vault**: Primary fungible tokens ($PRN, ADA, NRL). Includes native **SEND** and **RECEIVE** functionality for Cardano ($ADA).
+    *   **Collectibles**: Dedicated gallery for **NFTs and ADA Handles**.
+
+## 4. MUZE API & Agency Model
 *   **Business Onboarding**: Legacy Web2 brands migrate to Web3 via the MUZE API.
 *   **Paid Tiers**:
     *   **Standard**: Personal use, basic transactions.
