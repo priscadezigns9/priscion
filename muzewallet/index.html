@@ -82,7 +82,7 @@
         <p style="color: var(--muted); margin-bottom: 50px; font-size: 0.85rem; max-width: 300px; line-height:1.6;">Choose your path to independent digital identity.</p>
         <div style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:300px;">
             <button class="reveal-btn" style="background:var(--text); color:#fff; border:none;" onclick="showAuth('login')">NEURAL LOGIN (WEB2)</button>
-            <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border);" onclick="showAuth('wizard')">VAULT SETUP (WEB3)</button>
+            <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border);" onclick="showAuth('vault_choice')">VAULT SETUP (WEB3)</button>
         </div>
     </div>
 
@@ -281,25 +281,54 @@
             
             if(type === 'login') {
                 title.innerText = "Neural Login";
-                desc.innerText = "Enter your sovereign credentials.";
+                desc.innerText = "Access your sovereign profile.";
                 fields.innerHTML = `
                     <div style="display:flex; flex-direction:column; gap:15px;">
                         <input type="text" id="auth-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
                         <input type="password" id="auth-pass" placeholder="Sovereign Password" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
                     </div>
                     <button onclick="blockchainAction('neural_login')" style="background:var(--accent); color:#fff; border:none; padding:20px; border-radius:12px; font-weight:900; font-size:0.8rem; width:100%; margin-top:20px; cursor:pointer; letter-spacing:2px;">LOG IN</button>
+                    <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('signup')">New here? Create a Sovereign Account</p>
                 `;
+            } else if(type === 'signup') {
+                title.innerText = "Create Account";
+                desc.innerText = "Claim your Sovereign Handle and PRN address.";
+                fields.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:15px;">
+                        <input type="text" id="auth-handle" placeholder="Desired Handle (e.g. name.pri)" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
+                        <input type="text" id="auth-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
+                        <input type="password" id="auth-pass" placeholder="Password" style="width:100%; padding:18px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-weight:600;">
+                    </div>
+                    <button onclick="blockchainAction('neural_signup')" style="background:var(--accent); color:#fff; border:none; padding:20px; border-radius:12px; font-weight:900; font-size:0.8rem; width:100%; margin-top:20px; cursor:pointer; letter-spacing:2px;">CREATE ACCOUNT</button>
+                    <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('login')">Already have an account? Sign In</p>
+                `;
+            } else if(type === 'vault_choice') {
+                title.innerText = "Vault Setup";
+                desc.innerText = "Secure your assets on the Sovereign Ledger.";
+                fields.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <button class="reveal-btn" style="background:var(--accent); color:#fff; border:none; padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem;" onclick="showAuth('wizard')">CREATE NEW WALLET</button>
+                        <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border); padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem;" onclick="showAuth('restore')">RESTORE WALLET</button>
+                        <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border); padding:15px; border-radius:12px; font-weight:900; font-size:0.7rem;" onclick="alert('Connect your Ledger device via USB.')">CONNECT LEDGER</button>
+                        <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="hideAuth()">Cancel</p>
+                    </div>
+                `;
+                document.getElementById('layer-entrance').style.display = 'none';
+                document.getElementById('layer-auth').style.display = 'flex';
+                return;
             } else if(type === 'wizard') {
+                document.getElementById('layer-auth').style.display = 'none';
                 document.getElementById('layer-entrance').style.display = 'none';
                 document.getElementById('layer-wizard').style.display = 'flex';
                 wizardStep(1);
                 return;
             } else if(type === 'restore') {
                 title.innerText = "Restore Vault";
-                desc.innerText = "Enter your 12-word seed phrase.";
+                desc.innerText = "Enter your 12 or 24-word seed phrase.";
                 fields.innerHTML = `
-                    <textarea id="auth-seed" placeholder="word1 word2 word3..." style="width:100%; height:100px; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-family:monospace; font-size:0.8rem;"></textarea>
+                  <textarea id="auth-seed" placeholder="word1 word2 word3..." style="width:100%; height:100px; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-family:monospace; font-size:0.8rem;"></textarea>
                     <button onclick="blockchainAction('vault_restore_confirm')" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:15px; cursor:pointer;">RESTORE VAULT</button>
+                    <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('vault_choice')">Back</p>
                 `;
             }
             document.getElementById('layer-entrance').style.display = 'none';
@@ -358,7 +387,30 @@
                     location.href = 'vault.html';
                     return;
                 }
-                alert("Invalid Sovereign Credentials.");
+                
+                const o = document.getElementById('proc-overlay');
+                o.style.display = 'flex';
+                setTimeout(() => {
+                    localStorage.setItem('muze_v11_active', 'true');
+                    localStorage.setItem('muze_handle', 'user.pri');
+                    location.reload();
+                }, 2000);
+                return;
+            }
+            if(action === 'neural_signup') {
+                const handle = document.getElementById('auth-handle').value;
+                const email = document.getElementById('auth-email').value;
+                const pass = document.getElementById('auth-pass').value;
+                
+                if(!handle || !email || !pass) { alert("All fields required."); return; }
+                
+                const o = document.getElementById('proc-overlay');
+                o.style.display = 'flex';
+                setTimeout(() => {
+                    localStorage.setItem('muze_v11_active', 'true');
+                    localStorage.setItem('muze_handle', handle.toLowerCase().includes('.pri') ? handle.toLowerCase() : handle.toLowerCase() + '.pri');
+                    location.reload();
+                }, 2500);
                 return;
             }
             if(action === 'vault_restore') { location.href = 'recover.html'; return; }
