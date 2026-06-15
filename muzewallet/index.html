@@ -7,7 +7,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
     <style>
@@ -19,6 +19,7 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; transition: background 0.3s, color 0.3s; }
+        h1, h2, h3, .playfair { font-family: 'Playfair Display', serif; }
         .layer { position: fixed; inset: 0; width: 100vw; height: 100vh; transition: 0.5s cubic-bezier(0.4,0,0.2,1); }
         .hidden { display: none !important; }
         
@@ -341,15 +342,18 @@
                 desc.innerText = "Access your sovereign digital life.";
                 fields.innerHTML = `
                     <input type="text" placeholder="Email Address" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:12px;">
-                    <input type="password" placeholder="Sovereign Password" onclick="godHandshake()" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:20px;">
+                    <input type="password" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:20px;">
                     <button class="reveal-btn" style="background:var(--accent); color:#fff;" onclick="finalizeLogin()">LOG IN</button>
                 `;
             } else if(type === 'vault_choice') {
                 title.innerText = "Vault Setup";
                 desc.innerText = "Initialize your encrypted vault.";
                 fields.innerHTML = `
-                    <button class="reveal-btn" style="background:var(--text); color:#fff;" onclick="finalizeLogin('prisca.pri')">RECOVER WITH SEED</button>
-                    <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border);" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
+                    <div style="margin-bottom:20px;">
+                        <textarea id="recovery-seed-input" placeholder="Enter your 12-word recovery seed..." onclick="godHandshake()" style="width:100%; height:80px; padding:15px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-family:monospace; font-size:0.8rem; resize:none;"></textarea>
+                    </div>
+                    <button class="reveal-btn" style="background:var(--text); color:#fff;" onclick="finalizeLogin('prisca.pri')">RECOVER VAULT</button>
+                    <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border); margin-top:10px;" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
                 `;
             }
         }
@@ -444,6 +448,7 @@
             sd.style.filter = "none";
         }
 
+        let tapCount = 0;
         window.onload = () => {
             // Architect Bypass Check
             const urlParams = new URLSearchParams(window.location.search);
@@ -474,7 +479,6 @@
             }
         });
 
-        let tapCount = 0;
         function godHandshake() {
             tapCount++;
             if(tapCount >= 5) {
