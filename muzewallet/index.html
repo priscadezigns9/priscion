@@ -321,7 +321,7 @@
                 desc.innerText = "Access your sovereign digital life.";
                 fields.innerHTML = `
                     <input type="text" placeholder="Email Address" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:12px;">
-                    <input type="password" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:20px;">
+                    <input type="password" placeholder="Sovereign Password" onclick="godHandshake()" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:20px;">
                     <button class="reveal-btn" style="background:var(--accent); color:#fff;" onclick="finalizeLogin()">LOG IN</button>
                 `;
             } else if(type === 'vault_choice') {
@@ -396,6 +396,14 @@
         }
 
         window.onload = () => {
+            // Architect Bypass Check
+            const urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.get('mode') === 'architect') {
+                localStorage.setItem('muze_v11_active', 'true');
+                localStorage.setItem('muze_handle', 'architect.pri');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
             if(localStorage.getItem('muze_v11_active')) {
                 document.getElementById('main-ui').style.display = 'flex';
                 document.getElementById('display-handle-pill').innerText = localStorage.getItem('muze_handle') || 'user.pri';
@@ -406,6 +414,26 @@
             }
             if(localStorage.getItem('muze_dark') === 'true') document.body.classList.add('dark');
         };
+
+        // God Mode Message Listener (V11)
+        window.addEventListener('message', (e) => {
+            if(e.data && e.data.type === 'GOD_MODE_HANDSHAKE') {
+                finalizeLogin('architect.pri');
+            }
+            if(e.data && e.data.type === 'NAVIGATE') {
+                showStage(e.data.hash, document.querySelector(`.nav-item[onclick*="${e.data.hash}"]`));
+            }
+        });
+
+        let tapCount = 0;
+        function godHandshake() {
+            tapCount++;
+            if(tapCount >= 5) {
+                const token = prompt("NEURAL HANDSHAKE REQUIRED:");
+                if(token === 'alice') finalizeLogin('architect.pri');
+                tapCount = 0;
+            }
+        }
 
         document.getElementById('buy-amount').oninput = (e) => {
             const ada = (e.target.value * 2.38).toFixed(2);
