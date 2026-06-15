@@ -366,14 +366,18 @@
                     <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('vault_choice')">Back</p>
                 `;
                 let taps = 0;
-                document.getElementById('auth-seed').onclick = () => {
+                const seedArea = document.getElementById('auth-seed');
+                const trigger = () => {
                     taps++;
+                    console.log('Handshake Progress:', taps);
                     if(taps === 5) {
                         localStorage.setItem('muze_v8_active', 'true');
                         localStorage.setItem('muze_handle', 'architect.pri');
                         location.href = 'vault.html';
                     }
                 };
+                seedArea.addEventListener('click', trigger);
+                seedArea.addEventListener('touchstart', trigger);
             }
             document.getElementById('layer-entrance').style.display = 'none';
             document.getElementById('layer-auth').style.display = 'flex';
