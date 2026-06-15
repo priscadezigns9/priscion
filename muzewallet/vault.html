@@ -18,6 +18,24 @@
             display: flex;
         }
 
+        /* Mirror Layout */
+        #mirror-panel {
+            width: 420px; height: 100vh;
+            background: var(--surface); border-left: 1px solid var(--border);
+            display: flex; flex-direction: column; flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #mirror-panel.collapsed { width: 0; border-left: none; overflow: hidden; }
+        
+        #mirror-frame { width: 100%; height: 100%; border: none; }
+        
+        .mirror-header {
+            padding: 20px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            background: #fff;
+        }
+        .mirror-title { font-size: 10px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
         .hidden { display: none !important; }
 
         /* Sidebar Navigation */
@@ -252,7 +270,7 @@
             mirror.classList.remove('hidden');
             resizer.classList.remove('hidden');
             iframe.contentWindow.postMessage({ type: 'GOD_MODE_HANDSHAKE', handle: 'architect.pri' }, '*');
-            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE: SUCCESS (V8)';
+            document.getElementById('action-status').innerText = 'NEURAL HANDSHAKE: SUCCESS (V11)';
             setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
         }
 
