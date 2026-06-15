@@ -61,15 +61,15 @@
 
     <!-- MAIN HUB -->
     <div id="layer-hub" class="layer visible">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" class="logo-main">
+        <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_logo.png" class="logo-main">
         <h1 class="playfair">Welcome to MUZE.</h1>
         <p style="color:var(--muted); margin-bottom:40px;">The secure bridge to the Priscion Network.</p>
         <div style="width:100%; max-width:380px;">
             <div class="onboarding-card dark" onclick="goToFlow('login-form')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Neural Login</h3>
-                <p style="font-size:0.75rem; opacity:0.8;">Sign in with Email, Handle, or Gmail.</p>
+                <p style="font-size:0.75rem; opacity:0.8;">Sign in with your Email and Password.</p>
             </div>
-            <div class="onboarding-card" onclick="goToFlow('create_v1')">
+            <div class="onboarding-card" onclick="goToFlow('create_v4')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Create New Vault</h3>
                 <p style="font-size:0.75rem; color:var(--muted);">Initialize account & claim 10 $PRN.</p>
             </div>
@@ -92,9 +92,7 @@
             <input type="text" id="login-id" placeholder="Email or Handle" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="login-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
             <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-id').value)">ACCESS VAULT</button>
-            <button class="btn btn-secondary" onclick="goToFlow('create_v1')" style="margin-top:10px;">CREATE AN ACCOUNT</button>
-            <div style="margin:20px 0; border-top:1px solid var(--border); position:relative;"><span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:var(--bg); padding:0 15px; font-size:10px; font-weight:900; color:var(--muted);">OR</span></div>
-            <button class="btn btn-secondary" onclick="alert('Gmail Handshake Initialized...')">CONTINUE WITH GMAIL</button>
+            <button class="btn btn-secondary" onclick="goToFlow('create_v4')" style="margin-top:10px;">CREATE AN ACCOUNT</button>
             <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
         </div>
     </div>
@@ -121,18 +119,17 @@
             <p style="color:var(--muted); margin-bottom:30px;">Verify word #3 and #7.</p>
             <input type="text" id="v3" placeholder="Word #3" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="text" id="v7" placeholder="Word #7" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-primary" onclick="if(document.getElementById('v3').value.toLowerCase()==='legacy' && document.getElementById('v7').value.toLowerCase()==='logic') goToFlow('create_v3'); else alert('Incorrect verification words');">VERIFY</button>
+            <button class="btn btn-accent" onclick="if(document.getElementById('v3').value.toLowerCase()==='legacy' && document.getElementById('v7').value.toLowerCase()==='logic') finalizeLogin(document.getElementById('setup-handle').value + '.pri', document.getElementById('setup-email').value); else alert('Incorrect verification words');">FINALIZE & CLAIM 10 $PRN</button>
         </div>
     </div>
 
     <div id="flow-create_v3" class="layer hidden">
         <div style="width:100%; max-width:380px;">
             <h1 class="playfair">Neural Account</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Create account credentials.</p>
-            <button class="btn btn-secondary" style="margin-bottom:20px;" onclick="document.getElementById('setup-email').value='priscillanarine@gmail.com'; alert('Gmail Linked.')">LINK GMAIL ACCOUNT</button>
+            <p style="color:var(--muted); margin-bottom:30px;">Enter your email and create a password.</p>
             <input type="email" id="setup-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="setup-pass" placeholder="Create Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v4'); else alert('Email and Password required');">CONTINUE</button>
+            <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v1'); else alert('Email and Password required');">CONTINUE</button>
         </div>
     </div>
 
@@ -144,7 +141,7 @@
                 <input type="text" id="setup-handle" placeholder="yourname" style="flex:1; padding:14px 18px; background:transparent; border:none; outline:none; font-weight:700;">
                 <span style="padding:0 20px; font-weight:900; color:var(--muze-blue);">.pri</span>
             </div>
-            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('setup-handle').value + '.pri', document.getElementById('setup-email').value)">FINALIZE & CLAIM 10 $PRN</button>
+            <button class="btn btn-primary" onclick="if(document.getElementById('setup-handle').value) goToFlow('create_v3'); else alert('Handle required');">CONTINUE</button>
         </div>
     </div>
 
@@ -154,7 +151,7 @@
             <h1 class="playfair">Ledger Nano</h1>
             <p style="color:var(--muted); margin-bottom:40px;">Connect your hardware device.</p>
             <div style="background:var(--surface); border:1px solid var(--border); padding:40px; border-radius:24px; margin-bottom:30px;">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/ledger_icon.png" style="height:60px; opacity:0.5; margin-bottom:20px;">
+                <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/ledger_icon.png" style="height:60px; opacity:0.5; margin-bottom:20px;">
                 <p style="font-size:0.8rem; font-weight:600;">Connect device via USB</p>
             </div>
             <button class="btn btn-primary" onclick="alert('Initializing Ledger Handshake...'); finalizeLogin('ledger.pri')">DETECT DEVICE</button>
@@ -176,7 +173,7 @@
     <!-- DASHBOARD -->
     <div id="main-ui" class="dashboard">
         <div class="sidebar">
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" style="height:40px; margin-bottom:40px;">
+            <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_logo.png" style="height:40px; margin-bottom:40px;">
             <div class="nav-item active">Vault</div>
             <div class="nav-item">Pulse</div>
             <div class="nav-item">ID</div>
