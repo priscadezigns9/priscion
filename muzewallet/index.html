@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | User Console</title>
+    <title>MUZE | User Console v2.7.2</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;600;900&display=swap">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
     <style>
         :root { 
             --bg: #FDF8F2; --text: #1A1A1A; --muted: #666666; --border: #E5E7EB; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #FFFFFF;
@@ -21,6 +20,7 @@
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; transition: background 0.3s, color 0.3s; }
         h1, h2, h3, .playfair { font-family: 'Playfair Display', serif; }
         
+        /* LAYERS */
         .layer { position: fixed; inset: 0; width: 100vw; height: 100vh; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
         .hidden { transform: translateY(100vh); pointer-events: none; opacity: 0; }
         .visible { transform: translateY(0); pointer-events: all; opacity: 1; }
@@ -35,19 +35,18 @@
         .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
         .btn-accent { background: var(--accent); color: #fff; }
 
+        /* DASHBOARD */
         .dashboard { display: flex; flex-direction: row; height: 100vh; width: 100vw; background: var(--bg); }
         .sidebar { width: 300px; background: var(--surface); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; }
         .content { flex: 1; padding: 60px 80px; overflow-y: auto; }
-        
         .nav-item { padding: 15px 24px; border-radius: 16px; font-weight: 700; font-size: 0.9rem; color: var(--muted); cursor: pointer; transition: 0.3s; }
         .nav-item.active { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
-        
         .balance-card { background: var(--surface); border: 1px solid var(--border); padding: 48px; border-radius: 40px; text-align: center; margin-bottom: 40px; }
         .bal-val { font-size: 4rem; font-weight: 900; color: var(--accent); letter-spacing: -2px; }
-        
         .asset-list { display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
         .asset-item { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
         
+        /* PROCESSING OVERLAY */
         #proc-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 20000; display: none; align-items: center; justify-content: center; flex-direction: column; }
         .loader { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -60,108 +59,91 @@
         <div class="playfair" style="font-weight:900; font-size:1.2rem;">SYNCING...</div>
     </div>
 
-    <!-- MAIN HUB (v2.7 Style Restoration) -->
+    <!-- MAIN HUB (v2.7 Canonical Design) -->
     <div id="layer-hub" class="layer visible">
         <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo-main">
         <h1 class="playfair">Welcome to MUZE.</h1>
         <p style="color:var(--muted); margin-bottom:40px;">The secure bridge to the Priscion Network.</p>
-        
         <div style="width:100%; max-width:380px;">
-            <!-- Neural Login (Existing Users) -->
             <div class="onboarding-card dark" onclick="goToFlow('login-form')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Neural Login</h3>
                 <p style="font-size:0.75rem; opacity:0.8;">Sign in with your Email or Handle.</p>
             </div>
-            
-            <!-- Create New Vault (New Users) -->
             <div class="onboarding-card" onclick="goToFlow('create_v1')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Create New Vault</h3>
-                <p style="font-size:0.75rem; color:var(--muted);">Initialize your account & get 10 $PRN.</p>
+                <p style="font-size:0.75rem; color:var(--muted);">Initialize account & claim 10 $PRN.</p>
             </div>
-
-            <!-- Recover Vault -->
             <div class="onboarding-card" onclick="goToFlow('recover')">
                 <h3 style="font-weight:900; margin-bottom:4px;">Recover (Seed)</h3>
-                <p style="font-size:0.75rem; color:var(--muted);">Restore access via your 12-word phrase.</p>
+                <p style="font-size:0.75rem; color:var(--muted);">Restore via your 12-word phrase.</p>
             </div>
         </div>
     </div>
 
-    <!-- Login Form -->
+    <!-- LOGIN FORM -->
     <div id="flow-login-form" class="layer hidden">
         <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Neural Login</h1>
+            <h1 class="playfair">Neural Login</h1>
             <p style="color:var(--muted); margin-bottom:40px;">Access your sovereign vault.</p>
             <input type="text" id="login-id" placeholder="Email or Handle" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="login-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
             <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-id').value)">ACCESS VAULT</button>
-            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK TO HUB</p>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
         </div>
     </div>
 
-    <!-- CREATE FLOW: Step 1 (Seeds) -->
+    <!-- CREATE VAULT FLOW (Logic Fix: Fixed Seed -> Verification -> Account -> Handle) -->
     <div id="flow-create_v1" class="layer hidden">
         <div style="width:100%; max-width:400px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Security Seed</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Write down these 12 words. They are the ONLY way to recover your vault.</p>
+            <h1 class="playfair">Security Seed</h1>
+            <p style="color:var(--muted); margin-bottom:30px;">Save these 12 words. They are your ONLY recovery key.</p>
             <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; background:var(--surface); padding:20px; border-radius:20px; border:1px solid var(--border); margin-bottom:30px;">
-                <div style="font-size:12px; font-weight:800; padding:10px;">1. asset</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">2. drift</div>
-                <div style="font-size:12px; font-weight:800; padding:10px; color:var(--muze-blue);">3. legacy</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">4. pulse</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">5. node</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">6. orbit</div>
-                <div style="font-size:12px; font-weight:800; padding:10px; color:var(--muze-blue);">7. logic</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">8. vision</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">9. neural</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">10. chill</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">11. maze</div>
-                <div style="font-size:12px; font-weight:800; padding:10px;">12. bridge</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">1. asset</div><div style="font-size:12px; font-weight:800; padding:10px;">2. drift</div><div style="font-size:12px; font-weight:800; padding:10px; color:var(--muze-blue);">3. legacy</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">4. pulse</div><div style="font-size:12px; font-weight:800; padding:10px;">5. node</div><div style="font-size:12px; font-weight:800; padding:10px;">6. orbit</div>
+                <div style="font-size:12px; font-weight:800; padding:10px; color:var(--muze-blue);">7. logic</div><div style="font-size:12px; font-weight:800; padding:10px;">8. vision</div><div style="font-size:12px; font-weight:800; padding:10px;">9. neural</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">10. chill</div><div style="font-size:12px; font-weight:800; padding:10px;">11. maze</div><div style="font-size:12px; font-weight:800; padding:10px;">12. bridge</div>
             </div>
             <button class="btn btn-primary" onclick="goToFlow('create_v2')">I HAVE SAVED THEM</button>
             <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK</p>
         </div>
     </div>
 
-    <!-- CREATE FLOW: Step 2 (Verification) -->
     <div id="flow-create_v2" class="layer hidden">
         <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Verify Shards</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Enter word #3 and #7 to confirm.</p>
+            <h1 class="playfair">Verify Shards</h1>
+            <p style="color:var(--muted); margin-bottom:30px;">Verify word #3 and #7.</p>
             <input type="text" id="v3" placeholder="Word #3" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="text" id="v7" placeholder="Word #7" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-primary" onclick="if(document.getElementById('v3').value.toLowerCase()==='legacy' && document.getElementById('v7').value.toLowerCase()==='logic') goToFlow('create_v3'); else alert('Fail');">VERIFY</button>
+            <button class="btn btn-primary" onclick="if(document.getElementById('v3').value.toLowerCase()==='legacy' && document.getElementById('v7').value.toLowerCase()==='logic') goToFlow('create_v3'); else alert('Incorrect verification words');">VERIFY</button>
         </div>
     </div>
 
-    <!-- CREATE FLOW: Step 3 (Email & Password) -->
     <div id="flow-create_v3" class="layer hidden">
         <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Neural Account</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Create your account with email and password.</p>
+            <h1 class="playfair">Neural Account</h1>
+            <p style="color:var(--muted); margin-bottom:30px;">Create account credentials.</p>
             <input type="email" id="setup-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
-            <input type="password" id="setup-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v4'); else alert('Required');">CONTINUE</button>
+            <input type="password" id="setup-pass" placeholder="Create Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
+            <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v4'); else alert('Email and Password required');">CONTINUE</button>
         </div>
     </div>
 
-    <!-- CREATE FLOW: Step 4 (Handle & Finalize) -->
     <div id="flow-create_v4" class="layer hidden">
         <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Claim Handle</h1>
+            <h1 class="playfair">Claim Handle</h1>
             <p style="color:var(--muted); margin-bottom:30px;">Your unique ID on the Prisicon Ledger.</p>
             <div style="display:flex; align-items:center; background:var(--surface); padding:4px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px;">
                 <input type="text" id="setup-handle" placeholder="yourname" style="flex:1; padding:14px 18px; background:transparent; border:none; outline:none; font-weight:700;">
                 <span style="padding:0 20px; font-weight:900; color:var(--muze-blue);">.pri</span>
             </div>
-            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('setup-handle').value + '.pri', document.getElementById('setup-email').value)">FINALIZE SETUP</button>
+            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('setup-handle').value + '.pri', document.getElementById('setup-email').value)">FINALIZE & CLAIM 10 $PRN</button>
         </div>
     </div>
 
-    <!-- RECOVER FLOW -->
+    <!-- RECOVER FLOW (God Mode Handshake Site) -->
     <div id="flow-recover" class="layer hidden">
         <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Recover Vault</h1>
+            <h1 class="playfair">Recover Vault</h1>
             <p style="color:var(--muted); margin-bottom:30px;">Enter your 12-word seed phrase.</p>
             <textarea id="r-seed" placeholder="word1 word2..." style="width:100%; height:120px; padding:20px; border-radius:20px; border:1px solid var(--border); font-family:inherit; margin-bottom:20px; font-weight:600;" onclick="godHandshake()"></textarea>
             <button class="btn btn-primary" onclick="finalizeLogin('recovered.pri')">RECOVER</button>
@@ -174,15 +156,13 @@
         <div class="sidebar">
             <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:40px; margin-bottom:40px;">
             <div class="nav-item active">Vault</div>
-            <div class="nav-item" onclick="alert('Exploring...')">Pulse</div>
-            <div class="nav-item" onclick="alert('Digital ID...')">ID</div>
+            <div class="nav-item">Pulse</div>
+            <div class="nav-item">ID</div>
             <div style="flex:1;"></div>
             <div class="nav-item" onclick="logout()" style="color:#ff3b30;">Logout</div>
         </div>
         <div class="content">
-            <div style="display:flex; justify-content:flex-end; margin-bottom:40px;">
-                <div style="background:var(--surface); border:1px solid var(--border); padding:8px 20px; border-radius:100px; font-weight:900; font-size:0.75rem;" id="display-handle">prisca.pri</div>
-            </div>
+            <div style="display:flex; justify-content:flex-end; margin-bottom:40px;"><div style="background:var(--surface); border:1px solid var(--border); padding:8px 20px; border-radius:100px; font-weight:900; font-size:0.75rem;" id="display-handle">prisca.pri</div></div>
             <div class="balance-card">
                 <div style="font-weight:900; font-size:0.7rem; color:var(--muted); letter-spacing:3px;">VAULT BALANCE</div>
                 <div class="bal-val"><span id="dash-ada">0</span> <span style="font-size:1.5rem; opacity:0.4;">ADA</span></div>
@@ -203,21 +183,18 @@
             if(el) el.className = 'layer visible';
         }
         function finalizeLogin(h, email = "") {
-            if(!h) return;
+            if(!h || h === '.pri') return alert('Handle required');
             if(!h.includes('.pri')) h += '.pri';
             document.getElementById('proc-overlay').style.display = 'flex';
             setTimeout(() => {
                 localStorage.setItem('muze_active', 'true');
                 localStorage.setItem('muze_handle', h);
                 if(email) localStorage.setItem('muze_email', email);
-                
-                // Reward Logic: First time sign up gets 10 $PRN
                 if(localStorage.getItem('muze_balance_prn') === null) {
                     localStorage.setItem('muze_balance_prn', '10');
                     localStorage.setItem('muze_balance_ada', '0');
-                    alert("Welcome! 10 $PRN has been deposited into your vault.");
+                    alert("Account Finalized. 10 $PRN Welcome Drop deposited.");
                 }
-                
                 showDashboard();
                 document.getElementById('proc-overlay').style.display = 'none';
             }, 1500);
