@@ -21,86 +21,102 @@
         .layer { position: fixed; inset: 0; width: 100vw; height: 100vh; transition: 0.5s cubic-bezier(0.4,0,0.2,1); }
         .hidden { display: none !important; }
         
-        /* Dashboard Sidebar */
+        /* Sidebar */
         .sidebar { width: 80px; height: 100vh; background: var(--bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 20px 0; z-index: 100; flex-shrink: 0; }
-        .nav-item { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; transition: 0.3s; color: var(--muted); }
+        .nav-item { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; transition: 0.3s; color: var(--muted); position: relative; }
         .nav-item:hover { background: var(--surface); color: var(--text); }
         .nav-item.active { background: var(--text); color: #fff; }
         .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
 
-        /* Main Content */
+        /* Content */
         .content { flex: 1; height: 100vh; display: flex; flex-direction: column; background: var(--surface); overflow-y: auto; position: relative; }
         .top-bar { height: 70px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
         
-        /* User Profile */
         .user-profile { position: relative; display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .pfp-wrap { width: 36px; height: 36px; border-radius: 100px; background: #e2e8f0; color: #64748b; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .pfp-wrap { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); position: relative; overflow: hidden; border: 2px solid var(--border); }
         .pfp-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .pfp-edit-hint { position: absolute; inset: 0; background: rgba(0,0,0,0.4); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 900; opacity: 0; transition: 0.3s; }
+        .pfp-wrap:hover .pfp-edit-hint { opacity: 1; }
+        
         .user-pill { padding: 6px 12px; border-radius: 100px; background: var(--surface); border: 1px solid var(--border); font-size: 11px; font-weight: 900; }
         .handle-menu { position: absolute; top: 100%; left: 0; margin-top: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: none; flex-direction: column; width: 220px; padding: 8px; z-index: 500; }
         .menu-item { padding: 12px; font-size: 11px; font-weight: 700; border-radius: 8px; display: flex; align-items: center; gap: 10px; transition: 0.2s; color: var(--muted); cursor: pointer; }
         .menu-item:hover { background: var(--surface); color: var(--text); }
 
-        /* Stages */
-        .stage { padding: 40px; display: flex; flex-direction: column; gap: 30px; animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .stage { padding: 40px; display: flex; flex-direction: column; gap: 30px; max-width: 1000px; margin: 0 auto; width: 100%; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .stat-card { background: var(--bg); padding: 25px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; }
         .stat-label { font-size: 10px; font-weight: 900; text-transform: uppercase; color: var(--muted); letter-spacing: 2px; }
-        .stat-value { font-size: 1.8rem; font-weight: 900; margin-top: 10px; }
-
-        /* Buttons */
         .reveal-btn { width: 100%; padding: 16px; border-radius: 12px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1px; cursor: pointer; transition: 0.3s; border: none; }
-        .reveal-btn.primary { background: var(--text); color: #fff; }
-        .reveal-btn.accent { background: var(--accent); color: #fff; }
-        .reveal-btn.ghost { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-
-        /* Modal */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 5000; }
-        .modal-box { background: var(--bg); padding: 30px; border-radius: 24px; width: 90%; max-width: 400px; text-align: center; }
-
-        /* App Viewer */
-        #app-viewer { position: fixed; inset: 0; background: var(--bg); z-index: 2000; display: none; flex-direction: column; }
-        #app-frame { border: none; flex: 1; width: 100%; }
-        .app-bar { height: 60px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-
-        /* Search Input */
-        .search-bar { width: 100%; padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); outline: none; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px; }
+        
+        /* Asset List */
+        .asset-row { display: flex; justify-content: space-between; align-items: center; padding: 15px; background: var(--bg); border-radius: 16px; border: 1px solid var(--border); margin-bottom: 10px; transition: 0.2s; }
+        .asset-row:hover { border-color: var(--muze-blue); transform: scale(1.01); }
+        .asset-info { display: flex; align-items: center; gap: 12px; }
+        .asset-icon { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+        
+        /* Buy Modal */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .modal-box { background: var(--bg); width: 90%; max-width: 400px; padding: 30px; border-radius: 24px; text-align: center; }
+        .buy-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); font-weight: 900; font-size: 1.2rem; text-align: center; margin: 20px 0; outline: none; }
     </style>
 </head>
 <body>
-
-    <!-- Processing Overlay -->
-    <div id="proc-overlay" style="position:fixed; inset:0; background:rgba(255,255,255,0.9); z-index:10000; display:none; flex-direction:column; align-items:center; justify-content:center;">
-        <div style="width:50px; height:50px; border:4px solid var(--accent); border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite;"></div>
-        <h3 id="proc-status" style="margin-top:20px; font-weight:900; letter-spacing:2px;">PROCESSING...</h3>
+    <!-- Overlays -->
+    <div id="proc-overlay" style="position:fixed; inset:0; background:#fff; z-index:20000; display:none; flex-direction:column; align-items:center; justify-content:center;">
+        <div style="width:50px; height:50px; border:4px solid var(--accent); border-radius:12px; animation:spin 1s infinite linear;"></div>
+        <h2 style="margin-top:20px; font-weight:900; letter-spacing:3px;">SYNCING...</h2>
+        <style>@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style>
     </div>
-    <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
 
-    <!-- App Viewer -->
-    <div id="app-viewer">
-        <div class="app-bar">
+    <!-- Entrance -->
+    <div id="layer-entrance" class="layer" style="background:#fff; z-index:7000; display:none; flex-direction:column; align-items:center; justify-content:center;">
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:80px; margin-bottom:30px;">
+        <h1 style="font-weight:900; font-size:2.5rem; margin-bottom:10px;">MUZE</h1>
+        <p style="color:var(--muted); margin-bottom:40px; font-size:0.9rem;">The Sovereign Gateway.</p>
+        <div style="display:flex; flex-direction:column; gap:12px; width:100%; max-width:320px;">
+            <button class="reveal-btn" style="background:var(--text); color:#fff;" onclick="showAuth('login')">NEURAL LOGIN</button>
+            <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border);" onclick="showAuth('vault_choice')">VAULT SETUP</button>
+        </div>
+    </div>
+
+    <!-- Modals (Buy/Auth/App) -->
+    <div id="buy-modal" class="modal">
+        <div class="modal-box">
+            <h2 style="font-weight:900;">Buy Crypto</h2>
+            <p style="font-size:0.8rem; color:var(--muted); margin-top:5px;">Direct settlement to your Sovereign Vault.</p>
+            <div style="margin-top:25px; text-align:left;">
+                <label style="font-size:10px; font-weight:900; color:var(--muted); text-transform:uppercase;">Buy Amount (USD)</label>
+                <input type="number" id="buy-amount" class="buy-input" value="100">
+                <div id="buy-calc" style="font-size:10px; font-weight:900; color:var(--muze-blue); text-align:center; margin-bottom:20px;">≈ 238.10 ADA</div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <button class="reveal-btn" style="background:#0070ba; color:#fff;" onclick="initiatePurchase('PayPal')">PAY WITH PAYPAL</button>
+                <button class="reveal-btn" style="background:var(--text); color:#fff;" onclick="initiatePurchase('Credit Card')">PAY WITH CREDIT CARD</button>
+                <button class="reveal-btn" style="background:none; color:var(--muted);" onclick="closeModal('buy-modal')">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal" style="background:rgba(255,255,255,0.98);">
+        <div class="modal-box" style="box-shadow:none;">
+            <h2 id="auth-title" style="font-weight:900;">Auth</h2>
+            <p id="auth-desc" style="font-size:0.8rem; color:var(--muted);"></p>
+            <div id="auth-fields" style="margin-top:30px;"></div>
+            <button onclick="closeModal('auth-modal')" style="background:none; border:none; color:var(--muted); font-size:10px; font-weight:900; cursor:pointer; margin-top:20px; letter-spacing:2px;">GO BACK</button>
+        </div>
+    </div>
+
+    <div id="app-viewer" style="position:fixed; inset:0; background:#fff; z-index:30000; display:none; flex-direction:column;">
+        <div style="height:60px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 20px;">
             <h4 id="app-name" style="font-weight:900; letter-spacing:2px;">APP</h4>
             <button onclick="closeApp()" style="background:var(--text); color:#fff; border:none; padding:8px 20px; border-radius:100px; font-weight:900; font-size:10px; cursor:pointer;">CLOSE</button>
         </div>
-        <iframe id="app-frame" src=""></iframe>
+        <iframe id="app-frame" style="flex:1; border:none;" src=""></iframe>
     </div>
 
-    <!-- Modals -->
-    <div id="buy-modal" class="modal">
-        <div class="modal-box">
-            <h2 style="font-weight:900; margin-bottom:10px;">Buy Crypto</h2>
-            <p style="font-size:0.85rem; color:var(--muted); margin-bottom:25px;">Select your preferred payment gateway.</p>
-            <button class="reveal-btn ghost" style="margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:10px;" onclick="initiatePurchase('PayPal')">
-                <img src="https://www.paypalobjects.com/webstatic/mktg/logo/pp_cc_mark_37x23.jpg" height="20"> PAYPAL
-            </button>
-            <button class="reveal-btn ghost" onclick="initiatePurchase('Credit Card')">CREDIT CARD</button>
-            <button class="reveal-btn" style="background:none; margin-top:15px; color:var(--muted); font-size:10px;" onclick="closeModal('buy-modal')">CANCEL</button>
-        </div>
-    </div>
-
-    <div id="main-ui" style="display:flex; width:100vw; height:100vh;">
-        <!-- Sidebar -->
+    <!-- Dashboard -->
+    <div id="main-ui" style="display:none; flex-direction:row; width:100vw; height:100vh;">
         <div class="sidebar">
             <div style="padding:10px 10px 40px;"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:35px;"></div>
             <div class="nav-item active" onclick="showStage('dash', this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
@@ -109,259 +125,299 @@
             <div class="nav-item" onclick="showStage('vault', this)"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
             <div class="nav-item" onclick="showStage('stake', this)"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg></div>
             <div style="margin-top:auto;">
-                <div class="nav-item" onclick="toggleDark()" id="mode-btn">
-                    <svg id="mode-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
-                </div>
+                <div class="nav-item" onclick="toggleDark()"><svg id="mode-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg></div>
             </div>
         </div>
 
-        <!-- Content Area -->
         <div class="content">
             <div class="top-bar">
                 <div class="user-profile" id="profile-container">
-                    <div class="pfp-wrap" id="user-pfp-wrap">
-                        <img id="user-pfp-img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E">
+                    <div class="pfp-wrap" onclick="triggerPfpUpload(event)">
+                        <img id="user-pfp-img" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pd_icon_512.png">
+                        <div class="pfp-edit-hint">EDIT</div>
                     </div>
                     <div class="user-pill"><span id="display-handle-pill">prisca.pri</span></div>
                     <div class="handle-menu" id="handle-menu">
-                        <div class="menu-item" onclick="triggerPfpUpload()"><span>📷</span> Change Photo</div>
-                        <div class="menu-item" onclick="alert('Creating New Wallet...')"><span>✦</span> New Wallet</div>
-                        <div class="menu-item" onclick="alert('Restoring Wallet...')"><span>↺</span> Restore Wallet</div>
-                        <div style="border-top:1px solid var(--border); margin:5px 0;"></div>
-                        <div class="menu-item" style="color:#ff3b30;" onclick="logout()"><span>⎋</span> Log Out</div>
+                        <div class="menu-item" onclick="showAuth('vault_choice')"><span>✦</span> MANAGE VAULTS</div>
+                        <div class="menu-item" onclick="alert('Initiating Connect Job...')"><span>⚓</span> CONNECT JOB</div>
+                        <div style="border-top:1px solid var(--border); margin:10px 0;"></div>
+                        <div class="menu-item" onclick="logout()" style="color:#ff3b30;"><span>⎋</span> LOG OUT</div>
                     </div>
                     <input type="file" id="pfp-input" style="display:none;" onchange="handlePfpUpload(this)">
                 </div>
-                <div style="display:flex; gap:20px; align-items:center;">
+                <div style="display:flex; gap:25px; align-items:center;">
                     <div style="text-align:right;">
-                        <p style="font-size:10px; font-weight:900; color:var(--muted); letter-spacing:1px;">AVAILABLE $PRN</p>
-                        <p style="font-size:1.1rem; font-weight:900;" id="prn-balance-val">50,000</p>
+                        <p style="font-size:9px; font-weight:900; color:var(--muted); letter-spacing:1px;">AVAILABLE $PRN</p>
+                        <p style="font-size:1.2rem; font-weight:900;">50,000</p>
                     </div>
-                    <button class="reveal-btn primary" style="padding:10px 20px; width:auto; margin:0; font-size:10px;" onclick="openModal('buy-modal')">BUY</button>
+                    <button class="reveal-btn" style="padding:10px 20px; background:var(--text); color:#fff; width:auto; margin:0;" onclick="openBuy()">BUY</button>
                 </div>
             </div>
 
-            <!-- DASHBOARD STAGE -->
+            <!-- Dash Stage -->
             <div id="stage-dash" class="stage">
                 <div class="stat-grid">
                     <div class="stat-card">
                         <p class="stat-label">Main Account Balance</p>
-                        <p class="stat-value">4.2k <span style="font-size:0.9rem; color:var(--accent);">ADA</span></p>
+                        <h2 style="font-size:2.2rem; font-weight:900; margin-top:10px;">4,250 <span style="font-size:1rem; color:var(--accent);">ADA</span></h2>
                         <div style="display:flex; gap:10px; margin-top:20px;">
-                            <button class="reveal-btn accent" style="padding:8px 15px; font-size:9px; width:auto;">SEND</button>
-                            <button class="reveal-btn ghost" style="padding:8px 15px; font-size:9px; width:auto;">RECEIVE</button>
+                            <button class="reveal-btn" style="padding:10px; background:var(--accent); color:#fff; width:50%;" onclick="alert('Anchoring Send...')">SEND</button>
+                            <button class="reveal-btn" style="padding:10px; background:var(--surface); border:1px solid var(--border); width:50%;" onclick="alert('Receiving address copied.')">RECEIVE</button>
                         </div>
                     </div>
                     <div class="stat-card">
-                        <p class="stat-label">Neural Holding</p>
-                        <p class="stat-value">50,000 <span style="font-size:0.9rem; color:var(--muze-blue);">$PRN</span></p>
-                        <p style="font-size:10px; color:var(--muted); margin-top:8px;">Estimated Value: $12,500.00</p>
+                        <p class="stat-label">Sovereign Asset</p>
+                        <h2 style="font-size:2.2rem; font-weight:900; margin-top:10px;">50,000 <span style="font-size:1rem; color:var(--muze-blue);">$PRN</span></h2>
+                        <p style="font-size:10px; color:var(--muted); margin-top:10px; font-weight:900;">Verified on Procyon Ledger</p>
                     </div>
                 </div>
 
                 <div class="stat-card">
-                    <p class="stat-label" style="margin-bottom:20px;">Cardano Native Assets</p>
-                    <div style="display:flex; flex-direction:column; gap:15px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
-                            <div style="display:flex; gap:12px; align-items:center;">
-                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/jlo.jpg" style="width:36px; height:36px; border-radius:50%;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon.png'">
-                                <div><p style="font-weight:900; font-size:13px;">Jello</p><p style="font-size:10px; color:var(--muted);">$J</p></div>
+                    <p class="stat-label" style="margin-bottom:20px;">Sovereign Assets & Tickers</p>
+                    <div class="asset-list">
+                        <div class="asset-row">
+                            <div class="asset-info">
+                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/jlo.jpg" class="asset-icon">
+                                <div><p style="font-weight:900; font-size:13px;">Jello</p><p style="font-size:10px; color:var(--muted);">$JLO (Privacy)</p></div>
                             </div>
                             <p style="font-weight:900; font-size:13px;">1,250.00</p>
                         </div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
-                            <div style="display:flex; gap:12px; align-items:center;">
-                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg" style="width:36px; height:36px; border-radius:50%;" onerror="this.src='https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon.png'">
-                                <div><p style="font-weight:900; font-size:13px;">Muze USD</p><p style="font-size:10px; color:var(--muted);">$MUSD</p></div>
+                        <div class="asset-row">
+                            <div class="asset-info">
+                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/nrl.jpg" class="asset-icon">
+                                <div><p style="font-weight:900; font-size:13px;">Neural</p><p style="font-size:10px; color:var(--muted);">$NRL (Reserve)</p></div>
+                            </div>
+                            <p style="font-weight:900; font-size:13px;">25,000.00</p>
+                        </div>
+                        <div class="asset-row">
+                            <div class="asset-info">
+                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/atlr.jpg" class="asset-icon">
+                                <div><p style="font-weight:900; font-size:13px;">Atelia</p><p style="font-size:10px; color:var(--muted);">$ATLR (Gaming)</p></div>
+                            </div>
+                            <p style="font-weight:900; font-size:13px;">0.00</p>
+                        </div>
+                        <div class="asset-row">
+                            <div class="asset-info">
+                                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/musd.jpg" class="asset-icon">
+                                <div><p style="font-weight:900; font-size:13px;">Muze USD</p><p style="font-size:10px; color:var(--muted);">$MUSD (Stable)</p></div>
                             </div>
                             <p style="font-weight:900; font-size:13px;">500.00</p>
                         </div>
                     </div>
                 </div>
+
+                <div class="stat-card">
+                    <p class="stat-label" style="margin-bottom:20px;">Cardano Handles</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px;">
+                        <div style="padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; display:flex; align-items:center; gap:8px;">
+                            <span style="width:8px; height:8px; background:#4CD964; border-radius:50%;"></span>
+                            <span style="font-weight:900; font-size:11px;">$prisca</span>
+                        </div>
+                        <div style="padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; display:flex; align-items:center; gap:8px;">
+                            <span style="width:8px; height:8px; background:#4CD964; border-radius:50%;"></span>
+                            <span style="font-weight:900; font-size:11px;">$pricey</span>
+                        </div>
+                        <div style="padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; display:flex; align-items:center; gap:8px; opacity:0.5;">
+                            <span style="width:8px; height:8px; background:var(--muted); border-radius:50%;"></span>
+                            <span style="font-weight:900; font-size:11px;">Discover More...</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- DAPPS STAGE -->
+            <!-- DApps Stage -->
             <div id="stage-dapps" class="stage hidden">
                 <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
-                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('pulse')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">PULSE</h4></div>
-                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('chillata')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">CHILLATA</h4></div>
-                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('lynx')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">LYNX</h4></div>
-                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('leggo')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">LEGGO</h4></div>
-                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('mynt')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png" height="40"><h4 style="margin-top:10px; font-weight:900;">MYNT</h4></div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('pulse')">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png" style="height:40px; margin-bottom:15px;">
+                        <p style="font-weight:900; font-size:12px;">PULSE</p>
+                    </div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('chillata')">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" style="height:40px; margin-bottom:15px;">
+                        <p style="font-weight:900; font-size:12px;">CHILLATA</p>
+                    </div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('lynx')">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/lynx_logo.png" style="height:40px; margin-bottom:15px;">
+                        <p style="font-weight:900; font-size:12px;">LYNX</p>
+                    </div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('leggo')">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/leggo_logo.png" style="height:40px; margin-bottom:15px;">
+                        <p style="font-weight:900; font-size:12px;">LEGGO</p>
+                    </div>
+                    <div class="stat-card" style="text-align:center; cursor:pointer;" onclick="openApp('mynt')">
+                        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png" style="height:40px; margin-bottom:15px;">
+                        <p style="font-weight:900; font-size:12px;">MYNT</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- CARD STAGE -->
+            <!-- Card Stage -->
             <div id="stage-card" class="stage hidden">
                 <div style="max-width:600px; margin:0 auto; width:100%;">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" style="width:100%; border-radius:24px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" style="width:100%; border-radius:24px; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
                     <div class="stat-card" style="margin-top:30px;">
-                        <p class="stat-label">Card Status</p>
-                        <h2 style="font-weight:900; margin-top:10px;">ELITE ACCESS ACTIVE</h2>
-                        <p style="font-size:0.8rem; color:var(--muted); margin-top:10px;">Verified on the Sovereign Ledger. Card #001 Bridge Live.</p>
+                        <p class="stat-label">Procyon Elite Card</p>
+                        <h2 style="font-weight:900; margin-top:10px;">ELITE STATUS ACTIVE</h2>
+                        <p style="font-size:0.85rem; color:var(--muted); margin-top:12px; line-height:1.6;">Your physical-to-digital bridge is verified. You can now use your $PRN and ADA assets for real-world settlement.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- VAULT STAGE -->
+            <!-- Vault Stage -->
             <div id="stage-vault" class="stage hidden">
                 <div class="stat-card">
-                    <p class="stat-label">Collectibles / Handles</p>
-                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:15px; margin-top:20px;" id="handles-list">
-                        <div class="handle-item">🏷️ prisca.pri</div>
-                        <div class="handle-item">🏷️ pricey.pri</div>
-                        <div class="handle-item">🏷️ calalloo.pri</div>
-                        <div class="handle-item">🏷️ ateliagaming.pri</div>
-                        <div class="handle-item">🏷️ nurasen.pri</div>
-                        <div class="handle-item">🏷️ couturegallery.pri</div>
-                        <div class="handle-item">🏷️ thewaymadeknown.pri</div>
-                        <div class="handle-item">🏷️ theautodrome.pri</div>
-                        <div class="handle-item">🏷️ peakfit.pri</div>
-                        <div class="handle-item">🏷️ glowprotocol.pri</div>
-                        <div class="handle-item">🏷️ soleprestige.pri</div>
-                        <div class="handle-item">🏷️ essenceelite.pri</div>
-                        <div class="handle-item">🏷️ theescapist.pri</div>
-                        <div class="handle-item">🏷️ techscouthq.pri</div>
-                        <div class="handle-item">🏷️ quietluxury.pri</div>
-                        <div class="handle-item">🏷️ trustedsignal.pri</div>
-                        <div class="handle-item">🏷️ primeland.pri</div>
-                    </div>
+                    <p class="stat-label">Identity Anchor</p>
+                    <h2 id="display-handle-vault" style="font-weight:900; font-size:2rem; margin-top:10px;">prisca.pri</h2>
+                    <p style="font-size:0.85rem; color:var(--muted); margin-top:10px;">Neural Handshake verified.</p>
                 </div>
-                <style>
-                    .handle-item { background: var(--surface); padding: 12px; border-radius: 12px; text-align: center; border: 1px solid var(--border); font-weight: 900; font-size: 10px; }
-                </style>
                 <div class="stat-card">
                     <p class="stat-label">Recovery Shard</p>
-                    <button class="reveal-btn ghost" style="margin-top:20px;" onclick="revealSeed()">REVEAL SEED PHRASE</button>
-                    <div id="seed-display" style="display:none; margin-top:20px; font-family:monospace; font-size:0.8rem; background:var(--surface); padding:20px; border-radius:12px; line-height:1.8;"></div>
+                    <div id="seed-display" style="filter:blur(12px); margin:25px 0; background:var(--surface); padding:20px; border-radius:16px; font-family:monospace; font-size:0.8rem; border:1px solid var(--border); line-height:1.8;"></div>
+                    <button class="reveal-btn" style="background:var(--surface); border:1px solid var(--border); color:var(--text);" onclick="revealSeed()">REVEAL SEED</button>
                 </div>
             </div>
 
-            <!-- STAKE STAGE -->
+            <!-- Stake Stage -->
             <div id="stage-stake" class="stage hidden">
                 <div class="stat-card">
-                    <p class="stat-label">Staking APY</p>
-                    <h2 style="font-weight:900; margin-top:10px;">8.5% <span style="font-size:1rem; color:var(--muted);">Estimated</span></h2>
+                    <p class="stat-label">Sovereign Staking</p>
+                    <h2 style="font-weight:900; font-size:2.5rem; margin-top:10px;">8.5% <span style="font-size:1.2rem; color:var(--muted);">APY</span></h2>
+                    <p style="font-size:0.85rem; color:var(--muted); margin-top:10px;">Validate the Sovereign Ledger and earn real-time rewards.</p>
                 </div>
                 <div class="stat-card">
-                    <p class="stat-label">Stake Discovery</p>
-                    <input type="text" class="search-bar" id="pool-search" placeholder="Search Staking Pools (e.g. Prisicon, Vespr)..." oninput="searchPools()">
-                    <div id="pools-list" style="display:flex; flex-direction:column; gap:12px;">
-                        <div class="pool-item" style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
-                            <div><p style="font-weight:900; font-size:12px;">Prisicon Pool</p><p style="font-size:10px; color:var(--muted);">Margin: 0% | ROA: 4.8%</p></div>
-                            <button class="reveal-btn accent" style="width:auto; padding:8px 15px; font-size:9px;">STAKE</button>
-                        </div>
-                        <div class="pool-item" style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:15px; border:1px solid var(--border);">
-                            <div><p style="font-weight:900; font-size:12px;">Vespr Pool</p><p style="font-size:10px; color:var(--muted);">Margin: 2% | ROA: 4.5%</p></div>
-                            <button class="reveal-btn ghost" style="width:auto; padding:8px 15px; font-size:9px;">STAKE</button>
+                    <p class="stat-label" style="margin-bottom:15px;">Pool Discovery</p>
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <input type="text" placeholder="Search Staking Pools..." style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--border); background:var(--surface); font-size:0.8rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:var(--surface); border-radius:16px; border:1px solid var(--border);">
+                            <div>
+                                <p style="font-weight:900; font-size:12px;">[PRSC] Prisicon Official</p>
+                                <p style="font-size:10px; color:var(--muted);">Margin: 0% | ROA: 4.8%</p>
+                            </div>
+                            <button class="reveal-btn" style="width:auto; padding:8px 20px; margin:0; background:var(--text); color:#fff; font-size:10px;" onclick="alert('Delegating...')">DELEGATE</button>
                         </div>
                     </div>
                 </div>
+                <div class="stat-card" style="background:var(--accent); color:#fff;">
+                    <p class="stat-label" style="color:rgba(255,255,255,0.7);">Active Stake</p>
+                    <h2 style="font-weight:900; font-size:2rem; margin-top:10px;">0.00 <span style="font-size:1rem; opacity:0.7;">PRN</span></h2>
+                    <button class="reveal-btn" style="background:#fff; color:var(--accent); margin-top:20px;" onclick="alert('Staking logic engaged.')">STAKE NOW</button>
+                </div>
             </div>
-
         </div>
     </div>
 
     <script>
-        function toggleDark() {
-            document.body.classList.toggle('dark');
-            localStorage.setItem('muze_dark', document.body.classList.contains('dark'));
-        }
-        if(localStorage.getItem('muze_dark') === 'true') document.body.classList.add('dark');
-
-        function showStage(stage, el) {
-            document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden'));
-            document.getElementById('stage-' + stage).classList.remove('hidden');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            if(el) el.classList.add('active');
-        }
-
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function initiatePurchase(provider) {
-            const overlay = document.getElementById('proc-overlay');
-            const status = document.getElementById('proc-status');
-            closeModal('buy-modal');
-            overlay.style.display = 'flex';
-            status.innerText = 'CONNECTING...';
+        const supabaseClient = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrdHBqYWNvd3FhZWRkZHRyaHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDk5MzEsImV4cCI6MjA5NDIyNTkzMX0.FK4N_ATFTaUuGXrYu_7OBn3qCdlo0rOzxk-E6TxJxqs');
+        
+        function showAuth(type) {
+            const m = document.getElementById('auth-modal');
+            const title = document.getElementById('auth-title');
+            const desc = document.getElementById('auth-desc');
+            const fields = document.getElementById('auth-fields');
+            m.style.display = 'flex';
             
+            if(type === 'login') {
+                title.innerText = "Neural Login";
+                desc.innerText = "Access your sovereign digital life.";
+                fields.innerHTML = `
+                    <input type="text" placeholder="Email Address" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:12px;">
+                    <input type="password" placeholder="Sovereign Password" style="width:100%; padding:15px; border-radius:10px; border:1px solid var(--border); margin-bottom:20px;">
+                    <button class="reveal-btn" style="background:var(--accent); color:#fff;" onclick="finalizeLogin()">LOG IN</button>
+                `;
+            } else if(type === 'vault_choice') {
+                title.innerText = "Vault Setup";
+                desc.innerText = "Initialize your encrypted vault.";
+                fields.innerHTML = `
+                    <button class="reveal-btn" style="background:var(--text); color:#fff;" onclick="finalizeLogin('prisca.pri')">RECOVER WITH SEED</button>
+                    <button class="reveal-btn" style="background:var(--surface); color:var(--text); border:1px solid var(--border);" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
+                `;
+            }
+        }
+
+        function finalizeLogin(h = 'user.pri') {
+            document.getElementById('proc-overlay').style.display = 'flex';
             setTimeout(() => {
-                status.innerText = `PAYING VIA ${provider.toUpperCase()}...`;
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                    alert(`Purchase Successful! Your $PRN assets have been anchored to your ledger.`);
-                    document.getElementById('prn-balance-val').innerText = '55,000';
-                }, 2000);
-            }, 1500);
-        }
-
-        function openApp(name) {
-            const viewer = document.getElementById('app-viewer');
-            const frame = document.getElementById('app-frame');
-            const appName = document.getElementById('app-name');
-            viewer.style.display = 'flex';
-            appName.innerText = name.toUpperCase();
-            frame.src = name + '.html';
-        }
-
-        function closeApp() {
-            document.getElementById('app-viewer').style.display = 'none';
-            document.getElementById('app-frame').src = '';
-        }
-
-        function searchPools() {
-            const query = document.getElementById('pool-search').value.toLowerCase();
-            const items = document.querySelectorAll('.pool-item');
-            items.forEach(item => {
-                const text = item.innerText.toLowerCase();
-                item.style.display = text.includes(query) ? 'flex' : 'none';
-            });
-        }
-
-        function revealSeed() {
-            const display = document.getElementById('seed-display');
-            display.style.display = display.style.display === 'none' ? 'block' : 'none';
-            display.innerText = "beta ada pulse epsilon neon vault anchor matrix sovereign muze neural logic";
-        }
-
-        // PFP Upload
-        function triggerPfpUpload() { document.getElementById('pfp-input').click(); }
-        function handlePfpUpload(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('user-pfp-img').src = e.target.result;
-                    localStorage.setItem('muze_pfp', e.target.result);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        if(localStorage.getItem('muze_pfp')) document.getElementById('user-pfp-img').src = localStorage.getItem('muze_pfp');
-
-        // Handle Menu
-        document.getElementById('profile-container').onclick = (e) => {
-            const menu = document.getElementById('handle-menu');
-            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-            e.stopPropagation();
-        };
-        window.onclick = () => { document.getElementById('handle-menu').style.display = 'none'; };
-
-        window.addEventListener('message', (e) => {
-            if(e.data.type === 'GOD_MODE_HANDSHAKE') {
                 localStorage.setItem('muze_v11_active', 'true');
-                localStorage.setItem('muze_handle', e.data.handle || 'prisca.pri');
+                localStorage.setItem('muze_handle', h);
                 location.reload();
-            }
-            if(e.data.type === 'NAVIGATE') {
-                showStage(e.data.hash);
-            }
-        });
+            }, 2000);
+        }
 
         function logout() {
             localStorage.clear();
             location.reload();
         }
+
+        function toggleDark() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('muze_dark', document.body.classList.contains('dark'));
+        }
+
+        function showStage(s, el) {
+            document.querySelectorAll('.stage').forEach(x => x.classList.add('hidden'));
+            document.getElementById('stage-'+s).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function openBuy() { document.getElementById('buy-modal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function initiatePurchase(provider) {
+            const amt = document.getElementById('buy-amount').value;
+            alert(`Initiating ${provider} Purchase of $${amt}. Secure checkout window is opening...`);
+            closeModal('buy-modal');
+        }
+
+        function openApp(id) {
+            const apps = { pulse: 'https://orcinos.com/pulse/', chillata: 'https://orcinos.com/chillata/', lynx: 'https://orcinos.com/lynx/', leggo: 'https://orcinos.com/leggo/', mynt: 'https://orcinos.com/mynt/' };
+            document.getElementById('app-name').innerText = id.toUpperCase();
+            document.getElementById('app-frame').src = apps[id];
+            document.getElementById('app-viewer').style.display = 'flex';
+        }
+        function closeApp() { document.getElementById('app-viewer').style.display = 'none'; }
+
+        function triggerPfpUpload(e) { e.stopPropagation(); document.getElementById('pfp-input').click(); }
+        function handlePfpUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('user-pfp-img').src = e.target.result;
+                    localStorage.setItem('muze_user_pfp', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function revealSeed() {
+            const sd = document.getElementById('seed-display');
+            sd.innerText = "beta ada pulse epsilon neon vault anchor matrix sovereign muze neural logic";
+            sd.style.filter = "none";
+        }
+
+        window.onload = () => {
+            if(localStorage.getItem('muze_v11_active')) {
+                document.getElementById('main-ui').style.display = 'flex';
+                document.getElementById('display-handle-pill').innerText = localStorage.getItem('muze_handle') || 'user.pri';
+                document.getElementById('display-handle-vault').innerText = localStorage.getItem('muze_handle') || 'user.pri';
+                if(localStorage.getItem('muze_user_pfp')) document.getElementById('user-pfp-img').src = localStorage.getItem('muze_user_pfp');
+            } else {
+                document.getElementById('layer-entrance').style.display = 'flex';
+            }
+            if(localStorage.getItem('muze_dark') === 'true') document.body.classList.add('dark');
+        };
+
+        document.getElementById('buy-amount').oninput = (e) => {
+            const ada = (e.target.value * 2.38).toFixed(2);
+            document.getElementById('buy-calc').innerText = `≈ ${ada} ADA`;
+        };
+
+        document.getElementById('profile-container').onclick = (e) => {
+            const m = document.getElementById('handle-menu');
+            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+            e.stopPropagation();
+        };
+        window.onclick = () => { document.getElementById('handle-menu').style.display = 'none'; };
     </script>
 </body>
 </html>
