@@ -12,349 +12,238 @@
     <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
     <style>
         :root { 
-            --bg: #FFFFFF; --text: #000; --muted: #64748b; --border: #F1F5F9; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F8FAFC;
+            --bg: #FDF8F2; --text: #1A1A1A; --muted: #666666; --border: #E5E7EB; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #FFFFFF;
         }
         body.dark {
-            --bg: #0A0A0A; --text: #FFFFFF; --muted: #94a3b8; --border: #1E293B; --surface: #111827;
+            --bg: #0A0A0A; --text: #FFFFFF; --muted: #94A3B8; --border: #1E293B; --surface: #111827;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; transition: background 0.3s, color 0.3s; }
         h1, h2, h3, .playfair { font-family: 'Playfair Display', serif; }
-        .layer { position: fixed; inset: 0; width: 100vw; height: 100vh; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; background: var(--bg); display: flex; flex-direction: column; }
+        
+        .layer { position: fixed; inset: 0; width: 100vw; height: 100vh; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
         .hidden { transform: translateY(100vh); pointer-events: none; opacity: 0; }
         .visible { transform: translateY(0); pointer-events: all; opacity: 1; }
         
-        .btn { padding: 18px; border-radius: 14px; font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; cursor: pointer; border: none; transition: 0.3s; text-align: center; width: 100%; }
+        .logo-main { height: 80px; margin-bottom: 30px; }
+        .onboarding-card { background: var(--surface); border: 1px solid var(--border); padding: 32px; border-radius: 28px; text-align: left; cursor: pointer; width: 100%; max-width: 380px; margin-bottom: 16px; transition: 0.3s; }
+        .onboarding-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .onboarding-card.dark { background: #000; color: #fff; border: none; }
+        
+        .btn { padding: 18px; border-radius: 14px; font-weight: 900; font-size: 0.8rem; letter-spacing: 1px; cursor: pointer; border: none; transition: 0.3s; text-align: center; width: 100%; margin-bottom: 12px; }
         .btn-primary { background: var(--text); color: #fff; }
         .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
         .btn-accent { background: var(--accent); color: #fff; }
 
-        .dashboard { display: flex; flex-direction: column; height: 100vh; width: 100vw; background: var(--bg); }
-        .top-nav { padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .logo { height: 32px; width: auto; cursor: pointer; }
+        .dashboard { display: flex; flex-direction: row; height: 100vh; width: 100vw; background: var(--bg); }
+        .sidebar { width: 300px; background: var(--surface); border-right: 1px solid var(--border); padding: 40px 20px; display: flex; flex-direction: column; gap: 10px; }
+        .content { flex: 1; padding: 60px 80px; overflow-y: auto; }
         
-        .pill-container { display: flex; gap: 8px; }
-        .pill { padding: 8px 16px; border-radius: 100px; background: var(--surface); border: 1px solid var(--border); font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-        .pill.active { background: var(--text); color: #fff; border-color: var(--text); }
-
-        .main-content { flex: 1; display: flex; padding: 40px; gap: 40px; overflow-y: auto; }
-        .sidebar { width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: 20px; }
-        .view-pane { flex: 1; background: var(--surface); border-radius: 32px; border: 1px solid var(--border); padding: 40px; position: relative; overflow: hidden; }
-
-        .balance-card { background: var(--text); color: #fff; padding: 32px; border-radius: 24px; }
-        .bal-label { font-size: 10px; opacity: 0.6; font-weight: 800; letter-spacing: 2px; margin-bottom: 8px; }
-        .bal-value { font-size: 32px; font-weight: 900; margin-bottom: 20px; }
+        .nav-item { padding: 15px 24px; border-radius: 16px; font-weight: 700; font-size: 0.9rem; color: var(--muted); cursor: pointer; transition: 0.3s; }
+        .nav-item.active { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
         
-        .asset-list { display: flex; flex-direction: column; gap: 12px; }
-        .asset-item { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; }
-        .asset-icon { width: 40px; height: 40px; border-radius: 10px; background: #fff; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; border: 1px solid var(--border); }
-        .asset-info { flex: 1; }
-        .asset-name { font-size: 14px; font-weight: 700; }
-        .asset-symbol { font-size: 10px; color: var(--muted); font-weight: 600; }
-        .asset-amount { font-weight: 900; font-size: 14px; }
-
-        .flow-container { max-width: 400px; width: 100%; margin: auto; text-align: center; }
-        #proc-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 1000; display: none; align-items: center; justify-content: center; flex-direction: column; }
+        .balance-card { background: var(--surface); border: 1px solid var(--border); padding: 48px; border-radius: 40px; text-align: center; margin-bottom: 40px; }
+        .bal-val { font-size: 4rem; font-weight: 900; color: var(--accent); letter-spacing: -2px; }
+        
+        .asset-list { display: flex; flex-direction: column; gap: 12px; max-width: 600px; margin: 0 auto; }
+        .asset-item { background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        #proc-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 2000; display: none; align-items: center; justify-content: center; flex-direction: column; }
         .loader { width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Modal Styles */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal { background: var(--bg); border-radius: 24px; padding: 32px; width: 100%; max-width: 440px; position: relative; }
     </style>
 </head>
 <body>
 
     <div id="proc-overlay">
         <div class="loader"></div>
-        <div class="playfair" style="font-weight:900; font-size:1.2rem; letter-spacing:1px;">SYNCING LEDGER...</div>
+        <div class="playfair" style="font-weight:900; font-size:1.2rem;">SYNCING...</div>
     </div>
 
-    <!-- Entrance Layer (Brand Hub) -->
-    <div id="layer-entrance" class="layer visible" style="justify-content:center; align-items:center; padding:40px; text-align:center;">
-        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:80px; margin-bottom:40px;">
-        <h1 class="playfair" style="font-size:3rem; margin-bottom:10px;">MUZE</h1>
-        <p style="color:var(--muted); max-width:400px; margin-bottom:40px; line-height:1.6;">The sovereign gateway to the Prisicon Ledger. Manage assets, verify identity, and explore the network from a single high-fidelity hub.</p>
+    <!-- Hub Layer -->
+    <div id="layer-hub" class="layer visible">
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo-main">
+        <h1 class="playfair">Welcome to MUZE.</h1>
+        <p style="color:var(--muted); margin-bottom:40px;">The secure bridge to the Priscion Network.</p>
         
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; width:100%; max-width:600px;">
-            <div style="padding:40px; background:var(--surface); border-radius:32px; border:1px solid var(--border); text-align:left;">
-                <h3 class="playfair" style="margin-bottom:10px;">Neural Vault</h3>
-                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:20px;">Access your private reserve and sovereign digital assets.</p>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <button class="btn btn-primary" onclick="enterVault()">OPEN VAULT</button>
-                    <button class="btn btn-accent" onclick="goToFlow('login')">NEURAL LOGIN</button>
-                </div>
+        <div id="hub-main" style="width:100%; max-width:380px;">
+            <div class="onboarding-card dark" onclick="goToFlow('login-choice')">
+                <h3 style="font-weight:900; margin-bottom:4px;">Neural Login</h3>
+                <p style="font-size:0.75rem; opacity:0.8;">Access your sovereign digital life.</p>
             </div>
-            <div style="padding:40px; background:var(--surface); border-radius:32px; border:1px solid var(--border); text-align:left;">
-                <h3 class="playfair" style="margin-bottom:10px;">Sovereign ID</h3>
-                <p style="font-size:0.8rem; color:var(--muted); margin-bottom:20px;">Your .pri handle is your identity across the network.</p>
-                <button class="btn btn-secondary" onclick="goToFlow('setup-choice')">INITIALIZE</button>
+            <div class="onboarding-card" onclick="goToFlow('vault-choice')">
+                <h3 style="font-weight:900; margin-bottom:4px;">Vault Setup</h3>
+                <p style="font-size:0.75rem; color:var(--muted);">Initialize or recover your vault.</p>
             </div>
         </div>
     </div>
 
-    <!-- Setup Choice Flow -->
-    <div id="flow-setup-choice" class="layer hidden" style="padding:40px;">
-        <div class="flow-container">
-            <h1 class="playfair" style="margin-bottom:10px;">Vault Setup</h1>
-            <p style="color:var(--muted); margin-bottom:40px;">Initialize your encrypted vault.</p>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-                <button class="btn btn-primary" onclick="goToFlow('create_v1')">CREATE NEW VAULT</button>
-                <button class="btn btn-secondary" onclick="goToFlow('recover')">RECOVER WITH SEED</button>
-                <button class="btn btn-secondary" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
-                <div style="margin:20px 0; height:1px; background:var(--border);"></div>
-                <button class="btn btn-accent" onclick="goToFlow('login')">NEURAL LOGIN</button>
-                <button class="btn" style="margin-top:10px; color:var(--muted);" onclick="goToFlow('entrance')">GO BACK</button>
-            </div>
+    <!-- Login Choice -->
+    <div id="flow-login-choice" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
+            <h1 class="playfair" style="margin-bottom:10px;">Neural Login</h1>
+            <p style="color:var(--muted); margin-bottom:40px;">Choose your entry method.</p>
+            <button class="btn btn-primary" onclick="goToFlow('login-form')">SIGN IN (EMAIL/HANDLE)</button>
+            <button class="btn btn-secondary" onclick="goToFlow('create_v4')">CREATE ACCOUNT</button>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK TO HUB</p>
         </div>
     </div>
 
-    <!-- Login Flow (Neural Login) -->
-    <div id="flow-login" class="layer hidden" style="padding:40px;">
-        <div class="flow-container">
+    <!-- Login Form -->
+    <div id="flow-login-form" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Neural Login</h1>
             <p style="color:var(--muted); margin-bottom:40px;">Access your sovereign vault.</p>
-            <input type="text" id="login-handle" placeholder="Handle (e.g. user.pri)" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
+            <input type="text" id="login-id" placeholder="Email or Handle" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
             <input type="password" id="login-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-handle').value)">ACCESS VAULT</button>
-            <button class="btn" style="margin-top:10px; color:var(--muted);" onclick="goToFlow('setup-choice')">GO BACK</button>
+            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('login-id').value)">ACCESS VAULT</button>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('login-choice')">← BACK</p>
         </div>
     </div>
 
-    <!-- Create Flow V1: Seed Display -->
-    <div id="flow-create_v1" class="layer hidden" style="padding:40px;">
-        <div class="flow-container">
+    <!-- Vault Setup Choice -->
+    <div id="flow-vault-choice" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
+            <h1 class="playfair" style="margin-bottom:10px;">Vault Setup</h1>
+            <p style="color:var(--muted); margin-bottom:40px;">Initialize your encrypted vault.</p>
+            <button class="btn btn-primary" onclick="goToFlow('create_v1')">CREATE NEW VAULT</button>
+            <button class="btn btn-secondary" onclick="goToFlow('recover')">RECOVER WITH SEED</button>
+            <button class="btn btn-secondary" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK TO HUB</p>
+        </div>
+    </div>
+
+    <!-- Create Flow: 4-Step Sovereign Protocol -->
+    <div id="flow-create_v1" class="layer hidden">
+        <div style="width:100%; max-width:400px;">
             <h1 class="playfair" style="margin-bottom:10px;">Security Seed</h1>
             <p style="color:var(--muted); margin-bottom:30px;">Write down these 12 words. They are the ONLY way to recover your vault.</p>
             <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; background:var(--surface); padding:20px; border-radius:20px; border:1px solid var(--border); margin-bottom:30px;">
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">1. asset</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">2. drift</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px; background:rgba(90,200,250,0.1); border-radius:10px;">3. legacy</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">4. pulse</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">5. node</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">6. orbit</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px; background:rgba(90,200,250,0.1); border-radius:10px;">7. logic</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">8. vision</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">9. neural</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">10. chill</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">11. maze</div>
-                <div style="font-size:12px; font-weight:800; color:var(--text); padding:10px;">12. bridge</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">1. asset</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">2. drift</div>
+                <div style="font-size:12px; font-weight:800; padding:10px; color:var(--muze-blue);">3. legacy</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">4. pulse</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">5. node</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">6. orbit</div>
+                <div style="font-size:12px; font-weight:800; padding:10px; color:var(--muze-blue);">7. logic</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">8. vision</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">9. neural</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">10. chill</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">11. maze</div>
+                <div style="font-size:12px; font-weight:800; padding:10px;">12. bridge</div>
             </div>
             <button class="btn btn-primary" onclick="goToFlow('create_v2')">I HAVE SAVED THEM</button>
         </div>
     </div>
 
-    <!-- Create Flow V2: Verification -->
-    <div id="flow-create_v2" class="layer hidden" style="padding:40px;">
-        <div class="flow-container">
+    <div id="flow-create_v2" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Verify Shards</h1>
             <p style="color:var(--muted); margin-bottom:30px;">Enter word #3 and #7 to confirm.</p>
-            <input type="text" id="v-word-3" placeholder="Word #3" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
-            <input type="text" id="v-word-7" placeholder="Word #7" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-primary" onclick="verifyCreate()">VERIFY & ENCRYPT</button>
+            <input type="text" id="v3" placeholder="Word #3" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
+            <input type="text" id="v7" placeholder="Word #7" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
+            <button class="btn btn-primary" onclick="if(document.getElementById('v3').value.toLowerCase()==='legacy' && document.getElementById('v7').value.toLowerCase()==='logic') goToFlow('create_v3'); else alert('Fail');">VERIFY</button>
         </div>
     </div>
 
-    <!-- Create Flow V3: Password -->
-    <div id="flow-create_v3" class="layer hidden" style="padding:40px;">
-        <div class="flow-container">
+    <div id="flow-create_v3" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Vault Password</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Used to unlock your local vault session.</p>
-            <input type="password" id="setup-pass" placeholder="Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
+            <p style="color:var(--muted); margin-bottom:30px;">This unlocks your vault locally.</p>
+            <input type="password" id="p1" placeholder="Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
             <button class="btn btn-primary" onclick="goToFlow('create_v4')">SET PASSWORD</button>
         </div>
     </div>
 
-    <!-- Create Flow V4: Handle -->
-    <div id="flow-create_v4" class="layer hidden" style="padding:40px;">
-        <div class="flow-container">
+    <div id="flow-create_v4" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Claim Handle</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Choose your unique identity on the ledger.</p>
+            <p style="color:var(--muted); margin-bottom:30px;">Your unique ID on the Prisicon Ledger.</p>
             <div style="display:flex; align-items:center; background:var(--surface); padding:4px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px;">
-                <input type="text" id="setup-handle" placeholder="yourname" style="flex:1; padding:14px 18px; background:transparent; border:none; outline:none; font-weight:700; font-size:1rem;">
+                <input type="text" id="h1" placeholder="yourname" style="flex:1; padding:14px 18px; background:transparent; border:none; outline:none; font-weight:700;">
                 <span style="padding:0 20px; font-weight:900; color:var(--muze-blue);">.pri</span>
             </div>
-            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('setup-handle').value + '.pri')">FINALIZE SETUP</button>
+            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('h1').value + '.pri')">FINALIZE SETUP</button>
         </div>
     </div>
 
     <!-- Recover Flow -->
-    <div id="flow-recover" class="layer hidden" style="padding:40px;">
-        <div class="flow-container">
+    <div id="flow-recover" class="layer hidden">
+        <div style="width:100%; max-width:380px;">
             <h1 class="playfair" style="margin-bottom:10px;">Recover Vault</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">Enter your 12-word security seed.</p>
-            <textarea id="recover-seed" placeholder="word1 word2 word3..." style="width:100%; height:120px; padding:20px; border-radius:20px; border:1px solid var(--border); font-family:inherit; margin-bottom:20px; font-weight:600;" onclick="godHandshake()"></textarea>
-            <button class="btn btn-primary" onclick="finalizeLogin('recovered.pri')">RECOVER VAULT</button>
-            <button class="btn" style="margin-top:10px; color:var(--muted);" onclick="goToFlow('setup-choice')">GO BACK</button>
+            <p style="color:var(--muted); margin-bottom:30px;">Enter your 12-word seed phrase.</p>
+            <textarea id="r-seed" placeholder="word1 word2..." style="width:100%; height:120px; padding:20px; border-radius:20px; border:1px solid var(--border); font-family:inherit; margin-bottom:20px; font-weight:600;" onclick="godHandshake()"></textarea>
+            <button class="btn btn-primary" onclick="finalizeLogin('recovered.pri')">RECOVER</button>
+            <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('vault-choice')">← BACK</p>
         </div>
     </div>
 
-    <!-- User Dashboard -->
-    <div id="main-ui" style="display:none; flex-direction:column; height:100vh; width:100vw; background:var(--bg);">
-        <nav class="top-nav">
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="logo" onclick="location.reload()">
-            <div class="pill-container">
-                <div class="pill active">Vault</div>
-                <div class="pill" onclick="alert('Exploring the Prisicon Ledger...')">Pulse</div>
-                <div class="pill" onclick="alert('Handles are decentralized identity assets.')">ID</div>
-                <div class="pill" onclick="logout()" style="color:#ff3b30;">Logout</div>
+    <!-- Dashboard -->
+    <div id="main-ui" style="display:none;" class="dashboard">
+        <div class="sidebar">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:40px; margin-bottom:40px;">
+            <div class="nav-item active">Vault</div>
+            <div class="nav-item" onclick="alert('Exploring the Ledger...')">Pulse</div>
+            <div class="nav-item" onclick="alert('Digital Identity Assets active.')">ID</div>
+            <div style="flex:1;"></div>
+            <div class="nav-item" onclick="logout()" style="color:#ff3b30;">Logout</div>
+        </div>
+        <div class="content">
+            <div style="display:flex; justify-content:flex-end; margin-bottom:40px;">
+                <div style="background:var(--surface); border:1px solid var(--border); padding:8px 20px; border-radius:100px; font-weight:900; font-size:0.75rem;" id="display-handle">prisca.pri</div>
             </div>
-        </nav>
-        
-        <main class="main-content">
-            <div class="sidebar">
-                <div class="balance-card">
-                    <div class="bal-label">TOTAL ASSETS</div>
-                    <div class="bal-value"><span id="dash-ada">0</span> <span style="font-size:14px; opacity:0.6;">ADA</span></div>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn btn-primary" style="padding:12px; font-size:10px;" onclick="openBuy()">BUY CRYPTO</button>
-                        <button class="btn btn-secondary" style="padding:12px; font-size:10px; background:rgba(255,255,255,0.1); color:#fff; border:none;" onclick="alert('Sending assets requires biometric verification.')">SEND</button>
-                    </div>
-                </div>
-
-                <div class="bal-label" style="color:var(--muted);">RESERVE ASSETS</div>
-                <div class="asset-list">
-                    <div class="asset-item">
-                        <div class="asset-icon" style="background:#000; color:#fff;">PRN</div>
-                        <div class="asset-info"><div class="asset-name">Prisicon</div><div class="asset-symbol">Network Utility</div></div>
-                        <div class="asset-amount" id="dash-prn">0</div>
-                    </div>
-                    <div class="asset-item">
-                        <div class="asset-icon" style="background:var(--accent); color:#fff;">NRL</div>
-                        <div class="asset-info"><div class="asset-name">Neural</div><div class="asset-symbol">Governance</div></div>
-                        <div class="asset-amount">0</div>
-                    </div>
-                    <div class="asset-item">
-                        <div class="asset-icon" style="background:var(--muze-blue); color:#fff;">JLO</div>
-                        <div class="asset-info"><div class="asset-name">Chillata</div><div class="asset-symbol">Privacy Layer</div></div>
-                        <div class="asset-amount">0</div>
-                    </div>
-                </div>
+            <div class="balance-card">
+                <div style="font-weight:900; font-size:0.7rem; color:var(--muted); letter-spacing:3px;">VAULT BALANCE</div>
+                <div class="bal-val"><span id="dash-ada">0</span> <span style="font-size:1.5rem; opacity:0.4;">ADA</span></div>
             </div>
-
-            <div class="view-pane">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:40px;">
-                    <div>
-                        <h1 class="playfair" style="font-size:2.5rem; margin-bottom:5px;">Digital Identity</h1>
-                        <p style="color:var(--muted); font-size:0.9rem;">Verified on the Prisicon Ledger.</p>
-                    </div>
-                    <div id="display-handle-pill" style="background:var(--text); color:#fff; padding:12px 24px; border-radius:100px; font-weight:900; font-size:0.8rem; letter-spacing:1px;">...</div>
-                </div>
-                
-                <div style="text-align:center; padding:60px; background:#fff; border-radius:32px; border:1px dashed var(--border);">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:60px; opacity:0.1; margin-bottom:20px;">
-                    <p style="color:var(--muted); font-size:0.9rem; font-weight:600;">No secondary handles found in this vault.</p>
-                    <button class="btn btn-secondary" style="margin-top:20px; width:auto; padding:12px 30px;" onclick="goToFlow('create_v4')">CLAIM NEW HANDLE</button>
-                </div>
+            <div class="asset-list">
+                <div class="asset-item"><div><strong>Independent Utility</strong><br><small>$PRN</small></div><div id="dash-prn">0</div></div>
+                <div class="asset-item"><div><strong>Neural Reserve</strong><br><small>$NRL</small></div><div>0</div></div>
+                <div class="asset-item"><div><strong>Chillata Privacy</strong><br><small>$JLO</small></div><div>0</div></div>
             </div>
-        </main>
-    </div>
-
-    <!-- Buy Modal -->
-    <div id="buy-modal" class="modal-overlay">
-        <div class="modal">
-            <h2 class="playfair" style="margin-bottom:10px;">Buy Assets</h2>
-            <p style="color:var(--muted); margin-bottom:24px; font-size:0.9rem;">Securely purchase ADA using PayPal or Credit Card.</p>
-            <input type="number" id="buy-amount" value="50" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:900; font-size:1.5rem; text-align:center;">
-            <div id="paypal-button-container"></div>
-            <button class="btn" style="margin-top:20px; color:var(--muted);" onclick="closeModal('buy-modal')">CANCEL</button>
         </div>
     </div>
 
     <script>
         let tapCount = 0;
-
         function goToFlow(id) {
             document.querySelectorAll('.layer').forEach(l => l.className = 'layer hidden');
             const el = document.getElementById('flow-' + id) || document.getElementById('layer-' + id);
-            if(el) { el.className = 'layer visible'; }
+            if(el) el.className = 'layer visible';
         }
-
-        function enterVault() {
-            if(localStorage.getItem('muze_v11_active')) {
-                showDashboard();
-            } else {
-                goToFlow('setup-choice');
-            }
-        }
-
-        function verifyCreate() {
-            const w3 = document.getElementById('v-word-3').value.toLowerCase();
-            const w7 = document.getElementById('v-word-7').value.toLowerCase();
-            if(w3 === 'legacy' && w7 === 'logic') {
-                goToFlow('create_v3');
-            } else {
-                alert('Verification failed. Check your shard list.');
-            }
-        }
-
-        function showDashboard() {
-            const handle = localStorage.getItem('muze_handle') || 'user.pri';
-            
-            // Hide all layers and Hub
-            document.querySelectorAll('.layer').forEach(l => l.className = 'layer hidden');
-            document.getElementById('layer-entrance').style.display = 'none';
-
-            document.getElementById('main-ui').style.display = 'flex';
-            document.getElementById('display-handle-pill').innerText = handle;
-
-            // Public user data only
-            const userAda = localStorage.getItem('muze_balance_ada') || '0';
-            const userPrn = localStorage.getItem('muze_balance_prn') || '0';
-            document.getElementById('dash-ada').innerText = userAda;
-            document.getElementById('dash-prn').innerText = userPrn;
-        }
-
-        function finalizeLogin(h = 'user.pri') {
+        function finalizeLogin(h) {
+            if(!h) return;
             if(!h.includes('.pri')) h += '.pri';
             document.getElementById('proc-overlay').style.display = 'flex';
             setTimeout(() => {
-                localStorage.setItem('muze_v11_active', 'true');
+                localStorage.setItem('muze_active', 'true');
                 localStorage.setItem('muze_handle', h);
-                
-                if(localStorage.getItem('muze_balance_prn') === null) {
+                if(localStorage.getItem('muze_balance_prn')===null) {
                     localStorage.setItem('muze_balance_prn', '10');
                     localStorage.setItem('muze_balance_ada', '0');
                 }
-
                 showDashboard();
                 document.getElementById('proc-overlay').style.display = 'none';
-            }, 2000);
+            }, 1500);
         }
-
+        function showDashboard() {
+            const h = localStorage.getItem('muze_handle') || 'user.pri';
+            document.querySelectorAll('.layer').forEach(l => l.className = 'layer hidden');
+            document.getElementById('main-ui').style.display = 'flex';
+            document.getElementById('display-handle').innerText = h;
+            document.getElementById('dash-ada').innerText = localStorage.getItem('muze_balance_ada') || '0';
+            document.getElementById('dash-prn').innerText = localStorage.getItem('muze_balance_prn') || '0';
+        }
         function godHandshake() {
             tapCount++;
             if(tapCount >= 5) {
-                // REDIRECT Architect to their dedicated console
-                const token = prompt("NEURAL HANDSHAKE REQUIRED:");
-                if(token === 'alice') {
-                    window.location.href = 'vault.html';
-                }
+                const token = prompt("NEURAL HANDSHAKE:");
+                if(token === 'alice') window.location.href = 'vault.html';
                 tapCount = 0;
             }
         }
-
         function logout() { localStorage.clear(); location.reload(); }
-
-        function openBuy() { document.getElementById('buy-modal').style.display = 'flex'; renderPayPal(); }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        function renderPayPal() {
-            const container = document.getElementById('paypal-button-container');
-            if (container.children.length > 0) return;
-            paypal.Buttons({
-                createOrder: (data, actions) => actions.order.create({ purchase_units: [{ amount: { value: document.getElementById('buy-amount').value } }] }),
-                onApprove: (data, actions) => actions.order.capture().then(() => finalizeLogin())
-            }).render('#paypal-button-container');
-        }
-
-        window.onload = () => {
-            if(localStorage.getItem('muze_v11_active')) {
-                showDashboard();
-            } else {
-                document.getElementById('layer-entrance').style.display = 'flex';
-            }
-        };
+        window.onload = () => { if(localStorage.getItem('muze_active')) showDashboard(); };
     </script>
 </body>
 </html>
