@@ -79,10 +79,10 @@
             <p style="color:var(--muted); font-size:1.1rem; max-width:500px; margin:0 auto 60px; line-height:1.6;">The sovereign gateway to the Prisicon Ledger. Manage assets, verify identity, and explore the network from a single high-fidelity hub.</p>
             
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px; margin-bottom:60px; text-align:left;">
-                <div class="stat-card" style="cursor:pointer;" onclick="goToFlow('login')">
+                <div class="stat-card" style="cursor:pointer;" onclick="showDashboard()">
                     <h3 style="margin-bottom:10px;">Neural Vault</h3>
                     <p style="font-size:0.85rem; color:var(--muted);">Access your private reserve and sovereign digital assets with zero compromise on security.</p>
-                    <button class="btn btn-accent" style="margin-top:20px; width:auto; padding:12px 30px;">OPEN VAULT</button>
+                    <button class="btn btn-accent" style="margin-top:20px; width:auto; padding:12px 30px;" onclick="showDashboard()">OPEN VAULT</button>
                 </div>
                 <div class="stat-card">
                     <h3 style="margin-bottom:10px;">Sovereign ID</h3>
@@ -300,12 +300,19 @@
             }
         }
 
+        function showDashboard() {
+            document.getElementById('main-ui').style.display = 'flex';
+            document.getElementById('layer-entrance').style.display = 'none';
+            document.getElementById('display-handle-pill').innerText = localStorage.getItem('muze_handle') || 'user.pri';
+        }
+
         function finalizeLogin(h = 'user.pri') {
             document.getElementById('proc-overlay').style.display = 'flex';
             setTimeout(() => {
                 localStorage.setItem('muze_v11_active', 'true');
                 localStorage.setItem('muze_handle', h);
-                location.reload();
+                showDashboard();
+                document.getElementById('proc-overlay').style.display = 'none';
             }, 2000);
         }
 
@@ -339,16 +346,21 @@
 
         window.onload = () => {
             const urlParams = new URLSearchParams(window.location.search);
-            if(urlParams.get('mode') === 'architect') {
+            const isArchitect = urlParams.get('mode') === 'architect';
+
+            if(isArchitect) {
                 localStorage.setItem('muze_v11_active', 'true');
                 localStorage.setItem('muze_handle', 'architect.pri');
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
 
+            // Always show Hub first if not a direct wallet link
             if(localStorage.getItem('muze_v11_active')) {
-                document.getElementById('main-ui').style.display = 'flex';
-                document.getElementById('layer-entrance').style.display = 'none';
-                document.getElementById('display-handle-pill').innerText = localStorage.getItem('muze_handle') || 'user.pri';
+                if(urlParams.get('view') === 'wallet' || isArchitect) {
+                    showDashboard();
+                } else {
+                    document.getElementById('layer-entrance').style.display = 'flex';
+                }
             } else {
                 document.getElementById('layer-entrance').style.display = 'flex';
             }
