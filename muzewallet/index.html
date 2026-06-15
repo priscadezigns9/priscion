@@ -183,7 +183,7 @@
             if(el) el.className = 'layer visible';
         }
         function finalizeLogin(h, email = "") {
-            if(!h || h === '.pri') return alert('Handle required');
+            if(!h || h === '.pri' || h === 'recovered.pri') return alert('Please enter a handle or name to proceed.');
             if(!h.includes('.pri')) h += '.pri';
             document.getElementById('proc-overlay').style.display = 'flex';
             setTimeout(() => {
