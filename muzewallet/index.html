@@ -371,8 +371,8 @@
                     taps++;
                     if(taps === 5) {
                         const godPass = prompt("Neural Handshake Initiated. Enter Architect Token:");
-                        if(godPass === 'alice') {
-                            localStorage.setItem('muze_v8_active', 'true');
+                        if(godPass && godPass.toLowerCase() === 'alice') {
+                            localStorage.setItem('muze_v11_active', 'true');
                             localStorage.setItem('muze_handle', 'architect.pri');
                             location.href = 'vault.html';
                         } else {
@@ -435,7 +435,7 @@
                 
                 // USER ARCHITECT LOGIN
                 if(email === 'architect' && pass === 'alice') {
-                    localStorage.setItem('muze_v8_active', 'true');
+                    localStorage.setItem('muze_v11_active', 'true');
                     localStorage.setItem('muze_handle', 'architect.pri');
                     location.href = 'vault.html';
                     return;
@@ -589,7 +589,7 @@
             console.log('Session Status:', { active, handle, seed });
 
             // ARCHITECT MANDATE: Neural Handshake (v8)
-            if(active === 'true' && handle === 'architect.pri') {
+            if(active === 'true' && handle === 'architect.pri' && window.self === window.top) {
                 console.log('ARCHITECT DETECTED - REDIRECTING TO VAULT');
                 location.href = 'vault.html';
                 return;
