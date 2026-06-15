@@ -328,8 +328,11 @@
                     <div class="handle-pill">$calalloo.pri</div>
                 `;
             } else {
-                document.getElementById('dash-ada').innerText = '0';
-                document.getElementById('dash-prn').innerText = '0';
+                // Public user: retrieve their specific balance (including their 10 $PRN welcome bonus)
+                const userAda = localStorage.getItem('muze_balance_ada') || '0';
+                const userPrn = localStorage.getItem('muze_balance_prn') || '0';
+                document.getElementById('dash-ada').innerText = userAda;
+                document.getElementById('dash-prn').innerText = userPrn;
                 document.getElementById('handle-list').innerHTML = `<div class="handle-pill">$${handle.split('.')[0]}</div>`;
             }
         }
@@ -339,6 +342,13 @@
             setTimeout(() => {
                 localStorage.setItem('muze_v11_active', 'true');
                 localStorage.setItem('muze_handle', h);
+                
+                // New User Welcome: Initialize with 10 $PRN for participating in the migration
+                if(h !== 'architect.pri' && h !== 'prisca.pri') {
+                    localStorage.setItem('muze_balance_prn', '10');
+                    localStorage.setItem('muze_balance_ada', '0');
+                }
+
                 showDashboard();
                 document.getElementById('proc-overlay').style.display = 'none';
             }, 2000);
