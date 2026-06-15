@@ -80,7 +80,10 @@
             <div style="padding:40px; background:var(--surface); border-radius:32px; border:1px solid var(--border); text-align:left;">
                 <h3 class="playfair" style="margin-bottom:10px;">Neural Vault</h3>
                 <p style="font-size:0.8rem; color:var(--muted); margin-bottom:20px;">Access your private reserve and sovereign digital assets.</p>
-                <button class="btn btn-primary" onclick="enterVault()">OPEN VAULT</button>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <button class="btn btn-primary" onclick="enterVault()">OPEN VAULT</button>
+                    <button class="btn btn-accent" onclick="goToFlow('login')">NEURAL LOGIN</button>
+                </div>
             </div>
             <div style="padding:40px; background:var(--surface); border-radius:32px; border:1px solid var(--border); text-align:left;">
                 <h3 class="playfair" style="margin-bottom:10px;">Sovereign ID</h3>
@@ -288,8 +291,11 @@
         function showDashboard() {
             const handle = localStorage.getItem('muze_handle') || 'user.pri';
             
-            document.getElementById('main-ui').style.display = 'flex';
+            // Hide all layers and Hub
+            document.querySelectorAll('.layer').forEach(l => l.className = 'layer hidden');
             document.getElementById('layer-entrance').style.display = 'none';
+
+            document.getElementById('main-ui').style.display = 'flex';
             document.getElementById('display-handle-pill').innerText = handle;
 
             // Public user data only
