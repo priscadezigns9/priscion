@@ -84,7 +84,7 @@
             <h1 class="playfair" style="margin-bottom:10px;">Neural Login</h1>
             <p style="color:var(--muted); margin-bottom:40px;">Choose your entry method.</p>
             <button class="btn btn-primary" onclick="goToFlow('login-form')">SIGN IN (EMAIL/HANDLE)</button>
-            <button class="btn btn-secondary" onclick="goToFlow('create_v4')">CREATE ACCOUNT</button>
+            <button class="btn btn-secondary" onclick="goToFlow('create_v3')">CREATE ACCOUNT</button>
             <p style="margin-top:20px; font-size:0.75rem; color:var(--muted); cursor:pointer;" onclick="goToFlow('hub')">← BACK TO HUB</p>
         </div>
     </div>
@@ -148,10 +148,11 @@
 
     <div id="flow-create_v3" class="layer hidden">
         <div style="width:100%; max-width:380px;">
-            <h1 class="playfair" style="margin-bottom:10px;">Vault Password</h1>
-            <p style="color:var(--muted); margin-bottom:30px;">This unlocks your vault locally.</p>
-            <input type="password" id="p1" placeholder="Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
-            <button class="btn btn-primary" onclick="goToFlow('create_v4')">SET PASSWORD</button>
+            <h1 class="playfair" style="margin-bottom:10px;">Neural Account</h1>
+            <p style="color:var(--muted); margin-bottom:30px;">Initialize your profile on the Prisicon Ledger.</p>
+            <input type="email" id="setup-email" placeholder="Email Address" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:12px; font-weight:600;">
+            <input type="password" id="setup-pass" placeholder="Create Vault Password" style="width:100%; padding:18px; border-radius:14px; border:1px solid var(--border); margin-bottom:20px; font-weight:600;">
+            <button class="btn btn-primary" onclick="if(document.getElementById('setup-email').value && document.getElementById('setup-pass').value) goToFlow('create_v4'); else alert('Please fill all fields');">CONTINUE</button>
         </div>
     </div>
 
@@ -160,10 +161,10 @@
             <h1 class="playfair" style="margin-bottom:10px;">Claim Handle</h1>
             <p style="color:var(--muted); margin-bottom:30px;">Your unique ID on the Prisicon Ledger.</p>
             <div style="display:flex; align-items:center; background:var(--surface); padding:4px; border-radius:18px; border:1px solid var(--border); margin-bottom:20px;">
-                <input type="text" id="h1" placeholder="yourname" style="flex:1; padding:14px 18px; background:transparent; border:none; outline:none; font-weight:700;">
+                <input type="text" id="setup-handle" placeholder="yourname" style="flex:1; padding:14px 18px; background:transparent; border:none; outline:none; font-weight:700;">
                 <span style="padding:0 20px; font-weight:900; color:var(--muze-blue);">.pri</span>
             </div>
-            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('h1').value + '.pri')">FINALIZE SETUP</button>
+            <button class="btn btn-accent" onclick="finalizeLogin(document.getElementById('setup-handle').value + '.pri', document.getElementById('setup-email').value)">FINALIZE SETUP</button>
         </div>
     </div>
 
@@ -211,17 +212,22 @@
             const el = document.getElementById('flow-' + id) || document.getElementById('layer-' + id);
             if(el) el.className = 'layer visible';
         }
-        function finalizeLogin(h) {
+        function finalizeLogin(h, email = "") {
             if(!h) return;
             if(!h.includes('.pri')) h += '.pri';
             document.getElementById('proc-overlay').style.display = 'flex';
             setTimeout(() => {
                 localStorage.setItem('muze_active', 'true');
                 localStorage.setItem('muze_handle', h);
-                if(localStorage.getItem('muze_balance_prn')===null) {
+                if(email) localStorage.setItem('muze_email', email);
+                
+                // Reward Logic: First time sign up gets 10 $PRN
+                if(localStorage.getItem('muze_balance_prn') === null) {
                     localStorage.setItem('muze_balance_prn', '10');
                     localStorage.setItem('muze_balance_ada', '0');
+                    alert("Welcome to the Prisicon Ledger! A welcome drop of 10 $PRN has been deposited into your vault.");
                 }
+                
                 showDashboard();
                 document.getElementById('proc-overlay').style.display = 'none';
             }, 1500);
