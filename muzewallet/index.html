@@ -62,6 +62,7 @@
         /* Buy Modal */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         .modal-box { background: var(--bg); width: 90%; max-width: 400px; padding: 30px; border-radius: 24px; text-align: center; }
+        .handle-pill { padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-weight:900; font-size:11px; }
     </style>
 </head>
 <body>
@@ -79,10 +80,10 @@
             <p style="color:var(--muted); font-size:1.1rem; max-width:500px; margin:0 auto 60px; line-height:1.6;">The sovereign gateway to the Prisicon Ledger. Manage assets, verify identity, and explore the network from a single high-fidelity hub.</p>
             
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px; margin-bottom:60px; text-align:left;">
-                <div class="stat-card" style="cursor:pointer;" onclick="showDashboard()">
+                <div class="stat-card" style="cursor:pointer;" onclick="enterVault()">
                     <h3 style="margin-bottom:10px;">Neural Vault</h3>
                     <p style="font-size:0.85rem; color:var(--muted);">Access your private reserve and sovereign digital assets with zero compromise on security.</p>
-                    <button class="btn btn-accent" style="margin-top:20px; width:auto; padding:12px 30px;" onclick="showDashboard()">OPEN VAULT</button>
+                    <button class="btn btn-accent" style="margin-top:20px; width:auto; padding:12px 30px;" onclick="enterVault()">OPEN VAULT</button>
                 </div>
                 <div class="stat-card">
                     <h3 style="margin-bottom:10px;">Sovereign ID</h3>
@@ -117,6 +118,8 @@
                 <input type="password" class="input-field" placeholder="••••••••" id="login-pass">
             </div>
             <button class="btn btn-accent" onclick="finalizeLogin()">LOG IN</button>
+            <p style="margin-top:25px; font-size:12px; font-weight:700; color:var(--muted);">New to the network?</p>
+            <button class="btn btn-secondary" style="margin-top:10px;" onclick="goToFlow('setup_choice')">CREATE ACCOUNT</button>
             <button class="btn" style="margin-top:15px; color:var(--muted);" onclick="goToFlow('entrance')">CANCEL</button>
         </div>
     </div>
@@ -224,29 +227,26 @@
                 </div>
             </div>
 
-            <!-- Dash Stage -->
-            <div id="stage-dash" class="stage">
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
-                    <div class="stat-card">
-                        <p style="font-size:10px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:2px;">Main Balance</p>
-                        <h2 style="font-size:2.2rem; margin-top:10px;">4,250 <span style="font-size:1rem; color:var(--accent);">ADA</span></h2>
-                    </div>
-                    <div class="stat-card">
-                        <p style="font-size:10px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:2px;">Sovereign Asset</p>
-                        <h2 style="font-size:2.2rem; margin-top:10px;">50,000 <span style="font-size:1rem; color:var(--muze-blue);">$PRN</span></h2>
-                    </div>
-                </div>
-                <!-- Handles -->
-                <div class="stat-card">
-                    <p style="font-size:10px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Cardano Handles</p>
-                    <div style="display:flex; flex-wrap:wrap; gap:12px;">
-                        <div style="padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-weight:900; font-size:11px;">$prisca</div>
-                        <div style="padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-weight:900; font-size:11px;">$pricey</div>
-                        <div style="padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-weight:900; font-size:11px;">$prisca.ada.pri</div>
-                        <div style="padding:10px 18px; background:var(--surface); border:1px solid var(--border); border-radius:12px; font-weight:900; font-size:11px;">$ateliagaming.pri</div>
-                    </div>
-                </div>
+    <!-- Dash Stage -->
+    <div id="stage-dash" class="stage">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+            <div class="stat-card">
+                <p style="font-size:10px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:2px;">Main Balance</p>
+                <h2 style="font-size:2.2rem; margin-top:10px;"><span id="dash-ada">0</span> <span style="font-size:1rem; color:var(--accent);">ADA</span></h2>
             </div>
+            <div class="stat-card">
+                <p style="font-size:10px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:2px;">Sovereign Asset</p>
+                <h2 style="font-size:2.2rem; margin-top:10px;"><span id="dash-prn">0</span> <span style="font-size:1rem; color:var(--muze-blue);">$PRN</span></h2>
+            </div>
+        </div>
+        <!-- Handles -->
+        <div class="stat-card">
+            <p style="font-size:10px; font-weight:900; color:var(--muted); text-transform:uppercase; letter-spacing:2px; margin-bottom:20px;">Cardano Handles</p>
+            <div id="handle-list" style="display:flex; flex-wrap:wrap; gap:12px;">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
             <!-- Other stages hidden for brevity in logic restoration -->
         </div>
     </div>
@@ -300,10 +300,38 @@
             }
         }
 
+        function enterVault() {
+            if(localStorage.getItem('muze_v11_active')) {
+                showDashboard();
+            } else {
+                goToFlow('login');
+            }
+        }
+
         function showDashboard() {
+            const handle = localStorage.getItem('muze_handle') || 'user.pri';
+            const isArch = handle === 'architect.pri' || handle === 'prisca.pri';
+
             document.getElementById('main-ui').style.display = 'flex';
             document.getElementById('layer-entrance').style.display = 'none';
-            document.getElementById('display-handle-pill').innerText = localStorage.getItem('muze_handle') || 'user.pri';
+            document.getElementById('display-handle-pill').innerText = handle;
+
+            // Load data based on profile
+            if(isArch) {
+                document.getElementById('dash-ada').innerText = '4,250';
+                document.getElementById('dash-prn').innerText = '50,000';
+                document.getElementById('handle-list').innerHTML = `
+                    <div class="handle-pill">$prisca</div>
+                    <div class="handle-pill">$pricey</div>
+                    <div class="handle-pill">$prisca.ada.pri</div>
+                    <div class="handle-pill">$ateliagaming.pri</div>
+                    <div class="handle-pill">$calalloo.pri</div>
+                `;
+            } else {
+                document.getElementById('dash-ada').innerText = '0';
+                document.getElementById('dash-prn').innerText = '0';
+                document.getElementById('handle-list').innerHTML = `<div class="handle-pill">$${handle.split('.')[0]}</div>`;
+            }
         }
 
         function finalizeLogin(h = 'user.pri') {
