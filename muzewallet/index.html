@@ -169,9 +169,13 @@
             <!-- Stages -->
             <div id="stage-dash" class="stage">
                 <div class="stat-grid">
-                    <div class="stat-card">
+                    <div class="stat-card" style="position:relative;">
                         <p class="stat-label">Sovereign Assets</p>
                         <p class="stat-value">4.2k <span style="font-size:0.9rem; color:var(--accent);">ADA</span></p>
+                        <div style="display:flex; gap:10px; margin-top:15px;">
+                            <button class="reveal-btn" style="padding:8px 12px; margin:0; font-size:9px; background:var(--accent); color:#fff;" onclick="blockchainAction('send_ada')">SEND</button>
+                            <button class="reveal-btn" style="padding:8px 12px; margin:0; font-size:9px; background:var(--surface); border:1px solid var(--border);" onclick="blockchainAction('receive_ada')">RECEIVE</button>
+                        </div>
                     </div>
                     <div class="stat-card">
                         <p class="stat-label">Network Liquidity</p>
@@ -360,6 +364,23 @@
             if(action === 'vault_restore') { location.href = 'recover.html'; return; }
             if(action === 'wallet_create') { showAuth('wizard'); return; }
             if(action === 'buy_prn') { document.getElementById('payment-modal').style.display='flex'; return; }
+            if(action === 'send_ada') {
+                const addr = prompt("Enter Cardano Destination Address:");
+                if(!addr) return;
+                const amt = prompt("Enter ADA Amount:");
+                if(!amt) return;
+                const o = document.getElementById('proc-overlay');
+                o.style.display = 'flex';
+                setTimeout(() => { 
+                    o.style.display = 'none'; 
+                    alert(`Transaction Anchored: ${amt} ADA sent to ${addr.substring(0,8)}...`);
+                }, 2500);
+                return;
+            }
+            if(action === 'receive_ada') {
+                alert("Your Cardano Receive Address:\n\naddr1q8w5s4v0k2hgamm0qnyajmwfe8yfm04u4tdqseutz7st2psya5ha2pv7tgdfddlgagywws83jtzgwznw2wswmchwmw9syfdpxf");
+                return;
+            }
             
             const o = document.getElementById('proc-overlay');
             o.style.display = 'flex';
