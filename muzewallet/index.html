@@ -216,7 +216,11 @@
             }
         }
         function logout() { localStorage.clear(); location.reload(); }
-        window.onload = () => { if(localStorage.getItem('muze_active')) showDashboard(); };
+        window.onload = () => { 
+            // Security Protocol: No auto-entry without re-authentication.
+            // If the user wants to enter their wallet, they must select an onboarding path.
+            console.log("MUZE Node: Security Layer Active.");
+        };
     </script>
 </body>
 </html>
