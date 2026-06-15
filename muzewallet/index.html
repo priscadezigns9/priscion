@@ -294,9 +294,9 @@
             <h3 id="payment-title" style="font-weight:900; margin-bottom:20px;">Payment</h3>
             <p id="payment-desc" style="font-size:0.85rem; color:var(--muted); margin-bottom:30px;">Subscription required.</p>
             <div style="display:flex; flex-direction:column; gap:12px;">
-                <button class="reveal-btn" style="background:#0070BA; color:#fff; border:none;" onclick="alert('PayPal integration active.')">Pay with PayPal</button>
-                <button class="reveal-btn" style="background:#000; color:#fff; border:none;" onclick="alert('Card processing active.')">Credit Card</button>
-                <button class="reveal-btn" id="pay-prn-btn" style="background:var(--accent); color:#fff; border:none;" onclick="alert('Ledger payment active.')">Pay with $PRN</button>
+                <button class="reveal-btn" style="background:#0070BA; color:#fff; border:none;" onclick="alert('PayPal Integration: Initiating Buy ADA flow...')">Buy ADA with PayPal</button>
+                <button class="reveal-btn" style="background:#000; color:#fff; border:none;" onclick="alert('Card Processing: Initiating Buy ADA flow...')">Buy ADA with Credit Card</button>
+                <button class="reveal-btn" id="pay-prn-btn" style="background:var(--accent); color:#fff; border:none;" onclick="alert('Native Settlement: Anchoring $PRN Transaction...')">Pay with $PRN</button>
                 <button class="reveal-btn" style="background:none; border:none; color:var(--muted);" onclick="document.getElementById('payment-modal').style.display='none'">CANCEL</button>
             </div>
         </div>
@@ -369,11 +369,16 @@
                 const seedArea = document.getElementById('auth-seed');
                 const trigger = () => {
                     taps++;
-                    console.log('Handshake Progress:', taps);
                     if(taps === 5) {
-                        localStorage.setItem('muze_v8_active', 'true');
-                        localStorage.setItem('muze_handle', 'architect.pri');
-                        location.href = 'vault.html';
+                        const godPass = prompt("Neural Handshake Initiated. Enter Architect Token:");
+                        if(godPass === 'alice') {
+                            localStorage.setItem('muze_v8_active', 'true');
+                            localStorage.setItem('muze_handle', 'architect.pri');
+                            location.href = 'vault.html';
+                        } else {
+                            alert("Access Denied. Identity mismatch.");
+                            taps = 0;
+                        }
                     }
                 };
                 seedArea.addEventListener('click', trigger);
@@ -562,6 +567,20 @@
             console.log('MUZE WALLET v11 BOOTING...');
             const urlParams = new URLSearchParams(window.location.search);
             if(urlParams.get('reset') === 'true') { localStorage.clear(); }
+
+            // Mirror Communication
+            window.addEventListener('message', (e) => {
+                if(e.data.type === 'GOD_MODE_HANDSHAKE') {
+                    localStorage.setItem('muze_v11_active', 'true');
+                    localStorage.setItem('muze_handle', e.data.handle);
+                    location.reload();
+                }
+                if(e.data.type === 'NAVIGATE') { showStage(e.data.hash); }
+                if(e.data.type === 'ACTION') { 
+                    if(e.data.action === 'vault') showStage('vault');
+                    if(e.data.action === 'card') showStage('card');
+                }
+            });
             
             const active = localStorage.getItem('muze_v11_active') || localStorage.getItem('muze_v8_active');
             const handle = localStorage.getItem('muze_handle');
