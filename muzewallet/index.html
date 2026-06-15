@@ -172,6 +172,16 @@
                 <div class="asset-item"><div><strong>Neural Reserve</strong><br><small>$NRL</small></div><div>0</div></div>
                 <div class="asset-item"><div><strong>Chillata Privacy</strong><br><small>$JLO</small></div><div>0</div></div>
             </div>
+
+            <!-- SECURITY PANEL -->
+            <div style="margin-top:40px; background:var(--surface); border:1px solid var(--border); padding:30px; border-radius:24px;">
+                <h4 style="font-size:0.6rem; font-weight:900; letter-spacing:3px; color:var(--muted); margin-bottom:20px; text-transform:uppercase;">Shield Protocol</h4>
+                <div style="display:flex; gap:10px;">
+                    <input type="password" id="vault-pass" placeholder="Set Shield Password" style="flex:1; padding:15px; border-radius:12px; border:1px solid var(--border); font-size:0.85rem;">
+                    <button onclick="saveVaultPass()" style="background:#000; color:#fff; border:none; padding:0 25px; border-radius:12px; font-weight:900; font-size:0.7rem; cursor:pointer;">LOCK</button>
+                </div>
+                <p style="font-size:0.65rem; color:var(--muted); margin-top:15px; line-height:1.4;">The MUZE Shield Protocol automatically forces a logout after 5 minutes of inactivity. Set a local password above to enhance device-level security.</p>
+            </div>
         </div>
     </div>
 
@@ -182,6 +192,24 @@
             const el = document.getElementById('flow-' + id) || document.getElementById('layer-' + id);
             if(el) el.className = 'layer visible';
         }
+        // Security State
+        let sessionTimeout;
+        const TIMEOUT_DURATION = 5 * 60 * 1000; // 5 Minutes
+
+        function resetSessionTimeout() {
+            if (sessionTimeout) clearTimeout(sessionTimeout);
+            if (localStorage.getItem('muze_active')) {
+                sessionTimeout = setTimeout(() => {
+                    alert('Session expired for security. Please re-authenticate.');
+                    logout();
+                }, TIMEOUT_DURATION);
+            }
+        }
+
+        // Monitor activity
+        window.onclick = resetSessionTimeout;
+        window.onkeypress = resetSessionTimeout;
+
         function finalizeLogin(h, email = "") {
             if(!h || h === '.pri' || h === 'recovered.pri') return alert('Please enter a handle or name to proceed.');
             if(!h.includes('.pri')) h += '.pri';
@@ -216,6 +244,15 @@
             }
         }
         function logout() { localStorage.clear(); location.reload(); }
+        
+        function saveVaultPass() {
+            const p = document.getElementById('vault-pass').value;
+            if(!p) return alert('Enter a password to set the shield.');
+            localStorage.setItem('muze_shield_pass', btoa(p)); // Simple obfuscation
+            alert('Shield Protocol Updated.');
+            document.getElementById('vault-pass').value = '';
+        }
+
         window.onload = () => { 
             // Security Protocol: No auto-entry without re-authentication.
             // If the user wants to enter their wallet, they must select an onboarding path.
