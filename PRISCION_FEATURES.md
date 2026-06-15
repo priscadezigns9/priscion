@@ -22,7 +22,12 @@ This is the canonical document for the Prisicon L1 Ecosystem. It serves as the p
 *   **Dual-Mode Interface**:
     *   **Sovereign Swap**: High-fidelity terminal for exchanging $PRN, $JLLO, $MUSD, $NRL, and $ATLR.
     *   **Liquidity Pools**: Interface for anchoring assets to the ledger. Users earn a 0.2% share of swap fees. Supported pools: PRN/NRL, PRN/MUSD.
-*   **Yield Engine**: Users can stake assets directly to secure the ledger. Target yield: **12.5% APY** in $PRN rewards.
+*   **Yield & Revenue Engine**:
+    *   **Staking (Neural Mining)**: Sustainable yield target: **7% - 8.5% APY**. This is derived from a combination of network emissions and transaction fee redistribution, ensuring long-term economic viability without hyper-inflation.
+    *   **Sovereign Fees (The Revenue Shield)**:
+        *   **Swap Fee**: 0.3% per transaction (0.2% to Liquidity Providers, 0.1% to the Architect/Agency Treasury).
+        *   **Migration Fee**: A one-time activation fee for Web2-to-Web3 brand migrations.
+        *   **API/Business Tiers**: Monthly subscription for high-volume enterprise node access.
 *   **Asset Categorization**:
     *   **Vault**: Primary fungible tokens ($PRN, ADA, NRL). Includes native **SEND** and **RECEIVE** functionality for Cardano ($ADA).
     *   **Collectibles**: Dedicated gallery for **NFTs and ADA Handles**.
