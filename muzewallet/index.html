@@ -13,6 +13,9 @@
         :root { 
             --bg: #FFFFFF; --text: #000; --muted: #64748b; --border: #F1F5F9; --muze-blue: #5AC8FA; --accent: #7B35D4; --surface: #F8FAFC;
         }
+        body.dark {
+            --bg: #0A0A0A; --text: #FFFFFF; --muted: #94a3b8; --border: #1E293B; --surface: #111827;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
         body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; width: 100vw; height: 100vh; }
         .layer { position: fixed; inset: 0; width: 100vw; height: 100vh; transition: 0.5s cubic-bezier(0.4,0,0.2,1); }
@@ -200,13 +203,23 @@
                             </div>
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border);">
                                 <div style="display:flex; gap:10px; align-items:center;">
-                                    <div style="width:30px; height:30px; background:#000; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:10px;">M</div>
+                                    <img src="https://priscion.com/assets/musd.jpg" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
                                     <div>
                                         <p style="font-weight:900; font-size:12px;">Muze USD</p>
                                         <p style="font-size:10px; color:var(--muted);">$MUSD</p>
                                     </div>
                                 </div>
                                 <p style="font-weight:900; font-size:12px;">500.00</p>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border);">
+                                <div style="display:flex; gap:10px; align-items:center;">
+                                    <img src="https://priscion.com/assets/jlo.jpg" style="width:30px; height:30px; border-radius:50%; object-fit:cover;">
+                                    <div>
+                                        <p style="font-weight:900; font-size:12px;">Jello</p>
+                                        <p style="font-size:10px; color:var(--muted);">$JLLO</p>
+                                    </div>
+                                </div>
+                                <p style="font-weight:900; font-size:12px;">1,000.00</p>
                             </div>
                             <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface); border-radius:12px; border:1px solid var(--border); opacity:0.6;">
                                 <div style="display:flex; gap:10px; align-items:center;">
@@ -236,7 +249,8 @@
                 <div class="dapp-grid" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:20px;">
                     <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('pulse')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">PULSE</h4></div>
                     <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('chillata')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">CHILLATA</h4></div>
-                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('riddiim')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/riddiim_logo.jpg" style="height:40px; margin-bottom:10px; border-radius:8px;"><h4 style="font-weight:900;">RIDDIIM</h4></div>
+                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('lynx')"><div style="width:40px; height:40px; background:var(--accent); border-radius:10px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900;">L</div><h4 style="font-weight:900;">LYNX</h4></div>
+                    <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('leggo')"><div style="width:40px; height:40px; background:var(--muze-blue); border-radius:10px; margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900;">L</div><h4 style="font-weight:900;">LEGGO</h4></div>
                     <div class="stat-card" style="cursor:pointer; text-align:center;" onclick="openApp('mynt')"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png" style="height:40px; margin-bottom:10px;"><h4 style="font-weight:900;">MYNT</h4></div>
                 </div>
             </div>
@@ -523,6 +537,7 @@
             localStorage.removeItem('muze_v11_active');
             localStorage.removeItem('muze_handle');
             localStorage.removeItem('muze_seed');
+            localStorage.removeItem('muze_v8_active');
             location.reload();
         }
 
