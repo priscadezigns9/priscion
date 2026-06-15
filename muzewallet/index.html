@@ -434,9 +434,21 @@
                 return;
             }
             
-            const o = document.getElementById('proc-overlay');
-            o.style.display = 'flex';
-            setTimeout(() => { o.style.display = 'none'; }, 2000);
+            if(action === 'vault_restore_confirm') {
+                const seed = document.getElementById('auth-seed').value.trim();
+                if(!seed || seed.split(' ').length < 12) { alert("Valid 12 or 24-word seed phrase required."); return; }
+                const handle = prompt("Vault Recovered. Enter your .pri handle to link to this device (or claim a new one):");
+                if(!handle) return;
+                const o = document.getElementById('proc-overlay');
+                o.style.display = 'flex';
+                setTimeout(() => {
+                    localStorage.setItem('muze_v11_active', 'true');
+                    localStorage.setItem('muze_handle', handle.toLowerCase().includes('.pri') ? handle.toLowerCase() : handle.toLowerCase() + '.pri');
+                    localStorage.setItem('muze_seed', seed.split(' ').join(' | '));
+                    location.reload();
+                }, 2500);
+                return;
+            }
         }
 
         function logout() {
