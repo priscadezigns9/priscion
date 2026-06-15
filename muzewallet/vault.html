@@ -213,7 +213,7 @@
     <!-- Live Mirror -->
     <div id="mirror-panel">
         <div class="mirror-label">LIVE USER LENS</div>
-        <iframe src="index.html" id="mirror-iframe"></iframe>
+        <iframe src="index.html?mode=architect" id="mirror-iframe"></iframe>
     </div>
 
     <script>
@@ -276,7 +276,7 @@
 
         function forceSync() { 
             const iframe = document.getElementById('mirror-iframe');
-            iframe.src = 'index.html?v=' + Date.now(); 
+            iframe.src = 'index.html?mode=architect&v=' + Date.now(); 
             fetchLiveTelemetry(); 
             document.getElementById('action-status').innerText = 'CACHE PURGED: RE-INITIALIZING...';
             setTimeout(() => { document.getElementById('action-status').innerText = ''; }, 2000);
