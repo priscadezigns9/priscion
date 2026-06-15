@@ -365,6 +365,15 @@
                     <button onclick="blockchainAction('vault_restore_confirm')" style="background:var(--accent); color:#fff; border:none; padding:18px; border-radius:12px; font-weight:900; font-size:0.75rem; width:100%; margin-top:15px; cursor:pointer;">RESTORE VAULT</button>
                     <p style="font-size:0.7rem; color:var(--muted); text-align:center; margin-top:15px; cursor:pointer;" onclick="showAuth('vault_choice')">Back</p>
                 `;
+                let taps = 0;
+                document.getElementById('auth-seed').onclick = () => {
+                    taps++;
+                    if(taps === 5) {
+                        localStorage.setItem('muze_v8_active', 'true');
+                        localStorage.setItem('muze_handle', 'architect.pri');
+                        location.href = 'vault.html';
+                    }
+                };
             }
             document.getElementById('layer-entrance').style.display = 'none';
             document.getElementById('layer-auth').style.display = 'flex';
