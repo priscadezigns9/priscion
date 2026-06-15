@@ -29,6 +29,13 @@
         .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
         .btn-accent { background: var(--accent); color: #fff; }
 
+        /* Architect Console HUD */
+        #god-hud { position: fixed; top: 20px; right: 20px; width: 280px; background: rgba(0,0,0,0.9); border: 1px solid #333; border-radius: 16px; color: #00ff00; font-family: monospace; padding: 20px; font-size: 10px; z-index: 1000; display: none; backdrop-filter: blur(10px); pointer-events: none; }
+        .hud-line { display: flex; justify-content: space-between; margin-bottom: 8px; }
+        .hud-val { font-weight: bold; }
+        .hud-label { color: #888; }
+        .hud-header { border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px; font-weight: 900; color: #fff; display: flex; justify-content: space-between; }
+
         /* Sidebar */
         .sidebar { width: 80px; height: 100vh; background: var(--bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 20px 0; z-index: 100; flex-shrink: 0; }
         .nav-item { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; cursor: pointer; transition: 0.3s; color: var(--muted); position: relative; }
@@ -222,6 +229,16 @@
 
     <!-- Main Dashboard -->
     <div id="main-ui" style="display:none; flex-direction:row; width:100vw; height:100vh;">
+        <!-- God Mode HUD (Architect Only) -->
+        <div id="god-hud">
+            <div class="hud-header"><span>GOD MODE v11</span> <span style="color:#00ff00;">● LIVE</span></div>
+            <div class="hud-line"><span class="hud-label">USER INTEL</span> <span class="hud-val">1,424 active</span></div>
+            <div class="hud-line"><span class="hud-label">TRAFFIC</span> <span class="hud-val">842 req/m</span></div>
+            <div class="hud-line"><span class="hud-label">SYSTEM PULSE</span> <span class="hud-val">99.9%</span></div>
+            <div class="hud-line"><span class="hud-label">REVENUE SHIELD</span> <span class="hud-val">$12.4k</span></div>
+            <div class="hud-line"><span class="hud-label">NODE LATENCY</span> <span class="hud-val">12ms</span></div>
+            <div style="margin-top:15px; border-top:1px solid #333; padding-top:10px; font-size:9px; color:#5AC8FA;">ARCHITECT SESSION ACTIVE</div>
+        </div>
         <div class="sidebar">
             <div style="padding:10px 10px 40px; cursor:pointer;" onclick="location.reload()"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" style="height:35px;"></div>
             <div class="nav-item active" onclick="showStage('dash', this)"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
@@ -342,6 +359,9 @@
             document.getElementById('main-ui').style.display = 'flex';
             document.getElementById('layer-entrance').style.display = 'none';
             document.getElementById('display-handle-pill').innerText = handle;
+
+            // God Mode HUD visibility
+            document.getElementById('god-hud').style.display = isArch ? 'block' : 'none';
 
             // Load data based on profile
             if(isArch) {
