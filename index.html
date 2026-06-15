@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Priscion | Architecting Sovereign Reality</title>
-    <link rel="icon" type="image/png" href="https://priscion.com/assets/p-logo.png">
-    <meta name="description" content="Priscion is a global AI brand builder helping you create high quality private digital networks." />
+    <meta name="description" content="Priscion is a global AI brand architecture agency building high-fidelity sovereign digital empires." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
     <style>
@@ -14,7 +13,6 @@
             --text: #1A1A1A;
             --muted: #666666;
             --accent: #7B35D4;
-            --muze-blue: #5AC8FA;
             --border: rgba(0,0,0,0.08);
             --surface: #F9F9F9;
             --font-heading: 'Playfair Display', serif;
@@ -22,152 +20,126 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
 
         nav {
             height: 90px; padding: 0 8%;
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); z-index: 1000;
+            position: sticky; top: 0; background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px); z-index: 1000;
         }
 
-        .logo-wrap img { height: 22px; }
         .nav-links { display: flex; gap: 40px; align-items: center; }
         .nav-links a { 
-            text-decoration: none; color: var(--text); 
-            font-weight: 900; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase;
+            text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.75rem; 
+            letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; 
         }
         .nav-links a:hover { color: var(--accent); }
 
         .btn-muze {
-            background: #000; color: #fff; border: none; padding: 12px 25px; 
-            border-radius: 100px; font-weight: 900; font-size: 0.65rem; 
-            letter-spacing: 2px; cursor: pointer;
+            background: #000; color: #fff; padding: 14px 28px; border-radius: 100px;
+            font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
+            cursor: pointer; transition: 0.3s;
         }
 
-        .hero { padding: 120px 8%; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
-        .hero-tag { font-weight: 900; font-size: 0.7rem; color: var(--muze-blue); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 20px; display: block; }
-        .hero h1 { font-family: var(--font-heading); font-size: 5rem; line-height: 0.95; margin-bottom: 30px; letter-spacing: -2px; }
-        .hero p { font-size: 1.2rem; color: var(--muted); max-width: 500px; margin-bottom: 40px; }
-
-        .dapp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .dapp-card { 
-            background: var(--surface); border: 1px solid var(--border); 
-            padding: 40px; border-radius: 32px; text-decoration: none; color: inherit;
-            transition: transform 0.2s;
+        .hero {
+            padding: 120px 8% 100px; text-align: center;
+            display: flex; flex-direction: column; align-items: center;
         }
-        .dapp-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .dapp-card img { height: 40px; margin-bottom: 25px; }
-        .dapp-card h3 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px; }
-        .dapp-card p { font-size: 0.85rem; color: var(--muted); }
+        .p-logo-hero { width: 60px; margin-bottom: 40px; cursor: pointer; transition: 0.5s; }
+        
+        .kicker { font-weight: 900; font-size: 0.7rem; letter-spacing: 5px; color: var(--muted); text-transform: uppercase; margin-bottom: 20px; }
+        h1 { font-family: var(--font-heading); font-size: 5rem; line-height: 1.1; margin-bottom: 30px; letter-spacing: -2px; }
+        .hero p { max-width: 600px; color: var(--muted); font-size: 1.1rem; margin-bottom: 40px; }
 
-        .section-label { text-align: center; font-weight: 900; font-size: 0.7rem; letter-spacing: 5px; color: #DDD; text-transform: uppercase; margin: 100px 0 50px; }
+        .pillar-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; padding: 0 8% 100px;
+        }
+        .pillar-card {
+            background: var(--surface); border: 1px solid var(--border); padding: 50px 40px;
+            border-radius: 32px; text-decoration: none; color: inherit; transition: 0.3s;
+            text-align: center;
+        }
+        .pillar-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .pillar-card h3 { font-weight: 900; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 15px; text-transform: uppercase; }
+        .pillar-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.6; }
 
-        .services { padding: 0 8% 150px; max-width: 1400px; margin: 0 auto; }
-        .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .service-card { background: #000; color: #fff; padding: 50px; border-radius: 40px; text-align: center; }
-        .service-card h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
-        .service-card p { font-size: 0.9rem; color: #666; margin-bottom: 30px; min-height: 60px; }
-
-        .intel-strip { background: var(--surface); padding: 100px 8%; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .services { padding: 100px 8%; background: #000; color: #fff; border-radius: 60px 60px 0 0; }
+        .service-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
+        .service-card { background: #080808; border: 1px solid #111; padding: 60px; border-radius: 40px; }
+        .service-card h3 { font-weight: 900; font-size: 1rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
+        .service-card .price { font-size: 2rem; font-weight: 300; margin-bottom: 20px; color: var(--accent); }
+        .service-card p { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
 
         footer { padding: 80px 8%; text-align: center; border-top: 1px solid var(--border); }
-        .copyright { font-weight: 900; font-size: 0.6rem; color: #CCC; letter-spacing: 5px; text-transform: uppercase; }
+        .copyright { font-weight: 900; font-size: 0.6rem; letter-spacing: 3px; color: #CCC; text-transform: uppercase; }
 
-        @media (max-width: 1000px) {
-            .hero { grid-template-columns: 1fr; padding-top: 60px; text-align: center; }
-            .hero h1 { font-size: 3.5rem; }
-            .hero p { margin: 0 auto 40px; }
+        #sidebar { position: fixed; top: 0; right: -400px; width: 400px; height: 100%; background: #fff; z-index: 10000; transition: 0.3s; box-shadow: -20px 0 50px rgba(0,0,0,0.1); }
+        #sidebar.active { right: 0; }
+
+        @media (max-width: 1024px) {
+            .pillar-grid { grid-template-columns: 1fr; }
             .service-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 3.5rem; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo-wrap"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/p-logo.png" alt="PRISCION"></div>
-        <div class="nav-links">
-            <a href="pulse/">Explorer</a>
-            <a href="leggo.html">OS</a>
-            <button class="btn-muze" onclick="location.href='muzewallet/index.html'">MUZE WALLET</button>
-        </div>
+        <div class="nav-links"><a href="pulse/">Explorer</a><a href="leggo.html">OS</a></div>
+        <div class="nav-links"><button class="btn-muze" onclick="toggleSidebar()">MUZE WALLET</button></div>
     </nav>
 
-    <main>
-        <section class="hero">
-            <div>
-                <span class="hero-tag">Sovereign Architecture</span>
-                <h1>Architecting<br>Reality.</h1>
-                <p>Migrating the world's elite brands to the Web3 Ledger. High-fidelity intelligence meets absolute autonomy.</p>
-                <div style="display: flex; gap: 20px;">
-                    <a href="signup.html" style="text-decoration: none; background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;">Get Started</a>
-                    <a href="share-to-earn/" style="text-decoration: none; background: var(--accent); color: #fff; padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase;">Share to Earn</a>
-                </div>
-            </div>
-            <div class="dapp-grid">
-                <a href="pulse/" class="dapp-card">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png" alt="PULSE">
-                    <h3>PULSE</h3>
-                    <p>Network Explorer & Activity Hub.</p>
-                </a>
-                <a href="muzewallet/" class="dapp-card">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE">
-                    <h3>MUZE</h3>
-                    <p>Sovereign Vault & Identity.</p>
-                </a>
-                <a href="chillata/" class="dapp-card">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" alt="CHILLATA">
-                    <h3>CHILLATA</h3>
-                    <p>High-Fidelity Asset Exchange.</p>
-                </a>
-                <a href="mynt/" class="dapp-card">
-                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png" alt="MYNT">
-                    <h3>MYNT</h3>
-                    <p>Sovereign NFT Marketplace.</p>
-                </a>
-            </div>
-        </section>
+    <section class="hero">
+        <img src="assets/p-logo.png" class="p-logo-hero" onclick="location.href='/'">
+        <div class="kicker">The Sovereign Ledger</div>
+        <h1>Architecting<br>Reality.</h1>
+        <p>Global brand architecture and high-fidelity digital infrastructure. We build the autonomous systems that power the 2026 digital age.</p>
+    </section>
 
-        <div class="section-label">Empire Migration Services</div>
+    <div class="pillar-grid">
+        <a href="priscion/" class="pillar-card">
+            <h3>PRISCION</h3>
+            <p>Blockchain & Sovereign Ledger. Decentralized brand identity and neural asset protection.</p>
+        </a>
+        <a href="orcinos/" class="pillar-card">
+            <h3>ORCINOS</h3>
+            <p>Advanced Software & AI. SaaS products and neural extensions for elite performance.</p>
+        </a>
+        <a href="dricil/" class="pillar-card">
+            <h3>DRICIL</h3>
+            <p>Autonomous Digital Agency. Done-for-you AI content, SEO, and brand automation.</p>
+        </a>
+    </div>
 
-        <section class="services">
-            <div class="service-grid">
-                <div class="service-card">
-                    <h3>Sovereign Onboarding</h3>
-                    <p>Establishing on-chain identity, .pri handle registration, and MUSE Wallet integration.</p>
-                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='signup.html'">ACQUIRE</button>
-                </div>
-                <div class="service-card">
-                    <h3>Empire Architecture</h3>
-                    <p>Full-spectrum brand synthesis, neural design systems, and multi-node deployment.</p>
-                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='signup.html'">ACQUIRE</button>
-                </div>
-                <div class="service-card">
-                    <h3>Ledger Migration</h3>
-                    <p>Full-scale migration of existing Web2 infrastructure to the Priscion Sovereign Ledger.</p>
-                    <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="location.href='signup.html'">CONSULT</button>
-                </div>
+    <section class="services">
+        <div class="service-grid">
+            <div class="service-card">
+                <h3>Sovereign Onboarding</h3>
+                <div class="price">$1,500.00</div>
+                <p>Establishing on-chain identity, .pri handle registration, and MUZE Wallet integration.</p>
+                <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="toggleSidebar()">ACQUIRE</button>
             </div>
-        </section>
-
-        <section class="intel-strip">
-            <div style="max-width: 1000px; margin: 0 auto;">
-                <span style="font-weight: 900; font-size: 0.6rem; color: var(--muze-blue); letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 20px;">Deep Intelligence Signal</span>
-                <h2 style="font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 30px;">NVIDIA 'Vera Rubin' <br>Independent Infrastructure</h2>
-                <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border: 1px solid var(--border); padding: 40px; border-radius: 24px;">
-                    <p style="font-size: 1.1rem; color: var(--text); margin-bottom: 20px;">The production of the 'Vera Rubin' architecture marks the definitive shift toward Sovereign AI Infrastructure. Priscion is integrating these nodes as the primary compute core for our independent digital networks.</p>
-                    <div style="display: flex; gap: 20px; align-items: center;">
-                        <span style="background: var(--muze-blue); color: white; padding: 5px 15px; border-radius: 100px; font-size: 0.7rem; font-weight: 900;">LIVE DEPLOYMENT</span>
-                        <span style="color: var(--muted); font-size: 0.8rem;">Session ALPHA // 2026.06.12</span>
-                    </div>
-                </div>
+            <div class="service-card">
+                <h3>Empire Architecture</h3>
+                <div class="price">$12,000.00</div>
+                <p>Full-spectrum brand synthesis, neural design systems, and multi-node deployment.</p>
+                <button style="width:100%; padding:18px; border-radius:100px; border:none; font-weight:900; background:#FFF; cursor:pointer;" onclick="toggleSidebar()">ACQUIRE</button>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <footer>
-        <p class="copyright">PRISCION &copy; 2026 | ARCHITECTING REALITY</p>
+        <p class="copyright">Prisca Dezigns Empire &copy; 2026 | Anchored to Eternity</p>
     </footer>
 
+    <div id="sidebar"></div>
+    <script src="wallet-core.js"></script>
+    <script>
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+    </script>
 </body>
 </html>
+
