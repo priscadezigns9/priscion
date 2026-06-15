@@ -136,10 +136,14 @@
         <div class="flow-container">
             <h1 style="margin-bottom:10px;">Vault Setup</h1>
             <p style="color:var(--muted); margin-bottom:40px;">Initialize your encrypted vault.</p>
-            <button class="btn btn-primary" onclick="goToFlow('create_v1')">CREATE NEW VAULT</button>
-            <button class="btn btn-secondary" style="margin-top:12px;" onclick="goToFlow('recover')">RECOVER WITH SEED</button>
-            <button class="btn btn-secondary" style="margin-top:12px;" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
-            <button class="btn" style="margin-top:20px; color:var(--muted);" onclick="goToFlow('entrance')">GO BACK</button>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <button class="btn btn-primary" onclick="goToFlow('create_v1')">CREATE NEW VAULT</button>
+                <button class="btn btn-secondary" onclick="goToFlow('recover')">RECOVER WITH SEED</button>
+                <button class="btn btn-secondary" onclick="alert('Connect Ledger Handshake...')">CONNECT LEDGER</button>
+                <div style="margin:20px 0; height:1px; background:var(--border);"></div>
+                <button class="btn btn-accent" onclick="goToFlow('login')">NEURAL LOGIN</button>
+                <button class="btn" style="margin-top:10px; color:var(--muted);" onclick="goToFlow('entrance')">GO BACK</button>
+            </div>
         </div>
     </div>
 
@@ -327,7 +331,7 @@
             if(localStorage.getItem('muze_v11_active')) {
                 showDashboard();
             } else {
-                goToFlow('login');
+                goToFlow('setup-choice');
             }
         }
 
