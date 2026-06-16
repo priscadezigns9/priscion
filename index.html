@@ -3,438 +3,722 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prisicon | Cardano L1 Blockchain</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
+    <title>Priscion | The Rubik's Globe</title>
+    <!-- GDrive Direct Link Proxy -->
+    <link rel="icon" type="image/png" href="https://share.zapia.com/si99hoojrdxzaoos5dmo1x">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        @keyframes globePulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--purple); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--purple); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--purple); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--purple); } }
         :root {
-            --bg: #FFFFFF;
-            --text: #000000;
-            --accent: #7B35D4;
+            --ivory: #FFFFF0;
+            --lilac: #C8A2C8;
+            --purple: #301934;
+            --text: #1a1a1a;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
+            --accent: #14B8A6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
             font-family: var(--font-body); 
-            background: var(--bg); 
+            background: var(--ivory); 
             color: var(--text); 
-            line-height: 1; 
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            transition: color 0.8s ease;
+            overflow: hidden;
+            height: 100vh;
         }
 
-        .grain {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.05; pointer-events: none; z-index: 50;
-        }
-
-        .sky-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #FFFFFF;
-            z-index: -2;
-            transition: background 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .stars {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
-                radial-gradient(2px 2px at 110px 10px, #eee, rgba(0,0,0,0)),
-                radial-gradient(1px 1px at 150px 80px, #fff, rgba(0,0,0,0));
-            background-repeat: repeat;
-            background-size: 200px 200px;
-            opacity: 0;
-            z-index: -2;
-            transition: opacity 1.2s ease;
+        #ui-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
-        }
-
-        .cloud-wrap {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; pointer-events: none;
-        }
-
-        .cloud {
-            position: absolute;
-            background: radial-gradient(circle, rgba(123, 53, 212, 0.25) 0%, rgba(123, 53, 212, 0) 70%);
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.8;
-            will-change: transform;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px;
         }
 
         header {
-            padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
-            display: flex; justify-content: space-between; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            pointer-events: auto;
         }
-        .logo img { height: 40px; cursor: pointer; transition: height 0.3s ease; }
+
+        .logo-container {
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .logo-img {
+            width: 50px; height: 50px;
+            object-fit: contain;
+            mix-blend-mode: multiply; filter: contrast(120%) brightness(110%);
+            border-radius: 50%;
+        }
+
+        .logo { 
+            font-family: var(--font-heading); 
+            font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px;
+            color: var(--purple);
+            text-transform: lowercase;
+        }
 
         main {
-            position: relative; z-index: 10;
-            max-width: 1000px; margin: 0 auto; padding: 0 40px;
+            text-align: left;
+            pointer-events: auto;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1), color 0.8s ease;
-            margin-bottom: 25vh;
+        .brand-visual-container {
+            display: flex;
+            align-items: center;
+            gap: 35px;
         }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
-        .reveal.fade-out { opacity: 0; transform: translateY(-50px); }
 
-        .hero-title h1 {
+        .dynamic-brand-logo {
+            width: 280px;
+            height: 280px;
+            object-fit: contain;
+            
+            filter: drop-shadow(0 15px 35px rgba(48, 25, 52, 0.2));
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-bottom: 20px;
+        }
+
+        .brand-text-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-label {
+            font-weight: 900; font-size: 0.75rem;
+            letter-spacing: 6px; text-transform: uppercase;
+            color: var(--lilac);
+            margin-bottom: 12px;
+        }
+
+        h1 {
             font-family: var(--font-heading);
-            font-size: clamp(5rem, 15vw, 12rem);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 0.9;
+            color: var(--purple);
+            letter-spacing: -3px;
             font-weight: 900;
-            letter-spacing: -0.06em;
-            line-height: 0.8;
-            margin: 0;
+            text-transform: uppercase;
+            margin-bottom: 15px;
         }
-        .hero-title h1 span { color: var(--accent); font-style: italic; font-weight: 400; }
 
-        .center-btn-group { margin: 100px 0; display: flex; gap: 20px; align-items: center; }
-        .primary-btn {
-            display: inline-block; padding: 25px 60px; background: #000; color: #FFF !important; border-radius: 100px;
-            text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3em;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        .brand-description {
+            font-size: 1rem;
+            color: var(--text);
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
         }
-        .primary-btn:hover { background: var(--accent); transform: translateY(-5px); color: #FFF !important; }
+
+        .price-tag {
+            font-family: var(--font-body);
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--purple);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .view-cta {
+            display: inline-block;
+            padding: 14px 40px;
+            border: 1px solid var(--purple);
+            color: var(--purple);
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 2.5px;
+            transition: all 0.3s ease;
+            width: fit-content;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .view-cta:hover {
+            background: var(--purple);
+            color: var(--ivory);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(48, 25, 52, 0.2);
+        }
+
+        footer {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            pointer-events: auto;
+        }
+
+        .footer-info { 
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-size: 1.1rem; 
+            color: var(--lilac);
+            max-width: 400px;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+
         
-        [data-theme="dark"] .primary-btn { background: #FFF; color: #000 !important; }
-        [data-theme="dark"] .primary-btn:hover { background: var(--accent); color: #FFF !important; }
-
-        .btn-share {
-            display: inline-block; padding: 23px 58px; background: transparent; color: #000 !important; border: 2px solid #000; border-radius: 100px;
-            text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3em;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        #scroll-indicator {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+            align-items: flex-end;
+            pointer-events: auto;
         }
-        .btn-share:hover { background: #000; color: #FFF !important; transform: translateY(-5px); }
-        
-        [data-theme="dark"] .btn-share { color: #FFF !important; border-color: #FFF; }
-        [data-theme="dark"] .btn-share:hover { background: #FFF; color: #000 !important; }
 
-        .narrative {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 400; letter-spacing: -0.05em; line-height: 1;
+        .dot-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            opacity: 0.3;
+            group: dot;
         }
-        .narrative b { font-weight: 900; color: var(--accent); }
 
-        .share-to-earn {
-            margin: 150px 0; padding: 60px; background: rgba(123, 53, 212, 0.05); border: 2px solid #000; border-radius: 40px;
+        .dot-wrapper:hover, .dot-wrapper.active {
+            opacity: 1;
         }
-        [data-theme="dark"] .share-to-earn { border-color: #FFF; background: rgba(123, 53, 212, 0.1); }
-        .share-to-earn h2 { font-family: var(--font-heading); font-size: 4rem; margin-bottom: 20px; letter-spacing: -0.05em; }
-        .share-to-earn p { font-size: 1.5rem; margin-bottom: 40px; line-height: 1.2; font-weight: 700; }
-        .btn-claim {
-            padding: 20px 50px; background: #000; color: #FFF !important; text-decoration: none; font-weight: 900; border-radius: 100px; font-size: 1.2rem; cursor: pointer; transition: background 0.3s;
-        }
-        .btn-claim:hover { background: var(--accent); }
-        [data-theme="dark"] .btn-claim { background: #FFF; color: #000 !important; }
-        [data-theme="dark"] .btn-claim:hover { background: var(--accent); color: #FFF !important; }
 
-        .node-list { border-top: 2px solid #000; }
-        [data-theme="dark"] .node-list { border-color: #FFF; }
-        .node-item {
-            padding: 70px 0; border-bottom: 2px solid #000;
-            display: flex; justify-content: space-between; align-items: center;
-            text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        .dot-label {
+            font-size: 0.55rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--lilac);
+            transition: 0.3s;
+            transform: translateX(10px);
+            opacity: 0;
+            white-space: nowrap;
         }
-        [data-theme="dark"] .node-item { border-color: #FFF; }
-        .node-item:hover { color: var(--accent); padding-left: 30px; }
-        .node-title { font-family: var(--font-heading); font-size: 5rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.85; }
-        .node-meta { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.4; }
 
-        .cta-box { text-align: center; }
-        .btn-glow {
-            font-family: var(--font-heading); font-size: 7rem; font-weight: 900;
-            font-style: italic; letter-spacing: -0.05em; color: #000;
-            text-decoration: none; border-bottom: 12px solid #000;
-            line-height: 0.8; cursor: pointer; display: inline-block;
-            transition: color 0.3s ease, border-color 0.3s ease;
+        .dot-wrapper:hover .dot-label, .dot-wrapper.active .dot-label {
+            opacity: 1;
+            transform: translateX(0);
         }
-        .btn-glow:hover { color: var(--accent); border-color: var(--accent); }
-        [data-theme="dark"] .btn-glow { color: #FFF; border-color: #FFF; }
-        [data-theme="dark"] .btn-glow:hover { color: var(--accent); border-color: var(--accent); }
 
-        footer { padding: 100px 40px; border-top: 2px solid #000; display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; letter-spacing: 0.1em; }
-        [data-theme="dark"] footer { border-color: #FFF; }
-
-        #leadModal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.98); display: none; justify-content: center; align-items: center; z-index: 2000;
-            backdrop-filter: blur(20px);
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--lilac);
+            transition: 0.3s;
         }
-        #leadModal.open { display: flex; }
-        [data-theme="dark"] #leadModal { background: rgba(10, 5, 20, 0.98); }
-        
-        .modal-inner { width: 100%; max-width: 600px; padding: 60px; position: relative; }
-        .modal-inner h2 { font-family: var(--font-heading); font-size: 5rem; line-height: 0.85; letter-spacing: -0.05em; margin-bottom: 50px; color: #000; font-weight: 900; }
-        [data-theme="dark"] .modal-inner h2 { color: #FFF; }
-        
-        .modal-form input {
-            width: 100%; padding: 25px 0; margin-bottom: 30px; border: none; border-bottom: 4px solid #000;
-            font-size: 1.8rem; font-weight: 900; outline: none; background: transparent; color: #000;
-            transition: border-color 0.3s ease;
-        }
-        [data-theme="dark"] .modal-form input { border-color: #FFF; color: #FFF; }
-        .modal-form input:focus { border-color: var(--accent); }
-        
-        .btn-submit { background: #000; color: #FFF; border: none; padding: 30px 80px; border-radius: 100px; font-weight: 900; font-size: 1.2rem; cursor: pointer; transition: all 0.3s ease; }
-        [data-theme="dark"] .btn-submit { background: #FFF; color: #000; }
-        .btn-submit:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        [data-theme="dark"] .btn-submit:hover { box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
 
-        .modal-close { position: absolute; top: 40px; right: 40px; border: none; background: none; font-size: 4rem; cursor: pointer; color: #000; opacity: 0.3; transition: opacity 0.3s; }
-        [data-theme="dark"] .modal-close { color: #FFF; }
-        .modal-close:hover { opacity: 1; }
-
-        @media (max-width: 600px) {
-            .hero-title h1 { font-size: 5.5rem; }
-            .node-title { font-size: 3rem; }
-            .btn-glow { font-size: 3.5rem; }
-            .narrative { font-size: 2.2rem; }
-            .share-to-earn h2 { font-size: 2.5rem; }
-            .center-btn-group { flex-direction: column; align-items: flex-start; }
+        .dot-wrapper.active .dot {
+            background: var(--purple);
+            box-shadow: 0 0 15px var(--purple);
+            transform: scale(1.3);
         }
+
+
+        /* MODAL STYLES */
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(48, 25, 52, 0.95);
+            z-index: 100;
+            display: none;
+            align-items: center; justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #modal-content {
+            background: var(--ivory);
+            padding: 60px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-active #modal-overlay { display: flex; opacity: 1; }
+        .modal-active #modal-content { transform: translateY(0); }
+
+        .close-modal {
+            position: absolute; top: 20px; right: 20px;
+            font-size: 2rem; color: var(--purple);
+            cursor: pointer; font-weight: 300;
+        }
+
+        #lead-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-field { display: flex; flex-direction: column; gap: 8px; }
+        .form-field label { font-weight: 900; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--lilac); }
+        .form-field input, .form-field select {
+            padding: 15px; border: 1px solid rgba(48, 25, 52, 0.1);
+            background: #fff; font-family: var(--font-body);
+            font-size: 1rem; border-radius: 8px;
+        }
+
+        #submit-btn {
+            background: var(--purple); color: #fff;
+            padding: 18px; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 0.8rem; letter-spacing: 3px;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        }
+
+        #submit-btn:disabled { background: var(--lilac); cursor: not-allowed; }
+
+        #form-msg { text-align: center; font-weight: 900; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; margin-top: 15px; }
+
+        #bg-logo-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vw;
+            background: url("assets/background_logo.jpg") no-repeat center;
+            background-size: contain;
+            opacity: 0.03; mix-blend-mode: multiply; filter: contrast(120%) brightness(110%);
+            z-index: -1;
+            pointer-events: none;
+        }
+    
+        #package-scroll-section {
+            position: fixed;
+            bottom: -300px;
+            left: 0;
+            width: 100%;
+            height: 250px;
+            background: rgba(255, 255, 240, 0.95);
+            border-top: 1px solid var(--lilac);
+            z-index: 100;
+            transition: bottom 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #package-scroll-section.active {
+            bottom: 0;
+        }
+        .scroller-container {
+            width: 90%;
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 10px;
+            scrollbar-width: none;
+        }
+        .scroller-container::-webkit-scrollbar { display: none; }
+        .pkg-card {
+            flex: 0 0 200px;
+            background: #fff;
+            border: 1px solid var(--lilac);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .pkg-card:hover { border-color: var(--purple); transform: translateY(-5px); }
+        .pkg-card h4 { font-size: 0.7rem; letter-spacing: 2px; color: var(--purple); margin-bottom: 8px; }
+        .pkg-card .price { font-size: 1rem; font-weight: 900; }
+        .close-scroller { position: absolute; top: 10px; right: 20px; cursor: pointer; font-weight: 900; font-size: 1.2rem; }
+
     </style>
 </head>
 <body>
 
-    <div class="grain"></div>
-    <div class="sky-canvas"></div>
-    <div class="stars"></div>
-    
-    <div class="cloud-wrap" id="cloud-field">
-        <div class="cloud" style="width: 1200px; height: 1200px; top: -10%; left: -20%;" data-depth="0.1"></div>
-        <div class="cloud" style="width: 900px; height: 900px; top: 30%; right: -10%;" data-depth="0.4"></div>
-        <div class="cloud" style="width: 1500px; height: 1500px; top: 70%; left: 0%;" data-depth="0.2"></div>
-        <div class="cloud" style="width: 1000px; height: 1000px; top: 120%; right: 5%;" data-depth="0.5"></div>
-        <div class="cloud" style="width: 1300px; height: 1300px; top: 180%; left: -10%;" data-depth="0.3"></div>
+    <div id="package-scroll-section">
+        <span class="close-scroller" onclick="toggleScroller(false)">&times;</span>
+        <h3 style="font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 15px; color: var(--purple);">Available Packages</h3>
+        <div class="scroller-container" id="scroller-items"></div>
     </div>
 
-    <header>
-        <div class="logo">
-            <img id="main-logo" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon" onclick="godHandshake()">
-        </div>
-        <div style="font-weight:900; font-size:14px; letter-spacing: 0.3em; text-transform: uppercase;">Cardano L1 Blockchain</div>
-    </header>
+    <div id="bg-logo-overlay"></div>
 
-    <main>
-        <div class="hero-title reveal">
-            <h1>architecting</h1>
-            <h1><span>reality.</span></h1>
-        </div>
-
-        <div class="center-btn-group reveal">
-            <a href="share-to-earn.html" class="primary-btn">Claim .pri Handle</a>
-            <a href="share-to-earn.html" class="btn-share">Share to Earn</a>
-        </div>
-
-        <div class="narrative reveal">
-            Prisicon is a <b>Cardano L1 Blockchain</b> and digital agency ecosystem.
-        </div>
-
-        <div class="narrative reveal" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
-            As an L1 network, we don't just build on the blockchain—we <b>are</b> the infrastructure. Inheriting the security of Cardano, we provide the sovereign rails for the next generation of global brands.
-        </div>
-
-        <div class="share-to-earn reveal">
-            <h2>Share-to-Earn</h2>
-            <p>Claim your <b>Free .pri Handle</b> and initial <b>$PRN</b> drop by joining the Prisicon network. Your identity, on-chain.</p>
-            <div class="btn-claim" onclick="openLeadModal('Free PRN Handle')">Claim My Handle</div>
-        </div>
-
-        <div class="narrative reveal">
-            We migrate elite brands from the noise of Web2 into the <b>absolute fidelity</b> of the Web3 Ledger.
-        </div>
-
-        <div class="node-list reveal">
-            <a href="pulse/" class="node-item">
-                <div class="node-title">PULSE</div>
-                <div class="node-meta">Explorer</div>
-            </a>
-            <a href="muzewallet/" class="node-item">
-                <div class="node-title">MUZE</div>
-                <div class="node-meta">Vault</div>
-            </a>
-            <a href="chillata/" class="node-item">
-                <div class="node-title">CHILLATA</div>
-                <div class="node-meta">Liquidity</div>
-            </a>
-            <a href="mynt/" class="node-item">
-                <div class="node-title">MYNT</div>
-                <div class="node-meta">Market</div>
-            </a>
-            <a href="blog/" class="node-item">
-                <div class="node-title">INTELLIGENCE</div>
-                <div class="node-meta">Blog</div>
-            </a>
-            <a href="whitepaper.html" class="node-item">
-                <div class="node-title">WHITEPAPER</div>
-                <div class="node-meta">Protocol</div>
-            </a>
-        </div>
-
-        <div class="cta-box reveal">
-            <div class="btn-glow" onclick="openLeadModal('Network Migration')">Begin Migration</div>
-        </div>
-
-        <div class="narrative reveal" style="margin-top: 400px; opacity: 0.15; font-size: 1.5rem; letter-spacing: 0.2em; text-align: center;">
-            ABSOLUTE AUTONOMY. NO SIMULATIONS.<br>THE LEDGER NEVER LIES.
-        </div>
-    </main>
-
-    <footer>
-        <div>PRISICON // CARDANO</div>
-        <div>NETWORK &copy; 2026</div>
-    </footer>
-
-    <div id="leadModal">
-        <div class="modal-inner">
-            <button class="modal-close" onclick="closeLeadModal()">&times;</button>
-            <h2 id="modal-title">Begin Migration</h2>
-            <form id="leadForm" class="modal-form">
-                <input type="text" id="leadName" placeholder="NAME" required>
-                <input type="text" id="leadCompany" placeholder="ENTITY / BRAND" required>
-                <input type="email" id="leadEmail" placeholder="EMAIL" required>
-                <input type="text" id="leadHandle" placeholder="DESIRED .PRI HANDLE (Optional)">
-                <button type="submit" class="btn-submit" id="submitBtn">SYNCHRONIZE</button>
-            </form>
-            <div id="successMsg" style="display:none; text-align:center; padding:40px;">
-                <h2 style="color:var(--accent);">SYNCHRONIZED.</h2>
-                <p style="font-weight:900; text-transform:uppercase; letter-spacing:0.2em;">The Great Migration has begun.</p>
+    <div id="ui-layer">
+        <header>
+            <div class="top-globe-container" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100;"><div class="small-globe" style="width: 30px; height: 30px; background: radial-gradient(circle at 30% 30%, var(--lilac), var(--purple)); border-radius: 50%; opacity: 0.8; box-shadow: 0 0 15px var(--purple); animation: pulse 3s infinite ease-in-out;"></div></div>
+            <div class="logo-container">
+                <img src="https://share.zapia.com/pymd7sa9f66vcqn2xl5lwq" alt="Prisca Dezigns" class="logo-img">
+                <div class="logo">priscion.</div>
             </div>
+            <div style="font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; color: var(--purple);">EMPIRE V.2.3</div>
+        </header>
+
+        <main>
+            <div class="brand-visual-container">
+                <img id="dynamic-logo" src="" alt="Brand Logo" class="dynamic-brand-logo">
+                <div class="brand-text-content">
+                    <div class="brand-label" id="current-sector">SYSTEM ENTRY</div>
+                    <h1 id="current-brand">BRAND SCAN</h1>
+                    <div class="brand-description" id="current-desc"></div>
+                    <div class="price-tag" id="current-price"></div>
+                    <button id="main-cta" class="view-cta">ENTER DOMAIN</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="footer-info">
+                Architecting Private Digital Networks for the Sovereign Individual.
+            </div>
+            <div id="interaction-guide" style="font-size: 0.6rem; letter-spacing: 3px; color: var(--lilac); font-weight: 900;">
+                SCROLL TO NAVIGATE SLICES
+            </div>
+        </footer>
+    </div>
+
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            
+            
+                <h2 id="modal-title" style="font-family: var(--font-heading); color: var(--purple); margin-bottom: 10px;">Secure Your Slot</h2>
+                <div id="pkg-checklist" style="margin-bottom: 25px; padding: 15px; background: rgba(48, 25, 52, 0.05); border-radius: 8px; display: none; text-align: left;">
+                    <h4 style="font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin-bottom: 10px; border-bottom: 1px solid rgba(48, 25, 52, 0.1); padding-bottom: 5px;">Includes:</h4>
+                    <ul id="checklist-items" style="list-style: none; font-size: 0.8rem; color: #555; display: grid; gap: 8px;"></ul>
+                </div>
+                <form id="lead-form">
+                    <div class="form-field">
+                        <label>Full Name</label>
+                        <input type="text" id="user-name" placeholder="E.g. Satoshi Nakamoto" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Contact Signal (Email)</label>
+                        <input type="email" id="user-email" placeholder="email@nexus.com" required>
+                    </div>
+                    <div class="form-field">
+                        <label>Selected Target</label>
+                        <input type="text" id="target-package" readonly>
+                    </div>
+                    <button type="submit" id="submit-btn">INITIATE CONNECTION</button>
+                </form>
+            <div id="form-msg"></div>
         </div>
     </div>
+
+    <div id="scroll-indicator"></div>
+    <div id="canvas-container"></div>
 
     <script>
-        const sky = document.querySelector('.sky-canvas');
-        const stars = document.querySelector('.stars');
-        const clouds = document.querySelectorAll('.cloud');
-        const reveals = document.querySelectorAll('.reveal');
-        const logo = document.getElementById('main-logo');
+        
+        const packageData = [
+            { 
+                name: "STARTER PKG", 
+                price: "$297", 
+                checklist: ["Domain Registration", "Brand Logo & Favicon", "Social Cover Image", "Web App (PWA) Setup", "1-Page High-Fidelity Website", "Mobile-First Optimization", "Technical SEO Architecture", "1 Month Free Maintenance"] 
+            },
+            { 
+                name: "GROWTH PKG", 
+                price: "$597", 
+                checklist: ["Domain to Logo/Favicon", "Cover Photo", "Web App", "Multi-Page Site (2-3 Pages)", "Social Media Management (1 Page)", "Social Links Integration", "SEO Architecture", "1 Month Free Maintenance"] 
+            },
+            { 
+                name: "TRUSTED PKG", 
+                price: "$1,200", 
+                checklist: ["Package 1 & 2 Features", "Multi-Page Site (10-20 Pages)", "Full Brand Automation", "1 Month Free Maintenance", "Advanced SEO Architecture"] 
+            },
+            { 
+                name: "E-COMM STARTER", 
+                price: "$497", 
+                checklist: ["Package 1 Specs", "Integrated Shop Architecture", "Payment Gateway Setup", "Inventory Management Logic"] 
+            },
+            { 
+                name: "E-COMM GROWTH", 
+                price: "$897", 
+                checklist: ["Package 2 Specs", "Advanced Shop Architecture", "Customer Account Logic", "Automated Checkout Flow"] 
+            },
+            { 
+                name: "E-COMM TRUSTED", 
+                price: "$1,800", 
+                checklist: ["Package 3 Specs", "Unlimited Item Inventory", "Multi-Currency Settlement", "Elite Commerce Intelligence"] 
+            },
+            { 
+                name: "MAINTENANCE", 
+                price: "$97/mo", 
+                checklist: ["Security Monitoring", "Uptime Optimization", "Monthly Content Updates", "Technical Support"] 
+            }
+        ];
 
-        function handleScroll() {
-            const scrollY = window.pageYOffset;
-            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = scrollY / scrollHeight;
+        function openLeadModal(pkgName) {
+            const pkg = packageData.find(p => p.name === pkgName) || brands.find(b => b.name === pkgName);
+            document.getElementById('target-package').value = pkgName;
+            document.getElementById('modal-title').innerText = "Activate " + pkgName;
             
-            // Background & Theme Shift
-            if (scrollPercent < 0.6) {
-                const p = scrollPercent * 2;
-                const r = Math.floor(255 - (255 - 245) * p);
-                const g = Math.floor(255 - (255 - 239) * p);
-                const b = 255;
-                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-                if(stars) stars.style.opacity = 0;
-                
-                document.body.style.color = "#000000";
-                document.body.setAttribute('data-theme', 'light');
-                if(logo) logo.style.filter = "none";
+            const list = document.getElementById('checklist-items');
+            const checklistContainer = document.getElementById('pkg-checklist');
+            list.innerHTML = "";
+            
+            if (pkg && pkg.checklist) {
+                pkg.checklist.forEach(item => {
+                    const li = document.createElement('li');
+                    li.style.display = "flex";
+                    li.style.alignItems = "center";
+                    li.style.gap = "10px";
+                    li.innerHTML = '<span style="color: var(--purple); font-weight: 900;">✓</span> ' + item;
+                    list.appendChild(li);
+                });
+                checklistContainer.style.display = "block";
             } else {
-                const p = (scrollPercent - 0.6) / 0.4;
-                const r = Math.floor(245 - (245 - 19) * p);
-                const g = Math.floor(239 - (239 - 2) * p);
-                const b = Math.floor(255 - (255 - 31) * p);
-                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-                if(stars) stars.style.opacity = p;
-
-                if (p > 0.3) {
-                    document.body.style.color = "#FFFFFF";
-                    document.body.setAttribute('data-theme', 'dark');
-                    if(logo) logo.style.filter = "invert(1)";
-                } else {
-                    document.body.style.color = "#000000";
-                    document.body.setAttribute('data-theme', 'light');
-                    if(logo) logo.style.filter = "none";
-                }
+                checklistContainer.style.display = "none";
             }
+            
+            document.body.classList.add('modal-active');
+        }
 
-            // Cloud Parallax
-            clouds.forEach(cloud => {
-                const depth = cloud.getAttribute('data-depth');
-                const move = scrollY * depth;
-                cloud.style.transform = `translateY(-${move}px) scale(${1 + scrollPercent * depth})`;
+        // SUPABASE INIT
+        const SB_URL = "https://sktpjacowqaedddtrhuz.supabase.co";
+        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrdHBqYWNvd3FhZWRkZHRyaHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDk5MzEsImV4cCI6MjA5NDIyNTkzMX0.FK4N_ATFTaUuGXrYu_7OBn3qCdlo0rOzxk-E6TxJxqs";
+        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        const globeGeo = new THREE.IcosahedronGeometry(2.8, 3);
+        const globeMat = new THREE.MeshPhongMaterial({ 
+            color: 0xC8A2C8, 
+            wireframe: true,
+            transparent: true,
+            opacity: 0.25
+        });
+        const globe = new THREE.Mesh(globeGeo, globeMat);
+        scene.add(globe);
+
+        camera.position.z = 6.5;
+
+        
+        const brands = [
+            { name: "BRAND SCAN", sector: "SYSTEM ENTRY", logo: "", desc: "Real-time diagnostic analysis of digital identity and brand footprint.", url: "scan/", type: "external" },
+            { name: "PACKAGES", sector: "SYSTEM HUB", logo: "", desc: "Explore our high-fidelity service tiers and brand packages.", type: "action" },
+            { name: "SHARE TO EARN", sector: "PROTOCOL", logo: "", desc: "Invite others to the network and earn $PRN for every successful migration.", url: "share-to-earn.html", type: "external" },
+            { name: "PRISCION", sector: "CORE NETWORK", logo: "", desc: "The high-fidelity migration hub for the Digital Evolution.", url: "https://priscion.com", type: "external" },
+            { name: "THE BLOG", sector: "INTELLIGENCE", logo: "", desc: "Deep-dives into product news and digital agency evolution.", url: "blog.html", type: "external" }
+        ];
+
+
+        
+        function rotateSlices(dir) {
+            if (isAnimating) return;
+            isAnimating = true;
+            const direction = dir === 'next' ? 1 : -1;
+            currentIndex = (currentIndex + direction + brands.length) % brands.length;
+            gsap.to(globe.rotation, { 
+                y: globe.rotation.y + (Math.PI / 2.5 * direction), 
+                duration: 1.5, 
+                ease: "expo.out",
+                onComplete: () => { isAnimating = false; }
             });
+            updateUI(currentIndex); toggleScroller(false);
+        }
 
-            // Reveal Animation
-            reveals.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                const windowHeight = window.innerHeight;
-                if (rect.top <= windowHeight * 0.85 && rect.bottom >= windowHeight * 0.15) {
-                    el.classList.add('visible');
-                    el.classList.remove('fade-out');
-                } else if (rect.bottom < windowHeight * 0.15) {
-                    el.classList.remove('visible');
-                    el.classList.add('fade-out');
+        function jumpTo(index) {
+            if (isAnimating || index === currentIndex) return;
+            const diff = index - currentIndex;
+            isAnimating = true;
+            currentIndex = index;
+            gsap.to(globe.rotation, { 
+                y: globe.rotation.y + (Math.PI / 2.5 * diff), 
+                duration: 1.5, 
+                ease: "expo.out",
+                onComplete: () => { isAnimating = false; }
+            });
+            updateUI(currentIndex); toggleScroller(false);
+        }
+
+        const dotsContainer = document.getElementById('scroll-indicator');
+        brands.forEach((brand, i) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'dot-wrapper' + (i === 0 ? ' active' : '');
+            wrapper.onclick = () => jumpTo(i);
+            
+            const label = document.createElement('span');
+            label.className = 'dot-label';
+            label.innerText = brand.name;
+            
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            
+            wrapper.appendChild(label);
+            wrapper.appendChild(dot);
+            dotsContainer.appendChild(wrapper);
+        });
+
+
+        let currentIndex = 0;
+        let isAnimating = false;
+
+        function updateUI(index) {
+            const brand = brands[index];
+            
+            gsap.to(".brand-visual-container", { opacity: 0, y: 30, duration: 0.3, onComplete: () => {
+                document.getElementById('current-brand').innerText = brand.name;
+                document.getElementById('current-sector').innerText = brand.sector;
+                document.getElementById('current-desc').innerText = brand.desc;
+                document.getElementById('current-price').innerText = brand.price || "";
+                
+                const cta = document.getElementById('main-cta');
+                if (brand.type === "lead") {
+                    cta.innerText = "GET STARTED";
+                    cta.onclick = () => openLeadModal(brand.name);
                 } else {
-                    el.classList.remove('visible');
-                    el.classList.remove('fade-out');
+                    cta.innerText = "ENTER DOMAIN";
+                    cta.onclick = () => window.open(brand.url, '_blank');
                 }
-            });
+
+                const logoImg = document.getElementById('dynamic-logo');
+                logoImg.style.display = brand.logo ? "block" : "none"; logoImg.src = brand.logo;
+                
+                const dots = document.querySelectorAll('.dot-wrapper');
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+
+                gsap.to(".brand-visual-container", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+            }});
         }
 
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('load', handleScroll);
-
-        let tapCount = 0;
-        function godHandshake() {
-            tapCount++;
-            if(tapCount >= 5) {
-                const token = prompt("NEURAL HANDSHAKE:");
-                if(token === 'alice') window.location.href = 'muzewallet/vault.html';
-                tapCount = 0;
+        // MODAL LOGIC
+        const modal = document.body;
+        
+        );
+                checklistContainer.style.display = "block";
+            } else {
+                checklistContainer.style.display = "none";
             }
+            
+            modal.classList.add('modal-active');
         }
 
-        const SUPABASE_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        document.getElementById('close-modal').onclick = () => modal.classList.remove('modal-active');
+        document.getElementById('modal-overlay').onclick = (e) => {
+            if (e.target.id === 'modal-overlay') modal.classList.remove('modal-active');
+        };
 
-        let currentPlan = '';
-        function openLeadModal(plan) {
-            currentPlan = plan;
-            document.getElementById('modal-title').textContent = plan.toUpperCase();
-            document.getElementById('leadModal').classList.add('open');
-            document.getElementById('leadForm').style.display = 'block';
-            document.getElementById('successMsg').style.display = 'none';
-        }
-        function closeLeadModal() { document.getElementById('leadModal').classList.remove('open'); }
+        const leadForm = document.getElementById('lead-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formMsg = document.getElementById('form-msg');
 
-        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+        leadForm.onsubmit = async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.textContent = 'SYNCING...'; btn.disabled = true;
+            submitBtn.disabled = true;
+            submitBtn.innerText = "SYNCHRONIZING...";
+            
+            const data = {
+                name: document.getElementById('user-name').value,
+                email: document.getElementById('user-email').value,
+                package: document.getElementById('target-package').value,
+                brand: "Priscion",
+                created_at: new Date().toISOString()
+            };
 
-            try {
-                await sb.from('leads').insert([{ 
-                    email: document.getElementById('leadEmail').value, 
-                    type: 'priscion_inquiry', 
-                    plan_interest: currentPlan,
-                    name: document.getElementById('leadName').value,
-                    business_name: document.getElementById('leadCompany').value,
-                    handle_request: document.getElementById('leadHandle').value
-                }]);
-                document.getElementById('leadForm').style.display = 'none';
-                document.getElementById('successMsg').style.display = 'block';
-            } catch (err) {
-                alert('Connection failed.');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'SYNCHRONIZE';
+            const { error } = await supabaseClient.from('client_leads').insert([data]);
+
+            if (error) {
+                formMsg.style.color = "#EF4444";
+                formMsg.innerText = "ERROR: UPLINK FAILED. TRY AGAIN.";
+                submitBtn.disabled = false;
+                submitBtn.innerText = "RETRY INITIATION";
+            } else {
+                formMsg.style.color = "var(--accent)";
+                formMsg.innerText = "NODE ACTIVATED. WE WILL CONTACT YOU SHORTLY.";
+                submitBtn.innerText = "CONNECTION SECURED";
+                leadForm.reset();
+                setTimeout(() => modal.classList.remove('modal-active'), 2000);
+            }
+        };
+
+        
+        // GLOBE DRAG/SWIPE SCROLL LOGIC
+        let isDragging = false;
+        let startX = 0;
+        window.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging || isAnimating) return;
+            const dx = e.clientX - startX;
+            if (Math.abs(dx) > 50) {
+                if (dx > 0) rotateSlices('prev');
+                else rotateSlices('next');
+                startX = e.clientX;
             }
         });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        
+        window.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, {passive: true});
+        window.addEventListener('touchmove', (e) => {
+            if (isAnimating) return;
+            const dx = e.touches[0].clientX - startX;
+            if (Math.abs(dx) > 50) {
+                if (dx > 0) rotateSlices('prev');
+                else rotateSlices('next');
+                startX = e.touches[0].clientX;
+            }
+        }, {passive: true});
+
+        
+        window.addEventListener('wheel', (e) => {
+            if (isAnimating || modal.classList.contains('modal-active')) return;
+            rotateSlices(e.deltaY > 0 ? 'next' : 'prev');
+        }, { passive: true });
+
+
+        
+        function toggleScroller(show) {
+            document.getElementById('package-scroll-section').classList.toggle('active', show);
+        }
+
+        const scrollerItems = document.getElementById('scroller-items');
+        packageData.forEach(pkg => {
+            const card = document.createElement('div');
+            card.className = 'pkg-card';
+            card.onclick = () => openLeadModal(pkg.name);
+            card.innerHTML = `<h4>${pkg.name}</h4><div class="price">${pkg.price}</div>`;
+            scrollerItems.appendChild(card);
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            globe.rotation.y += 0.0015;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        updateUI(0);
     </script>
 </body>
 </html>
+
 
