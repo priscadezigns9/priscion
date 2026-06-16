@@ -25,6 +25,7 @@
             line-height: 1; 
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            transition: color 0.8s ease;
         }
 
         .grain {
@@ -64,7 +65,7 @@
 
         .cloud {
             position: absolute;
-            background: radial-gradient(circle, rgba(123, 53, 212, 0.15) 0%, rgba(123, 53, 212, 0) 70%);
+            background: radial-gradient(circle, rgba(123, 53, 212, 0.25) 0%, rgba(123, 53, 212, 0) 70%);
             border-radius: 50%;
             filter: blur(120px);
             opacity: 0.8;
@@ -85,7 +86,7 @@
         .reveal {
             opacity: 0;
             transform: translateY(50px);
-            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1), color 0.8s ease;
         }
         .reveal.visible {
             opacity: 1;
@@ -126,9 +127,9 @@
         }
         .primary-btn:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(123, 53, 212, 0.2); }
 
-        .node-list { margin: 200px 0; border-top: 2px solid #000; }
+        .node-list { margin: 200px 0; border-top: 2px solid currentColor; }
         .node-item {
-            padding: 80px 0; border-bottom: 2px solid #000;
+            padding: 80px 0; border-bottom: 2px solid currentColor;
             display: flex; justify-content: space-between; align-items: center;
             text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -138,20 +139,20 @@
 
         .cta-box { text-align: center; margin: 200px 0; }
         .btn-glow {
-            display: inline-block; padding: 30px 80px; background: #000; color: #FFF; border-radius: 100px;
+            display: inline-block; padding: 30px 80px; background: currentColor; color: var(--bg); border-radius: 100px;
             font-weight: 900; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2em;
             transition: all 0.4s;
         }
         .btn-glow:hover { background: var(--accent); transform: scale(1.05); }
 
-        footer { padding: 150px 40px; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; }
+        footer { padding: 150px 40px; border-top: 1px solid rgba(128,128,128,0.2); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; }
 
-        /* Migration Modal Upgraded */
         #leadModal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
             display: flex; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; z-index: 2000; transition: opacity 0.5s;
+            color: #000;
         }
         #leadModal.open { opacity: 1; pointer-events: auto; }
         .modal-inner {
@@ -180,7 +181,7 @@
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
     <div class="grain"></div>
     <div class="sky-canvas"></div>
@@ -196,7 +197,7 @@
 
     <header>
         <div class="logo">
-            <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon"></a>
+            <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon" id="headerLogo"></a>
         </div>
     </header>
 
@@ -289,8 +290,8 @@
     </div>
 
     <footer>
-        <div>PRISICON // CARDANO</div>
-        <div>NETWORK &copy; 2026</div>
+        <div id="footerLeft">PRISICON // CARDANO</div>
+        <div id="footerRight">NETWORK &copy; 2026</div>
     </footer>
 
     <script>
@@ -299,30 +300,44 @@
         const stars = document.getElementById('stars');
         const clouds = document.querySelectorAll('.cloud');
         const reveals = document.querySelectorAll('.reveal');
+        const logo = document.getElementById('headerLogo');
 
         function handleScroll() {
             const scrollY = window.pageYOffset;
             const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
             const scrollPercent = scrollY / scrollHeight;
             
-            // Color Shift
-            if (scrollPercent < 0.5) {
-                const p = scrollPercent * 2;
+            // Color Shift & Theme Logic
+            if (scrollPercent < 0.6) {
+                const p = scrollPercent / 0.6;
                 const r = Math.floor(255 - (255 - 245) * p);
                 const g = Math.floor(255 - (255 - 239) * p);
                 const b = 255;
                 if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
                 if(stars) stars.style.opacity = 0;
+                
+                // Light Theme
+                document.body.style.color = "#000000";
+                if(logo) logo.style.filter = "none";
             } else {
-                const p = (scrollPercent - 0.5) * 2;
-                // Transition to deep dark purple (approx #230835)
-                const r = Math.floor(245 - (245 - 35) * p);
-                const g = Math.floor(239 - (239 - 8) * p);
-                const b = Math.floor(255 - (255 - 53) * p);
+                const p = (scrollPercent - 0.6) / 0.4;
+                // Transition to deep dark purple (#13021F)
+                const r = Math.floor(245 - (245 - 19) * p);
+                const g = Math.floor(239 - (239 - 2) * p);
+                const b = Math.floor(255 - (255 - 31) * p);
                 if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
                 
                 // Show stars in the deep purple sky
                 if(stars) stars.style.opacity = p;
+
+                // Dark Theme: Change text to white for readability
+                if (p > 0.3) {
+                    document.body.style.color = "#FFFFFF";
+                    if(logo) logo.style.filter = "invert(1)";
+                } else {
+                    document.body.style.color = "#000000";
+                    if(logo) logo.style.filter = "none";
+                }
             }
 
             // Cloud Parallax
