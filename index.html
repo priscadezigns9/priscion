@@ -36,14 +36,14 @@
 
         .sky-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, var(--sky-deep) 0%, #FFFFFF 100%);
+            background: #FFFFFF;
             z-index: -2;
+            transition: background 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .cloud-wrap {
-            position: fixed; top: 0; left: 0; width: 100%; height: 200%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; pointer-events: none;
-            will-change: transform;
         }
 
         .cloud {
@@ -51,7 +51,22 @@
             background: radial-gradient(circle, rgba(123, 53, 212, 0.15) 0%, rgba(123, 53, 212, 0) 70%);
             border-radius: 50%;
             filter: blur(120px);
-            opacity: 0.9;
+            opacity: 0.8;
+            will-change: transform;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal.fade-out {
+            opacity: 0;
+            transform: translateY(-50px);
         }
 
         header {
@@ -159,36 +174,36 @@
     </header>
 
     <main>
-        <div class="hero-title">
+        <div class="hero-title reveal">
             <h1>architecting</h1>
             <h1><span>reality.</span></h1>
         </div>
 
-        <div class="narrative">
+        <div class="narrative reveal">
             Prisicon is a <b>Cardano L1 Blockchain</b> and digital agency ecosystem.
         </div>
 
-        <div class="narrative" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
+        <div class="narrative reveal" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
             As an L1 network, we don't just build on the blockchain—we <b>are</b> the infrastructure. Inheriting the security of Cardano, we provide the sovereign rails for the next generation of global brands.
         </div>
 
-        <div class="center-btn-group">
+        <div class="center-btn-group reveal">
             <a href="share-to-earn.html" class="primary-btn">Claim .pri Handle</a>
         </div>
 
-        <div class="share-to-earn">
+        <div class="share-to-earn reveal">
             <h2>Share-to-Earn</h2>
             <p>Claim your <b>Free .pri Handle</b> and initial <b>$PRN</b> drop by joining the Prisicon network. Your identity, on-chain.</p>
             <div class="btn-claim" onclick="openLeadModal('Free PRN Handle')">Claim My Handle</div>
         </div>
 
-        <div class="section-break"></div>
+        <div class="section-break reveal"></div>
 
-        <div class="narrative">
+        <div class="narrative reveal">
             We migrate elite brands from the noise of Web2 into the <b>absolute fidelity</b> of the Web3 Ledger.
         </div>
 
-        <div class="node-list">
+        <div class="node-list reveal">
             <a href="pulse/" class="node-item">
                 <div class="node-title">PULSE</div>
                 <div class="node-meta">Explorer</div>
@@ -215,11 +230,11 @@
             </a>
         </div>
 
-        <div class="cta-box">
+        <div class="cta-box reveal">
             <div class="btn-glow" onclick="openLeadModal('Network Migration')">Begin Migration</div>
         </div>
 
-        <div class="narrative" style="margin-top: 400px; opacity: 0.15; font-size: 1.5rem; letter-spacing: 0.2em; text-align: center;">
+        <div class="narrative reveal" style="margin-top: 400px; opacity: 0.15; font-size: 1.5rem; letter-spacing: 0.2em; text-align: center;">
             ABSOLUTE AUTONOMY. NO SIMULATIONS.<br>THE LEDGER NEVER LIES.
         </div>
     </main>
@@ -248,15 +263,62 @@
     </div>
 
     <script>
-        window.addEventListener('scroll', () => {
+        const sky = document.querySelector('.sky-canvas');
+        const clouds = document.querySelectorAll('.cloud');
+        const reveals = document.querySelectorAll('.reveal');
+
+        function handleScroll() {
             const scrollY = window.pageYOffset;
-            const clouds = document.querySelectorAll('.cloud');
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollY / scrollHeight;
+            
+            // Color Shift: White -> Light Purple -> Deep Purple
+            if (scrollPercent < 0.5) {
+                const p = scrollPercent * 2;
+                const r = Math.floor(255 - (255 - 245) * p);
+                const g = Math.floor(255 - (255 - 239) * p);
+                const b = 255;
+                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            } else {
+                const p = (scrollPercent - 0.5) * 2;
+                const r = Math.floor(245 - (245 - 61) * p);
+                const g = Math.floor(239 - (239 - 13) * p);
+                const b = Math.floor(255 - (255 - 105) * p);
+                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            }
+
+            // Cloud Parallax
             clouds.forEach(cloud => {
                 const depth = cloud.getAttribute('data-depth');
                 const move = scrollY * depth;
-                cloud.style.transform = `translateY(-${move}px)`;
+                cloud.style.transform = `translateY(-${move}px) scale(${1 + scrollPercent * depth})`;
             });
-        });
+
+            // Reveal Animation (Fade In/Out)
+            reveals.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                // Element is in focus
+                if (rect.top <= windowHeight * 0.85 && rect.bottom >= windowHeight * 0.15) {
+                    el.classList.add('visible');
+                    el.classList.remove('fade-out');
+                } 
+                // Element is scrolled past (Fade out up)
+                else if (rect.bottom < windowHeight * 0.15) {
+                    el.classList.remove('visible');
+                    el.classList.add('fade-out');
+                }
+                // Element is below viewport
+                else {
+                    el.classList.remove('visible');
+                    el.classList.remove('fade-out');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll);
 
         let tapCount = 0;
         function godHandshake() {
