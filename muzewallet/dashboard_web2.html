@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUZE Wallet | Web2 Login</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --accent: #7B35D4;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body { margin: 0; font-family: var(--font-body); background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-box { width: 100%; max-width: 450px; padding: 40px; text-align: center; }
+        .logo img { height: 30px; margin-bottom: 40px; }
+        h1 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 20px; letter-spacing: -0.05em; }
+        p { font-weight: 900; opacity: 0.5; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
+        
+        .input-group { margin-bottom: 30px; text-align: left; }
+        label { font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; display: block; margin-bottom: 10px; }
+        input {
+            width: 100%; padding: 20px 0; border: none; border-bottom: 4px solid #000;
+            font-size: 1.5rem; font-weight: 900; outline: none; background: transparent;
+        }
+        
+        .btn-submit {
+            width: 100%; padding: 25px; background: #000; color: #FFF; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 20px; transition: background 0.3s;
+        }
+        .btn-submit:hover { background: var(--accent); }
+        
+        .back-link { margin-top: 30px; display: block; text-decoration: none; color: #000; font-weight: 900; font-size: 12px; opacity: 0.4; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_logo.png" alt="MUZE"></div>
+        <h1>Sync Identity</h1>
+        <p>Legacy Network Access</p>
+        
+        <form onsubmit="alert('Standard Authentication Required.'); return false;">
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="name@domain.com" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit">LOG IN</button>
+        </form>
+        
+        <a href="index.html" class="back-link">← RETURN TO GATE</a>
+    </div>
+</body>
+</html>
