@@ -31,6 +31,15 @@
             font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 20px; transition: background 0.3s;
         }
         .btn-submit:hover { background: var(--accent); }
+
+        .action-grid { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .action-link { 
+            text-decoration: none; color: #000; font-weight: 900; font-size: 11px; 
+            text-transform: uppercase; letter-spacing: 0.1em; border: 2px solid #EEE; 
+            padding: 15px; border-radius: 10px; transition: all 0.3s;
+        }
+        .action-link:hover { border-color: var(--accent); color: var(--accent); }
+        .action-link.full { grid-column: span 2; }
         
         .back-link { margin-top: 30px; display: block; text-decoration: none; color: #000; font-weight: 900; font-size: 12px; opacity: 0.4; }
     </style>
@@ -39,7 +48,7 @@
     <div class="login-box">
         <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
         <h1>Neural Link</h1>
-        <p>Access the Sovereign Vault</p>
+        <p>Sovereign Vault Access</p>
         
         <form onsubmit="alert('Neural Handshake Initialized...'); return false;">
             <div class="input-group">
@@ -48,6 +57,12 @@
             </div>
             <button type="submit" class="btn-submit">UNLOCK VAULT</button>
         </form>
+
+        <div class="action-grid">
+            <a href="create.html" class="action-link">Create New Vault</a>
+            <a href="recover.html" class="action-link">Restore Vault</a>
+            <a href="ledger.html" class="action-link full">Connect Hardware (Ledger)</a>
+        </div>
         
         <a href="index.html" class="back-link">← RETURN TO GATE</a>
     </div>
