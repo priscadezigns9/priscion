@@ -88,7 +88,15 @@
         <a href="index.html" class="back-link">← RETURN TO GATE</a>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        const SUPABASE_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralHandle = urlParams.get('ref');
+
         // Check for pending handle from Share-to-Earn
         window.onload = () => {
             const pending = localStorage.getItem('pending_handle');
@@ -119,6 +127,103 @@
                 btns[1].classList.add('active');
             }
         }
+
+        // Logic Implementation
+        document.getElementById('createForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const name = e.target.querySelectorAll('input')[0].value;
+            const email = e.target.querySelectorAll('input')[1].value;
+            const handle = e.target.querySelectorAll('input')[2].value.toLowerCase();
+            const password = e.target.querySelectorAll('input')[3].value;
+
+            btn.disabled = true;
+            btn.innerText = "INITIALIZING LEDGER...";
+
+            try {
+                // 1. Check if handle exists
+                const { data: existingHandle } = await sb.from('profiles').select('handle').eq('handle', handle).single();
+                if (existingHandle) {
+                    alert('Handle already registered on-chain.');
+                    btn.disabled = false;
+                    btn.innerText = "CREATE ACCOUNT";
+                    return;
+                }
+
+                // 2. Create Profile
+                const { data: profile, error: pError } = await sb.from('profiles').insert([{
+                    name, email, handle, password, referral_by: referralHandle
+                }]).select().single();
+
+                if (pError) throw pError;
+
+                // 3. Initial PRN Distribution (Free Wallet)
+                const INITIAL_PRN = 100;
+                const { error: bError } = await sb.from('balances').insert([{
+                    profile_id: profile.id,
+                    handle: handle,
+                    balance: INITIAL_PRN,
+                    token: '$PRN'
+                }]);
+
+                if (bError) throw bError;
+
+                // 4. Referral Bonus (10%)
+                if (referralHandle) {
+                    const REFERRAL_PERCENTAGE = 0.10;
+                    const bonus = INITIAL_PRN * REFERRAL_PERCENTAGE;
+                    
+                    // We need to find the referrer's profile_id or handle
+                    const { data: referrer } = await sb.from('profiles').select('id, handle').eq('handle', referralHandle).single();
+                    
+                    if (referrer) {
+                        // Update referrer balance - assuming we have an RPC or just fetching/updating
+                        const { data: refBalance } = await sb.from('balances').select('balance').eq('handle', referralHandle).single();
+                        if (refBalance) {
+                            await sb.from('balances').update({ balance: refBalance.balance + bonus }).eq('handle', referralHandle);
+                        } else {
+                            await sb.from('balances').insert([{ profile_id: referrer.id, handle: referralHandle, balance: bonus, token: '$PRN' }]);
+                        }
+                    }
+                }
+
+                alert('Account Created! Welcome to Procyon. Your 100 $PRN have been deposited.');
+                localStorage.setItem('user_handle', handle);
+                window.location.href = "vault.html";
+
+            } catch (err) {
+                console.error(err);
+                alert('Ledger synchronization failed: ' + err.message);
+                btn.disabled = false;
+                btn.innerText = "CREATE ACCOUNT";
+            }
+        };
+
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const email = e.target.querySelectorAll('input')[0].value;
+            const password = e.target.querySelectorAll('input')[1].value;
+
+            btn.disabled = true;
+            btn.innerText = "VERIFYING NEURAL LINK...";
+
+            try {
+                const { data: user, error } = await sb.from('profiles').select('handle').eq('email', email).eq('password', password).single();
+                if (error || !user) {
+                    alert('Invalid credentials.');
+                    btn.disabled = false;
+                    btn.innerText = "LOG IN";
+                    return;
+                }
+                localStorage.setItem('user_handle', user.handle);
+                window.location.href = "vault.html";
+            } catch (err) {
+                alert('Authentication failed.');
+                btn.disabled = false;
+                btn.innerText = "LOG IN";
+            }
+        };
     </script>
 </body>
 </html>
