@@ -74,6 +74,33 @@
             display: inline-block;
             width: 100%;
             max-width: 600px;
+            position: relative;
+        }
+
+        .share-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .share-link-box {
+            background: #F5EFFF;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 700;
+            word-break: break-all;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .reward-info {
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
         }
 
         .input-wrapper {
@@ -132,8 +159,14 @@
                 <input type="text" placeholder="enter handle" id="handleInput" onclick="handshake()">
                 <span class="suffix">.pri</span>
             </div>
-            <button class="btn-claim" onclick="claimHandle()">Claim Handle</button>
-            <div class="rules">Limit: 1 Handle Per Sovereign Account // Permanent on-chain</div>
+            <button class="btn-claim" onclick="claimHandle()" id="mainActionBtn">Claim Handle</button>
+            <div class="rules" id="rulesText">Limit: 1 Handle Per Sovereign Account // Permanent on-chain</div>
+
+            <div class="share-section" id="shareSection">
+                <div class="reward-info">Your Referral Link (10% Bonus)</div>
+                <div class="share-link-box" id="shareLink" onclick="copyLink()">Generating...</div>
+                <div class="rules">Share this link. When they join, you both earn $PRN.</div>
+            </div>
         </div>
     </main>
 
@@ -156,13 +189,42 @@
         }
 
         function claimHandle() {
-            const handle = document.getElementById('handleInput').value.trim();
+            const handle = document.getElementById('handleInput').value.trim().toLowerCase();
             if(!handle) {
                 alert('A sovereign handle is required.');
                 return;
             }
+            
+            // Check if user already has a handle (simplified for demo)
+            localStorage.setItem('user_handle', handle + '.pri');
             localStorage.setItem('pending_handle', handle + '.pri');
-            window.location.href = "muzewallet/dashboard_web2.html";
+            
+            showShareLink(handle + '.pri');
+        }
+
+        function showShareLink(handle) {
+            document.getElementById('mainActionBtn').innerText = "GO TO DASHBOARD";
+            document.getElementById('mainActionBtn').onclick = () => window.location.href = "muzewallet/dashboard_web2.html";
+            document.getElementById('rulesText').style.display = "none";
+            document.getElementById('shareSection').style.display = "block";
+            
+            const link = window.location.origin + window.location.pathname.replace('share-to-earn.html', 'muzewallet/dashboard_web2.html') + '?ref=' + handle;
+            document.getElementById('shareLink').innerText = link;
+        }
+
+        function copyLink() {
+            const link = document.getElementById('shareLink').innerText;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('Referral link copied to clipboard!');
+            });
+        }
+
+        window.onload = () => {
+            const existingHandle = localStorage.getItem('user_handle');
+            if (existingHandle) {
+                document.getElementById('handleInput').value = existingHandle.replace('.pri', '');
+                showShareLink(existingHandle);
+            }
         }
     </script>
 
