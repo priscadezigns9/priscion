@@ -46,7 +46,7 @@
 
         .cloud {
             position: absolute;
-            background: radial-gradient(circle, rgba(123, 53, 212, 0.1) 0%, rgba(123, 53, 212, 0) 70%);
+            background: radial-gradient(circle, rgba(123, 53, 212, 0.2) 0%, rgba(123, 53, 212, 0) 70%);
             border-radius: 50%;
             filter: blur(80px);
             opacity: 0.8;
@@ -55,7 +55,7 @@
 
         header {
             padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
-            display: flex; justify-content: space-between; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
         }
         .logo img { height: 40px; transition: height 0.3s ease; }
 
@@ -68,7 +68,8 @@
             opacity: 0;
             transform: translateY(50px);
             transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1);
-            margin-bottom: 30vh;
+            margin-bottom: 40vh; /* Deep spacing to prevent overlap */
+            padding-top: 100px;
         }
         .reveal.visible {
             opacity: 1;
@@ -80,6 +81,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            margin-bottom: 20vh;
         }
 
         h1 {
@@ -88,17 +90,29 @@
             font-weight: 900;
             letter-spacing: -0.06em;
             line-height: 0.75;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
 
-        h2 { font-family: var(--font-heading); font-size: 4.5rem; margin-bottom: 30px; letter-spacing: -0.04em; line-height: 0.9; }
-        p { font-size: 1.6rem; margin-bottom: 40px; opacity: 0.8; font-weight: 400; letter-spacing: -0.02em; }
+        h2 { font-family: var(--font-heading); font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 40px; letter-spacing: -0.04em; line-height: 0.9; }
+        p { font-size: clamp(1.1rem, 2vw, 1.6rem); margin-bottom: 40px; opacity: 0.8; font-weight: 400; letter-spacing: -0.02em; }
         
         .accent-box {
-            padding: 80px; background: rgba(255,255,255,0.05); border: 2px solid #000; border-radius: 60px; margin: 100px 0;
+            padding: 80px; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.1); border-radius: 60px; margin: 60px 0;
             backdrop-filter: blur(40px);
         }
-        .accent-box h3 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 20px; letter-spacing: -0.04em; }
+        .accent-box h3 { font-family: var(--font-heading); font-size: 2.5rem; margin-bottom: 20px; letter-spacing: -0.04em; }
+
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .token-card {
+            padding: 30px; background: rgba(123, 53, 212, 0.05); border-radius: 30px; border: 1px solid rgba(123, 53, 212, 0.1);
+        }
+        .token-card h4 { font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 10px; color: var(--accent); }
+        .token-card p { font-size: 0.9rem; margin-bottom: 0; opacity: 0.7; }
 
         .btn-group { margin-top: 50px; }
         .primary-btn {
@@ -114,6 +128,7 @@
             h1 { font-size: 5rem; }
             h2 { font-size: 3rem; }
             .accent-box { padding: 40px; }
+            .reveal { margin-bottom: 20vh; }
         }
     </style>
 </head>
@@ -134,13 +149,13 @@
         <div class="logo">
             <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon"></a>
         </div>
-        <div style="font-weight:900; font-size:12px; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.5;">Sovereign Intelligence</div>
+        <div style="font-weight:900; font-size:12px; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.5;">Sovereign Protocol</div>
     </header>
 
     <main>
         <section class="hero reveal">
             <h1>the<br>whitepaper.</h1>
-            <p>Architecting the sovereign rails for the Great Migration.</p>
+            <p>Architecting the sovereign rails for the Great Migration. Bridging E-commerce, Affiliate Marketing, and Web3.</p>
             <div class="btn-group">
                 <a href="index.html" class="primary-btn">Return to Node</a>
             </div>
@@ -148,7 +163,7 @@
 
         <section class="reveal">
             <h2>I. Executive Summary</h2>
-            <p>Prisicon is a specialized Layer 1 blockchain built on the Cardano settlement layer. It is designed to act as the sovereign rails for the transition of elite Web2 consumer brands into a high-fidelity Web3 ledger environment.</p>
+            <p>Prisicon is a specialized Layer 1 blockchain built on the Cardano settlement layer. It is designed to act as the sovereign rails for the transition of elite Web2 consumer brands into a high-fidelity Web3 ledger environment. Our goal is to unify identity, commerce, and privacy into a single, autonomous ecosystem.</p>
         </section>
 
         <section class="reveal">
@@ -156,18 +171,65 @@
             <p>Unlike secondary "apps" or L2 sidechains, Prisicon operates as a foundational network. This provides direct security inherited from Cardano’s peer-reviewed Ouroboros consensus mechanism.</p>
             <div class="accent-box">
                 <h3>Native Asset Fidelity</h3>
-                <p>$PRN (Prisicon) tokens are Native Assets on the Cardano ledger. They require no smart-contract overhead for basic transfers, ensuring maximum speed and minimal transaction costs for the ecosystem.</p>
+                <p>$PRN tokens are Native Assets on the Cardano ledger. They require no smart-contract overhead for basic transfers, ensuring maximum speed and minimal transaction costs.</p>
             </div>
         </section>
 
         <section class="reveal">
-            <h2>III. The .pri Identity Protocol</h2>
-            <p>Identity is the cornerstone of the Prisicon network. The .pri handle system creates a permanent, on-chain identifier for every user, enabling seamless cross-brand interaction across the node network.</p>
+            <h2>III. Token Economy</h2>
+            <p>The Prisicon ecosystem is powered by a multi-token economy designed for utility, governance, and stability.</p>
+            <div class="token-grid">
+                <div class="token-card">
+                    <h4>$PRN</h4>
+                    <p>Public Utility. Network fees, Public NFTs, and brand activations.</p>
+                </div>
+                <div class="token-card">
+                    <h4>$NRL</h4>
+                    <p>Neural Reserve. Governance, DAO voting, and private reserve.</p>
+                </div>
+                <div class="token-card">
+                    <h4>$JLO</h4>
+                    <p>Chillata Token. The specific token for the Jello Privacy Layer.</p>
+                </div>
+                <div class="token-card">
+                    <h4>$ATLR</h4>
+                    <p>Atelia Utility. Earned in the Atelia Gaming Lab ecosystem.</p>
+                </div>
+                <div class="token-card">
+                    <h4>$MUSD</h4>
+                    <p>Muze USD. Stablecoin for ecosystem settlement and payouts.</p>
+                </div>
+            </div>
         </section>
 
         <section class="reveal">
-            <h2>IV. Sovereign Migration Architecture</h2>
-            <p>Prisicon provides the infrastructure for Web2 entities to digitize their inventory, reputation, and identity. By bridging legacy databases to the Cardano ledger, we ensure that the "Ledger Never Lies."</p>
+            <h2>IV. Jello Privacy Layer</h2>
+            <p>Privacy is not an option; it is a human right. The Jello Privacy Layer provides encrypted transaction capabilities across the Prisicon network, ensuring that sensitive financial data and private assets (IDs, Deeds) remain sovereign.</p>
+        </section>
+
+        <section class="reveal">
+            <h2>V. MUZE Vault</h2>
+            <p>The MUZE Vault is the entry point for the entire ecosystem. It features "Neural Login" for Web2 users and advanced "Vault Setup" for Web3 natives, supporting hardware wallets like Ledger.</p>
+        </section>
+
+        <section class="reveal">
+            <h2>VI. DApp Suite</h2>
+            <p>A unified suite of tools for the new digital economy:</p>
+            <div class="accent-box">
+                <h3>LYNX Messenger</h3>
+                <p>Sovereign handle-to-handle encrypted communication. No phone numbers required.</p>
+                <h3 style="margin-top:40px">CHILLATA Swap</h3>
+                <p>The sovereign exchange interface for high-fidelity asset swapping and liquidity.</p>
+                <h3 style="margin-top:40px">MYNT Marketplace</h3>
+                <p>The hub for minting and trading both Public and Private NFTs.</p>
+                <h3 style="margin-top:40px">LEGGO & PULSE</h3>
+                <p>LEGGO serves as the brand node launchpad, while PULSE provides real-time network intelligence and exploration.</p>
+            </div>
+        </section>
+
+        <section class="reveal" style="margin-bottom: 20vh;">
+            <h2>VII. The .pri Identity</h2>
+            <p>The .pri handle system creates a permanent, on-chain identifier. It anchors your identity across all brands, stores, and services in the Prisicon Network.</p>
         </section>
     </main>
 
