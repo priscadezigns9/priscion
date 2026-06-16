@@ -146,6 +146,13 @@
         <div class="nav-item" onclick="showStage('messenger', this)">BrainLogic | Zapia</div>
         <div class="nav-item" onclick="showStage('card', this)">Digital Card</div>
         
+        <div class="sidebar-label" style="margin-top:20px;">Gord Mode Navigation</div>
+        <div class="nav-item" onclick="loadFrame('../index.html')">Procyon Hub</div>
+        <div class="nav-item" onclick="loadFrame('index.html')">MUZE Wallet</div>
+        <div class="nav-item" onclick="loadFrame('../pulse/')">PULSE Explorer</div>
+        <div class="nav-item" onclick="loadFrame('../chillata/')">CHILLATA Exchange</div>
+        <div class="nav-item" onclick="loadFrame('../mynt/')">MYNT Marketplace</div>
+        
         <div class="sidebar-label" style="margin-top:auto; padding-top:20px;">Controls</div>
         <div class="nav-item" onclick="toggleMirror()">Toggle Mirror</div>
         <div class="nav-item" onclick="forceMirrorLogin()">Enter MUZE World</div>
@@ -201,7 +208,7 @@
         <div id="stage-card" class="stage hidden">
             <h1 class="stage-title">Digital Card</h1>
             <div class="card-preview-container">
-                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/card_ai_access.jpg" class="card-img">
+                <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/card_ai_access.jpg" class="card-img">
                 <p style="font-size: 11px; font-weight: 900; color: var(--muted); letter-spacing: 2px; margin-top: 20px;">ELITE CARD #001 — PHYSICAL BRIDGE</p>
             </div>
         </div>
@@ -217,11 +224,14 @@
     </div>
 
     <script>
-        const supabaseUrl = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const supabaseKey = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const supabaseUrl = 'https://sazhdnqzaqpqcralmthh.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhemhkbnF6YXFwcWNyYWxtdGhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzE5NjYsImV4cCI6MjA5Mzc0Nzk2Nn0.uTyw31uWTNOTV5-HzNpm46vpAJABAsHLMzW-sYOkRhc';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         /* Telemetry Logic */
+        function loadFrame(url) {
+            document.getElementById('mirror-iframe').src = url + '?mode=architect';
+        }
         async function fetchLiveTelemetry() {
             const { data: users, count: userCount } = await supabaseClient.from('profiles').select('email, created_at', { count: 'exact' });
             document.getElementById('stat-nodes').innerText = (userCount || 0) + 1;
