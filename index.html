@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Priscion | Architecting Sovereign Reality</title>
-    <link rel="icon" type="image/png" href="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/p-logo.png">
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <meta name="description" content="Priscion is a global AI brand builder helping you create high quality private digital networks." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
@@ -103,11 +103,22 @@
             .service-grid { grid-template-columns: 1fr; }
         }
     </style>
+    <script>
+        let tapCount = 0;
+        function godHandshake() {
+            tapCount++;
+            if(tapCount >= 5) {
+                const token = prompt("NEURAL HANDSHAKE:");
+                if(token === 'alice') window.location.href = 'muzewallet/vault.html';
+                tapCount = 0;
+            }
+        }
+    </script>
 </head>
-<body>
+<body onclick="if(event.target.id === 'main-logo') godHandshake()">
 
     <nav>
-        <div class="logo-wrap"><img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/p-logo.png" alt="PRISCION" onclick="location.href='index.html'">
+        <div class="logo-wrap"><img id="main-logo" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="PRISCION" onclick="location.href='index.html'">
         </div>
         <div class="nav-links">
             <a href="pulse/">Explorer</a>
@@ -119,7 +130,7 @@
     <main>
         <section class="hero">
             <div>
-                <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/p-logo.png" class="hero-logo" alt="Procyon Hub">
+                <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" class="hero-logo" alt="Procyon Hub">
                 <span class="hero-tag">Sovereign Architecture</span>
                 <h1>Architecting<br>Reality.</h1>
                 <p>Migrating the world's elite brands to the Web3 Ledger. High-fidelity intelligence meets absolute autonomy.</p>
@@ -130,24 +141,22 @@
             </div>
             <div class="dapp-grid">
                 <a href="pulse/" class="dapp-card">
-                    <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/pulse_logo.png" alt="PULSE">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/pulse_logo.png" alt="PULSE">
                     <h3>PULSE</h3>
                     <p>Network Explorer & Activity Hub.</p>
                 </a>
                 <a href="muzewallet/" class="dapp-card">
-                    <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_icon_logo.png" 
-                         onerror="this.src='https://share.zapia.com/6h0tzrbb1e8o94jesdlbgz'" 
-                         alt="MUZE">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE">
                     <h3>MUZE</h3>
                     <p>Sovereign Vault & Identity.</p>
                 </a>
                 <a href="chillata/" class="dapp-card">
-                    <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/chillata_logo.png" alt="CHILLATA">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/chillata_logo.png" alt="CHILLATA">
                     <h3>CHILLATA</h3>
                     <p>High-Fidelity Asset Exchange.</p>
                 </a>
                 <a href="mynt/" class="dapp-card">
-                    <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/mynt_logo.png" alt="MYNT">
+                    <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/mynt_logo.png" alt="MYNT">
                     <h3>MYNT</h3>
                     <p>Sovereign NFT Marketplace.</p>
                 </a>
