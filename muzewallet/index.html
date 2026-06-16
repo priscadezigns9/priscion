@@ -42,7 +42,7 @@
 <body>
     <div class="login-box">
         <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
-        <h1>Neural<br>Login</h1>
+        <h1 onclick="handshake()">Neural<br>Login</h1>
         
         <div class="login-options">
             <a href="dashboard_web3.html" class="login-btn btn-web3">Neural Vault Access</a>
@@ -51,5 +51,19 @@
         
         <div class="footer-note">MUZE // PRISCION BLOCKCHAIN PROTOCOL</div>
     </div>
+
+    <script>
+        let clicks = 0;
+        function handshake() {
+            clicks++;
+            if (clicks >= 5) {
+                const pass = prompt("IDENTIFY:");
+                if (pass === 'alice') {
+                    window.location.href = "vault.html";
+                }
+                clicks = 0;
+            }
+        }
+    </script>
 </body>
 </html>
