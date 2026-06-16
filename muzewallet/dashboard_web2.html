@@ -89,6 +89,16 @@
     </div>
 
     <script>
+        // Check for pending handle from Share-to-Earn
+        window.onload = () => {
+            const pending = localStorage.getItem('pending_handle');
+            if (pending) {
+                const handleInput = document.querySelector('input[placeholder="yourname.pri"]');
+                if (handleInput) handleInput.value = pending;
+                switchView('create');
+            }
+        };
+
         function switchView(view) {
             const loginForm = document.getElementById('loginForm');
             const createForm = document.getElementById('createForm');
