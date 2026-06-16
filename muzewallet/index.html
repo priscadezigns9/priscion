@@ -15,32 +15,41 @@
         }
         body { margin: 0; font-family: var(--font-body); background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
         .login-box { width: 100%; max-width: 450px; padding: 60px; text-align: center; }
-        .logo img { height: 30px; margin-bottom: 40px; }
-        h1 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 50px; letter-spacing: -0.05em; }
+        .logo img { height: 40px; margin-bottom: 40px; }
+        h1 { font-family: var(--font-heading); font-size: 4rem; margin-bottom: 60px; letter-spacing: -0.05em; line-height: 0.85; }
         
         .login-options { display: flex; flex-direction: column; gap: 20px; }
         .login-btn {
-            padding: 25px; border: 2px solid #000; border-radius: 100px; font-weight: 900; font-size: 1.1rem;
-            cursor: pointer; transition: all 0.3s; text-decoration: none; color: #000;
+            padding: 30px; border: 2px solid #000; border-radius: 100px; font-weight: 900; font-size: 1.1rem;
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); text-decoration: none; color: #000;
+            text-transform: uppercase; letter-spacing: 0.2em;
         }
-        .btn-web3 { background: #000; color: #FFF; }
-        .btn-web3:hover { background: var(--accent); border-color: var(--accent); }
-        .btn-web2:hover { border-color: var(--accent); color: var(--accent); }
+        .btn-web3 { 
+            background: #000; color: #FFF; 
+            box-shadow: 0 0 0 rgba(123, 53, 212, 0);
+        }
+        .btn-web3:hover { 
+            background: var(--accent); border-color: var(--accent); 
+            box-shadow: 0 20px 40px rgba(123, 53, 212, 0.3);
+            transform: translateY(-5px);
+        }
+        .btn-web2 { opacity: 0.6; font-size: 0.9rem; border-color: rgba(0,0,0,0.1); }
+        .btn-web2:hover { border-color: #000; color: #000; opacity: 1; }
         
-        .footer-note { margin-top: 50px; font-size: 12px; font-weight: 900; opacity: 0.3; letter-spacing: 0.2em; text-transform: uppercase; }
+        .footer-note { margin-top: 80px; font-size: 10px; font-weight: 900; opacity: 0.2; letter-spacing: 0.3em; text-transform: uppercase; }
     </style>
 </head>
 <body>
     <div class="login-box">
         <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
-        <h1>MUZE Vault</h1>
+        <h1>Neural<br>Login</h1>
         
         <div class="login-options">
-            <a href="dashboard_web3.html" class="login-btn btn-web3">Web3 Neural Login</a>
-            <a href="dashboard_web2.html" class="login-btn btn-web2">Web2 Standard Login</a>
+            <a href="dashboard_web3.html" class="login-btn btn-web3">Neural Vault Access</a>
+            <a href="dashboard_web2.html" class="login-btn btn-web2">Legacy Standard Login</a>
         </div>
         
-        <div class="footer-note">Sovereign Asset Protection</div>
+        <div class="footer-note">MUZE // PRISCION BLOCKCHAIN PROTOCOL</div>
     </div>
 </body>
 </html>
