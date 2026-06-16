@@ -5,17 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prisicon | Architecting Sovereign Reality</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
-    <meta name="description" content="Prisicon is a global AI brand builder helping you create high quality private digital networks." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg: #FFFFFF;
             --text: #000000;
-            --muted: #666666;
+            --muted: #000000; /* Reference uses black for most text */
             --accent: #7B35D4;
-            --border: #F0F0F0;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
@@ -25,167 +23,136 @@
             font-family: var(--font-body); 
             background: var(--bg); 
             color: var(--text); 
-            line-height: 1.5; 
-            overflow-x: hidden; 
+            line-height: 1.1; /* Tight line height like reference */
             -webkit-font-smoothing: antialiased;
         }
 
-        /* Minimal Header */
+        /* The "Sticky" Sidebar/Header feel from reference */
         header {
-            padding: 40px 50px;
+            padding: 30px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
             z-index: 1000;
         }
-        .logo img { height: 20px; cursor: pointer; }
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 14px; }
-        .nav-links a:hover { color: var(--accent); }
+        .logo img { height: 18px; cursor: pointer; }
 
-        /* Main Container */
+        /* Main Container - Centered and Narrow like the reference */
         main {
-            max-width: 1000px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 200px 50px 100px;
+            padding: 150px 30px;
         }
 
-        /* Large Hero Text */
-        .hero-title {
+        /* Large, tight, overlapping titles */
+        .title-block {
+            margin-bottom: 120px;
+        }
+        .title-block h1 {
             font-family: var(--font-heading);
-            font-size: clamp(4rem, 12vw, 10rem);
+            font-size: clamp(5rem, 15vw, 12rem);
             font-weight: 900;
-            line-height: 0.85;
-            letter-spacing: -0.05em;
-            margin-bottom: 60px;
-            color: var(--text);
+            letter-spacing: -0.06em;
+            line-height: 0.8;
+            margin: 0;
         }
-        .hero-title span { color: var(--accent); font-style: italic; }
-
-        .intro-text {
-            font-size: clamp(1.5rem, 3vw, 2.5rem);
+        .title-block h1 span {
+            color: var(--accent);
+            font-style: italic;
             font-weight: 400;
-            line-height: 1.2;
-            margin-bottom: 100px;
-            max-width: 800px;
-            letter-spacing: -0.02em;
         }
 
-        /* Sections */
-        .section {
-            padding: 80px 0;
-            border-top: 1px solid var(--border);
-        }
-        .section-label {
-            font-size: 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--muted);
-            margin-bottom: 40px;
-            display: block;
-        }
-        .section-content h2 {
-            font-family: var(--font-heading);
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 30px;
+        /* Narrative blocks */
+        .narrative {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.1;
             letter-spacing: -0.03em;
+            margin-bottom: 150px;
         }
-        .section-content p {
-            font-size: clamp(1.1rem, 2vw, 1.4rem);
-            color: var(--muted);
-            margin-bottom: 40px;
-            max-width: 700px;
-        }
+        .narrative b { font-weight: 700; }
 
-        /* Interaction List */
-        .item-list { list-style: none; }
-        .item-list li {
-            padding: 30px 0;
-            border-bottom: 1px solid var(--border);
+        /* The "Menu" list from the reference */
+        .menu-list {
+            margin-top: 100px;
+            border-top: 2px solid #000;
+        }
+        .menu-item {
+            padding: 40px 0;
+            border-bottom: 2px solid #000;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-        .item-list li:last-child { border-bottom: none; }
-        .item-info h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 5px; }
-        .item-info p { font-size: 1rem; color: var(--muted); }
-        .btn-link {
+            align-items: flex-start;
             text-decoration: none;
-            color: var(--accent);
-            font-weight: 800;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 10px 20px;
-            border: 1px solid var(--accent);
-            border-radius: 100px;
-            transition: all 0.3s;
+            color: inherit;
         }
-        .btn-link:hover { background: var(--accent); color: #fff; }
+        .menu-item:hover .item-title { color: var(--accent); }
+        .item-num { font-size: 14px; font-weight: 700; width: 50px; }
+        .item-content { flex: 1; }
+        .item-title { 
+            font-family: var(--font-heading); 
+            font-size: 3rem; 
+            font-weight: 900; 
+            line-height: 0.9; 
+            margin-bottom: 15px; 
+            letter-spacing: -0.04em;
+        }
+        .item-desc { font-size: 1.2rem; max-width: 500px; line-height: 1.2; }
 
-        /* Wallet Section */
-        .wallet-cta {
-            background: var(--accent);
-            color: #fff;
-            padding: 100px 50px;
-            border-radius: 40px;
-            margin: 100px 0;
-            text-align: center;
+        /* Call to Action */
+        .cta-section {
+            margin: 150px 0;
         }
-        .wallet-cta h2 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 20px; }
-        .btn-wallet {
-            background: #fff;
+        .btn-large {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 5rem;
+            font-weight: 900;
+            font-style: italic;
+            letter-spacing: -0.05em;
             color: var(--accent);
-            border: none;
-            padding: 20px 40px;
-            border-radius: 100px;
-            font-weight: 800;
-            font-size: 1rem;
+            text-decoration: none;
+            border-bottom: 8px solid var(--accent);
+            line-height: 0.8;
             cursor: pointer;
-            margin-top: 20px;
+        }
+        .btn-large:hover { color: #000; border-color: #000; }
+
+        footer {
+            padding: 60px 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
         /* Lead Modal */
         #leadModal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.98);
+            background: var(--bg);
             display: none; justify-content: center; align-items: center; z-index: 2000;
         }
         #leadModal.open { display: flex; }
-        .modal-inner { width: 100%; max-width: 500px; padding: 40px; }
-        .modal-inner h2 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 30px; letter-spacing: -2px; }
+        .modal-inner { width: 100%; max-width: 600px; padding: 40px; }
+        .modal-inner h2 { font-family: var(--font-heading); font-size: 4rem; margin-bottom: 30px; letter-spacing: -0.05em; line-height: 0.9; }
         .modal-form input {
-            width: 100%; padding: 15px 0; margin-bottom: 25px; border: none; border-bottom: 1px solid #ccc;
-            font-size: 1.1rem; outline: none;
+            width: 100%; padding: 20px 0; margin-bottom: 30px; border: none; border-bottom: 4px solid #000;
+            font-size: 1.5rem; font-weight: 700; outline: none;
         }
         .btn-submit {
-            background: var(--text); color: #fff; border: none; padding: 15px 40px; border-radius: 100px;
-            font-weight: 800; font-size: 14px; cursor: pointer; width: 100%;
-        }
-
-        footer {
-            padding: 100px 50px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 600;
+            background: #000; color: #fff; border: none; padding: 20px 60px; border-radius: 100px;
+            font-weight: 800; font-size: 18px; cursor: pointer;
         }
 
         @media (max-width: 600px) {
-            header { padding: 20px; }
-            main { padding: 150px 20px 50px; }
-            .intro-text { font-size: 1.2rem; }
-            footer { flex-direction: column; gap: 20px; }
+            .title-block h1 { font-size: 5rem; }
+            .narrative { font-size: 1.5rem; }
+            .item-title { font-size: 2rem; }
+            .btn-large { font-size: 3rem; }
         }
     </style>
 </head>
@@ -195,92 +162,72 @@
         <div class="logo">
             <img id="main-logo" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon" onclick="godHandshake()">
         </div>
-        <nav class="nav-links">
-            <a href="pulse/">PULSE</a>
-            <a href="muzewallet/">MUZE</a>
-            <a href="leggo.html">LEGGO</a>
-        </nav>
+        <div style="font-weight:700; font-size:14px;">AST // 2026</div>
     </header>
 
     <main>
-        <div class="hero-title">
-            architecting<br><span>reality.</span>
+        <div class="title-block">
+            <h1>architecting</h1>
+            <h1><span>reality.</span></h1>
         </div>
 
-        <p class="intro-text">
-            Prisicon is the sovereign architecture for the next evolution of brand identity. We migrate elite legacies from the noise of Web2 to the absolute fidelity of the Web3 Ledger.
-        </p>
+        <div class="narrative">
+            Prisicon is a <b>sovereign agency</b> for elite brand migration. We take the noise of Web2 and crystallize it into the <b>absolute fidelity</b> of the Web3 Ledger.
+        </div>
 
-        <section class="section">
-            <span class="section-label">the mission</span>
-            <div class="section-content">
-                <h2>Autonomous Identity.</h2>
-                <p>Establishing on-chain sovereignty through private networks, signed high-fidelity assets, and neural identity protocols.</p>
-            </div>
-        </section>
+        <div class="menu-list">
+            <a href="pulse/" class="menu-item">
+                <div class="item-num">01</div>
+                <div class="item-content">
+                    <div class="item-title">PULSE</div>
+                    <div class="item-desc">Real-time network explorer and activity hub for sovereign data.</div>
+                </div>
+            </a>
+            <a href="muzewallet/" class="menu-item">
+                <div class="item-num">02</div>
+                <div class="item-content">
+                    <div class="item-title">MUZE</div>
+                    <div class="item-desc">The elite private vault for identity and high-fidelity assets.</div>
+                </div>
+            </a>
+            <a href="chillata/" class="menu-item">
+                <div class="item-num">03</div>
+                <div class="item-content">
+                    <div class="item-title">CHILLATA</div>
+                    <div class="item-desc">High-fidelity asset exchange and liquidity provider.</div>
+                </div>
+            </a>
+            <a href="mynt/" class="menu-item">
+                <div class="item-num">04</div>
+                <div class="item-content">
+                    <div class="item-title">MYNT</div>
+                    <div class="item-desc">Sovereign marketplace for verified and signed products.</div>
+                </div>
+            </a>
+        </div>
 
-        <section class="section">
-            <span class="section-label">the dapps</span>
-            <ul class="item-list">
-                <li>
-                    <div class="item-info">
-                        <h3>PULSE Explorer</h3>
-                        <p>Real-time visibility into the sovereign network pulse.</p>
-                    </div>
-                    <a href="pulse/" class="btn-link">Explore</a>
-                </li>
-                <li>
-                    <div class="item-info">
-                        <h3>MUZE Wallet</h3>
-                        <p>The elite vault for private asset management.</p>
-                    </div>
-                    <a href="muzewallet/" class="btn-link">Open</a>
-                </li>
-                <li>
-                    <div class="item-info">
-                        <h3>CHILLATA Exchange</h3>
-                        <p>High-fidelity liquidity for the Prisicon economy.</p>
-                    </div>
-                    <a href="chillata/" class="btn-link">Trade</a>
-                </li>
-                <li>
-                    <div class="item-info">
-                        <h3>MYNT Marketplace</h3>
-                        <p>Verified storefront for autonomous commerce.</p>
-                    </div>
-                    <a href="mynt/" class="btn-link">Shop</a>
-                </li>
-            </ul>
-        </section>
+        <div class="cta-section">
+            <div class="btn-large" onclick="openLeadModal('Network Migration')">Begin Migration</div>
+        </div>
 
-        <section class="wallet-cta">
-            <h2>Ready to Migrate?</h2>
-            <p>Secure your position in the sovereign ledger today.</p>
-            <button class="btn-wallet" onclick="openLeadModal('General Migration')">Inquire Now</button>
-        </section>
-
-        <section class="section">
-            <span class="section-label">the architect</span>
-            <div class="section-content">
-                <h2>High-Fidelity Engineering.</h2>
-                <p>Every node, every contract, and every pixel is engineered for permanence and precision.</p>
-            </div>
-        </section>
+        <div class="narrative" style="margin-top: 200px;">
+            High-fidelity engineering for those who demand <b>absolute autonomy.</b> No simulations. No noise. Just the ledger.
+        </div>
     </main>
 
     <footer>
-        <div>PRISICON &copy; 2026</div>
-        <div>ARCHITECTING SOVEREIGN REALITY</div>
+        <div>PRISICON / SOVEREIGN</div>
+        <div>&copy; 2026 ARCHITECTING REALITY</div>
     </footer>
 
     <div id="leadModal">
         <div class="modal-inner">
-            <button style="float:right; border:none; background:none; font-size:2rem; cursor:pointer;" onclick="closeLeadModal()">&times;</button>
-            <h2 id="modal-title">Secure Position</h2>
+            <button style="float:right; border:none; background:none; font-size:3rem; cursor:pointer;" onclick="closeLeadModal()">&times;</button>
+            <h2 id="modal-title">Begin Migration</h2>
             <form id="leadForm">
-                <input type="text" id="leadName" placeholder="Full Name" required>
-                <input type="text" id="leadCompany" placeholder="Company" required>
-                <input type="email" id="leadEmail" placeholder="Email" required>
+                <input type="text" id="leadName" placeholder="NAME" required>
+                <input type="text" id="leadCompany" placeholder="ENTITY" required>
+                <input type="email" id="leadEmail" placeholder="EMAIL" required>
                 <button type="submit" class="btn-submit" id="submitBtn">SYNCHRONIZE</button>
             </form>
             <div id="successMsg" style="display:none; text-align:center; padding:40px;">
@@ -307,7 +254,7 @@
         let currentPlan = '';
         function openLeadModal(plan) {
             currentPlan = plan;
-            document.getElementById('modal-title').textContent = plan;
+            document.getElementById('modal-title').textContent = plan.toUpperCase();
             document.getElementById('leadModal').classList.add('open');
             document.getElementById('leadForm').style.display = 'block';
             document.getElementById('successMsg').style.display = 'none';
