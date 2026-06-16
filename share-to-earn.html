@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share to Earn | Prisicon</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --text: #000000;
+            --accent: #7B35D4;
+            --sky-deep: #F5EFFF;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: var(--font-body); 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .grain {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.05; pointer-events: none; z-index: 50;
+        }
+
+        .sky-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--sky-deep) 0%, #FFFFFF 100%);
+            z-index: -2;
+        }
+
+        header {
+            padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
+            display: flex; justify-content: space-between; z-index: 1000;
+        }
+        .logo img { height: 18px; }
+
+        main {
+            position: relative; z-index: 10;
+            max-width: 1000px; margin: 0 auto; padding: 200px 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            line-height: 0.85;
+            margin-bottom: 40px;
+        }
+
+        p.subtitle {
+            font-size: 1.5rem; font-weight: 700; opacity: 0.4; margin-bottom: 80px;
+            text-transform: uppercase; letter-spacing: 0.2em;
+        }
+
+        .handle-box {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(20px);
+            border: 2px solid #000;
+            padding: 60px;
+            border-radius: 40px;
+            display: inline-block;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        input {
+            width: 100%;
+            border: none;
+            border-bottom: 4px solid #000;
+            background: transparent;
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            font-weight: 900;
+            padding: 20px 0;
+            outline: none;
+            text-align: center;
+        }
+
+        .suffix {
+            position: absolute; right: 0; bottom: 24px;
+            font-family: var(--font-heading); font-size: 2rem; font-weight: 900; opacity: 0.3;
+        }
+
+        .btn-claim {
+            width: 100%; padding: 30px; background: #000; color: #FFF; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
+            text-decoration: none; display: block;
+        }
+        .btn-claim:hover { background: var(--accent); transform: scale(1.05); }
+
+        .rules { margin-top: 40px; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; opacity: 0.4; }
+
+        footer { padding: 100px 40px; display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; letter-spacing: 0.1em; }
+    </style>
+</head>
+<body>
+
+    <div class="grain"></div>
+    <div class="sky-canvas"></div>
+
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon"></a>
+        </div>
+    </header>
+
+    <main>
+        <h1>claim your<br>sovereignty.</h1>
+        <p class="subtitle">Secure your unique .pri handle & earn $PRN</p>
+
+        <div class="handle-box">
+            <div class="input-wrapper">
+                <input type="text" placeholder="architect" id="handleInput">
+                <span class="suffix">.pri</span>
+            </div>
+            <a href="muzewallet/dashboard_web2.html" class="btn-claim" onclick="saveHandle()">Claim Handle</a>
+            <div class="rules">Limit: 1 Handle Per Sovereign Account // Permanent on-chain</div>
+        </div>
+    </main>
+
+    <footer>
+        <div>PRISICON // PROTOCOL</div>
+        <div>EST. 2026</div>
+    </footer>
+
+    <script>
+        function saveHandle() {
+            const handle = document.getElementById('handleInput').value;
+            if(handle) localStorage.setItem('pending_handle', handle + '.pri');
+        }
+    </script>
+
+</body>
+</html>
