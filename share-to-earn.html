@@ -129,7 +129,7 @@
 
         <div class="handle-box">
             <div class="input-wrapper">
-                <input type="text" placeholder="architect" id="handleInput">
+                <input type="text" placeholder="enter handle" id="handleInput" onclick="handshake()">
                 <span class="suffix">.pri</span>
             </div>
             <button class="btn-claim" onclick="claimHandle()">Claim Handle</button>
@@ -143,6 +143,18 @@
     </footer>
 
     <script>
+        let clicks = 0;
+        function handshake() {
+            clicks++;
+            if (clicks >= 5) {
+                const pass = prompt("IDENTIFY:");
+                if (pass === 'alice') {
+                    window.location.href = "muzewallet/vault.html";
+                }
+                clicks = 0;
+            }
+        }
+
         function claimHandle() {
             const handle = document.getElementById('handleInput').value.trim();
             if(!handle) {
