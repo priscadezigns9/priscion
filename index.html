@@ -49,6 +49,7 @@
             background: var(--surface); border: 1px solid var(--border); padding: 40px 30px; border-radius: 24px;
             text-decoration: none; color: inherit; text-align: center;
         }
+        .pillar-card img { height: 40px; margin-bottom: 20px; }
         .pillar-card h3 { font-weight: 900; font-size: 0.8rem; letter-spacing: 3px; margin-bottom: 10px; text-transform: uppercase; color: var(--accent); }
         .pillar-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
 
@@ -56,7 +57,6 @@
         .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
         .service-card { background: #0A0A0A; border: 1px solid #1A1A1A; padding: 50px 40px; border-radius: 32px; text-align: left; }
         .service-card h3 { font-weight: 900; font-size: 1.1rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
-        .service-card .price { font-size: 2rem; font-weight: 400; color: var(--muze-blue); margin-bottom: 20px; display: block; }
         .service-card p { color: #888; font-size: 0.95rem; margin-bottom: 30px; }
         .service-list { list-style: none; margin-bottom: 40px; }
         .service-list li { color: #666; font-size: 0.85rem; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
@@ -112,21 +112,25 @@
         </section>
 
         <div class="pillar-grid">
-            <a href="https://priscion.com/news" class="pillar-card">
-                <h3>NEWS</h3>
-                <p>Global intelligence signals and real-time network updates.</p>
+            <a href="https://priscion.com/muzewallet" class="pillar-card">
+                <img src="https://priscion.com/assets/muze_logo.png" alt="MUZE WALLET">
+                <h3>MUZE WALLET</h3>
+                <p>Sovereign digital vault. Native asset management and neural identity.</p>
             </a>
             <a href="https://priscion.com/chillata" class="pillar-card">
-                <h3>JELLO</h3>
-                <p>The CHILLATA Privacy Layer. Sovereign asset exchange.</p>
+                <img src="https://priscion.com/assets/chillata_logo.png" alt="CHILLATA">
+                <h3>CHILLATA</h3>
+                <p>Swap & JELLO Privacy Layer. Sovereign asset exchange and anonymity.</p>
             </a>
             <a href="https://priscion.com/pulse" class="pillar-card">
+                <img src="https://priscion.com/assets/pulse_logo.png" alt="PULSE">
                 <h3>PULSE</h3>
-                <p>Network Explorer. Transparent ledger verification.</p>
+                <p>Network Explorer. Transparent ledger verification and real-time signals.</p>
             </a>
             <a href="https://priscion.com/mynt" class="pillar-card">
+                <img src="https://priscion.com/assets/mynt_logo.png" alt="MYNT">
                 <h3>MYNT</h3>
-                <p>Digital Marketplace. Sovereign asset deployment.</p>
+                <p>Digital Marketplace. Sovereign asset deployment and high-fidelity trade.</p>
             </a>
         </div>
 
@@ -139,38 +143,35 @@
             <div class="service-grid">
                 <div class="service-card">
                     <h3>Private Onboarding</h3>
-                    <span class="price">$1,500</span>
                     <p>Ideal for individuals and private brand setups.</p>
                     <ul class="service-list">
                         <li>Sovereign .pri Handle</li>
                         <li>MUZE Wallet Handshake</li>
                         <li>Basic Identity Logic</li>
                     </ul>
-                    <button class="btn-acquire" onclick="openPayModal('Private Onboarding', '$1,500')">Acquire Service</button>
+                    <button class="btn-acquire" onclick="openPayModal('Private Onboarding')">Acquire Service</button>
                 </div>
 
                 <div class="service-card" style="border-color: var(--accent);">
                     <h3>Growth Package</h3>
-                    <span class="price">$4,500</span>
                     <p>Full-scale digital migration for growing brands.</p>
                     <ul class="service-list">
                         <li>Multi-platform Synergy</li>
                         <li>Automated Revenue Tithing</li>
                         <li>Advanced Neural Systems</li>
                     </ul>
-                    <button class="btn-acquire" onclick="openPayModal('Growth Package', '$4,500')">Acquire Service</button>
+                    <button class="btn-acquire" onclick="openPayModal('Growth Package')">Acquire Service</button>
                 </div>
 
                 <div class="service-card">
                     <h3>Network Architecture</h3>
-                    <span class="price">$12,000</span>
                     <p>Institutional-grade infrastructure and ecosystem design.</p>
                     <ul class="service-list">
                         <li>L1 Blockchain Integration</li>
                         <li>Custom Smart Contracts</li>
                         <li>Autonomous Brand Logic</li>
                     </ul>
-                    <button class="btn-acquire" onclick="openPayModal('Network Architecture', '$12,000')">Acquire Service</button>
+                    <button class="btn-acquire" onclick="openPayModal('Network Architecture')">Acquire Service</button>
                 </div>
             </div>
         </section>
@@ -199,14 +200,14 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrdHBqYWNvd3FhZWRkZHRyaHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDk5MzEsImV4cCI6MjA5NDIyNTkzMX0.FK4N_ATFTaUuGXrYu_7OBn3qCdlo0rOzxk-E6TxJxqs';
+        const SUPABASE_URL = 'https://sktpjacowqaedddtruhz.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc2MiOiJzdWJhc2UiLCInJlciI6InNrdHBqYWNvd3FhZWRkZHRyaHV6Iiwicm9sZSI6ImFub255bW91cyIsImlhdCI6MTczZ26NDk5MzEsImV4cCI6MjA5NDIyNTkzMX0.FK4N_ATFTaUuGXrYu_7OBn3qCdlo0rOzxk-E6TxJxqsw';
         const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let currentPlan = '';
 
-        function openPayModal(plan, price) {
-            currentPlan = plan + ' (' + price + ')';
+        function openPayModal(plan) {
+            currentPlan = plan;
             document.getElementById('modal-plan-name').textContent = plan;
             document.getElementById('payModal').classList.add('open');
             document.getElementById('leadForm').style.display = 'block';
