@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whitepaper | Prisicon L1</title>
+    <title>Whitepaper | Prisicon</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -12,7 +12,6 @@
             --bg: #FFFFFF;
             --text: #000000;
             --accent: #7B35D4;
-            --sky-deep: #F5EFFF;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
@@ -30,66 +29,107 @@
         .grain {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.05; pointer-events: none; z-index: 50; brightness: 0.5;
+            opacity: 0.05; pointer-events: none; z-index: 50;
+        }
+
+        .sky-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #FFFFFF;
+            z-index: -2;
+            transition: background 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         header {
             padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
             display: flex; justify-content: space-between; z-index: 1000;
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(10px);
         }
-        .logo img { height: 18px; cursor: pointer; }
+        .logo img { height: 18px; }
 
         main {
             position: relative; z-index: 10;
-            max-width: 800px; margin: 0 auto; padding: 200px 40px;
+            max-width: 900px; margin: 0 auto; padding: 0 40px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+            margin-bottom: 20vh;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         h1 {
             font-family: var(--font-heading);
-            font-size: clamp(3rem, 8vw, 6rem);
+            font-size: clamp(3.5rem, 10vw, 8rem);
             font-weight: 900;
             letter-spacing: -0.06em;
             line-height: 0.8;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
         }
 
-        h2 { font-family: var(--font-heading); font-size: 2.5rem; margin: 60px 0 20px; letter-spacing: -0.04em; }
-        p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.8; }
+        h2 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 30px; letter-spacing: -0.04em; }
+        p { font-size: 1.4rem; margin-bottom: 30px; opacity: 0.8; font-weight: 400; }
         
         .accent-box {
-            padding: 40px; background: var(--sky-deep); border-left: 10px solid var(--accent); margin: 60px 0;
+            padding: 60px; background: rgba(255,255,255,0.1); border: 2px solid #000; border-radius: 40px; margin: 60px 0;
+            backdrop-filter: blur(20px);
         }
-        .accent-box h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
+        .accent-box h3 { font-family: var(--font-heading); font-size: 2.2rem; margin-bottom: 20px; }
 
-        footer { padding: 100px 40px; border-top: 2px solid #000; display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; letter-spacing: 0.1em; }
+        .btn-group { margin-top: 50px; }
+        .primary-btn {
+            display: inline-block; padding: 25px 50px; background: #000; color: #FFF; border-radius: 100px;
+            text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em;
+            transition: all 0.3s;
+        }
+        .primary-btn:hover { background: var(--accent); transform: scale(1.05); }
+
+        footer { padding: 100px 40px; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; }
 
         @media (max-width: 600px) {
-            h1 { font-size: 3rem; }
-            h2 { font-size: 1.8rem; }
+            h1 { font-size: 4rem; }
+            h2 { font-size: 2.5rem; }
+            .accent-box { padding: 30px; }
         }
     </style>
 </head>
 <body>
 
     <div class="grain"></div>
+    <div class="sky-canvas" id="sky"></div>
 
     <header>
         <div class="logo">
-            <a href="../"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon"></a>
+            <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon"></a>
         </div>
-        <div style="font-weight:900; font-size:14px; letter-spacing: 0.3em; text-transform: uppercase;">Technical Specification</div>
+        <div style="font-weight:900; font-size:12px; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.5;">Protocol V1.0</div>
     </header>
 
     <main>
-        <h1>the<br>whitepaper.</h1>
-
-        <section>
-            <h2>I. Executive Summary</h2>
-            <p>Prisicon is a specialized Layer 1 blockchain built on the Cardano settlement layer. It is designed to act as the sovereign rails for the "Great Migration"—the transition of elite Web2 consumer brands into a high-fidelity Web3 ledger environment.</p>
+        <section class="hero reveal">
+            <h1>the<br>whitepaper.</h1>
+            <p>Architecting the sovereign rails for the Great Migration.</p>
+            <div class="btn-group">
+                <a href="index.html" class="primary-btn">Return to Node</a>
+            </div>
         </section>
 
-        <section>
+        <section class="reveal">
+            <h2>I. Executive Summary</h2>
+            <p>Prisicon is a specialized Layer 1 blockchain built on the Cardano settlement layer. It is designed to act as the sovereign rails for the transition of elite Web2 consumer brands into a high-fidelity Web3 ledger environment.</p>
+        </section>
+
+        <section class="reveal">
             <h2>II. The Cardano L1 Advantage</h2>
             <p>Unlike secondary "apps" or L2 sidechains, Prisicon operates as a foundational network. This provides direct security inherited from Cardano’s peer-reviewed Ouroboros consensus mechanism.</p>
             <div class="accent-box">
@@ -98,12 +138,12 @@
             </div>
         </section>
 
-        <section>
+        <section class="reveal">
             <h2>III. The .pri Identity Protocol</h2>
-            <p>Identity is the cornerstone of the Prisicon network. The .pri handle system creates a permanent, on-chain identifier for every user, enabling seamless cross-brand interaction across the node network (Atelia, Calalloo, etc.).</p>
+            <p>Identity is the cornerstone of the Prisicon network. The .pri handle system creates a permanent, on-chain identifier for every user, enabling seamless cross-brand interaction across the node network.</p>
         </section>
 
-        <section>
+        <section class="reveal">
             <h2>IV. Sovereign Migration Architecture</h2>
             <p>Prisicon provides the infrastructure for Web2 entities to digitize their inventory, reputation, and identity. By bridging legacy databases to the Cardano ledger, we ensure that the "Ledger Never Lies."</p>
         </section>
@@ -111,8 +151,46 @@
 
     <footer>
         <div>PRISICON // DOCUMENTATION</div>
-        <div>V1.0 &copy; 2026</div>
+        <div>&copy; 2026 // SOVEREIGN</div>
     </footer>
+
+    <script>
+        const sky = document.getElementById('sky');
+        const reveals = document.querySelectorAll('.reveal');
+
+        function handleScroll() {
+            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            
+            // Color Shift: White -> Light Purple -> Deep Purple
+            if (scrollPercent < 0.5) {
+                const p = scrollPercent * 2;
+                const r = Math.floor(255 - (255 - 245) * p);
+                const g = Math.floor(255 - (255 - 239) * p);
+                const b = 255;
+                sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            } else {
+                const p = (scrollPercent - 0.5) * 2;
+                const r = Math.floor(245 - (245 - 123) * p);
+                const g = Math.floor(239 - (239 - 53) * p);
+                const b = Math.floor(255 - (255 - 212) * p);
+                sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+            }
+
+            // Reveal Animation
+            reveals.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const isVisible = (rect.top <= window.innerHeight * 0.8) && (rect.bottom >= 0);
+                if (isVisible) {
+                    el.classList.add('visible');
+                } else {
+                    el.classList.remove('visible');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial check
+    </script>
 
 </body>
 </html>
