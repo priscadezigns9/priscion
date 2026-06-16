@@ -157,13 +157,14 @@
         .cta-box { text-align: center; }
         .btn-glow {
             font-family: var(--font-heading); font-size: 7rem; font-weight: 900;
-            font-style: italic; letter-spacing: -0.05em; color: var(--accent);
-            text-decoration: none; border-bottom: 12px solid var(--accent);
+            font-style: italic; letter-spacing: -0.05em; color: #000;
+            text-decoration: none; border-bottom: 12px solid #000;
             line-height: 0.8; cursor: pointer; display: inline-block;
             transition: color 0.3s ease, border-color 0.3s ease;
         }
-        .btn-glow:hover { color: #000 !important; border-color: #000 !important; }
-        [data-theme="dark"] .btn-glow:hover { color: #FFF !important; border-color: #FFF !important; }
+        .btn-glow:hover { color: var(--accent); border-color: var(--accent); }
+        [data-theme="dark"] .btn-glow { color: #FFF; border-color: #FFF; }
+        [data-theme="dark"] .btn-glow:hover { color: var(--accent); border-color: var(--accent); }
 
         footer { padding: 100px 40px; border-top: 2px solid #000; display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; letter-spacing: 0.1em; }
         [data-theme="dark"] footer { border-color: #FFF; }
@@ -420,3 +421,4 @@
     </script>
 </body>
 </html>
+
