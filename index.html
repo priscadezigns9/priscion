@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prisicon | Sovereign Reality</title>
+    <title>Prisicon</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
             --bg: #FFFFFF;
             --text: #000000;
             --accent: #7B35D4;
-            --sky-deep: #F8F4FF; /* Very light purple sky baseline */
+            --sky-deep: #F5EFFF; /* Tented Purple Sky Baseline */
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
@@ -32,7 +32,7 @@
         .grain {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.04; pointer-events: none; z-index: 50; brightness: 0.5;
+            opacity: 0.05; pointer-events: none; z-index: 50; brightness: 0.5;
         }
 
         /* The Purple Sky Baseline */
@@ -42,7 +42,7 @@
             z-index: -2;
         }
 
-        /* Parallax Cloud Logic */
+        /* Parallax Cloud Logic - Changing Depth */
         .cloud-wrap {
             position: fixed; top: 0; left: 0; width: 100%; height: 200%;
             z-index: -1; pointer-events: none;
@@ -51,10 +51,10 @@
 
         .cloud {
             position: absolute;
-            background: radial-gradient(circle, rgba(123, 53, 212, 0.12) 0%, rgba(123, 53, 212, 0) 70%);
+            background: radial-gradient(circle, rgba(123, 53, 212, 0.15) 0%, rgba(123, 53, 212, 0) 70%);
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.8;
+            filter: blur(120px);
+            opacity: 0.9;
         }
 
         header {
@@ -135,29 +135,30 @@
     <div class="sky-canvas"></div>
     
     <div class="cloud-wrap" id="cloud-field">
-        <!-- Parallax Depth Clouds -->
+        <!-- Parallax Depth Clouds - Pure Purple changing depth -->
         <div class="cloud" style="width: 1200px; height: 1200px; top: -10%; left: -20%;" data-depth="0.1"></div>
         <div class="cloud" style="width: 900px; height: 900px; top: 30%; right: -10%;" data-depth="0.4"></div>
         <div class="cloud" style="width: 1500px; height: 1500px; top: 70%; left: 0%;" data-depth="0.2"></div>
         <div class="cloud" style="width: 1000px; height: 1000px; top: 120%; right: 5%;" data-depth="0.5"></div>
         <div class="cloud" style="width: 1300px; height: 1300px; top: 180%; left: -10%;" data-depth="0.3"></div>
+        <div class="cloud" style="width: 1400px; height: 1400px; top: 250%; right: -20%;" data-depth="0.6"></div>
     </div>
 
     <header>
         <div class="logo">
             <img id="main-logo" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon" onclick="godHandshake()">
         </div>
-        <div style="font-weight:900; font-size:14px; letter-spacing: 0.3em; text-transform: uppercase;">Sovereign Intelligence</div>
+        <div style="font-weight:900; font-size:14px; letter-spacing: 0.3em; text-transform: uppercase;">Intelligence</div>
     </header>
 
     <main>
         <div class="hero-title">
-            <h1>Sovereign</h1>
+            <h1>architecting</h1>
             <h1><span>reality.</span></h1>
         </div>
 
         <div class="narrative">
-            Prisicon is a <b>sovereign digital agency</b> designed for the age of agentic orchestration.
+            Prisicon is a <b>digital agency</b> designed for the age of agentic orchestration.
         </div>
 
         <div class="section-break"></div>
@@ -195,8 +196,8 @@
     </main>
 
     <footer>
-        <div>PRISICON // SOVEREIGN</div>
-        <div>SOVEREIGN NETWORK &copy; 2026</div>
+        <div>PRISICON</div>
+        <div>NETWORK &copy; 2026</div>
     </footer>
 
     <div id="leadModal">
@@ -216,7 +217,7 @@
     </div>
 
     <script>
-        // High-Fidelity Scroll-Based Cloud Movement
+        // High-Fidelity Scroll-Based Cloud Movement - Depth Logic
         window.addEventListener('scroll', () => {
             const scrollY = window.pageYOffset;
             const clouds = document.querySelectorAll('.cloud');
