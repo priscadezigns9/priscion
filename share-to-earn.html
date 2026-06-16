@@ -132,7 +132,7 @@
                 <input type="text" placeholder="architect" id="handleInput">
                 <span class="suffix">.pri</span>
             </div>
-            <a href="muzewallet/dashboard_web2.html" class="btn-claim" onclick="saveHandle()">Claim Handle</a>
+            <button class="btn-claim" onclick="claimHandle()">Claim Handle</button>
             <div class="rules">Limit: 1 Handle Per Sovereign Account // Permanent on-chain</div>
         </div>
     </main>
@@ -143,9 +143,14 @@
     </footer>
 
     <script>
-        function saveHandle() {
-            const handle = document.getElementById('handleInput').value;
-            if(handle) localStorage.setItem('pending_handle', handle + '.pri');
+        function claimHandle() {
+            const handle = document.getElementById('handleInput').value.trim();
+            if(!handle) {
+                alert('A sovereign handle is required.');
+                return;
+            }
+            localStorage.setItem('pending_handle', handle + '.pri');
+            window.location.href = "muzewallet/dashboard_web2.html";
         }
     </script>
 
