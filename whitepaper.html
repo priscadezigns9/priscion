@@ -39,6 +39,20 @@
             transition: background 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
+        .cloud-wrap {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .cloud {
+            position: absolute;
+            background: radial-gradient(circle, rgba(123, 53, 212, 0.1) 0%, rgba(123, 53, 212, 0) 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.8;
+            will-change: transform;
+        }
+
         header {
             padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
             display: flex; justify-content: space-between; z-index: 1000;
@@ -52,9 +66,9 @@
 
         .reveal {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
-            margin-bottom: 20vh;
+            transform: translateY(50px);
+            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1);
+            margin-bottom: 30vh;
         }
         .reveal.visible {
             opacity: 1;
@@ -70,36 +84,36 @@
 
         h1 {
             font-family: var(--font-heading);
-            font-size: clamp(3.5rem, 10vw, 8rem);
+            font-size: clamp(3.5rem, 12vw, 10rem);
             font-weight: 900;
             letter-spacing: -0.06em;
-            line-height: 0.8;
+            line-height: 0.75;
             margin-bottom: 20px;
         }
 
-        h2 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 30px; letter-spacing: -0.04em; }
-        p { font-size: 1.4rem; margin-bottom: 30px; opacity: 0.8; font-weight: 400; }
+        h2 { font-family: var(--font-heading); font-size: 4.5rem; margin-bottom: 30px; letter-spacing: -0.04em; line-height: 0.9; }
+        p { font-size: 1.6rem; margin-bottom: 40px; opacity: 0.8; font-weight: 400; letter-spacing: -0.02em; }
         
         .accent-box {
-            padding: 60px; background: rgba(255,255,255,0.1); border: 2px solid #000; border-radius: 40px; margin: 60px 0;
-            backdrop-filter: blur(20px);
+            padding: 80px; background: rgba(255,255,255,0.05); border: 2px solid #000; border-radius: 60px; margin: 100px 0;
+            backdrop-filter: blur(40px);
         }
-        .accent-box h3 { font-family: var(--font-heading); font-size: 2.2rem; margin-bottom: 20px; }
+        .accent-box h3 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 20px; letter-spacing: -0.04em; }
 
         .btn-group { margin-top: 50px; }
         .primary-btn {
-            display: inline-block; padding: 25px 50px; background: #000; color: #FFF; border-radius: 100px;
-            text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.2em;
-            transition: all 0.3s;
+            display: inline-block; padding: 25px 60px; background: #000; color: #FFF; border-radius: 100px;
+            text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3em;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .primary-btn:hover { background: var(--accent); transform: scale(1.05); }
+        .primary-btn:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(123, 53, 212, 0.2); }
 
-        footer { padding: 100px 40px; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.2em; text-transform: uppercase; }
+        footer { padding: 150px 40px; border-top: 1px solid rgba(0,0,0,0.1); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; }
 
         @media (max-width: 600px) {
-            h1 { font-size: 4rem; }
-            h2 { font-size: 2.5rem; }
-            .accent-box { padding: 30px; }
+            h1 { font-size: 5rem; }
+            h2 { font-size: 3rem; }
+            .accent-box { padding: 40px; }
         }
     </style>
 </head>
@@ -108,11 +122,19 @@
     <div class="grain"></div>
     <div class="sky-canvas" id="sky"></div>
 
+    <div class="cloud-wrap">
+        <div class="cloud" style="width: 600px; height: 600px; top: -10%; left: -10%;" data-depth="0.1"></div>
+        <div class="cloud" style="width: 800px; height: 800px; top: 20%; right: -20%;" data-depth="0.3"></div>
+        <div class="cloud" style="width: 500px; height: 500px; bottom: 10%; left: 10%;" data-depth="0.2"></div>
+        <div class="cloud" style="width: 900px; height: 900px; top: 50%; left: -30%;" data-depth="0.5"></div>
+        <div class="cloud" style="width: 700px; height: 700px; top: 80%; right: 10%;" data-depth="0.4"></div>
+    </div>
+
     <header>
         <div class="logo">
             <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon"></a>
         </div>
-        <div style="font-weight:900; font-size:12px; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.5;">Protocol V1.0</div>
+        <div style="font-weight:900; font-size:12px; letter-spacing: 0.4em; text-transform: uppercase; opacity: 0.5;">Sovereign Intelligence</div>
     </header>
 
     <main>
@@ -157,9 +179,12 @@
     <script>
         const sky = document.getElementById('sky');
         const reveals = document.querySelectorAll('.reveal');
+        const clouds = document.querySelectorAll('.cloud');
 
         function handleScroll() {
-            const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            const scrollY = window.scrollY;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollY / scrollHeight;
             
             // Color Shift: White -> Light Purple -> Deep Purple
             if (scrollPercent < 0.5) {
@@ -170,16 +195,23 @@
                 sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
             } else {
                 const p = (scrollPercent - 0.5) * 2;
-                const r = Math.floor(245 - (245 - 123) * p);
-                const g = Math.floor(239 - (239 - 53) * p);
-                const b = Math.floor(255 - (255 - 212) * p);
+                const r = Math.floor(245 - (245 - 61) * p);
+                const g = Math.floor(239 - (239 - 13) * p);
+                const b = Math.floor(255 - (255 - 105) * p);
                 sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
             }
+
+            // Cloud Parallax
+            clouds.forEach(cloud => {
+                const depth = cloud.getAttribute('data-depth');
+                const move = scrollY * depth;
+                cloud.style.transform = `translateY(-${move}px) scale(${1 + scrollPercent * depth})`;
+            });
 
             // Reveal Animation
             reveals.forEach(el => {
                 const rect = el.getBoundingClientRect();
-                const isVisible = (rect.top <= window.innerHeight * 0.8) && (rect.bottom >= 0);
+                const isVisible = (rect.top <= window.innerHeight * 0.85) && (rect.bottom >= 0);
                 if (isVisible) {
                     el.classList.add('visible');
                 } else {
