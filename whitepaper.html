@@ -3,127 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRISCION | Sovereign White Paper v3.0</title>
+    <title>Whitepaper | Prisicon L1</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #FFFFFF;
-            --text: #1A1A1A;
-            --muted: #666666;
+            --text: #000000;
             --accent: #7B35D4;
-            --muze-blue: #5AC8FA;
-            --border: rgba(0,0,0,0.08);
-            --surface: #F9F9F9;
+            --sky-deep: #F5EFFF;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: none !important; animation: none !important; }
-        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.7; padding: 0 5%; }
-
-        nav {
-            height: 90px; max-width: 1200px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border);
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: var(--font-body); 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
-        .logo { height: 35px; cursor: pointer; }
 
-        article { max-width: 800px; margin: 80px auto; }
-        
-        .version { font-size: 0.65rem; font-weight: 900; letter-spacing: 5px; color: var(--accent); text-transform: uppercase; margin-bottom: 20px; display: block; }
-        h1 { font-family: var(--font-heading); font-size: clamp(3rem, 8vw, 4.5rem); line-height: 1.1; margin-bottom: 40px; }
-        h2 { font-family: var(--font-heading); font-size: 2.2rem; margin: 60px 0 25px; border-top: 1px solid var(--border); padding-top: 40px; }
-        h3 { font-size: 1.1rem; font-weight: 900; margin: 40px 0 15px; text-transform: uppercase; letter-spacing: 2px; }
-        p { font-size: 1.1rem; color: #333; margin-bottom: 25px; }
-        
-        .highlight-box { background: var(--surface); border: 1px solid var(--border); padding: 40px; border-radius: 24px; margin: 40px 0; }
-        .highlight-box h4 { font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 15px; }
+        .grain {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.05; pointer-events: none; z-index: 50; brightness: 0.5;
+        }
 
-        .btn-cta { background: #000; color: #fff; padding: 20px 40px; border-radius: 100px; text-decoration: none; font-weight: 900; font-size: 0.8rem; letter-spacing: 2px; display: inline-block; margin-top: 20px; }
+        header {
+            padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
+            display: flex; justify-content: space-between; z-index: 1000;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(10px);
+        }
+        .logo img { height: 18px; cursor: pointer; }
+
+        main {
+            position: relative; z-index: 10;
+            max-width: 800px; margin: 0 auto; padding: 200px 40px;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            line-height: 0.8;
+            margin-bottom: 60px;
+        }
+
+        h2 { font-family: var(--font-heading); font-size: 2.5rem; margin: 60px 0 20px; letter-spacing: -0.04em; }
+        p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.8; }
+        
+        .accent-box {
+            padding: 40px; background: var(--sky-deep); border-left: 10px solid var(--accent); margin: 60px 0;
+        }
+        .accent-box h3 { font-family: var(--font-heading); font-size: 1.8rem; margin-bottom: 15px; }
+
+        footer { padding: 100px 40px; border-top: 2px solid #000; display: flex; justify-content: space-between; font-size: 14px; font-weight: 900; letter-spacing: 0.1em; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <img src="https://priscion.com/assets/priscion_logo.png" class="logo" onclick="location.href='index.html'" onerror="this.src='assets/priscion_logo.png'">
-        <div class="nav-links">
-            <a href="index.html">Hub</a>
-            <a href="pulse/">Explorer</a>
-            <a href="muzewallet/" style="background:var(--muze-blue); color:white; padding:12px 25px; border-radius:100px;">MUSE</a>
+    <div class="grain"></div>
+
+    <header>
+        <div class="logo">
+            <a href="../"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon"></a>
         </div>
-    </nav>
+        <div style="font-weight:900; font-size:14px; letter-spacing: 0.3em; text-transform: uppercase;">Technical Specification</div>
+    </header>
 
-    <article>
-        <span class="version">Version 3.1 // Independent Reality</span>
-        <h1>Architecting<br>Reality.</h1>
-        <p>The Priscion Sovereign Ledger (L1) is the high-fidelity infrastructure for the transition from the fragmented Web2 landscape to a unified, independent Web3 reality. This document outlines the protocols, products, and economic systems driving our global migration.</p>
+    <main>
+        <h1>the<br>whitepaper.</h1>
 
-        <div class="highlight-box">
-            <h4>Affiliate Protocol</h4>
-            <h3>The Share-to-Earn System</h3>
-            <p>Our "Share-to-Earn" engine turns the Priscion community into a global marketing force. Users share brand content and service invitations through their unique handle-anchored links. When an interaction leads to a migration or service acquisition, the affiliate earns instant commissions paid in <strong>$PRN</strong> directly to their MUZE Vault.</p>
-            <a href="affiliates/" class="btn-cta">JOIN THE AFFILIATE ENGINE</a>
-        </div>
+        <section>
+            <h2>I. Executive Summary</h2>
+            <p>Prisicon is a specialized Layer 1 blockchain built on the Cardano settlement layer. It is designed to act as the sovereign rails for the "Great Migration"—the transition of elite Web2 consumer brands into a high-fidelity Web3 ledger environment.</p>
+        </section>
 
-        <h2>1. Core Infrastructure</h2>
-        <h3>MUSE Wallet</h3>
-        <p>The MUZE Wallet is the non-custodial gateway to the Priscion ecosystem. It manages high-fidelity identities through **.pri handles** and secures assets in the "Sovereign Enclave."</p>
+        <section>
+            <h2>II. The Cardano L1 Advantage</h2>
+            <p>Unlike secondary "apps" or L2 sidechains, Prisicon operates as a foundational network. This provides direct security inherited from Cardano’s peer-reviewed Ouroboros consensus mechanism.</p>
+            <div class="accent-box">
+                <h3>Native Asset Fidelity</h3>
+                <p>$PRN (Prisicon) tokens are Native Assets on the Cardano ledger. They require no smart-contract overhead for basic transfers, ensuring maximum speed and minimal transaction costs for the ecosystem.</p>
+            </div>
+        </section>
 
-        <div class="highlight-box" style="background:#000; color:#FFF;">
-            <h4 style="color:var(--muze-blue);">The Sovereign Card</h4>
-            <h3>NFT-Anchored Spending</h3>
-            <p style="color:#CCC;">The Sovereign Digital Card is a high-fidelity utility NFT. Once purchased in the MINT store, it manifests in the MUZE Wallet, attached to the user's handle. This card enables the real-world spending of $PRN at millions of merchants globally through our BaaS bridge, converting assets instantly on-swipe.</p>
-        </div>
+        <section>
+            <h2>III. The .pri Identity Protocol</h2>
+            <p>Identity is the cornerstone of the Prisicon network. The .pri handle system creates a permanent, on-chain identifier for every user, enabling seamless cross-brand interaction across the node network (Atelia, Calalloo, etc.).</p>
+        </section>
 
-        <h3>PULSE Explorer</h3>
-        <p>PULSE is the high-fidelity heartbeat of the network, providing transparent, real-time monitoring of all block production, transaction validation, and ledger health metrics.</p>
+        <section>
+            <h2>IV. Sovereign Migration Architecture</h2>
+            <p>Prisicon provides the infrastructure for Web2 entities to digitize their inventory, reputation, and identity. By bridging legacy databases to the Cardano ledger, we ensure that the "Ledger Never Lies."</p>
+        </section>
+    </main>
 
-        <h3>CHILLATA Swap</h3>
-        <p>Chillata is the decentralized liquidity engine, facilitating private, zero-friction asset exchange across the network's internal brand nodes.</p>
-
-        <h3>MYNT Store & Factory</h3>
-        <p>The MYNT Store is the primary hub for the Sovereign NFT economy. It allows users to:</p>
-        <ul style="margin: 20px 0 20px 40px; font-size: 1.1rem; color: #333;">
-            <li><strong>Mint Private Artifacts:</strong> Upload documents and images to the Jello Privacy Layer ($JLO) as private NFTs.</li>
-            <li><strong>Mint Public Artifacts:</strong> Anchor media and data to the public ledger ($PRN).</li>
-            <li><strong>Sovereign Profiles:</strong> Manage a high-fidelity profile attached to your .pri handle, using owned NFTs as profile pictures.</li>
-            <li><strong>NFT Store:</strong> Buy, sell, and trade independent artifacts and utility tokens using the MUZE Wallet.</li>
-        </ul>
-
-        <h2>2. Economic Engine</h2>
-        <h3>The Mustard Seed Protocol</h3>
-        <p>To eliminate the "cold start" barrier, Priscion implements the <strong>Mustard Seed Protocol</strong>. New users can claim their first .pri handle for free through the MUZE Wallet. This initial identity comes with a "Mustard Seed" airdrop of utility $PRN, providing the necessary fuel for their first ledger interactions and enabling them to participate in the Share-to-Earn system immediately.</p>
-
-        <h3>Native Assets & Utility</h3>
-        <p>While $PRN is the primary fuel, the ledger hosts native assets designed for specific utility nodes:</p>
-        <ul style="margin: 20px 0 20px 40px; font-size: 1.1rem; color: #333;">
-            <li><strong>$NRL (NEURAL):</strong> The private reserve and governance asset for the entire Network.</li>
-            <li><strong>$JLO:</strong> Utility token for the Jello Privacy Layer, required for private NFT interactions.</li>
-            <li><strong>$MUSD:</strong> High-fidelity stablecoin pegged to USD and backed by Network service revenue.</li>
-            <li><strong>$ATLR:</strong> Gaming utility currency for the Atelia Gaming Lab ecosystem.</li>
-        </ul>
-
-        <h2>3. DeFi & Liquidity Protocols</h2>
-        <h3>CHILLATA: The High-Fidelity DEX</h3>
-        <p>Chillata is the decentralized liquidity engine where all native assets are traded. Acquisition and stability are governed by decentralized protocols:</p>
-        <div class="highlight-box">
-            <h4>Liquidity Rules</h4>
-            <p><strong>The $ADA Bridge:</strong> Priscion is anchored to the Cardano Blockchain. $ADA serves as the primary bridge asset for external liquidity, allowing users to swap $PRN and other native assets directly for $ADA to exit or enter the global ecosystem.</p>
-            <p><strong>Swapping:</strong> Exchange $PRN or $ADA for any native asset ($JLO, $NRL, $ATLR, $MUSD) for a 0.3% swap fee.</p>
-            <p><strong>Yield Provision:</strong> Users can anchor assets to Liquidity Pools (e.g., $PRN/$NRL). In exchange for providing this stability, they earn a 0.2% share of all swap fees generated by that pool.</p>
-            <p><strong>Sovereign Staking:</strong> Staking $PRN or $NRL in the MUZE Vault generates a 12.5% APY, paid out in real-time as blocks are validated.</p>
-        </div>
-
-        <h2>4. Conclusion</h2>
-        <p>Priscion is more than a blockchain; it is a framework for architecting a new reality where data ownership, financial independence, and brand integrity are the default state.</p>
-        
-        <div style="text-align:center; margin-top:80px; border-top:1px solid var(--border); padding-top:40px;">
-            <p style="font-size:0.7rem; font-weight:900; letter-spacing:2px; color:var(--muted); text-transform:uppercase;">Anchored to Eternity // 2026</p>
-        </div>
-    </article>
+    <footer>
+        <div>PRISICON // DOCUMENTATION</div>
+        <div>V1.0 &copy; 2026</div>
+    </footer>
 
 </body>
 </html>
