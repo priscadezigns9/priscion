@@ -40,6 +40,23 @@
             transition: background 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
+        .stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 110px 10px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 150px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0;
+            z-index: -2;
+            transition: opacity 1.2s ease;
+            pointer-events: none;
+        }
+
         .cloud-wrap {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1; pointer-events: none;
@@ -167,6 +184,7 @@
 
     <div class="grain"></div>
     <div class="sky-canvas"></div>
+    <div class="stars" id="stars"></div>
 
     <div class="cloud-wrap">
         <div class="cloud" style="width: 600px; height: 600px; top: -10%; left: -10%;" data-depth="0.1"></div>
@@ -202,6 +220,10 @@
 
         <div class="narrative reveal">
             We migrate brands from the noise of Web2 into the <b>absolute fidelity</b> of the Web3 Ledger.
+        </div>
+
+        <div class="narrative reveal" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
+            The Prisicon mission is to bridge the gap between <b>E-commerce</b>, <b>Affiliate Marketing</b>, and <b>Web3</b>—creating a unified ecosystem where identity and commerce are sovereign.
         </div>
 
         <div class="node-list reveal">
@@ -274,6 +296,7 @@
     <script>
         const sb = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR');
         const sky = document.querySelector('.sky-canvas');
+        const stars = document.getElementById('stars');
         const clouds = document.querySelectorAll('.cloud');
         const reveals = document.querySelectorAll('.reveal');
 
@@ -289,12 +312,17 @@
                 const g = Math.floor(255 - (255 - 239) * p);
                 const b = 255;
                 if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                if(stars) stars.style.opacity = 0;
             } else {
                 const p = (scrollPercent - 0.5) * 2;
-                const r = Math.floor(245 - (245 - 61) * p);
-                const g = Math.floor(239 - (239 - 13) * p);
-                const b = Math.floor(255 - (255 - 105) * p);
+                // Transition to deep dark purple (approx #230835)
+                const r = Math.floor(245 - (245 - 35) * p);
+                const g = Math.floor(239 - (239 - 8) * p);
+                const b = Math.floor(255 - (255 - 53) * p);
                 if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                
+                // Show stars in the deep purple sky
+                if(stars) stars.style.opacity = p;
             }
 
             // Cloud Parallax
