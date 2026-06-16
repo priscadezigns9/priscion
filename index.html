@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prisicon</title>
+    <title>Prisicon | Cardano L1 Blockchain</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
             --bg: #FFFFFF;
             --text: #000000;
             --accent: #7B35D4;
-            --sky-deep: #F5EFFF; /* Tented Purple Sky Baseline */
+            --sky-deep: #F5EFFF;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
@@ -28,21 +28,18 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* High-Fidelity Grain Overlay */
         .grain {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: url("https://grainy-gradients.vercel.app/noise.svg");
             opacity: 0.05; pointer-events: none; z-index: 50; brightness: 0.5;
         }
 
-        /* The Purple Sky Baseline */
         .sky-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, var(--sky-deep) 0%, #FFFFFF 100%);
             z-index: -2;
         }
 
-        /* Parallax Cloud Logic - Changing Depth */
         .cloud-wrap {
             position: fixed; top: 0; left: 0; width: 100%; height: 200%;
             z-index: -1; pointer-events: none;
@@ -96,6 +93,17 @@
         .node-title { font-family: var(--font-heading); font-size: 5rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.85; }
         .node-meta { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.4; }
 
+        /* Share to Earn Section */
+        .share-to-earn {
+            margin: 150px 0; padding: 60px; background: rgba(123, 53, 212, 0.05); border: 2px solid #000; border-radius: 40px;
+        }
+        .share-to-earn h2 { font-family: var(--font-heading); font-size: 4rem; margin-bottom: 20px; letter-spacing: -0.05em; }
+        .share-to-earn p { font-size: 1.5rem; margin-bottom: 40px; line-height: 1.2; font-weight: 700; }
+        .btn-claim {
+            padding: 20px 50px; background: #000; color: #FFF; text-decoration: none; font-weight: 900; border-radius: 100px; font-size: 1.2rem; cursor: pointer; transition: background 0.3s;
+        }
+        .btn-claim:hover { background: var(--accent); }
+
         .cta-box { margin: 250px 0; text-align: center; }
         .btn-glow {
             font-family: var(--font-heading); font-size: 7rem; font-weight: 900;
@@ -110,14 +118,14 @@
 
         #leadModal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #FFF; display: none; justify-content: center; align-items: center; z-index: 2000;
+            background: rgba(255, 255, 255, 0.98); display: none; justify-content: center; align-items: center; z-index: 2000;
         }
         #leadModal.open { display: flex; }
         .modal-inner { width: 100%; max-width: 600px; padding: 40px; }
-        .modal-inner h2 { font-family: var(--font-heading); font-size: 5rem; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 40px; }
-        .modal-form input {
-            width: 100%; padding: 25px 0; margin-bottom: 40px; border: none; border-bottom: 5px solid #000;
-            font-size: 2rem; font-weight: 900; outline: none;
+        .modal-inner h2 { font-family: var(--font-heading); font-size: 4rem; line-height: 0.9; letter-spacing: -0.05em; margin-bottom: 40px; }
+        .modal-form input, .modal-form select {
+            width: 100%; padding: 25px 0; margin-bottom: 30px; border: none; border-bottom: 5px solid #000;
+            font-size: 1.8rem; font-weight: 900; outline: none; background: transparent;
         }
         .btn-submit { background: #000; color: #FFF; border: none; padding: 25px 80px; border-radius: 100px; font-weight: 900; font-size: 20px; cursor: pointer; }
 
@@ -126,6 +134,7 @@
             .node-title { font-size: 3rem; }
             .btn-glow { font-size: 3.5rem; }
             .narrative { font-size: 2.2rem; }
+            .share-to-earn h2 { font-size: 2.5rem; }
         }
     </style>
 </head>
@@ -135,20 +144,18 @@
     <div class="sky-canvas"></div>
     
     <div class="cloud-wrap" id="cloud-field">
-        <!-- Parallax Depth Clouds - Pure Purple changing depth -->
         <div class="cloud" style="width: 1200px; height: 1200px; top: -10%; left: -20%;" data-depth="0.1"></div>
         <div class="cloud" style="width: 900px; height: 900px; top: 30%; right: -10%;" data-depth="0.4"></div>
         <div class="cloud" style="width: 1500px; height: 1500px; top: 70%; left: 0%;" data-depth="0.2"></div>
         <div class="cloud" style="width: 1000px; height: 1000px; top: 120%; right: 5%;" data-depth="0.5"></div>
         <div class="cloud" style="width: 1300px; height: 1300px; top: 180%; left: -10%;" data-depth="0.3"></div>
-        <div class="cloud" style="width: 1400px; height: 1400px; top: 250%; right: -20%;" data-depth="0.6"></div>
     </div>
 
     <header>
         <div class="logo">
             <img id="main-logo" src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Prisicon" onclick="godHandshake()">
         </div>
-        <div style="font-weight:900; font-size:14px; letter-spacing: 0.3em; text-transform: uppercase;">Intelligence</div>
+        <div style="font-weight:900; font-size:14px; letter-spacing: 0.3em; text-transform: uppercase;">Cardano L1 Blockchain</div>
     </header>
 
     <main>
@@ -158,7 +165,13 @@
         </div>
 
         <div class="narrative">
-            Prisicon is a <b>digital agency</b> designed for the age of agentic orchestration.
+            Prisicon is a <b>Cardano L1 Blockchain</b> and digital agency ecosystem.
+        </div>
+
+        <div class="share-to-earn">
+            <h2>Share-to-Earn</h2>
+            <p>Claim your <b>Free .pri Handle</b> and initial <b>$PRN</b> drop by joining the Prisicon network. Your identity, on-chain.</p>
+            <div class="btn-claim" onclick="openLeadModal('Free PRN Handle')">Claim My Handle</div>
         </div>
 
         <div class="section-break"></div>
@@ -196,7 +209,7 @@
     </main>
 
     <footer>
-        <div>PRISICON</div>
+        <div>PRISICON // CARDANO</div>
         <div>NETWORK &copy; 2026</div>
     </footer>
 
@@ -206,22 +219,22 @@
             <h2 id="modal-title">Begin Migration</h2>
             <form id="leadForm">
                 <input type="text" id="leadName" placeholder="NAME" required>
-                <input type="text" id="leadCompany" placeholder="ENTITY" required>
+                <input type="text" id="leadCompany" placeholder="ENTITY / BRAND" required>
                 <input type="email" id="leadEmail" placeholder="EMAIL" required>
+                <input type="text" id="leadHandle" placeholder="DESIRED .PRI HANDLE (Optional)">
                 <button type="submit" class="btn-submit" id="submitBtn">SYNCHRONIZE</button>
             </form>
             <div id="successMsg" style="display:none; text-align:center; padding:40px;">
                 <h2 style="color:var(--accent);">SYNCHRONIZED.</h2>
+                <p style="font-weight:900; margin-top:20px;">The Ledger is processing your request.</p>
             </div>
         </div>
     </div>
 
     <script>
-        // High-Fidelity Scroll-Based Cloud Movement - Depth Logic
         window.addEventListener('scroll', () => {
             const scrollY = window.pageYOffset;
             const clouds = document.querySelectorAll('.cloud');
-            
             clouds.forEach(cloud => {
                 const depth = cloud.getAttribute('data-depth');
                 const move = scrollY * depth;
@@ -264,7 +277,8 @@
                     type: 'priscion_inquiry', 
                     plan_interest: currentPlan,
                     name: document.getElementById('leadName').value,
-                    business_name: document.getElementById('leadCompany').value
+                    business_name: document.getElementById('leadCompany').value,
+                    handle_request: document.getElementById('leadHandle').value
                 }]);
                 document.getElementById('leadForm').style.display = 'none';
                 document.getElementById('successMsg').style.display = 'block';
