@@ -87,6 +87,7 @@
             opacity: 0;
             transform: translateY(50px);
             transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1), color 0.8s ease;
+            margin-bottom: 25vh; /* Increased margin to prevent overlap */
         }
         .reveal.visible {
             opacity: 1;
@@ -110,16 +111,18 @@
             font-weight: 900;
             letter-spacing: -0.06em;
             line-height: 0.75;
+            margin-bottom: 20px;
         }
         h1 span { color: var(--accent); font-style: italic; }
 
         .narrative {
-            margin: 30vh 0; font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 400; letter-spacing: -0.05em; line-height: 1;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400; letter-spacing: -0.05em; line-height: 1.1;
+            margin: 40vh 0;
         }
         .narrative b { font-weight: 900; color: var(--accent); }
 
-        .center-btn-group { text-align: center; margin: 100px 0; }
+        .center-btn-group { text-align: center; margin: 150px 0; }
         .primary-btn {
             display: inline-block; padding: 25px 60px; background: #000; color: #FFF; border-radius: 100px;
             text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3em;
@@ -127,9 +130,9 @@
         }
         .primary-btn:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(123, 53, 212, 0.2); }
 
-        .node-list { margin: 200px 0; border-top: 2px solid currentColor; }
+        .node-list { margin: 250px 0; border-top: 2px solid currentColor; }
         .node-item {
-            padding: 80px 0; border-bottom: 2px solid currentColor;
+            padding: 100px 0; border-bottom: 2px solid currentColor;
             display: flex; justify-content: space-between; align-items: center;
             text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
@@ -137,13 +140,17 @@
         .node-title { font-family: var(--font-heading); font-size: 6rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.85; }
         .node-meta { font-size: 14px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.4; }
 
-        .cta-box { text-align: center; margin: 200px 0; }
+        .cta-box { text-align: center; margin: 300px 0; }
         .btn-glow {
-            display: inline-block; padding: 30px 80px; background: currentColor; color: var(--bg); border-radius: 100px;
+            display: inline-block; padding: 30px 80px; background: #000; color: #FFF; border-radius: 100px;
             font-weight: 900; font-size: 1.2rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2em;
             transition: all 0.4s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .btn-glow:hover { background: var(--accent); transform: scale(1.05); }
+        .btn-glow:hover { background: var(--accent); transform: scale(1.05); color: #FFF; }
+        
+        [data-theme="dark"] .btn-glow { background: #FFF; color: #000; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
+        [data-theme="dark"] .btn-glow:hover { background: var(--accent); color: #FFF; }
 
         footer { padding: 150px 40px; border-top: 1px solid rgba(128,128,128,0.2); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; }
 
@@ -318,6 +325,7 @@
                 
                 // Light Theme
                 document.body.style.color = "#000000";
+                document.body.setAttribute('data-theme', 'light');
                 if(logo) logo.style.filter = "none";
             } else {
                 const p = (scrollPercent - 0.6) / 0.4;
@@ -333,9 +341,11 @@
                 // Dark Theme: Change text to white for readability
                 if (p > 0.3) {
                     document.body.style.color = "#FFFFFF";
+                    document.body.setAttribute('data-theme', 'dark');
                     if(logo) logo.style.filter = "invert(1)";
                 } else {
                     document.body.style.color = "#000000";
+                    document.body.setAttribute('data-theme', 'light');
                     if(logo) logo.style.filter = "none";
                 }
             }
