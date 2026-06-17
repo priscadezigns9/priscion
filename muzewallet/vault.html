@@ -218,6 +218,12 @@
     <div class="resizer" id="drag-handle"></div>
 
     <!-- Live Mirror -->
+    <script>
+        // God Mode Protection
+        if (localStorage.getItem('isGodMode') !== 'true') {
+            window.location.href = "index.html";
+        }
+    </script>
     <div id="mirror-panel">
         <div class="mirror-label">LIVE USER LENS</div>
         <iframe src="index.html?mode=architect" id="mirror-iframe"></iframe>
