@@ -20,91 +20,192 @@
         p { font-weight: 900; opacity: 0.5; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
         
         .tab-nav { display: flex; gap: 30px; justify-content: center; margin-bottom: 40px; }
-        .tab-btn { background: none; border: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; opacity: 0.3; }
-        .tab-btn.active { opacity: 1; border-bottom: 2px solid #000; padding-bottom: 5px; }
+        .tab-btn { background: none; border: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; opacity: 0.3; transition: opacity 0.3s; }
+        .tab-btn.active { opacity: 1; border-bottom: 3px solid var(--accent); padding-bottom: 5px; }
 
-        form { display: none; flex-direction: column; gap: 15px; }
-        form.active { display: flex; }
-        
-        input { 
-            padding: 20px; border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; font-family: var(--font-body); font-size: 14px; outline: none;
-            transition: border 0.3s;
+        .input-group { margin-bottom: 25px; text-align: left; }
+        label { font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; display: block; margin-bottom: 8px; }
+        input {
+            width: 100%; padding: 15px 0; border: none; border-bottom: 3px solid #000;
+            font-size: 1.3rem; font-weight: 900; outline: none; background: transparent;
         }
-        input:focus { border-color: var(--accent); }
         
         .btn-submit {
-            padding: 20px; background: #000; color: #FFF; border: none; border-radius: 10px; font-weight: 900; 
-            text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer; margin-top: 10px;
+            width: 100%; padding: 25px; background: #000; color: #FFF; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 20px; transition: background 0.3s;
         }
-        .btn-submit:disabled { opacity: 0.5; cursor: wait; }
-
-        .back-link { display: block; margin-top: 30px; font-size: 10px; font-weight: 900; text-decoration: none; color: #000; opacity: 0.4; text-transform: uppercase; letter-spacing: 0.2em; }
+        .btn-submit:hover { background: var(--accent); }
+        
+        .back-link { margin-top: 30px; display: block; text-decoration: none; color: #000; font-weight: 900; font-size: 12px; opacity: 0.4; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
+    <script>
+        if (localStorage.getItem('isGodMode') === 'true') {
+            window.location.href = "vault.html";
+        }
+    </script>
     <div class="login-box">
         <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
-        <h1>Priscion Hub</h1>
-        <p>standard neural gateway</p>
-
+        <h1 id="view-title">Login</h1>
+        
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('login')">Log In</button>
-            <button class="tab-btn" onclick="switchTab('create')">Create Account</button>
+            <button class="tab-btn active" onclick="switchView('login')">Login</button>
+            <button class="tab-btn" onclick="switchView('create')">Create</button>
         </div>
 
-        <form id="loginForm" class="active">
-            <input type="email" placeholder="NEURAL EMAIL" required>
-            <input type="password" placeholder="VAULT PASSWORD" required>
-            <button type="submit" class="btn-submit">Access Vault</button>
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="alert('Authenticating...'); return false;">
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="name@domain.com" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit">LOG IN</button>
         </form>
 
-        <form id="createForm">
-            <input type="email" placeholder="NEURAL EMAIL" required>
-            <input type="password" placeholder="VAULT PASSWORD" required>
-            <button type="submit" class="btn-submit">Initialize Vault</button>
+        <!-- Create Account Form -->
+        <form id="createForm" class="hidden" onsubmit="alert('Creating Account and .pri Handle...'); return false;">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="John Doe" required>
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="name@domain.com" required>
+            </div>
+            <div class="input-group">
+                <label>Unique .pri Handle</label>
+                <input type="text" placeholder="yourname.pri" required pattern="[a-z0-9.]+" title="Lowercase letters, numbers, and dots only">
+                <small style="font-size: 10px; font-weight: 900; opacity: 0.5; text-transform: uppercase; margin-top: 5px; display: block;">Limit: One handle per account. Permanent.</small>
+            </div>
+            <div class="input-group">
+                <label>Vault Password</label>
+                <input type="password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn-submit">CREATE ACCOUNT</button>
         </form>
-
-        <a href="index.html" class="back-link">← Change Login Method</a>
+        
+        <a href="index.html" class="back-link">← RETURN TO GATE</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const sb = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR');
+        const SUPABASE_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function switchTab(type) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('form').forEach(f => f.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(type + 'Form').classList.add('active');
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralHandle = urlParams.get('ref');
+
+        // Check for pending handle from Share-to-Earn
+        window.onload = () => {
+            const pending = localStorage.getItem('pending_handle');
+            if (pending) {
+                const handleInput = document.querySelector('input[placeholder="yourname.pri"]');
+                if (handleInput) handleInput.value = pending;
+                switchView('create');
+            }
+        };
+
+        function switchView(view) {
+            const loginForm = document.getElementById('loginForm');
+            const createForm = document.getElementById('createForm');
+            const viewTitle = document.getElementById('view-title');
+            const btns = document.querySelectorAll('.tab-btn');
+
+            btns.forEach(b => b.classList.remove('active'));
+
+            if(view === 'login') {
+                loginForm.classList.remove('hidden');
+                createForm.classList.add('hidden');
+                viewTitle.textContent = 'Login';
+                btns[0].classList.add('active');
+            } else {
+                loginForm.classList.add('hidden');
+                createForm.classList.remove('hidden');
+                viewTitle.textContent = 'Create Account';
+                btns[1].classList.add('active');
+            }
         }
 
+        // Logic Implementation
         document.getElementById('createForm').onsubmit = async (e) => {
             e.preventDefault();
-            if (localStorage.getItem('isGodMode') === 'true') { window.location.href = "vault.html"; return; }
             const btn = e.target.querySelector('button');
-            const email = e.target.querySelectorAll('input')[0].value;
-            const password = e.target.querySelectorAll('input')[1].value;
-            const handle = localStorage.getItem('pending_handle') || 'sovereign.pri';
+            const name = e.target.querySelectorAll('input')[0].value;
+            const email = e.target.querySelectorAll('input')[1].value;
+            const handle = e.target.querySelectorAll('input')[2].value.toLowerCase();
+            const password = e.target.querySelectorAll('input')[3].value;
 
             btn.disabled = true;
             btn.innerText = "INITIALIZING LEDGER...";
 
             try {
-                const { error } = await sb.from('profiles').insert([{ email, password, handle }]);
-                if (error) throw error;
-                alert('Sovereign identity initialized. 500 $PRN have been deposited.');
+                // 1. Check if handle exists
+                const { data: existingHandle } = await sb.from('profiles').select('handle').eq('handle', handle).single();
+                if (existingHandle) {
+                    alert('Handle already registered on-chain.');
+                    btn.disabled = false;
+                    btn.innerText = "CREATE ACCOUNT";
+                    return;
+                }
+
+                // 2. Create Profile
+                const { data: profile, error: pError } = await sb.from('profiles').insert([{
+                    name, email, handle, password, referral_by: referralHandle
+                }]).select().single();
+
+                if (pError) throw pError;
+
+                // 3. Initial PRN Distribution (Free Wallet)
+                const INITIAL_PRN = 100;
+                const { error: bError } = await sb.from('balances').insert([{
+                    profile_id: profile.id,
+                    handle: handle,
+                    balance: INITIAL_PRN,
+                    token: '$PRN'
+                }]);
+
+                if (bError) throw bError;
+
+                // 4. Referral Bonus (10%)
+                if (referralHandle) {
+                    const REFERRAL_PERCENTAGE = 0.10;
+                    const bonus = INITIAL_PRN * REFERRAL_PERCENTAGE;
+                    
+                    // We need to find the referrer's profile_id or handle
+                    const { data: referrer } = await sb.from('profiles').select('id, handle').eq('handle', referralHandle).single();
+                    
+                    if (referrer) {
+                        // Update referrer balance - assuming we have an RPC or just fetching/updating
+                        const { data: refBalance } = await sb.from('balances').select('balance').eq('handle', referralHandle).single();
+                        if (refBalance) {
+                            await sb.from('balances').update({ balance: refBalance.balance + bonus }).eq('handle', referralHandle);
+                        } else {
+                            await sb.from('balances').insert([{ profile_id: referrer.id, handle: referralHandle, balance: bonus, token: '$PRN' }]);
+                        }
+                    }
+                }
+
+                alert('Account Created! Welcome to Priscion. Your 100 $PRN have been deposited.');
                 localStorage.setItem('user_handle', handle);
                 window.location.href = "vault.html";
+
             } catch (err) {
+                console.error(err);
                 alert('Ledger synchronization failed: ' + err.message);
                 btn.disabled = false;
-                btn.innerText = "INITIALIZE VAULT";
+                btn.innerText = "CREATE ACCOUNT";
             }
         };
 
         document.getElementById('loginForm').onsubmit = async (e) => {
             e.preventDefault();
-            if (localStorage.getItem('isGodMode') === 'true') { window.location.href = "vault.html"; return; }
             const btn = e.target.querySelector('button');
             const email = e.target.querySelectorAll('input')[0].value;
             const password = e.target.querySelectorAll('input')[1].value;
@@ -117,7 +218,7 @@
                 if (error || !user) {
                     alert('Invalid credentials.');
                     btn.disabled = false;
-                    btn.innerText = "ACCESS VAULT";
+                    btn.innerText = "LOG IN";
                     return;
                 }
                 localStorage.setItem('user_handle', user.handle);
@@ -125,26 +226,9 @@
             } catch (err) {
                 alert('Authentication failed.');
                 btn.disabled = false;
-                btn.innerText = "ACCESS VAULT";
+                btn.innerText = "LOG IN";
             }
         };
-        
-        async function connectWeb3() {
-            if (localStorage.getItem('isGodMode') === 'true') { window.location.href = "vault.html"; return; }
-            if (typeof window.cardano === 'undefined') {
-                alert('Please install a Cardano wallet (Nami, Eternl, Flint) to continue.');
-                return;
-            }
-            try {
-                const api = await window.cardano.nami.enable();
-                const address = await api.getUsedAddresses();
-                alert('Cardano Wallet Connected: ' + address[0].substring(0,10) + '...');
-                localStorage.setItem('user_handle', 'cardano_user_' + address[0].substring(0,8));
-                window.location.href = "vault.html";
-            } catch (err) {
-                alert('Web3 Connection Failed: ' + err.message);
-            }
-        }
     </script>
 </body>
 </html>
