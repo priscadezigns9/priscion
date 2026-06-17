@@ -1,229 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MUZE Wallet | Standard Access</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Titan Dashboard | Institutional Control</title>
+    <link rel='icon' href='../logos/TITAN_ICON.png' type='image/png'>
+    <link href='https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap' rel='stylesheet'>
     <style>
         :root {
-            --bg: #FFFFFF;
-            --accent: #7B35D4;
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
+            --bg: #050505; --surface: #0F0F11; --text: #ccd6f6; --white: #ffffff; 
+            --malachite: #00FF7F; --border: rgba(255,255,255,0.08); --muted: #888;
+            --error: #ff4b4b;
         }
-        body { margin: 0; font-family: var(--font-body); background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .login-box { width: 100%; max-width: 450px; padding: 40px; text-align: center; }
-        .logo img { height: 30px; margin-bottom: 40px; }
-        h1 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 20px; letter-spacing: -0.05em; }
-        p { font-weight: 900; opacity: 0.5; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
-        
-        .tab-nav { display: flex; gap: 30px; justify-content: center; margin-bottom: 40px; }
-        .tab-btn { background: none; border: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; opacity: 0.3; transition: opacity 0.3s; }
-        .tab-btn.active { opacity: 1; border-bottom: 3px solid var(--accent); padding-bottom: 5px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); 
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding-top: 100px; overflow-x: hidden;
+        }
 
-        .input-group { margin-bottom: 25px; text-align: left; }
-        label { font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; display: block; margin-bottom: 8px; }
-        input {
-            width: 100%; padding: 15px 0; border: none; border-bottom: 3px solid #000;
-            font-size: 1.3rem; font-weight: 900; outline: none; background: transparent;
+        header {
+            background: rgba(5,5,5,0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border);
+            padding: 0 6%; display: flex; justify-content: space-between; align-items: center;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 2000; height: 80px;
+        }
+        .logo-container { display: flex; align-items: center; text-decoration: none; }
+        .logo-container img { height: 32px; width: auto; }
+        
+        nav { display: flex; gap: 30px; align-items: center; }
+        nav a { text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.85rem; opacity: 0.7; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        nav a:hover, nav a.active { opacity: 1; color: var(--malachite); }
+        
+        .hamburger { 
+            display: none; cursor: pointer; flex-direction: column; gap: 6px; padding: 10px; z-index: 2001; 
+            background: transparent; border: none;
+        }
+        .hamburger div { width: 24px; height: 2px; background-color: var(--white); transition: 0.3s; }
+
+        @media screen and (max-width: 968px) {
+            nav { 
+                position: fixed; right: -100%; top: 0; width: 85%; height: 100vh; 
+                background: #0A0A0C; flex-direction: column; align-items: center; 
+                justify-content: center; gap: 40px; transition: 0.4s; z-index: 2000; 
+                border-left: 1px solid var(--border);
+            }
+            nav.nav-active { right: 0; }
+            .hamburger { display: flex; }
+        }
+
+        .auth-card {
+            background: var(--surface);
+            padding: 50px 40px;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid var(--border);
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+        }
+
+        .logo-box { margin-bottom: 40px; }
+        .logo-box img { 
+            height: 45px; 
+            width: auto; 
+            filter: drop-shadow(0 0 20px rgba(0,255,127,0.2));
         }
         
-        .btn-submit {
-            width: 100%; padding: 25px; background: #000; color: #FFF; border: none; border-radius: 100px;
-            font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 20px; transition: background 0.3s;
+        h1 { font-size: 2rem; font-weight: 800; margin-bottom: 12px; color: var(--white); letter-spacing: -0.5px; }
+        p { color: var(--muted); margin-bottom: 35px; font-size: 1rem; line-height: 1.5; }
+
+        .input-group { margin-bottom: 24px; text-align: left; }
+        .input-group label { display: block; font-size: 0.75rem; font-weight: 800; margin-bottom: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; }
+        .input-group input {
+            width: 100%; background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            padding: 18px; border-radius: 16px; color: var(--white); font-size: 1rem; transition: 0.3s;
         }
-        .btn-submit:hover { background: var(--accent); }
-        
-        .back-link { margin-top: 30px; display: block; text-decoration: none; color: #000; font-weight: 900; font-size: 12px; opacity: 0.4; }
-        .hidden { display: none; }
+        .input-group input:focus { outline: none; border-color: var(--malachite); background: rgba(0,255,127,0.03); box-shadow: 0 0 0 4px rgba(0,255,127,0.05); }
+
+        .auth-buttons { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+        .btn {
+            width: 100%; padding: 18px; border-radius: 16px; font-weight: 800; cursor: pointer; transition: 0.3s; border: none; font-family: inherit; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .btn-signin { background: var(--malachite); color: #000; }
+        .btn-signin:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(0,255,127,0.3); }
+        .btn-signup { background: transparent; border: 1px solid var(--border); color: var(--white); }
+        .btn-signup:hover { background: rgba(255,255,255,0.05); }
+
+        .error-msg { color: var(--error); font-size: 0.85rem; margin-top: 20px; display: none; padding: 12px; background: rgba(255,75,75,0.1); border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
-        <h1 id="view-title">Login</h1>
+    <header>
+        <a href='index.html' class='logo-container'>
+            <img src='../logos/TITAN_ICON.png' alt='TITAN'>
+        </a>
+        <nav id='main-nav'>
+            <a href='index.html'>Home</a>
+            <a href='terminal.html'>Terminal</a>
+            <a href='academy.html'>Academy</a>
+            <a href='partners.html'>Partners</a>
+            <a href='dashboard.html' style='background: var(--malachite); color: #000; padding: 10px 20px; border-radius: 8px; opacity: 1; font-weight: 800;'>LOGIN</a>
+        </nav>
+        <button class='hamburger' onclick='toggleMenu()'><div></div><div></div><div></div></button>
+    </header>
+
+    <div class='auth-card' id='auth-ui'>
+        <div class='logo-box'>
+            <img src='../logos/TITAN_TRADERX_LOGO.png' alt='TITAN TRADERX'>
+        </div>
+        <h1>Welcome to Titan</h1>
+        <p>Access your institutional trading dashboard and institutional academy.</p>
         
-        <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchView('login')">Login</button>
-            <button class="tab-btn" onclick="switchView('create')">Create</button>
+        <div class='input-group'>
+            <label>Email Address</label>
+            <input type='email' id='email' placeholder='name@company.com'>
+        </div>
+        <div class='input-group'>
+            <label>Password</label>
+            <input type='password' id='password' placeholder='••••••••'>
         </div>
 
-        <!-- Login Form -->
-        <form id="loginForm" onsubmit="alert('Authenticating...'); return false;">
-            <div class="input-group">
-                <label>Email Address</label>
-                <input type="email" placeholder="name@domain.com" required>
-            </div>
-            <div class="input-group">
-                <label>Password</label>
-                <input type="password" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-submit">LOG IN</button>
-        </form>
-
-        <!-- Create Account Form -->
-        <form id="createForm" class="hidden" onsubmit="alert('Creating Account and .pri Handle...'); return false;">
-            <div class="input-group">
-                <label>Full Name</label>
-                <input type="text" placeholder="John Doe" required>
-            </div>
-            <div class="input-group">
-                <label>Email Address</label>
-                <input type="email" placeholder="name@domain.com" required>
-            </div>
-            <div class="input-group">
-                <label>Unique .pri Handle</label>
-                <input type="text" placeholder="yourname.pri" required pattern="[a-z0-9.]+" title="Lowercase letters, numbers, and dots only">
-                <small style="font-size: 10px; font-weight: 900; opacity: 0.5; text-transform: uppercase; margin-top: 5px; display: block;">Limit: One handle per account. Permanent.</small>
-            </div>
-            <div class="input-group">
-                <label>Vault Password</label>
-                <input type="password" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-submit">CREATE ACCOUNT</button>
-        </form>
-        
-        <a href="index.html" class="back-link">← RETURN TO GATE</a>
+        <div class='auth-buttons'>
+            <button class='btn btn-signin' onclick='signIn()'>LOGIN</button>
+            <button class='btn btn-signup' onclick='signUp()'>Create Account</button>
+        </div>
+        <div id='error-message' class='error-msg'></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const referralHandle = urlParams.get('ref');
-
-        // Check for pending handle from Share-to-Earn
-        window.onload = () => {
-            const pending = localStorage.getItem('pending_handle');
-            if (pending) {
-                const handleInput = document.querySelector('input[placeholder="yourname.pri"]');
-                if (handleInput) handleInput.value = pending;
-                switchView('create');
+    <script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'>
+        async function connectWeb3() {
+            if (typeof window.cardano === 'undefined') {
+                alert('Please install a Cardano wallet (Nami, Eternl, Flint) to continue.');
+                return;
             }
-        };
-
-        function switchView(view) {
-            const loginForm = document.getElementById('loginForm');
-            const createForm = document.getElementById('createForm');
-            const viewTitle = document.getElementById('view-title');
-            const btns = document.querySelectorAll('.tab-btn');
-
-            btns.forEach(b => b.classList.remove('active'));
-
-            if(view === 'login') {
-                loginForm.classList.remove('hidden');
-                createForm.classList.add('hidden');
-                viewTitle.textContent = 'Login';
-                btns[0].classList.add('active');
-            } else {
-                loginForm.classList.add('hidden');
-                createForm.classList.remove('hidden');
-                viewTitle.textContent = 'Create Account';
-                btns[1].classList.add('active');
+            try {
+                const api = await window.cardano.nami.enable();
+                const address = await api.getUsedAddresses();
+                alert('Cardano Wallet Connected: ' + address[0].substring(0,10) + '...');
+                localStorage.setItem('user_handle', 'cardano_user_' + address[0].substring(0,8));
+                window.location.href = "vault.html";
+            } catch (err) {
+                alert('Web3 Connection Failed: ' + err.message);
             }
         }
 
-        // Logic Implementation
-        document.getElementById('createForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const name = e.target.querySelectorAll('input')[0].value;
-            const email = e.target.querySelectorAll('input')[1].value;
-            const handle = e.target.querySelectorAll('input')[2].value.toLowerCase();
-            const password = e.target.querySelectorAll('input')[3].value;
+    </script>
+    <script>
+        const supabaseUrl = 'https://sazhdnqzaqpqcralmthh.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhemhkbnF6YXFwcWNyYWxtdGhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzE5NjYsImV4cCI6MjA5Mzc0Nzk2Nn0.uTyw31uWTNOTV5-HzNpm46vpAJABAsHLMzW-sYOkRhc';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-            btn.disabled = true;
-            btn.innerText = "INITIALIZING LEDGER...";
+        async function signIn() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { error } = await _supabase.auth.signInWithPassword({ email, password });
+            if (error) showError(error.message);
+        }
 
-            try {
-                // 1. Check if handle exists
-                const { data: existingHandle } = await sb.from('profiles').select('handle').eq('handle', handle).single();
-                if (existingHandle) {
-                    alert('Handle already registered on-chain.');
-                    btn.disabled = false;
-                    btn.innerText = "CREATE ACCOUNT";
-                    return;
-                }
+        async function signUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { error } = await _supabase.auth.signUp({ email, password });
+            if (error) showError(error.message);
+            else alert('Check your email for confirmation!');
+        }
 
-                // 2. Create Profile
-                const { data: profile, error: pError } = await sb.from('profiles').insert([{
-                    name, email, handle, password, referral_by: referralHandle
-                }]).select().single();
+        function showError(msg) {
+            const err = document.getElementById('error-message');
+            err.innerText = msg;
+            err.style.display = 'block';
+        }
 
-                if (pError) throw pError;
-
-                // 3. Initial PRN Distribution (Free Wallet)
-                const INITIAL_PRN = 100;
-                const { error: bError } = await sb.from('balances').insert([{
-                    profile_id: profile.id,
-                    handle: handle,
-                    balance: INITIAL_PRN,
-                    token: '$PRN'
-                }]);
-
-                if (bError) throw bError;
-
-                // 4. Referral Bonus (10%)
-                if (referralHandle) {
-                    const REFERRAL_PERCENTAGE = 0.10;
-                    const bonus = INITIAL_PRN * REFERRAL_PERCENTAGE;
-                    
-                    // We need to find the referrer's profile_id or handle
-                    const { data: referrer } = await sb.from('profiles').select('id, handle').eq('handle', referralHandle).single();
-                    
-                    if (referrer) {
-                        // Update referrer balance - assuming we have an RPC or just fetching/updating
-                        const { data: refBalance } = await sb.from('balances').select('balance').eq('handle', referralHandle).single();
-                        if (refBalance) {
-                            await sb.from('balances').update({ balance: refBalance.balance + bonus }).eq('handle', referralHandle);
-                        } else {
-                            await sb.from('balances').insert([{ profile_id: referrer.id, handle: referralHandle, balance: bonus, token: '$PRN' }]);
-                        }
-                    }
-                }
-
-                alert('Account Created! Welcome to Procyon. Your 100 $PRN have been deposited.');
-                localStorage.setItem('user_handle', handle);
-                window.location.href = "vault.html";
-
-            } catch (err) {
-                console.error(err);
-                alert('Ledger synchronization failed: ' + err.message);
-                btn.disabled = false;
-                btn.innerText = "CREATE ACCOUNT";
+        _supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                window.location.href = 'terminal.html';
             }
-        };
+        });
 
-        document.getElementById('loginForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const email = e.target.querySelectorAll('input')[0].value;
-            const password = e.target.querySelectorAll('input')[1].value;
-
-            btn.disabled = true;
-            btn.innerText = "VERIFYING NEURAL LINK...";
-
+        function toggleMenu() {
+            const nav = document.getElementById('main-nav');
+            const hamburger = document.querySelector('.hamburger');
+            nav.classList.toggle('nav-active');
+            const lines = hamburger.querySelectorAll('div');
+            if (nav.classList.contains('nav-active')) {
+                lines[0].style.transform = 'rotate(-45deg) translate(-5px, 6px)';
+                lines[1].style.opacity = '0';
+                lines[2].style.transform = 'rotate(45deg) translate(-5px, -6px)';
+            } else {
+                lines[0].style.transform = 'none'; lines[1].style.opacity = '1'; lines[2].style.transform = 'none';
+            }
+        }
+    
+        async function connectWeb3() {
+            if (typeof window.cardano === 'undefined') {
+                alert('Please install a Cardano wallet (Nami, Eternl, Flint) to continue.');
+                return;
+            }
             try {
-                const { data: user, error } = await sb.from('profiles').select('handle').eq('email', email).eq('password', password).single();
-                if (error || !user) {
-                    alert('Invalid credentials.');
-                    btn.disabled = false;
-                    btn.innerText = "LOG IN";
-                    return;
-                }
-                localStorage.setItem('user_handle', user.handle);
+                const api = await window.cardano.nami.enable();
+                const address = await api.getUsedAddresses();
+                alert('Cardano Wallet Connected: ' + address[0].substring(0,10) + '...');
+                localStorage.setItem('user_handle', 'cardano_user_' + address[0].substring(0,8));
                 window.location.href = "vault.html";
             } catch (err) {
-                alert('Authentication failed.');
-                btn.disabled = false;
-                btn.innerText = "LOG IN";
+                alert('Web3 Connection Failed: ' + err.message);
             }
-        };
+        }
+
     </script>
 </body>
 </html>
+
