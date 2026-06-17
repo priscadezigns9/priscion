@@ -50,21 +50,33 @@
     <script>
         const sb = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', '{{credential:sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR}}');
         
+        window.onload = () => {
+            const pending = localStorage.getItem('pending_handle');
+            if (pending) {
+                document.getElementById('handle').value = pending.replace('.pri', '');
+            }
+        };
+
         async function handleSignup(e) {
             e.preventDefault();
             const btn = document.getElementById('submit-btn');
             btn.innerText = "REGISTERING...";
             btn.disabled = true;
 
-            const handle = document.getElementById('handle').value;
+            const handle = document.getElementById('handle').value + ".pri";
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
             try {
                 const { error } = await sb.from('profiles').insert([{ handle, email, password }]);
                 if (error) throw error;
-                alert('Account created! Please login.');
-                window.location.href = "dashboard_web2.html";
+                
+                // Login immediately and award PRN
+                localStorage.setItem('muze_active', 'true');
+                localStorage.setItem('muze_handle', handle);
+                localStorage.removeItem('pending_handle'); // Clear the reservation
+                
+                window.location.href = "v27.html";
             } catch (err) {
                 alert('Registration failed: ' + err.message);
                 btn.disabled = false;
