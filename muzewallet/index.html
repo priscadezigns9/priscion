@@ -82,7 +82,7 @@
         <p>The sovereign bridge to the Priscion Network. Architect your digital identity.</p>
         
         <div class="onboarding-grid">
-            <button class="btn-full" id="btn-vault-access" onclick="showLogin()">Access Neural Vault</button>
+            <button class="btn-full" onclick="showLogin()">Access Neural Vault</button>
             <button class="btn-outline" onclick="location.href='create.html'">Create New Vault</button>
             <button class="btn-outline" onclick="location.href='recover.html'">Restore with Seed</button>
         </div>
@@ -96,8 +96,8 @@
         <h2 onclick="handshake()">Neural<br>Login</h2>
         
         <div class="login-options">
-            <a href="dashboard_web3.html" id="link-web3" class="login-btn btn-primary">Unlock Vault</a>
-            <a href="dashboard_web2.html" id="link-web2" class="login-btn btn-secondary">Legacy Standard Login</a>
+            <a href="dashboard_web3.html" class="login-btn btn-primary">Unlock Vault</a>
+            <a href="dashboard_web2.html" class="login-btn btn-secondary">Legacy Standard Login</a>
         </div>
         
         <div class="footer-note">AUTHENTICATION PROTOCOL v4.0</div>
@@ -112,18 +112,6 @@
             }
         }
 
-        function checkGodMode() {
-            if (localStorage.getItem('isGodMode') === 'true') {
-                document.getElementById('link-web3').href = "vault.html";
-                document.getElementById('link-web2').href = "vault.html";
-                document.getElementById('btn-vault-access').onclick = () => window.location.href = "vault.html";
-                
-                console.log('GOD MODE ACTIVE: Bypassing all gates.');
-                const entrance = document.getElementById('layer-entrance');
-                if (entrance) entrance.classList.add('dismissed');
-            }
-        }
-
         let clicks = 0;
         function handshake() {
             clicks++;
@@ -131,7 +119,6 @@
                 const pass = prompt("IDENTIFY:");
                 if (pass === 'alice') {
                     localStorage.setItem('isGodMode', 'true');
-                    checkGodMode();
                     window.location.href = "vault.html";
                 }
                 clicks = 0;
@@ -139,7 +126,9 @@
         }
 
         window.onload = () => {
-            checkGodMode();
+            if (localStorage.getItem('isGodMode') === 'true') {
+                document.getElementById('layer-entrance').classList.add('dismissed');
+            }
         };
     </script>
 </body>
