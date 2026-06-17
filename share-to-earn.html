@@ -199,20 +199,13 @@
             const fullHandle = handleRaw + ".pri";
             const btn = document.getElementById('claim-btn');
             
-            btn.innerText = "VERIFYING AVAILABILITY...";
+            btn.innerText = "RESERVING...";
             btn.disabled = true;
 
             setTimeout(() => {
-                localStorage.setItem('claimed_handle', fullHandle);
-                
-                document.getElementById('claimed-handle-display').innerText = fullHandle;
-                document.getElementById('referral-link-display').innerText = `https://priscion.com/share-to-earn.html?ref=${fullHandle}`;
-                
-                document.getElementById('step-claim').classList.add('hidden');
-                document.getElementById('step-success').style.display = 'block';
-                
-                console.log("Handle claimed:", fullHandle);
-            }, 1200);
+                localStorage.setItem('pending_handle', fullHandle);
+                window.location.href = "muzewallet/index.html";
+            }, 800);
         }
 
         function copyLink() {
@@ -228,6 +221,13 @@
         }
 
         window.onload = () => {
+            // Check for referral in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const referrer = urlParams.get('ref');
+            if (referrer) {
+                localStorage.setItem('muze_referrer', referrer);
+            }
+
             const saved = localStorage.getItem('claimed_handle');
             if (saved) {
                 document.getElementById('claimed-handle-display').innerText = saved;
