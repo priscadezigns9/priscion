@@ -20,14 +20,14 @@
         p { font-weight: 900; opacity: 0.5; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
         
         .tab-nav { display: flex; gap: 30px; justify-content: center; margin-bottom: 40px; }
-        .tab-btn { background: none; border: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; opacity: 0.3; transition: opacity 0.3s; }
-        .tab-btn.active { opacity: 1; border-bottom: 3px solid var(--accent); padding-bottom: 5px; }
+        .tab-btn { background: none; border: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; opacity: 0.2; }
+        .tab-btn.active { opacity: 1; border-bottom: 4px solid #000; padding-bottom: 10px; }
 
-        .input-group { margin-bottom: 25px; text-align: left; }
-        label { font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; display: block; margin-bottom: 8px; }
+        .input-group { margin-bottom: 30px; text-align: left; }
+        label { font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; display: block; margin-bottom: 10px; }
         input {
-            width: 100%; padding: 15px 0; border: none; border-bottom: 3px solid #000;
-            font-size: 1.3rem; font-weight: 900; outline: none; background: transparent;
+            width: 100%; padding: 20px 0; border: none; border-bottom: 4px solid #000;
+            font-size: 1.5rem; font-weight: 900; outline: none; background: transparent;
         }
         
         .btn-submit {
@@ -35,9 +35,16 @@
             font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 20px; transition: background 0.3s;
         }
         .btn-submit:hover { background: var(--accent); }
+
+        .action-grid { margin-top: 40px; display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .action-link { 
+            text-decoration: none; color: #000; font-weight: 900; font-size: 11px; 
+            text-transform: uppercase; letter-spacing: 0.1em; border: 2px solid #EEE; 
+            padding: 15px; border-radius: 10px; transition: all 0.3s; text-align: center;
+        }
+        .action-link:hover { border-color: var(--accent); color: var(--accent); }
         
         .back-link { margin-top: 30px; display: block; text-decoration: none; color: #000; font-weight: 900; font-size: 12px; opacity: 0.4; }
-        .hidden { display: none; }
     </style>
 </head>
 <body>
@@ -48,177 +55,52 @@
     </script>
     <div class="login-box">
         <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
-        <h1 id="view-title">Login</h1>
+        <h1>Access Vault</h1>
+        <p>Managed Node Security</p>
         
         <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchView('login')">Login</button>
-            <button class="tab-btn" onclick="switchView('create')">Create</button>
+            <button class="tab-btn active">Web2 Login</button>
+            <button class="tab-btn" onclick="connectWeb3()">Web3 Wallet</button>
         </div>
 
-        <!-- Login Form -->
-        <form id="loginForm" onsubmit="alert('Authenticating...'); return false;">
+        <form onsubmit="handleLogin(event)">
             <div class="input-group">
-                <label>Email Address</label>
-                <input type="email" placeholder="name@domain.com" required>
+                <label>Email Identity</label>
+                <input type="email" id="email" placeholder="architect@priscion.com" required>
             </div>
             <div class="input-group">
-                <label>Password</label>
-                <input type="password" placeholder="••••••••" required>
+                <label>Secure Key</label>
+                <input type="password" id="password" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn-submit">LOG IN</button>
+            <button type="submit" id="submit-btn" class="btn-submit">UNLOCK VAULT</button>
         </form>
 
-        <!-- Create Account Form -->
-        <form id="createForm" class="hidden" onsubmit="alert('Creating Account and .pri Handle...'); return false;">
-            <div class="input-group">
-                <label>Full Name</label>
-                <input type="text" placeholder="John Doe" required>
-            </div>
-            <div class="input-group">
-                <label>Email Address</label>
-                <input type="email" placeholder="name@domain.com" required>
-            </div>
-            <div class="input-group">
-                <label>Unique .pri Handle</label>
-                <input type="text" placeholder="yourname.pri" required pattern="[a-z0-9.]+" title="Lowercase letters, numbers, and dots only">
-                <small style="font-size: 10px; font-weight: 900; opacity: 0.5; text-transform: uppercase; margin-top: 5px; display: block;">Limit: One handle per account. Permanent.</small>
-            </div>
-            <div class="input-group">
-                <label>Vault Password</label>
-                <input type="password" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-submit">CREATE ACCOUNT</button>
-        </form>
+        <div class="action-grid">
+            <a href="create.html" class="action-link">Register New Identity</a>
+        </div>
         
         <a href="index.html" class="back-link">← RETURN TO GATE</a>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR';
-        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const referralHandle = urlParams.get('ref');
-
-        // Check for pending handle from Share-to-Earn
-        window.onload = () => {
-            const pending = localStorage.getItem('pending_handle');
-            if (pending) {
-                const handleInput = document.querySelector('input[placeholder="yourname.pri"]');
-                if (handleInput) handleInput.value = pending;
-                switchView('create');
-            }
-        };
-
-        function switchView(view) {
-            const loginForm = document.getElementById('loginForm');
-            const createForm = document.getElementById('createForm');
-            const viewTitle = document.getElementById('view-title');
-            const btns = document.querySelectorAll('.tab-btn');
-
-            btns.forEach(b => b.classList.remove('active'));
-
-            if(view === 'login') {
-                loginForm.classList.remove('hidden');
-                createForm.classList.add('hidden');
-                viewTitle.textContent = 'Login';
-                btns[0].classList.add('active');
-            } else {
-                loginForm.classList.add('hidden');
-                createForm.classList.remove('hidden');
-                viewTitle.textContent = 'Create Account';
-                btns[1].classList.add('active');
-            }
-        }
-
-        // Logic Implementation
-        document.getElementById('createForm').onsubmit = async (e) => {
+        const sb = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', '{{credential:sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR}}');
+        
+        async function handleLogin(e) {
             e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const name = e.target.querySelectorAll('input')[0].value;
-            const email = e.target.querySelectorAll('input')[1].value;
-            const handle = e.target.querySelectorAll('input')[2].value.toLowerCase();
-            const password = e.target.querySelectorAll('input')[3].value;
-
+            const btn = document.getElementById('submit-btn');
+            btn.innerText = "AUTHENTICATING...";
             btn.disabled = true;
-            btn.innerText = "INITIALIZING LEDGER...";
 
-            try {
-                // 1. Check if handle exists
-                const { data: existingHandle } = await sb.from('profiles').select('handle').eq('handle', handle).single();
-                if (existingHandle) {
-                    alert('Handle already registered on-chain.');
-                    btn.disabled = false;
-                    btn.innerText = "CREATE ACCOUNT";
-                    return;
-                }
-
-                // 2. Create Profile
-                const { data: profile, error: pError } = await sb.from('profiles').insert([{
-                    name, email, handle, password, referral_by: referralHandle
-                }]).select().single();
-
-                if (pError) throw pError;
-
-                // 3. Initial PRN Distribution (Free Wallet)
-                const INITIAL_PRN = 100;
-                const { error: bError } = await sb.from('balances').insert([{
-                    profile_id: profile.id,
-                    handle: handle,
-                    balance: INITIAL_PRN,
-                    token: '$PRN'
-                }]);
-
-                if (bError) throw bError;
-
-                // 4. Referral Bonus (10%)
-                if (referralHandle) {
-                    const REFERRAL_PERCENTAGE = 0.10;
-                    const bonus = INITIAL_PRN * REFERRAL_PERCENTAGE;
-                    
-                    // We need to find the referrer's profile_id or handle
-                    const { data: referrer } = await sb.from('profiles').select('id, handle').eq('handle', referralHandle).single();
-                    
-                    if (referrer) {
-                        // Update referrer balance - assuming we have an RPC or just fetching/updating
-                        const { data: refBalance } = await sb.from('balances').select('balance').eq('handle', referralHandle).single();
-                        if (refBalance) {
-                            await sb.from('balances').update({ balance: refBalance.balance + bonus }).eq('handle', referralHandle);
-                        } else {
-                            await sb.from('balances').insert([{ profile_id: referrer.id, handle: referralHandle, balance: bonus, token: '$PRN' }]);
-                        }
-                    }
-                }
-
-                alert('Account Created! Welcome to Priscion. Your 100 $PRN have been deposited.');
-                localStorage.setItem('user_handle', handle);
-                window.location.href = "vault.html";
-
-            } catch (err) {
-                console.error(err);
-                alert('Ledger synchronization failed: ' + err.message);
-                btn.disabled = false;
-                btn.innerText = "CREATE ACCOUNT";
-            }
-        };
-
-        document.getElementById('loginForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            const email = e.target.querySelectorAll('input')[0].value;
-            const password = e.target.querySelectorAll('input')[1].value;
-
-            btn.disabled = true;
-            btn.innerText = "VERIFYING NEURAL LINK...";
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
             try {
                 const { data: user, error } = await sb.from('profiles').select('handle').eq('email', email).eq('password', password).single();
                 if (error || !user) {
                     alert('Invalid credentials.');
                     btn.disabled = false;
-                    btn.innerText = "LOG IN";
+                    btn.innerText = "UNLOCK VAULT";
                     return;
                 }
                 localStorage.setItem('user_handle', user.handle);
@@ -226,9 +108,24 @@
             } catch (err) {
                 alert('Authentication failed.');
                 btn.disabled = false;
-                btn.innerText = "LOG IN";
+                btn.innerText = "UNLOCK VAULT";
             }
-        };
+        }
+
+        async function connectWeb3() {
+            if (typeof window.cardano === 'undefined') {
+                alert('Please install a Cardano wallet to continue.');
+                return;
+            }
+            try {
+                const api = await window.cardano.nami.enable();
+                const address = await api.getUsedAddresses();
+                localStorage.setItem('user_handle', 'cardano_user_' + address[0].substring(0,8));
+                window.location.href = "vault.html";
+            } catch (err) {
+                alert('Web3 Connection Failed.');
+            }
+        }
     </script>
 </body>
 </html>
