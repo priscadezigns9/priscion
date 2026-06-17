@@ -1,1 +1,803 @@
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prisca Dezigns | The Rubik's Globe</title>
+    <!-- GDrive Direct Link Proxy -->
+    <link rel="icon" type="image/png" href="https://share.zapia.com/si99hoojrdxzaoos5dmo1x">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        @keyframes globePulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--purple); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--purple); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--purple); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--purple); } }
+        :root {
+            --ivory: #FFFFF0;
+            --lilac: #C8A2C8;
+            --purple: #301934;
+            --text: #1a1a1a;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+            --accent: #14B8A6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        #page-wrapper {
+            height: 100vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        body { 
+            font-family: var(--font-body); 
+            background: var(--ivory); 
+            color: var(--text); 
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        section {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+        }
+
+        #ui-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            pointer-events: auto;
+        }
+
+        .logo-container {
+            display: flex; align-items: center; gap: 15px;
+        }
+
+        .logo-img {
+            width: 140px; height: 140px;
+            object-fit: contain;
+            pointer-events: none;
+        }
+
+        .logo { 
+            font-family: var(--font-heading); 
+            font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px;
+            color: var(--purple);
+            text-transform: lowercase;
+        }
+
+        main {
+            text-align: left;
+            pointer-events: auto;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .brand-visual-container {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .dynamic-brand-logo {
+            width: 280px;
+            height: 280px;
+            object-fit: contain;
+            filter: drop-shadow(0 15px 35px rgba(48, 25, 52, 0.2));
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-bottom: 20px;
+        }
+
+        .brand-text-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-label {
+            font-weight: 900; font-size: 0.75rem;
+            letter-spacing: 6px; text-transform: uppercase;
+            color: var(--lilac);
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 0.9;
+            color: var(--purple);
+            letter-spacing: -3px;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .brand-description {
+            font-size: 1rem;
+            color: var(--text);
+            max-width: 500px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .price-tag {
+            font-family: var(--font-body);
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: var(--purple);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .view-cta {
+            display: inline-block;
+            padding: 14px 40px;
+            border: 1px solid var(--purple);
+            color: var(--purple);
+            text-decoration: none;
+            font-weight: 900;
+            font-size: 0.75rem;
+            letter-spacing: 2.5px;
+            transition: all 0.3s ease;
+            width: fit-content;
+            text-transform: uppercase;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .view-cta:hover {
+            background: var(--purple);
+            color: var(--ivory);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(48, 25, 52, 0.2);
+        }
+
+        footer {
+            display: flex; justify-content: space-between; align-items: flex-end;
+            pointer-events: auto;
+        }
+
+        .footer-info { 
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-size: 1.1rem; 
+            color: var(--lilac);
+            max-width: 400px;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        #scroll-indicator {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 100;
+            align-items: flex-end;
+            pointer-events: auto;
+        }
+
+        .dot-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            opacity: 0.3;
+        }
+
+        .dot-wrapper:hover, .dot-wrapper.active {
+            opacity: 1;
+        }
+
+        .dot-label {
+            font-size: 0.55rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--lilac);
+            transition: 0.3s;
+            transform: translateX(10px);
+            opacity: 0;
+            white-space: nowrap;
+        }
+
+        .dot-wrapper:hover .dot-label, .dot-wrapper.active .dot-label {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--lilac);
+            transition: 0.3s;
+        }
+
+        .dot-wrapper.active .dot {
+            background: var(--purple);
+            box-shadow: 0 0 15px var(--purple);
+            transform: scale(1.3);
+        }
+
+        #modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(48, 25, 52, 0.95);
+            z-index: 200;
+            display: none;
+            align-items: center; justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #modal-content {
+            background: var(--ivory);
+            padding: 60px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-active #modal-overlay { display: flex; opacity: 1; }
+        .modal-active #modal-content { transform: translateY(0); }
+
+        .close-modal {
+            position: absolute; top: 20px; right: 20px;
+            font-size: 2rem; color: var(--purple);
+            cursor: pointer; font-weight: 300;
+        }
+
+        #lead-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-field { display: flex; flex-direction: column; gap: 8px; }
+        .form-field label { font-weight: 900; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--lilac); }
+        .form-field input, .form-field select {
+            padding: 15px; border: 1px solid rgba(48, 25, 52, 0.1);
+            background: #fff; font-family: var(--font-body);
+            font-size: 1rem; border-radius: 8px;
+        }
+
+        #submit-btn {
+            background: var(--purple); color: #fff;
+            padding: 18px; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 0.8rem; letter-spacing: 3px;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        }
+
+        #bg-logo-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vw;
+            background: url("assets/background_logo.jpg") no-repeat center;
+            background-size: contain;
+            opacity: 0.03;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        #package-section {
+            background: var(--ivory);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 80px 50px;
+            z-index: 50;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .back-to-home {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            padding: 12px 30px;
+            background: var(--purple);
+            color: var(--ivory);
+            font-weight: 900;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border-radius: 100px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: none;
+            border: none;
+        }
+
+        .package-active .back-to-home {
+            display: block;
+        }
+
+        .back-to-home:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(48, 25, 52, 0.2);
+        }
+
+        #package-section h2 {
+            margin-top: 100px;
+        }
+
+        .package-active #package-section {
+            display: flex;
+        }
+
+        .package-active #globe-section {
+            height: auto;
+            filter: blur(15px);
+            opacity: 0.3;
+        }
+
+        .package-active #page-wrapper {
+            overflow-y: auto;
+        }
+
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 1024px) {
+            .package-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .package-grid { grid-template-columns: 1fr; }
+        }
+
+        .pkg-category-title {
+            grid-column: 1 / -1;
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--purple);
+            border-bottom: 2px solid var(--lilac);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        .pkg-card {
+            background: #fff;
+            border: 1px solid var(--lilac);
+            padding: 50px;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .pkg-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(48, 25, 52, 0.1);
+            border-color: var(--purple);
+        }
+
+        .pkg-card h3 { font-family: var(--font-heading); color: var(--purple); font-size: 2.2rem; margin-bottom: 15px; letter-spacing: -1px; }
+        .pkg-card .price { font-size: 2.5rem; font-weight: 900; color: var(--purple); margin-bottom: 25px; font-family: var(--font-body); }
+        .pkg-card ul { list-style: none; margin-bottom: 40px; flex-grow: 1; }
+        .pkg-card ul li { font-size: 1rem; color: #444; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 12px; line-height: 1.4; }
+        .pkg-card ul li::before { content: "✓"; color: var(--purple); font-weight: 900; }
+        
+        .pkg-btn {
+            background: var(--purple); color: #fff;
+            padding: 20px; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 0.75rem; letter-spacing: 3px;
+            cursor: pointer; transition: 0.3s; text-transform: uppercase;
+            width: 100%;
+        }
+
+        .pkg-btn:hover {
+            transform: scale(1.02);
+            filter: brightness(1.2);
+        }
+    </style>
+</head>
+<body>
+    <div id="page-wrapper">
+        <div class="back-to-home" onclick="hidePackages()">← RETURN TO GLOBE</div>
+        <section id="globe-section">
+            <div id="bg-logo-overlay"></div>
+            <div id="ui-layer">
+                <header>
+                    <div class="logo-container">
+                        <img src="https://share.zapia.com/57sonyoar08flg9xz5v667" alt="Prisca Dezigns" class="logo-img">
+                    </div>
+                    <div style="font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; color: var(--purple); margin-right: 60px;">EMPIRE V.2.3 [PRISCA_DEZIGNS_2123]</div>
+                </header>
+
+                <main>
+                        <div class="brand-text-content">
+                            <div class="brand-label" id="current-sector">SYSTEM ENTRY</div>
+                            <h1 id="current-brand">BRAND SCAN</h1>
+                            <div class="brand-description" id="current-desc"></div>
+                            <div class="price-tag" id="current-price"></div>
+                            <button id="main-cta" class="view-cta">ENTER DOMAIN</button>
+                        </div>
+                </main>
+
+                <footer>
+                    <div class="footer-info">Architecting Private Digital Networks for the Sovereign Individual.</div>
+                    <div id="interaction-guide" style="font-size: 0.6rem; letter-spacing: 3px; color: var(--lilac); font-weight: 900; margin-bottom: 25px;">SCROLL TO NAVIGATE SLICES</div>
+                </footer>
+            </div>
+            <div id="canvas-container"></div>
+            <div id="scroll-indicator"></div>
+        </section>
+
+        <section id="package-section">
+            <h2 style="font-family: var(--font-heading); font-size: 4rem; color: var(--purple); margin-bottom: 10px; letter-spacing: -2px;">Our High-Fidelity Packages</h2>
+            <p style="color: var(--lilac); font-weight: 900; letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 40px;">Select your digital evolution tier</p>
+            
+            <div class="package-grid">
+                <div class="pkg-category-title">Standard Brand Packages</div>
+                <div class="pkg-card">
+                    <h3>Starter</h3>
+                    <div class="price">$297</div>
+                    <ul>
+                        <li>1-Page High-Fidelity Website</li>
+                        <li>Full Brand Setup (Logo, Domain, Favicon)</li>
+                        <li>Social Media Integration (FB/IG Covers)</li>
+                        <li>Technical SEO & SSL</li>
+                        <li>1 Month Free Maintenance</li>
+                    </ul>
+                    <button class="pkg-btn" onclick="openModal('STARTER PKG')">Initiate</button>
+                </div>
+                <div class="pkg-card">
+                    <h3>Growth</h3>
+                    <div class="price">$597</div>
+                    <ul>
+                        <li>Manage 1 Brand Page (Full Social Setup)</li>
+                        <li>Full Branding & App/Web Architecture</li>
+                        <li>Content Creation & Copywriting</li>
+                        <li>Advanced SEO & Analytics</li>
+                        <li>1 Month Free Maintenance</li>
+                    </ul>
+                    <button class="pkg-btn" onclick="openModal('GROWTH PKG')">Initiate</button>
+                </div>
+                <div class="pkg-card">
+                    <h3>Trusted</h3>
+                    <div class="price">$1,200</div>
+                    <ul>
+                        <li>Full Business Automation Node</li>
+                        <li>10-15 Pages of High-Fidelity Content</li>
+                        <li>Premium Brand Scaling & PR Logic</li>
+                        <li>24/7 Sovereign Tech Support</li>
+                        <li>1 Month Free Maintenance</li>
+                    </ul>
+                    <button class="pkg-btn" onclick="openModal('TRUSTED PKG')">Initiate</button>
+                </div>
+
+                <div class="pkg-category-title">E-Commerce Ecosystems</div>
+                <div class="pkg-card">
+                    <h3>E-Starter</h3>
+                    <div class="price">$497</div>
+                    <ul>
+                        <li>1-Page Shop Node</li>
+                        <li>Full Store Branding & Domain</li>
+                        <li>Integrated Social Shop Setup</li>
+                        <li>Payment Gateway Integration</li>
+                        <li>1 Month Free Maintenance</li>
+                    </ul>
+                    <button class="pkg-btn" onclick="openModal('E-STARTER PKG')">Initiate</button>
+                </div>
+                <div class="pkg-card">
+                    <h3>E-Growth</h3>
+                    <div class="price">$1,497</div>
+                    <ul>
+                        <li>2-5 Page Store Architecture</li>
+                        <li>Full Shop Logic (10+ Products)</li>
+                        <li>Deep Copywriting & Product SEO</li>
+                        <li>Automated Fulfillment Sync</li>
+                        <li>1 Month Free Maintenance</li>
+                    </ul>
+                    <button class="pkg-btn" onclick="openModal('E-GROWTH PKG')">Initiate</button>
+                </div>
+                <div class="pkg-card">
+                    <h3>E-Trusted</h3>
+                    <div class="price">$2,500</div>
+                    <ul>
+                        <li>Elite Store (50+ Products)</li>
+                        <li>15+ Page Network Architecture</li>
+                        <li>Advanced Inventory & CRM Automation</li>
+                        <li>On-Chain Inventory Logic</li>
+                        <li>1 Month Free Maintenance</li>
+                    </ul>
+                    <button class="pkg-btn" onclick="openModal('E-TRUSTED PKG')">Initiate</button>
+                </div>
+
+                <div class="pkg-category-title">System Continuity</div>
+                <div class="pkg-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+                    <h3>Maintenance</h3>
+                    <div class="price">$97/mo</div>
+                    <ul>
+                        <li>Daily Uptime & Security Monitoring</li>
+                        <li>Monthly Content Optimization</li>
+                        <li>High-Fidelity Technical Backups</li>
+                        <li>Priority Sovereign Support</li>
+                        <li>1 Month Free Maintenance</li>
+                    </ul>
+                    <button class="pkg-btn" onclick="openModal('MAINTENANCE PKG')">Initiate</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2 id="modal-title" style="font-family: var(--font-heading); color: var(--purple); margin-bottom: 10px;">Secure Your Slot</h2>
+            <div id="pkg-checklist" style="margin-bottom: 25px; padding: 20px; background: rgba(48, 25, 52, 0.05); border-radius: 12px; display: none;">
+                <ul id="checklist-items" style="list-style: none; font-size: 0.9rem; color: #444; display: grid; gap: 10px;"></ul>
+            </div>
+            <form id="lead-form">
+                <div class="form-field">
+                    <label>Full Name</label>
+                    <input type="text" id="user-name" placeholder="E.g. Satoshi Nakamoto" required>
+                </div>
+                <div class="form-field">
+                    <label>Contact Signal (Email)</label>
+                    <input type="email" id="user-email" placeholder="email@nexus.com" required>
+                </div>
+                <div class="form-field">
+                    <label>Selected Target</label>
+                    <input type="text" id="target-package" readonly>
+                </div>
+                <button type="submit" id="submit-btn">INITIATE CONNECTION</button>
+            </form>
+            <div id="form-msg"></div>
+        </div>
+    </div>
+
+    <script>
+        const SB_URL = "https://sktpjacowqaedddtrhuz.supabase.co";
+        const SB_KEY = "{{credential:supabase-anon-key}}";
+        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        dirLight.position.set(5, 5, 5);
+        scene.add(dirLight);
+
+        const globeGeo = new THREE.IcosahedronGeometry(2.8, 3);
+        const globeMat = new THREE.MeshPhongMaterial({ color: 0xC8A2C8, wireframe: true, transparent: true, opacity: 0.25 });
+        const globe = new THREE.Mesh(globeGeo, globeMat);
+        scene.add(globe);
+        camera.position.z = 6.5;
+
+        const brands = [
+            { name: "BRAND SCAN", sector: "SYSTEM ENTRY", logo: "", desc: "Real-time diagnostic analysis of digital identity and brand footprint.", url: "scan/", type: "external" },
+            { name: "PACKAGES", sector: "SYSTEM HUB", logo: "", desc: "Explore our high-fidelity service tiers and brand packages.", type: "scroll" },
+            { name: "ROWCELL", sector: "PRODUCT", logo: "", desc: "Advanced cellular logistics and data management node.", url: "rowcell/", type: "external" },
+            { name: "KARJOV", sector: "PRODUCT", logo: "", desc: "High-performance operational engine for private networks.", url: "karjov/", type: "external" },
+            { name: "VELLOQ", sector: "PRODUCT", logo: "", desc: "Next-gen communication and encryption protocol.", url: "velloq/", type: "external" },
+            { name: "MOBLYNC", sector: "PRODUCT", logo: "", desc: "Mobile-first synchronization for multi-device brand ecosystems.", url: "moblync/", type: "external" },
+            { name: "CUPYX", sector: "PRODUCT", logo: "", desc: "Digital resource containerization and distribution utility.", url: "cupyx/", type: "external" },
+            { name: "ESSENCE ELITE", sector: "BRAND", logo: "", desc: "Artisanal olfactory science and scent-layering mastery.", url: "essenceelite/", type: "external" },
+            { name: "THE AUTODROME", sector: "BRAND", logo: "", desc: "Engineering-grade supercar culture and automotive performance.", url: "theautodrome/", type: "external" },
+            { name: "DESKWELL", sector: "BRAND", logo: "", desc: "High-fidelity ergonomic environments for peak productivity.", url: "deskwell/", type: "external" },
+            { name: "THE GEN PLAY", sector: "BRAND", logo: "", desc: "Generational toys and high-fidelity collectible engineering.", url: "thegenplay/", type: "external" },
+            { name: "LES AMOUR", sector: "BRAND", logo: "", desc: "AI-powered emotional intelligence and relationship coaching.", url: "lesamour/", type: "external" },
+            { name: "ORNALIS LIGHTING", sector: "BRAND", logo: "", desc: "Architectural illumination and sanctuary atmosphere engineering.", url: "ornalis/", type: "external" },
+            { name: "AVORIA FRAMES", sector: "BRAND", logo: "", desc: "Sovereign eyewear and architectural vision design.", url: "axoria/", type: "external" },
+            { name: "SHELFLY", sector: "BRAND", logo: "", desc: "Intelligent storage logistics for modern living spaces.", url: "shelfly/", type: "external" },
+            { name: "PANTRIQ", sector: "BRAND", logo: "", desc: "Automated culinary logistics and smart kitchen tech.", url: "pantriq/", type: "external" },
+            { name: "VERDANT CO", sector: "BRAND", logo: "", desc: "Regenerative sustainability and circular economy infrastructure.", url: "verdantco/", type: "external" },
+            { name: "QUIET LUXURY", sector: "BRAND", logo: "", desc: "Minimalist luxury and sanctuary-focused home decor.", url: "quietluxury/", type: "external" },
+            { name: "COUTURE GALLERY", sector: "BRAND", logo: "", desc: "Archival fashion craftsmanship and luxury accessories.", url: "couturegallery/", type: "external" },
+            { name: "PAW VAULT", sector: "BRAND", logo: "", desc: "High-fidelity pet care and smart nutrition technology.", url: "pawvault/", type: "external" },
+            { name: "THE WATCH LIST", sector: "BRAND", logo: "", desc: "Elite horological engineering and archival timepiece intelligence.", url: "thewatchlist/", type: "external" },
+            { name: "THE ESCAPIST", sector: "BRAND", logo: "", desc: "Sanctuary travel experiences and luxury destination intelligence.", url: "theescapist/", type: "external" },
+            { name: "GLOW PROTOCOL", sector: "BRAND", logo: "", desc: "Regenerative beauty tech and longevity skin diagnostics.", url: "glowprotocol/", type: "external" },
+            { name: "SOLE PRESTIGE", sector: "BRAND", logo: "", desc: "Bespoke footwear design and elite streetwear culture.", url: "soleprestige/", type: "external" },
+            { name: "PRIME LAND NETWORK", sector: "BRAND", logo: "", desc: "Global property investment and luxury real estate logistics.", url: "primelandnetwork/", type: "external" },
+            { name: "ATELIA GAMING", sector: "BRAND", logo: "", desc: "High-fidelity gaming media and tech hardware engineering.", url: "ateliagaming/", type: "external" },
+            { name: "THE WAY MADE KNOWN", sector: "MISSION", logo: "", desc: "Analytical faith evidence and historical gospel proclamation.", url: "https://thewaymadeknown.com", type: "external" },
+            { name: "DREAMING ANIME", sector: "BRAND", logo: "", desc: "High-fidelity animation media and studio production news.", url: "https://dreaminganime.com", type: "external" },
+            { name: "THE TECH SCOUT HQ", sector: "BRAND", logo: "", desc: "Innovation news and emerging neural technology signals.", url: "thetechscouthq/", type: "external" },
+            { name: "PEAK FIT", sector: "BRAND", logo: "", desc: "Biohacking recovery science and elite fitness performance.", url: "peakfit/", type: "external" },
+            { name: "EVOLVE", sector: "PARTNER", logo: "", desc: "Caribbean-wide corporate mobility and fleet sales logistics.", url: "partners/#evolve", type: "external" },
+            { name: "THE BLOG", sector: "INTELLIGENCE", logo: "", desc: "Deep-dives into product news and digital agency evolution.", url: "blog.html", type: "external" }
+        ];
+
+        let currentIndex = 0;
+        let isAnimating = false;
+
+        function rotateSlices(dir) {
+            if (isAnimating) return;
+            isAnimating = true;
+            const direction = dir === 'next' ? 1 : -1;
+            currentIndex = (currentIndex + direction + brands.length) % brands.length;
+            gsap.to(globe.rotation, { y: globe.rotation.y + (Math.PI / 2.5 * direction), duration: 0.8, ease: "power2.out", onComplete: () => { isAnimating = false; } });
+            updateUI(currentIndex);
+        }
+
+        function jumpTo(index) {
+            if (isAnimating || index === currentIndex) return;
+            const diff = index - currentIndex;
+            isAnimating = true; currentIndex = index;
+            gsap.to(globe.rotation, { y: globe.rotation.y + (Math.PI / 2.5 * diff), duration: 0.8, ease: "power2.out", onComplete: () => { isAnimating = false; } });
+            updateUI(currentIndex);
+        }
+
+        const dotsContainer = document.getElementById('scroll-indicator');
+        brands.forEach((brand, i) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'dot-wrapper' + (i === 0 ? ' active' : '');
+            wrapper.onclick = () => jumpTo(i);
+            const label = document.createElement('span'); label.className = 'dot-label'; label.innerText = brand.name;
+            const dot = document.createElement('div'); dot.className = 'dot';
+            wrapper.appendChild(label); wrapper.appendChild(dot);
+            dotsContainer.appendChild(wrapper);
+        });
+
+        function updateUI(index) {
+            const brand = brands[index];
+            gsap.to(".brand-visual-container", { opacity: 0, y: 30, duration: 0.3, onComplete: () => {
+                document.getElementById('current-brand').innerText = brand.name;
+                document.getElementById('current-sector').innerText = brand.sector;
+                document.getElementById('current-desc').innerText = brand.desc;
+                document.getElementById('current-price').innerText = brand.price || "";
+                const cta = document.getElementById('main-cta');
+                if (brand.type === "scroll") {
+                    cta.innerText = "VIEW PACKAGES";
+                    cta.onclick = () => {
+                        document.body.classList.add('package-active');
+                        setTimeout(() => {
+                            document.getElementById('package-section').scrollIntoView({ behavior: "smooth", block: "start" });
+                        }, 10);
+                    };
+                } else {
+                    cta.innerText = "ENTER DOMAIN";
+                    cta.onclick = () => window.open(brand.url, '_blank');
+                }
+                const dots = document.querySelectorAll('.dot-wrapper');
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+                gsap.to(".brand-visual-container", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+            }});
+        }
+
+        const modal = document.body;
+        function openModal(pkgName) {
+            const pkgData = {
+                'STARTER PKG': { title: 'Activate Starter', items: ['1-Page High-Fidelity Website', 'Full Brand Setup (Logo, Domain, Favicon)', 'Social Media Integration', 'Technical SEO & SSL', '1 Month Free Maintenance'] },
+                'GROWTH PKG': { title: 'Activate Growth', items: ['Manage 1 Brand Page (Social Setup)', 'Full Branding & Architecture', 'Content Creation & Copywriting', 'Advanced SEO & Analytics', '1 Month Free Maintenance'] },
+                'TRUSTED PKG': { title: 'Activate Trusted', items: ['Full Business Automation Node', '10-15 Pages of Content', 'Premium Brand Scaling & PR', '24/7 Sovereign Tech Support', '1 Month Free Maintenance'] },
+                'E-STARTER PKG': { title: 'Activate E-Starter', items: ['1-Page Shop Node', 'Full Store Branding & Domain', 'Integrated Social Shop Setup', 'Payment Gateway Integration', '1 Month Free Maintenance'] },
+                'E-GROWTH PKG': { title: 'Activate E-Growth', items: ['2-5 Page Store Architecture', 'Full Shop Logic (10+ Products)', 'Deep Copywriting & Product SEO', 'Automated Fulfillment Sync', '1 Month Free Maintenance'] },
+                'E-TRUSTED PKG': { title: 'Activate E-Trusted', items: ['Elite Store (50+ Products)', '15+ Page Network Architecture', 'Advanced Inventory Automation', 'On-Chain Inventory Logic', '1 Month Free Maintenance'] },
+                'MAINTENANCE PKG': { title: 'Activate Maintenance', items: ['Daily Uptime & Security Monitoring', 'Monthly Content Optimization', 'Technical Backups', 'Priority Sovereign Support', '1 Month Free Maintenance'] }
+            };
+            const data = pkgData[pkgName];
+            document.getElementById('target-package').value = pkgName;
+            document.getElementById('modal-title').innerText = data.title;
+            const list = document.getElementById('checklist-items');
+            list.innerHTML = "";
+            data.items.forEach(item => { const li = document.createElement('li'); li.innerText = item; list.appendChild(li); });
+            document.getElementById('pkg-checklist').style.display = "block";
+            modal.classList.add('modal-active');
+        }
+
+        function hidePackages() {
+            document.body.classList.remove('package-active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        document.getElementById('close-modal').onclick = () => modal.classList.remove('modal-active');
+        document.getElementById('modal-overlay').onclick = (e) => { if (e.target.id === 'modal-overlay') modal.classList.remove('modal-active'); };
+
+        const leadForm = document.getElementById('lead-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formMsg = document.getElementById('form-msg');
+        leadForm.onsubmit = async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true; submitBtn.innerText = "SYNCHRONIZING...";
+            const data = {
+                name: document.getElementById('user-name').value,
+                email: document.getElementById('user-email').value,
+                package: document.getElementById('target-package').value,
+                brand: "Prisca Dezigns",
+                created_at: new Date().toISOString()
+            };
+            const { error } = await supabaseClient.from('client_leads').insert([data]);
+            if (error) {
+                formMsg.style.color = "#EF4444"; formMsg.innerText = "ERROR: UPLINK FAILED.";
+                submitBtn.disabled = false; submitBtn.innerText = "RETRY INITIATION";
+            } else {
+                formMsg.style.color = "var(--accent)"; formMsg.innerText = "NODE ACTIVATED.";
+                submitBtn.innerText = "CONNECTION SECURED";
+                leadForm.reset();
+                setTimeout(() => modal.classList.remove('modal-active'), 2000);
+            }
+        };
+
+        let startX = 0;
+        window.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging || isAnimating) return;
+            const dx = e.clientX - startX;
+            if (Math.abs(dx) > 50) { if (dx > 0) rotateSlices('prev'); else rotateSlices('next'); startX = e.clientX; }
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+
+        // High-fidelity touch sensitivity update
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (isAnimating || modal.classList.contains('modal-active') || document.body.classList.contains('package-active')) return;
+            
+            const touchY = e.touches[0].clientY;
+            const dy = touchStartY - touchY;
+            const TOUCH_THRESHOLD = 20; // Sensitive light flick
+
+            if (Math.abs(dy) >= TOUCH_THRESHOLD) {
+                rotateSlices(dy > 0 ? 'next' : 'prev');
+                touchStartY = touchY; // Reset starting point for fluid swiping
+            }
+        }, { passive: true });
+
+        let wheelAccumulator = 0;
+        const WHEEL_THRESHOLD = 25; // Reduced from default behavior for higher sensitivity
+
+        window.addEventListener('wheel', (e) => { 
+            if (isAnimating || modal.classList.contains('modal-active') || document.body.classList.contains('package-active')) return;
+            
+            wheelAccumulator += e.deltaY;
+            
+            if (Math.abs(wheelAccumulator) >= WHEEL_THRESHOLD) {
+                rotateSlices(wheelAccumulator > 0 ? 'next' : 'prev');
+                wheelAccumulator = 0;
+            }
+        }, { passive: true });
+
+        function animate() { requestAnimationFrame(animate); globe.rotation.y += 0.0015; renderer.render(scene, camera); }
+        animate();
+        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        updateUI(0);
+    </script>
+</body>
+</html>
