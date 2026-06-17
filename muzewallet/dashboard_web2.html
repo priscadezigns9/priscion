@@ -48,30 +48,35 @@
     </style>
 </head>
 <body>
+    <script>
+        if (localStorage.getItem('isGodMode') === 'true') {
+            window.location.href = "vault.html";
+        }
+    </script>
     <div class="login-box">
         <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
-        <h1>Access Vault</h1>
-        <p>Managed Node Security</p>
+        <h1>Account Login</h1>
+        <p>Standard Managed Access</p>
         
         <div class="tab-nav">
-            <button class="tab-btn active">Web2 Login</button>
-            <button class="tab-btn" onclick="connectWeb3()">Web3 Wallet</button>
+            <button class="tab-btn active">Standard</button>
+            <button class="tab-btn" onclick="connectWeb3()">Sovereign Wallet</button>
         </div>
 
         <form onsubmit="handleLogin(event)">
             <div class="input-group">
-                <label>Email Identity</label>
-                <input type="email" id="email" placeholder="architect@priscion.com" required>
+                <label>Email or Handle</label>
+                <input type="text" id="email" placeholder="prisca.pri" required>
             </div>
             <div class="input-group">
-                <label>Secure Key</label>
+                <label>Password</label>
                 <input type="password" id="password" placeholder="••••••••" required>
             </div>
-            <button type="submit" id="submit-btn" class="btn-submit">UNLOCK VAULT</button>
+            <button type="submit" id="submit-btn" class="btn-submit">LOGIN</button>
         </form>
 
         <div class="action-grid">
-            <a href="create.html" class="action-link">Register New Identity</a>
+            <a href="signup.html" class="action-link">Register New Account</a>
         </div>
         
         <a href="index.html" class="back-link">← RETURN TO GATE</a>
@@ -99,24 +104,24 @@
                     return;
                 }
                 localStorage.setItem('user_handle', user.handle);
-                window.location.href = "vault.html";
+                window.location.href = "v27.html";
             } catch (err) {
                 alert('Authentication failed.');
                 btn.disabled = false;
-                btn.innerText = "UNLOCK VAULT";
+                btn.innerText = "LOGIN";
             }
         }
 
         async function connectWeb3() {
             if (typeof window.cardano === 'undefined') {
-                alert('Please install a Cardano wallet to continue.');
+                alert('Please install a Cardano wallet (Nami/Vespa) to continue.');
                 return;
             }
             try {
                 const api = await window.cardano.nami.enable();
                 const address = await api.getUsedAddresses();
-                localStorage.setItem('user_handle', 'cardano_user_' + address[0].substring(0,8));
-                window.location.href = "vault.html";
+                localStorage.setItem('user_handle', 'wallet_' + address[0].substring(0,8));
+                window.location.href = "v27.html";
             } catch (err) {
                 alert('Web3 Connection Failed.');
             }
