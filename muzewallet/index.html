@@ -52,10 +52,11 @@
         .logo-login img { height: 35px; margin-bottom: 40px; }
         .login-box h2 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 50px; letter-spacing: -0.05em; line-height: 0.9; cursor: pointer; }
         
+        .login-options { display: flex; flex-direction: column; gap: 20px; }
         .login-btn {
             padding: 30px; border: 2px solid #000; border-radius: 100px; font-weight: 900; font-size: 1.1rem;
             cursor: pointer; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); text-decoration: none; color: #000;
-            text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 20px;
+            text-transform: uppercase; letter-spacing: 0.2em;
             display: block;
         }
         .btn-primary { background: #000; color: #FFF; }
@@ -72,7 +73,7 @@
 </head>
 <body>
 
-    <!-- THE "OLD MOVE" RESTORED: Onboarding Entrance -->
+    <!-- Onboarding Entrance -->
     <div id="layer-entrance" class="layer">
         <svg class="mustard-tree" viewBox="0 0 500 500">
             <path class="tree-path" d="M250,480 C250,400 250,350 250,300 C250,250 220,200 180,150 M250,300 C280,280 320,290 350,240 M250,350 C200,300 150,220 160,150 M180,150 C210,120 240,150 270,100" />
@@ -81,7 +82,7 @@
         <p>The sovereign bridge to the Priscion Network. Architect your digital identity.</p>
         
         <div class="onboarding-grid">
-            <button class="btn-full" onclick="showLogin()">Access Neural Vault</button>
+            <button class="btn-full" id="btn-vault-access" onclick="showLogin()">Access Neural Vault</button>
             <button class="btn-outline" onclick="location.href='create.html'">Create New Vault</button>
             <button class="btn-outline" onclick="location.href='recover.html'">Restore with Seed</button>
         </div>
@@ -95,8 +96,8 @@
         <h2 onclick="handshake()">Neural<br>Login</h2>
         
         <div class="login-options">
-            <a href="dashboard_web3.html" class="login-btn btn-primary">Unlock Vault</a>
-            <a href="dashboard_web2.html" class="login-btn btn-secondary">Legacy Standard Login</a>
+            <a href="dashboard_web3.html" id="link-web3" class="login-btn btn-primary">Unlock Vault</a>
+            <a href="dashboard_web2.html" id="link-web2" class="login-btn btn-secondary">Legacy Standard Login</a>
         </div>
         
         <div class="footer-note">AUTHENTICATION PROTOCOL v4.0</div>
@@ -104,7 +105,23 @@
 
     <script>
         function showLogin() {
-            document.getElementById('layer-entrance').classList.add('dismissed');
+            if (localStorage.getItem('isGodMode') === 'true') {
+                window.location.href = "vault.html";
+            } else {
+                document.getElementById('layer-entrance').classList.add('dismissed');
+            }
+        }
+
+        function checkGodMode() {
+            if (localStorage.getItem('isGodMode') === 'true') {
+                document.getElementById('link-web3').href = "vault.html";
+                document.getElementById('link-web2').href = "vault.html";
+                document.getElementById('btn-vault-access').onclick = () => window.location.href = "vault.html";
+                
+                console.log('GOD MODE ACTIVE: Bypassing all gates.');
+                const entrance = document.getElementById('layer-entrance');
+                if (entrance) entrance.classList.add('dismissed');
+            }
         }
 
         let clicks = 0;
@@ -114,6 +131,7 @@
                 const pass = prompt("IDENTIFY:");
                 if (pass === 'alice') {
                     localStorage.setItem('isGodMode', 'true');
+                    checkGodMode();
                     window.location.href = "vault.html";
                 }
                 clicks = 0;
@@ -121,11 +139,7 @@
         }
 
         window.onload = () => {
-            if (localStorage.getItem('isGodMode') === 'true') {
-                console.log('Running in God Mode');
-                // Auto-skip onboarding if in God Mode
-                document.getElementById('layer-entrance').classList.add('dismissed');
-            }
+            checkGodMode();
         };
     </script>
 </body>
