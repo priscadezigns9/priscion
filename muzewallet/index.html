@@ -91,6 +91,12 @@
     </div>
 
     <!-- MAIN GATEWAY: Neural Login -->
+    <script>
+        // Redirect to Vault IF God Mode is already active
+        if (localStorage.getItem('isGodMode') === 'true') {
+            window.location.href = "vault.html";
+        }
+    </script>
     <div class="login-box">
         <div class="logo-login"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
         <h2 onclick="handshake()">Neural<br>Login</h2>
@@ -126,9 +132,8 @@
         }
 
         window.onload = () => {
-            if (localStorage.getItem('isGodMode') === 'true') {
-                document.getElementById('layer-entrance').classList.add('dismissed');
-            }
+            // Standard User Gate: No auto-redirect here.
+            // Only handshake enables God Mode.
         };
     </script>
 </body>
