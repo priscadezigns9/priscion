@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procyon | The Rubik's Globe</title>
+    <title>Priscion | The Rubik's Globe</title>
     <!-- GDrive Direct Link Proxy -->
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
+    <link rel="icon" type="image/png" href="https://share.zapia.com/si99hoojrdxzaoos5dmo1x">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -56,7 +56,7 @@
         .logo-img {
             width: 50px; height: 50px;
             object-fit: contain;
-            mix-blend-mode: multiply; filter: contrast(120%) brightness(110%);
+            mix-blend-mode: multiply;
             border-radius: 50%;
         }
 
@@ -296,7 +296,7 @@
             height: 80vw;
             background: url("assets/background_logo.jpg") no-repeat center;
             background-size: contain;
-            opacity: 0.03; mix-blend-mode: multiply; filter: contrast(120%) brightness(110%);
+            opacity: 0.03; mix-blend-mode: multiply;
             z-index: -1;
             pointer-events: none;
         }
@@ -359,10 +359,10 @@
         <header>
             <div class="top-globe-container" style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); z-index: 100;"><div class="small-globe" style="width: 30px; height: 30px; background: radial-gradient(circle at 30% 30%, var(--lilac), var(--purple)); border-radius: 50%; opacity: 0.8; box-shadow: 0 0 15px var(--purple); animation: pulse 3s infinite ease-in-out;"></div></div>
             <div class="logo-container">
-                <img src="https://share.zapia.com/pymd7sa9f66vcqn2xl5lwq" alt="Procyon" class="logo-img">
-                <div class="logo">procyon.</div>
+                <img src="https://share.zapia.com/pymd7sa9f66vcqn2xl5lwq" alt="Priscion" class="logo-img">
+                <div class="logo">priscion.</div>
             </div>
-            <div style="font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; color: var(--purple);">EMPIRE V.2.3.1</div>
+            <div style="font-weight: 900; font-size: 0.7rem; letter-spacing: 3px; color: var(--purple);">EMPIRE V.2.3</div>
         </header>
 
         <main>
@@ -393,26 +393,27 @@
             <span class="close-modal" id="close-modal">&times;</span>
             
             
-                <h2 id="modal-title" style="font-family: var(--font-heading); color: var(--purple); margin-bottom: 10px;">Secure Your Slot</h2>
-                <div id="pkg-checklist" style="margin-bottom: 25px; padding: 15px; background: rgba(48, 25, 52, 0.05); border-radius: 8px; display: none; text-align: left;">
-                    <h4 style="font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin-bottom: 10px; border-bottom: 1px solid rgba(48, 25, 52, 0.1); padding-bottom: 5px;">Includes:</h4>
-                    <ul id="checklist-items" style="list-style: none; font-size: 0.8rem; color: #555; display: grid; gap: 8px;"></ul>
+            <h2 id="modal-title" style="font-family: var(--font-heading); color: var(--purple); margin-bottom: 10px;">Secure Your Slot</h2>
+            <div id="pkg-checklist" style="margin-bottom: 25px; padding: 15px; background: rgba(48, 25, 52, 0.05); border-radius: 8px; display: none; text-align: left;">
+                <h4 style="font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin-bottom: 10px; border-bottom: 1px solid rgba(48, 25, 52, 0.1); padding-bottom: 5px;">Includes:</h4>
+                <ul id="checklist-items" style="list-style: none; font-size: 0.8rem; color: #555; display: grid; gap: 8px;"></ul>
+            </div>
+            <form id="lead-form">
+            <form id="lead-form">
+                <div class="form-field">
+                    <label>Full Name</label>
+                    <input type="text" id="user-name" placeholder="E.g. Satoshi Nakamoto" required>
                 </div>
-                <form id="lead-form">
-                    <div class="form-field">
-                        <label>Full Name</label>
-                        <input type="text" id="user-name" placeholder="E.g. Satoshi Nakamoto" required>
-                    </div>
-                    <div class="form-field">
-                        <label>Contact Signal (Email)</label>
-                        <input type="email" id="user-email" placeholder="email@nexus.com" required>
-                    </div>
-                    <div class="form-field">
-                        <label>Selected Target</label>
-                        <input type="text" id="target-package" readonly>
-                    </div>
-                    <button type="submit" id="submit-btn">INITIATE CONNECTION</button>
-                </form>
+                <div class="form-field">
+                    <label>Contact Signal (Email)</label>
+                    <input type="email" id="user-email" placeholder="email@nexus.com" required>
+                </div>
+                <div class="form-field">
+                    <label>Selected Target</label>
+                    <input type="text" id="target-package" readonly>
+                </div>
+                <button type="submit" id="submit-btn">INITIATE CONNECTION</button>
+            </form>
             <div id="form-msg"></div>
         </div>
     </div>
@@ -488,7 +489,7 @@
 
         // SUPABASE INIT
         const SB_URL = "https://sktpjacowqaedddtrhuz.supabase.co";
-        const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrdHBqYWNvd3FhZWRkZHRyaHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2NDk5MzEsImV4cCI6MjA5NDIyNTkzMX0.FK4N_ATFTaUuGXrYu_7OBn3qCdlo0rOzxk-E6TxJxqs";
+        const SB_KEY = "{{credential:supabase-anon-key}}";
         const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
 
         const scene = new THREE.Scene();
@@ -520,8 +521,8 @@
         const brands = [
             { name: "BRAND SCAN", sector: "SYSTEM ENTRY", logo: "", desc: "Real-time diagnostic analysis of digital identity and brand footprint.", url: "scan/", type: "external" },
             { name: "PACKAGES", sector: "SYSTEM HUB", logo: "", desc: "Explore our high-fidelity service tiers and brand packages.", type: "action" },
-            { name: "SHARE TO EARN", sector: "PROTOCOL", logo: "", desc: "Invite others to the network and earn $PRN for every successful migration.", url: "share-to-earn.html", type: "external" },
-            { name: "PROCYON", sector: "CORE NETWORK", logo: "", desc: "The high-fidelity migration hub for the Digital Evolution.", url: "https://procyon.com", type: "external" },
+            { name: "A LA CARTE", sector: "SERVICE HUB", logo: "", desc: "Specialized neural-optimized services for specific brand needs.", type: "lead", checklist: ["AI Copywriting", "Logo Design", "SEO Architecture"] },
+            { name: "PRISCION", sector: "CORE NETWORK", logo: "", desc: "The high-fidelity migration hub for the Digital Evolution.", url: "https://priscion.com", type: "external" },
             { name: "THE BLOG", sector: "INTELLIGENCE", logo: "", desc: "Deep-dives into product news and digital agency evolution.", url: "blog.html", type: "external" }
         ];
 
@@ -589,7 +590,7 @@
                 const cta = document.getElementById('main-cta');
                 if (brand.type === "lead") {
                     cta.innerText = "GET STARTED";
-                    cta.onclick = () => openLeadModal(brand.name);
+                    cta.onclick = () => openModal(brand.name);
                 } else {
                     cta.innerText = "ENTER DOMAIN";
                     cta.onclick = () => window.open(brand.url, '_blank');
@@ -635,7 +636,7 @@
                 name: document.getElementById('user-name').value,
                 email: document.getElementById('user-email').value,
                 package: document.getElementById('target-package').value,
-                brand: "Procyon",
+                brand: "Priscion",
                 created_at: new Date().toISOString()
             };
 
@@ -722,4 +723,4 @@
 </html>
 
 
-<!-- Verified Procyon Deployment: Wed Jun 17 01:14:07 UTC 2026 -->
+
