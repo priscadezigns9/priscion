@@ -3,213 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Priscion | The Sovereign Ledger</title>
+    <title>Priscion | Cardano L1 Blockchain</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --bg: #FFFFFF;
-            --text: #1A1A1A;
-            --muted: #666666;
+            --text: #000000;
             --accent: #7B35D4;
-            --border: rgba(0,0,0,0.08);
-            --surface: #F9F9F9;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        body { 
+            font-family: var(--font-body); 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            transition: color 0.8s ease;
+        }
 
-        nav {
-            height: 90px; padding: 0 8%;
+        .grain {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.05; pointer-events: none; z-index: 50;
+        }
+
+        .sky-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #FFFFFF;
+            z-index: -2;
+            transition: background 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 110px 10px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 150px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0;
+            z-index: -2;
+            transition: opacity 1.2s ease;
+            pointer-events: none;
+        }
+
+        .cloud-wrap {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .cloud {
+            position: absolute;
+            background: radial-gradient(circle, rgba(123, 53, 212, 0.25) 0%, rgba(123, 53, 212, 0) 70%);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.8;
+            will-change: transform;
+        }
+
+        header {
+            padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
+            display: flex; justify-content: space-between; z-index: 1000;
+        }
+        .logo img { height: 40px; cursor: pointer; transition: height 0.3s ease; }
+
+        main {
+            position: relative; z-index: 10;
+            max-width: 1000px; margin: 0 auto; padding: 0 40px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1), color 0.8s ease;
+            margin-bottom: 25vh;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal.fade-out {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+
+        .hero-title {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+        }
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3.5rem, 12vw, 10rem);
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            line-height: 0.75;
+            margin-bottom: 20px;
+        }
+        h1 span { color: var(--accent); font-style: italic; }
+
+        .narrative {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400; letter-spacing: -0.05em; line-height: 1.1;
+            margin: 40vh 0;
+        }
+        .narrative b { font-weight: 900; color: var(--accent); }
+
+        .center-btn-group { text-align: center; margin: 150px 0; }
+        .primary-btn {
+            display: inline-block; padding: 25px 60px; background: #000; color: #FFF; border-radius: 100px;
+            text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3em;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .primary-btn:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(123, 53, 212, 0.2); }
+
+        .node-list { margin: 250px 0; border-top: 2px solid currentColor; }
+        .node-item {
+            padding: 100px 0; border-bottom: 2px solid currentColor;
             display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px); z-index: 1000;
+            text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
+        .node-item:hover { color: var(--accent); padding-left: 30px; }
+        .node-title { font-family: var(--font-heading); font-size: 6rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.85; }
+        .node-meta { font-weight: 900; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.5; }
 
-        .nav-links { display: flex; gap: 40px; align-items: center; }
-        .nav-links a { 
-            text-decoration: none; color: var(--text); font-weight: 600; font-size: 0.75rem; 
-            letter-spacing: 2px; text-transform: uppercase; transition: 0.3s; 
+        .cta-box { text-align: center; margin: 150px 0; }
+        .btn-glow {
+            display: inline-block; padding: 30px 80px; background: #000; color: #FFF; border-radius: 100px;
+            font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 0.4em;
+            cursor: pointer; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        .nav-links a:hover { color: var(--accent); }
+        .btn-glow:hover { background: var(--accent); transform: scale(1.05); color: #FFF; }
+        
+        [data-theme="dark"] .btn-glow { background: #FFF; color: #000; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
+        [data-theme="dark"] .btn-glow:hover { background: var(--accent); color: #FFF; }
 
-        .btn-muse-nav {
-            background: #000; color: #fff; padding: 14px 28px; border-radius: 100px;
-            font-weight: 900; font-size: 0.7rem; letter-spacing: 2px; border: none;
-            cursor: pointer; transition: 0.3s;
+        footer { padding: 150px 40px; border-top: 1px solid rgba(128,128,128,0.2); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; }
+
+        #leadModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; z-index: 2000; transition: opacity 0.5s;
+            color: #000;
         }
-
-        .hero {
-            padding: 120px 8% 100px; text-align: center;
-            display: flex; flex-direction: column; align-items: center;
+        #leadModal.open { opacity: 1; pointer-events: auto; }
+        .modal-inner {
+            width: 100%; max-width: 600px; padding: 60px; text-align: left;
         }
-        .p-logo-hero { width: 60px; margin-bottom: 40px; cursor: pointer; }
-
-        .kicker { font-weight: 900; font-size: 0.7rem; letter-spacing: 5px; color: var(--muted); text-transform: uppercase; margin-bottom: 20px; }
-        h1 { font-family: var(--font-heading); font-size: 5rem; line-height: 1.1; margin-bottom: 30px; letter-spacing: -2px; }
-        .hero p { max-width: 600px; color: var(--muted); font-size: 1.1rem; margin-bottom: 40px; }
-
-        .hero-btns { display: flex; gap: 20px; }
-        .btn-hero {
-            padding: 18px 40px; border-radius: 100px; font-weight: 900; font-size: 0.8rem;
-            letter-spacing: 2px; text-decoration: none; transition: 0.3s;
+        .modal-inner h2 { font-family: var(--font-heading); font-size: 4rem; letter-spacing: -0.05em; line-height: 0.85; margin-bottom: 40px; }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; font-weight: 900; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 10px; opacity: 0.5; }
+        .form-group input { 
+            width: 100%; border: none; border-bottom: 3px solid #000; padding: 15px 0; 
+            font-size: 1.5rem; font-weight: 700; outline: none; background: transparent;
         }
-        .btn-hero.primary { background: #000; color: #fff; }
-        .btn-hero.secondary { background: #fff; color: #000; border: 1px solid var(--border); }
-
-        /* Tile Grid */
-        .dapp-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 0 8% 100px;
+        .submit-btn {
+            width: 100%; padding: 25px; background: #000; color: #FFF; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2em;
+            margin-top: 20px; transition: background 0.3s;
         }
-        .dapp-card {
-            background: var(--surface); border: 1px solid var(--border); padding: 50px 40px;
-            border-radius: 24px; text-decoration: none; color: inherit; transition: 0.3s;
-            position: relative; overflow: hidden;
-        }
-        .dapp-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .status-badge {
-            position: absolute; top: 30px; right: 30px; font-weight: 900; font-size: 0.6rem;
-            letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
-        }
-        .dapp-logo { height: 45px; margin-bottom: 25px; object-fit: contain; }
-        .dapp-card h3 { font-weight: 900; font-size: 0.9rem; letter-spacing: 3px; margin-bottom: 15px; text-transform: uppercase; }
-        .dapp-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+        .submit-btn:hover { background: var(--accent); }
+        .close-modal { margin-top: 30px; display: block; text-align: center; font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer; opacity: 0.4; }
 
-        /* Migration Services */
-        .services { padding: 100px 8%; background: #000; color: #fff; border-radius: 60px 60px 0 0; }
-        .service-header { text-align: center; margin-bottom: 80px; }
-        .service-header h2 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 20px; }
-
-        .service-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .service-card {
-            background: #080808; border: 1px solid #111; padding: 60px; border-radius: 40px;
-            transition: 0.3s;
-        }
-        .service-card:hover { border-color: var(--accent); }
-        .service-card h3 { font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 20px; text-transform: uppercase; }
-        .service-card .price { font-size: 2.5rem; font-weight: 300; margin-bottom: 20px; color: var(--accent); }
-        .service-card p { color: #888; margin-bottom: 30px; font-size: 1rem; }
-        .service-list { list-style: none; margin-bottom: 40px; }
-        .service-list li { color: #666; margin-bottom: 10px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; }
-        .service-list li::before { content: '✓'; color: var(--accent); font-weight: bold; }
-
-        .btn-acquire {
-            width: 100%; padding: 20px; background: #fff; color: #000; border: none;
-            border-radius: 100px; font-weight: 900; cursor: pointer; transition: 0.3s;
-        }
-        .btn-acquire:hover { background: var(--accent); color: #fff; }
-
-        footer { padding: 80px 8%; text-align: center; border-top: 1px solid var(--border); }
-        .copyright { font-weight: 900; font-size: 0.6rem; letter-spacing: 3px; color: #CCC; text-transform: uppercase; }
-
-        #sidebar { 
-            position: fixed; top: 0; right: -400px; width: 400px; height: 100%; 
-            background: #fff; z-index: 10000; transition: 0.3s;
-            box-shadow: -20px 0 50px rgba(0,0,0,0.1);
-        }
-        #sidebar.active { right: 0; }
-
-        @media (max-width: 1024px) {
-            .dapp-grid { grid-template-columns: 1fr; }
-            .service-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 3rem; }
+        @media (max-width: 600px) {
+            .node-title { font-size: 3rem; }
+            h1 { font-size: 5rem; }
+            .modal-inner { padding: 30px; }
+            .modal-inner h2 { font-size: 2.5rem; }
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <nav>
-        <div class="nav-links">
-            <a href="whitepaper.html">White Paper</a>
-            <a href="pulse/">Explorer</a>
-        </div>
-        <div class="nav-links">
-            <a href="leggo.html">OS</a>
-            <button class="btn-muse-nav" onclick="toggleSidebar()">Muse Wallet</button>
-        </div>
-    </nav>
+    <div class="grain"></div>
+    <div class="sky-canvas"></div>
+    <div class="stars" id="stars"></div>
 
-    <section class="hero">
-        <img src="assets/pd_icon_512.png" class="p-logo-hero" onclick="location.href='/'">
-        <div class="kicker">The Sovereign Ledger</div>
-        <h1>Architecting<br>Reality.</h1>
-        <p>Migrate your brand to the Priscion Blockchain. Secure your legacy with high-fidelity digital architecture and neural identity protocols.</p>
-        <div class="hero-btns">
-            <a href="leggo.html" class="btn-hero primary">Enter the OS</a>
-            <a href="whitepaper.html" class="btn-hero secondary">White Paper</a>
-        </div>
-    </section>
-
-    <div class="dapp-grid">
-        <a href="pulse/" class="dapp-card">
-            <span class="status-badge">Live</span>
-            <img src="assets/pulse_logo.png" class="dapp-logo">
-            <h3>PULSE</h3>
-            <p>The official block explorer. Monitor transactions and ledger health in real-time.</p>
-        </a>
-        <a href="#" onclick="toggleSidebar()" class="dapp-card">
-            <span class="status-badge">Beta</span>
-            <img src="assets/muse_logo.png" class="dapp-logo">
-            <h3>MUSE</h3>
-            <p>High-fidelity sovereign wallet. Manage your $PRN, $NRL, and your .pri handles.</p>
-        </a>
-        <a href="swap.html" class="dapp-card">
-            <span class="status-badge">Live</span>
-            <img src="assets/chillata_logo.png" class="dapp-logo">
-            <h3>CHILLATA</h3>
-            <p>Sovereign Swap and liquidity engine. Deterministic asset exchange and liquidity protocols.</p>
-        </a>
-        <a href="mynt/" class="dapp-card">
-            <span class="status-badge">Dev</span>
-            <img src="assets/mynt_logo.png" class="dapp-logo">
-            <h3>MYNT</h3>
-            <p>The NFT Factory. Minting digital sovereignty and high-fidelity legacy artifacts.</p>
-        </a>
+    <div class="cloud-wrap">
+        <div class="cloud" style="width: 600px; height: 600px; top: -10%; left: -10%;" data-depth="0.1"></div>
+        <div class="cloud" style="width: 800px; height: 800px; top: 20%; right: -20%;" data-depth="0.3"></div>
+        <div class="cloud" style="width: 500px; height: 500px; bottom: 10%; left: 10%;" data-depth="0.2"></div>
+        <div class="cloud" style="width: 900px; height: 900px; top: 50%; left: -30%;" data-depth="0.5"></div>
+        <div class="cloud" style="width: 700px; height: 700px; top: 80%; right: 10%;" data-depth="0.4"></div>
     </div>
 
-    <section class="services">
-        <div class="service-header">
-            <div class="kicker" style="color: #444;">Ecosystem Integration</div>
-            <h2>Web3 Migration</h2>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Priscion" id="headerLogo"></a>
         </div>
-        <div class="service-grid">
-            <div class="service-card">
-                <h3>Sovereign Onboarding</h3>
-                <div class="price">$1,500.00</div>
-                <p>Designed for emerging brands and personal nodes looking for immediate entry into the network.</p>
-                <ul class="service-list">
-                    <li>Primary .pri handle registration</li>
-                    <li>Sovereign identity engineering</li>
-                    <li>MUSE Wallet handshake integration</li>
-                </ul>
-                <button class="btn-acquire" onclick="toggleSidebar()">Acquire Service</button>
-            </div>
-            <div class="service-card">
-                <h3>Ledger Migration</h3>
-                <div class="price">$7,900.00</div>
-                <p>High-fidelity deep-tissue migration for established corporations and heritage datasets.</p>
-                <ul class="service-list">
-                    <li>Legacy database heritage anchoring</li>
-                    <li>Custom revenue-tithing smart contracts</li>
-                    <li>Deep neural security firewalling</li>
-                </ul>
-                <button class="btn-acquire" onclick="toggleSidebar()">Acquire Service</button>
-            </div>
+    </header>
+
+    <main>
+        <div class="hero-title reveal">
+            <h1>architecting</h1>
+            <h1><span>reality.</span></h1>
         </div>
-    </section>
+
+        <div class="narrative reveal">
+            Priscion is a <b>Cardano L1 Blockchain</b> and digital agency ecosystem.
+        </div>
+
+        <div class="narrative reveal" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
+            As an L1 network, we don't just build on the blockchain—we <b>are</b> the infrastructure. Inheriting the security of Cardano, we provide the sovereign rails for the next generation of global brands.
+        </div>
+
+        <div class="center-btn-group reveal">
+            <a href="share-to-earn.html" class="primary-btn">Claim .pri Handle</a>
+        </div>
+
+        <div class="narrative reveal">
+            We migrate brands from the noise of Web2 into the <b>absolute fidelity</b> of the Web3 Ledger.
+        </div>
+
+        <div class="narrative reveal" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
+            The Priscion mission is to bridge the gap between <b>E-commerce</b>, <b>Affiliate Marketing</b>, and <b>Web3</b>—creating a unified ecosystem where identity and commerce are sovereign.
+        </div>
+
+        <div class="node-list reveal">
+            <a href="pulse/" class="node-item">
+                <div class="node-title">PULSE</div>
+                <div class="node-meta">Explorer</div>
+            </a>
+            <a href="muzewallet/" class="node-item">
+                <div class="node-title">MUZE</div>
+                <div class="node-meta">Vault</div>
+            </a>
+            <a href="chillata/" class="node-item">
+                <div class="node-title">CHILLATA</div>
+                <div class="node-meta">Liquidity</div>
+            </a>
+            <a href="mynt/" class="node-item">
+                <div class="node-title">MYNT</div>
+                <div class="node-meta">Market</div>
+            </a>
+            <a href="peanuts/" class="node-item">
+                <div class="node-title">PEANUTS</div>
+                <div class="node-meta">Analytics</div>
+            </a>
+            <a href="blog/" class="node-item">
+                <div class="node-title">INTELLIGENCE</div>
+                <div class="node-meta">Blog</div>
+            </a>
+            <a href="whitepaper.html" class="node-item">
+                <div class="node-title">WHITEPAPER</div>
+                <div class="node-meta">Protocol</div>
+            </a>
+        </div>
+
+        <div class="cta-box reveal">
+            <div class="btn-glow" onclick="openLeadModal('Network Migration')">Begin Migration</div>
+        </div>
+
+        <div class="narrative reveal" style="margin-top: 400px; opacity: 0.15; font-size: 1.5rem; letter-spacing: 0.2em; text-align: center;">
+            ABSOLUTE AUTONOMY. NO SIMULATIONS.<br>THE LEDGER NEVER LIES.
+        </div>
+    </main>
+
+    <div id="leadModal">
+        <div class="modal-inner">
+            <h2 id="modal-title">MIGRATION</h2>
+            <form id="leadForm">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="leadName" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="leadEmail" placeholder="email@domain.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Brand / Business</label>
+                    <input type="text" id="leadCompany" placeholder="Empire Name" required>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">SYNCHRONIZE</button>
+            </form>
+            <div id="successMsg" style="display:none; text-align:center;">
+                <h2 style="color:var(--accent);">SYNCED.</h2>
+                <p style="font-weight:900; text-transform:uppercase; letter-spacing:0.2em;">The Great Migration has begun.</p>
+            </div>
+            <div class="close-modal" onclick="closeLeadModal()">← Cancel</div>
+        </div>
+    </div>
 
     <footer>
-        <p class="copyright">Priscion Sovereign Ledger &copy; 2026 | Anchored to Eternity</p>
+        <div id="footerLeft">PRISCION // CARDANO</div>
+        <div id="footerRight">NETWORK &copy; 2026</div>
     </footer>
 
-    <div id="sidebar"></div>
-    <script src="wallet-core.js"></script>
     <script>
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        const sb = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR');
+        const sky = document.querySelector('.sky-canvas');
+        const stars = document.getElementById('stars');
+        const clouds = document.querySelectorAll('.cloud');
+        const reveals = document.querySelectorAll('.reveal');
+        const logo = document.getElementById('headerLogo');
+
+        function handleScroll() {
+            const scrollY = window.pageYOffset;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollY / scrollHeight;
+            
+            // Color Shift & Theme Logic
+            if (scrollPercent < 0.6) {
+                const p = scrollPercent / 0.6;
+                const r = Math.floor(255 - (255 - 245) * p);
+                const g = Math.floor(255 - (255 - 239) * p);
+                const b = 255;
+                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                if(stars) stars.style.opacity = 0;
+                
+                // Light Theme
+                document.body.style.color = "#000000";
+                document.body.setAttribute('data-theme', 'light');
+                if(logo) logo.style.filter = "none";
+            } else {
+                const p = (scrollPercent - 0.6) / 0.4;
+                // Transition to deep dark purple (#13021F)
+                const r = Math.floor(245 - (245 - 19) * p);
+                const g = Math.floor(239 - (239 - 2) * p);
+                const b = Math.floor(255 - (255 - 31) * p);
+                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                
+                // Show stars in the deep purple sky
+                if(stars) stars.style.opacity = p;
+
+                // Dark Theme: Change text to white for readability
+                if (p > 0.3) {
+                    document.body.style.color = "#FFFFFF";
+                    document.body.setAttribute('data-theme', 'dark');
+                    if(logo) logo.style.filter = "invert(1)";
+                } else {
+                    document.body.style.color = "#000000";
+                    document.body.setAttribute('data-theme', 'light');
+                    if(logo) logo.style.filter = "none";
+                }
+            }
+
+            // Cloud Parallax
+            clouds.forEach(cloud => {
+                const depth = cloud.getAttribute('data-depth');
+                const move = scrollY * depth;
+                cloud.style.transform = `translateY(-${move}px) scale(${1 + scrollPercent * depth})`;
+            });
+
+            // Reveal Animation
+            reveals.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                if (rect.top <= windowHeight * 0.85 && rect.bottom >= windowHeight * 0.15) {
+                    el.classList.add('visible');
+                    el.classList.remove('fade-out');
+                } else if (rect.bottom < windowHeight * 0.15) {
+                    el.classList.remove('visible');
+                    el.classList.add('fade-out');
+                } else {
+                    el.classList.remove('visible');
+                    el.classList.remove('fade-out');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll);
+
+        let currentPlan = '';
+        function openLeadModal(plan) {
+            currentPlan = plan;
+            document.getElementById('modal-title').textContent = plan.toUpperCase();
+            document.getElementById('leadModal').classList.add('open');
+            document.getElementById('leadForm').style.display = 'block';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+        function closeLeadModal() { document.getElementById('leadModal').classList.remove('open'); }
+
+        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = 'SYNCING...'; btn.disabled = true;
+            try {
+                await sb.from('leads').insert([{ 
+                    email: document.getElementById('leadEmail').value, 
+                    type: 'priscion_inquiry', 
+                    plan_interest: currentPlan,
+                    name: document.getElementById('leadName').value,
+                    business_name: document.getElementById('leadCompany').value
+                }]);
+                document.getElementById('leadForm').style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+            } catch (err) {
+                alert('Connection failed.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'SYNCHRONIZE';
+            }
+        });
     </script>
 </body>
 </html>
-
