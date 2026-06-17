@@ -82,28 +82,22 @@
         <p>The sovereign bridge to the Priscion Network. Architect your digital identity.</p>
         
         <div class="onboarding-grid">
-            <button class="btn-full" onclick="showLogin()">Access Neural Vault</button>
-            <button class="btn-outline" onclick="location.href='create.html'">Create New Vault</button>
-            <button class="btn-outline" onclick="location.href='recover.html'">Restore with Seed</button>
+            <button class="btn-full" onclick="showLogin()">Secure Login</button>
+            <button class="btn-full" style="background: var(--muze-blue);" onclick="location.href='create.html'">Get Started</button>
+            <p style="margin-top: 20px; opacity: 0.6; cursor: pointer; font-size: 11px;" onclick="location.href='recover.html'">Restore existing vault with seed</p>
         </div>
         
         <div class="footer-note" style="margin-top: 60px;">MUZE // PRISCION BLOCKCHAIN</div>
     </div>
 
     <!-- MAIN GATEWAY: Neural Login -->
-    <script>
-        // Redirect to Vault IF God Mode is already active
-        if (localStorage.getItem('isGodMode') === 'true') {
-            window.location.href = "vault.html";
-        }
-    </script>
     <div class="login-box">
         <div class="logo-login"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
-        <h2 onclick="handshake()">Neural<br>Login</h2>
+        <h2 onclick="handshake()">Login to<br>MUZE</h2>
         
         <div class="login-options">
-            <a href="dashboard_web3.html" class="login-btn btn-primary">Unlock Vault</a>
-            <a href="dashboard_web2.html" class="login-btn btn-secondary">Legacy Standard Login</a>
+            <a href="dashboard_web3.html" class="login-btn btn-primary">Sovereign Vault</a>
+            <a href="dashboard_web2.html" class="login-btn btn-secondary">Standard Account</a>
         </div>
         
         <div class="footer-note">AUTHENTICATION PROTOCOL v4.0</div>
@@ -132,8 +126,9 @@
         }
 
         window.onload = () => {
-            // Standard User Gate: No auto-redirect here.
-            // Only handshake enables God Mode.
+            if (localStorage.getItem('isGodMode') === 'true') {
+                document.getElementById('layer-entrance').classList.add('dismissed');
+            }
         };
     </script>
 </body>
