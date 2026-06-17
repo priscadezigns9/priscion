@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUZE Wallet | Standard Access</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FFFFFF;
+            --accent: #7B35D4;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+        body { margin: 0; font-family: var(--font-body); background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .login-box { width: 100%; max-width: 450px; padding: 40px; text-align: center; }
+        .logo img { height: 30px; margin-bottom: 40px; }
+        h1 { font-family: var(--font-heading); font-size: 3rem; margin-bottom: 20px; letter-spacing: -0.05em; }
+        p { font-weight: 900; opacity: 0.5; margin-bottom: 50px; text-transform: uppercase; letter-spacing: 0.1em; font-size: 12px; }
+        
+        .tab-nav { display: flex; gap: 30px; justify-content: center; margin-bottom: 40px; }
+        .tab-btn { background: none; border: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.15em; cursor: pointer; opacity: 0.3; }
+        .tab-btn.active { opacity: 1; border-bottom: 2px solid #000; padding-bottom: 5px; }
+
+        form { display: none; flex-direction: column; gap: 15px; }
+        form.active { display: flex; }
+        
+        input { 
+            padding: 20px; border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; font-family: var(--font-body); font-size: 14px; outline: none;
+            transition: border 0.3s;
+        }
+        input:focus { border-color: var(--accent); }
+        
+        .btn-submit {
+            padding: 20px; background: #000; color: #FFF; border: none; border-radius: 10px; font-weight: 900; 
+            text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer; margin-top: 10px;
+        }
+        .btn-submit:disabled { opacity: 0.5; cursor: wait; }
+
+        .back-link { display: block; margin-top: 30px; font-size: 10px; font-weight: 900; text-decoration: none; color: #000; opacity: 0.4; text-transform: uppercase; letter-spacing: 0.2em; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <div class="logo"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" alt="MUZE"></div>
+        <h1>Priscion Hub</h1>
+        <p>standard neural gateway</p>
+
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('login')">Log In</button>
+            <button class="tab-btn" onclick="switchTab('create')">Create Account</button>
+        </div>
+
+        <form id="loginForm" class="active">
+            <input type="email" placeholder="NEURAL EMAIL" required>
+            <input type="password" placeholder="VAULT PASSWORD" required>
+            <button type="submit" class="btn-submit">Access Vault</button>
+        </form>
+
+        <form id="createForm">
+            <input type="email" placeholder="NEURAL EMAIL" required>
+            <input type="password" placeholder="VAULT PASSWORD" required>
+            <button type="submit" class="btn-submit">Initialize Vault</button>
+        </form>
+
+        <a href="index.html" class="back-link">← Change Login Method</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const sb = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR');
+
+        function switchTab(type) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('form').forEach(f => f.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(type + 'Form').classList.add('active');
+        }
+
+        document.getElementById('createForm').onsubmit = async (e) => {
+            e.preventDefault();
+            if (localStorage.getItem('isGodMode') === 'true') { window.location.href = "vault.html"; return; }
+            const btn = e.target.querySelector('button');
+            const email = e.target.querySelectorAll('input')[0].value;
+            const password = e.target.querySelectorAll('input')[1].value;
+            const handle = localStorage.getItem('pending_handle') || 'sovereign.pri';
+
+            btn.disabled = true;
+            btn.innerText = "INITIALIZING LEDGER...";
+
+            try {
+                const { error } = await sb.from('profiles').insert([{ email, password, handle }]);
+                if (error) throw error;
+                alert('Sovereign identity initialized. 500 $PRN have been deposited.');
+                localStorage.setItem('user_handle', handle);
+                window.location.href = "vault.html";
+            } catch (err) {
+                alert('Ledger synchronization failed: ' + err.message);
+                btn.disabled = false;
+                btn.innerText = "INITIALIZE VAULT";
+            }
+        };
+
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            if (localStorage.getItem('isGodMode') === 'true') { window.location.href = "vault.html"; return; }
+            const btn = e.target.querySelector('button');
+            const email = e.target.querySelectorAll('input')[0].value;
+            const password = e.target.querySelectorAll('input')[1].value;
+
+            btn.disabled = true;
+            btn.innerText = "VERIFYING NEURAL LINK...";
+
+            try {
+                const { data: user, error } = await sb.from('profiles').select('handle').eq('email', email).eq('password', password).single();
+                if (error || !user) {
+                    alert('Invalid credentials.');
+                    btn.disabled = false;
+                    btn.innerText = "ACCESS VAULT";
+                    return;
+                }
+                localStorage.setItem('user_handle', user.handle);
+                window.location.href = "vault.html";
+            } catch (err) {
+                alert('Authentication failed.');
+                btn.disabled = false;
+                btn.innerText = "ACCESS VAULT";
+            }
+        };
+        
+        async function connectWeb3() {
+            if (localStorage.getItem('isGodMode') === 'true') { window.location.href = "vault.html"; return; }
+            if (typeof window.cardano === 'undefined') {
+                alert('Please install a Cardano wallet (Nami, Eternl, Flint) to continue.');
+                return;
+            }
+            try {
+                const api = await window.cardano.nami.enable();
+                const address = await api.getUsedAddresses();
+                alert('Cardano Wallet Connected: ' + address[0].substring(0,10) + '...');
+                localStorage.setItem('user_handle', 'cardano_user_' + address[0].substring(0,8));
+                window.location.href = "vault.html";
+            } catch (err) {
+                alert('Web3 Connection Failed: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
