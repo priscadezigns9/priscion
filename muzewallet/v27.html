@@ -190,7 +190,23 @@
         function openReceiveModal() { document.getElementById('recv-handle').innerText = document.getElementById('display-handle').innerText; document.getElementById('modal-receive').classList.add('active'); }
         function closeModals() { document.querySelectorAll('.sliding-modal').forEach(m => m.classList.remove('active')); }
         function logout() { localStorage.removeItem('muze_active'); location.reload(); }
-        window.onload = () => { if(localStorage.getItem('muze_active') === 'true') { document.getElementById('layer-entrance').style.display = 'none'; document.getElementById('display-handle').innerText = localStorage.getItem('muze_handle') || 'prisca.pri'; } };
+        window.onload = () => {
+            if(localStorage.getItem('muze_active') === 'true') { 
+                document.getElementById('layer-entrance').style.display = 'none'; 
+                const handle = localStorage.getItem('muze_handle') || 'prisca.pri';
+                document.getElementById('display-handle').innerText = handle;
+                document.getElementById('card-handle-display').innerText = handle.toUpperCase();
+                document.getElementById('ref-link').innerText = `https://priscion.com/share-to-earn.html?ref=${handle}`;
+                
+                // Initialize $PRN reward for new accounts
+                if (!localStorage.getItem('prn_reward_claimed')) {
+                    localStorage.setItem('prn_reward_claimed', 'true');
+                    // In a live system, this would be an on-chain grant.
+                    // For the UI demo, we show the updated asset amount.
+                    alert(`Welcome Bonus! 5,000 $PRN has been granted to ${handle}`);
+                }
+            }
+        };
     </script>
 </body>
 </html>
