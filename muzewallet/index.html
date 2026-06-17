@@ -82,9 +82,15 @@
         <p>The sovereign bridge to the Priscion Network. Architect your digital identity.</p>
         
         <div class="onboarding-grid">
-            <button class="btn-full" onclick="showLogin()">Secure Login</button>
-            <button class="btn-full" style="background: var(--muze-blue);" onclick="location.href='create.html'">Get Started</button>
-            <p style="margin-top: 20px; opacity: 0.6; cursor: pointer; font-size: 11px;" onclick="location.href='recover.html'">Restore existing vault with seed</p>
+            <button class="btn-full" onclick="showLogin()">Login</button>
+            <button class="btn-full" style="background: var(--muze-blue);" onclick="location.href='signup.html'">Create Account</button>
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); width: 100%;">
+                <p style="font-size: 10px; font-weight: 900; letter-spacing: 2px; color: var(--muze-blue); margin-bottom: 20px;">SOVEREIGN WEB3 ACCESS</p>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-outline" style="flex: 1; font-size: 10px;" onclick="location.href='create.html'">Create Wallet</button>
+                    <button class="btn-outline" style="flex: 1; font-size: 10px;" onclick="location.href='recover.html'">Restore Wallet</button>
+                </div>
+            </div>
         </div>
         
         <div class="footer-note" style="margin-top: 60px;">MUZE // PRISCION BLOCKCHAIN</div>
@@ -96,8 +102,8 @@
         <h2 onclick="handshake()">Login to<br>MUZE</h2>
         
         <div class="login-options">
-            <a href="dashboard_web3.html" class="login-btn btn-primary">Sovereign Vault</a>
-            <a href="dashboard_web2.html" class="login-btn btn-secondary">Standard Account</a>
+            <a href="dashboard_web2.html" class="login-btn btn-primary">Standard Account</a>
+            <a href="dashboard_web3.html" class="login-btn btn-secondary">Web3 Wallet</a>
         </div>
         
         <div class="footer-note">AUTHENTICATION PROTOCOL v4.0</div>
