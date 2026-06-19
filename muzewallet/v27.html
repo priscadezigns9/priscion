@@ -187,7 +187,18 @@
     <script src="economy.js"></script>
     <script>
         const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
-        function neuralLogin() { const h = prompt('Anchor Handle:'); if(h) { localStorage.setItem('muze_active', 'true'); localStorage.setItem('muze_handle', h); location.reload(); } }
+        function neuralLogin() { 
+            const h = prompt('Anchor Handle (Leave blank to login as guest wallet):'); 
+            if(h === "") {
+                localStorage.setItem('muze_active', 'true');
+                localStorage.setItem('muze_handle', 'Guest Wallet');
+                location.reload();
+            } else if(h) { 
+                localStorage.setItem('muze_active', 'true'); 
+                localStorage.setItem('muze_handle', h); 
+                location.reload(); 
+            } 
+        }
         function showVaultOptions() { document.getElementById('onboarding-main').style.display = 'none'; document.getElementById('vault-options').style.display = 'block'; }
         function backToOnboardingMain() { document.getElementById('onboarding-main').style.display = 'block'; document.getElementById('vault-options').style.display = 'none'; }
         function showStage(id, el) { document.querySelectorAll('.stage').forEach(s => s.classList.add('hidden')); document.getElementById('stage-' + id).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); el.classList.add('active'); }
@@ -213,15 +224,24 @@
         window.onload = async () => {
             if(localStorage.getItem('muze_active') === 'true') { 
                 document.getElementById('layer-entrance').style.display = 'none'; 
-                const handle = localStorage.getItem('muze_handle') || 'prisca.pri';
-                const price = HANDLE_ECONOMY.calculatePrice(handle);
-                const tier = HANDLE_ECONOMY.getTier(price);
+                const handle = localStorage.getItem('muze_handle') || 'Guest Wallet';
+                const isGuest = handle === 'Guest Wallet';
+                const price = isGuest ? 5.00 : HANDLE_ECONOMY.calculatePrice(handle);
+                const tier = isGuest ? 'UNCLAIMED' : HANDLE_ECONOMY.getTier(price);
+                
                 document.getElementById('display-handle').innerText = handle;
                 document.getElementById('card-handle-display').innerText = handle.toUpperCase();
+                
                 const badge = document.querySelector('.id-badge');
                 if(badge) {
                     badge.innerText = tier;
-                    if(tier === 'SOVEREIGN') badge.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+                    if(isGuest) {
+                        badge.style.background = 'var(--muted)';
+                        badge.style.cursor = 'pointer';
+                        badge.onclick = () => { alert('Redirecting to Handle Marketplace...'); };
+                    } else if(tier === 'SOVEREIGN') {
+                        badge.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+                    }
                 }
                 document.getElementById('ref-link').innerText = `https://priscion.com/share-to-earn.html?ref=${handle}`;
                 
