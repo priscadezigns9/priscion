@@ -131,16 +131,16 @@
             <button class="btn-outline" style="margin-top: 40px; color: #FF3B30; border-color: #FF3B30; font-weight:900;" onclick="logout()">LOCK VAULT</button>
         </div>
 
-        <!-- Stage: LYNX Messenger -->
         <div id="stage-lynx" class="stage hidden">
             <h2 style="font-family:'Playfair Display'; font-size:2rem; margin-bottom:20px;">LYNX</h2>
             <div style="background:#F8FAFC; border-radius:24px; padding:20px; height:450px; display:flex; flex-direction:column; border:1px solid #EEE;">
-                <div style="flex:1; overflow-y:auto; padding-bottom:20px;" id="lynx-feed">
-                    <div style="background:#fff; padding:12px 18px; border-radius:18px; font-size:0.9rem; align-self:flex-start; margin-bottom:10px; width:fit-content; border:1px solid #EEE; box-shadow:0 2px 5px rgba(0,0,0,0.02);">Welcome to LYNX. Handle-to-Handle communication is active.</div>
+                <div style="flex:1; overflow-y:auto; padding:bottom:20px; display:flex; flex-direction:column; gap:10px;" id="lynx-feed">
+                    <div style="background:#fff; padding:12px 18px; border-radius:18px; font-size:0.9rem; align-self:flex-start; width:fit-content; border:1px solid #EEE; box-shadow:0 2px 5px rgba(0,0,0,0.02);">Welcome to LYNX. Handle-to-Handle communication is active.</div>
                 </div>
-                <div style="display:flex; gap:10px;">
-                    <input type="text" placeholder="Message handle..." style="flex:1; padding:15px; border-radius:12px; border:1px solid #EEE; outline:none; font-family:'Inter'; font-weight:600;">
-                    <button style="background:var(--muze-blue); color:#fff; border:none; padding:0 25px; border-radius:12px; font-weight:900; cursor:pointer; box-shadow: 0 4px 0 #3ea6d6;">SEND</button>
+                <div style="display:flex; gap:10px; padding-top:15px; border-top:1px solid #EEE;">
+                    <input type="text" id="lynx-to" placeholder="@handle" style="width:100px; padding:12px; border-radius:12px; border:1px solid #EEE; outline:none; font-size:0.8rem; font-weight:600;">
+                    <input type="text" id="lynx-input" placeholder="Message..." style="flex:1; padding:12px; border-radius:12px; border:1px solid #EEE; outline:none; font-family:'Inter'; font-weight:600;">
+                    <button onclick="sendLynx()" style="background:var(--muze-blue); color:#fff; border:none; padding:0 25px; border-radius:12px; font-weight:900; cursor:pointer; box-shadow: 0 4px 0 #3ea6d6;">SEND</button>
                 </div>
             </div>
         </div>
@@ -183,6 +183,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="bridge.js"></script>
+    <script src="economy.js"></script>
     <script>
         const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
         function neuralLogin() { const h = prompt('Anchor Handle:'); if(h) { localStorage.setItem('muze_active', 'true'); localStorage.setItem('muze_handle', h); location.reload(); } }
@@ -193,13 +194,34 @@
         function openReceiveModal() { document.getElementById('recv-handle').innerText = document.getElementById('display-handle').innerText; document.getElementById('modal-receive').classList.add('active'); }
         function closeModals() { document.querySelectorAll('.sliding-modal').forEach(m => m.classList.remove('active')); }
         function logout() { localStorage.removeItem('muze_active'); location.reload(); }
+
+        function sendLynx() {
+            const to = document.getElementById('lynx-to').value;
+            const msg = document.getElementById('lynx-input').value;
+            if(!to || !msg) return;
+            const feed = document.getElementById('lynx-feed');
+            const div = document.createElement('div');
+            div.style = "background:var(--muze-blue); color:#fff; padding:12px 18px; border-radius:18px; font-size:0.9rem; align-self:flex-end; width:fit-content; box-shadow:0 2px 10px rgba(90,200,250,0.2);";
+            div.innerHTML = `<div style="font-size:0.6rem; opacity:0.7; margin-bottom:4px;">To: ${to}</div>${msg}`;
+            feed.appendChild(div);
+            document.getElementById('lynx-input').value = '';
+            feed.scrollTop = feed.scrollHeight;
+            LYNX_ENGINE.sendMessage(to, msg);
+        }
         
         window.onload = async () => {
             if(localStorage.getItem('muze_active') === 'true') { 
                 document.getElementById('layer-entrance').style.display = 'none'; 
                 const handle = localStorage.getItem('muze_handle') || 'prisca.pri';
+                const price = HANDLE_ECONOMY.calculatePrice(handle);
+                const tier = HANDLE_ECONOMY.getTier(price);
                 document.getElementById('display-handle').innerText = handle;
                 document.getElementById('card-handle-display').innerText = handle.toUpperCase();
+                const badge = document.querySelector('.id-badge');
+                if(badge) {
+                    badge.innerText = tier;
+                    if(tier === 'SOVEREIGN') badge.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+                }
                 document.getElementById('ref-link').innerText = `https://priscion.com/share-to-earn.html?ref=${handle}`;
                 
                 // Standalone Address Sync
