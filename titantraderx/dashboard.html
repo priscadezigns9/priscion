@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titan Dashboard | Sovereign Control</title>
+    <link rel="icon" href="../logos/TITAN_ICON.png" type="image/png">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00A36C;
+            --bg: #0A0A0B;
+            --surface: #161618;
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #FFFFFF;
+            --muted: #A0A0A5;
+            --malachite: #00FF7F;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
+        }
+
+        header { 
+            padding: 20px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--border); 
+            background: rgba(10,10,11,0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo img { height: 32px; border-radius: 50%; }
+        .logo span { font-weight: 800; font-size: 1.2rem; color: var(--text); letter-spacing: -0.5px; }
+
+        nav { display: flex; gap: 30px; }
+        nav a { 
+            text-decoration: none; 
+            color: var(--muted); 
+            font-weight: 600; 
+            font-size: 0.9rem; 
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        nav a:hover, nav a.active { color: var(--malachite); }
+
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .auth-card {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .auth-card h1 { font-size: 1.8rem; margin-bottom: 8px; font-weight: 800; }
+        .auth-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 32px; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px; color: var(--muted); text-transform: uppercase; }
+        .input-group input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            transition: 0.3s;
+        }
+        .input-group input:focus { outline: none; border-color: var(--malachite); background: rgba(0, 255, 127, 0.02); }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-signin { background: var(--malachite); color: black; margin-bottom: 12px; }
+        .btn-signin:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 255, 127, 0.2); }
+        
+        .btn-signup { background: transparent; color: white; border: 1px solid var(--border); }
+        .btn-signup:hover { background: rgba(255,255,255,0.05); }
+
+        .error-msg { color: #FF4B4B; font-size: 0.8rem; margin-top: 16px; text-align: center; display: none; }
+
+        #user-profile { display: none; }
+        .profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+        .avatar-placeholder { 
+            width: 48px; height: 48px; border-radius: 50%; 
+            background: var(--malachite); color: black; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 800; font-size: 1.2rem;
+        }
+
+        .nav-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .nav-item {
+            padding: 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            text-align: center;
+            transition: 0.3s;
+        }
+        .nav-item:hover { border-color: var(--malachite); background: rgba(0,255,127,0.05); }
+
+        .hamburger { display: none; cursor: pointer; }
+        .hamburger div { width: 25px; height: 2px; background: white; margin: 5px; }
+
+        @media (max-width: 768px) {
+            nav { display: none; }
+            .hamburger { display: block; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="../logos/TITAN_ICON.png" alt="Titan Logo">
+            <span>TITAN TRADERX</span>
+        </a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="terminal.html">Terminal</a>
+            <a href="academy/index.html">Academy</a>
+            <a href="partners.html">Partners</a>
+            <a href="dashboard.html" class="active">Login</a>
+        </nav>
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
+    </header>
+
+    <div class="auth-container">
+        <div class="auth-card" id="auth-form">
+            <h1 id="auth-title">Welcome to Titan</h1>
+            <p id="auth-subtitle">Access your sovereign trading dashboard and academy.</p>
+            
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="name@company.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
+
+            <div class="auth-buttons">
+                <button id="primary-auth-btn" class="btn btn-signin" onclick="handleAuth()">LOGIN</button>
+                <p style="text-align:center; margin: 16px 0 8px; font-size: 0.85rem; color: var(--muted);" id="toggle-text">
+                    Don't have an account? <a href="#" onclick="toggleAuthMode(false)" style="color: var(--malachite); text-decoration: none; font-weight: 700;">Create Account</a>
+                </p>
+            </div>
+            <div id="error-message" class="error-msg"></div>
+        </div>
+
+        <div class="auth-card" id="user-profile">
+            <div class="profile-header">
+                <div class="avatar-placeholder" id="user-initials">T</div>
+                <div>
+                    <h3 id="user-name">Trader</h3>
+                    <p id="user-email" style="margin:0; font-size:0.8rem; color: var(--muted);"></p>
+                </div>
+            </div>
+            <div class="nav-grid">
+                <a href="terminal.html" class="nav-item">ENTER TERMINAL</a>
+                <a href="academy/index.html" class="nav-item">ACADEMY</a>
+                <a href="partners.html" class="nav-item">PARTNERS</a>
+                <a href="#" onclick="logout()" class="nav-item" style="color:#FF4B4B;">LOGOUT</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://sazhdnqzaqpqcralmthh.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhemhkbnF6YXFwcWNyYWxtdGhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzE5NjYsImV4cCI6MjA5Mzc0Nzk2Nn0.uTyw31uWTNOTV5-HzNpm46vpAJABAsHLMzW-sYOkRhc';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let isLoginMode = true;
+
+        function toggleAuthMode(isLogin) {
+            isLoginMode = isLogin;
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            const primaryBtn = document.getElementById('primary-auth-btn');
+            const toggleText = document.getElementById('toggle-text');
+
+            if (isLoginMode) {
+                title.innerText = 'Welcome to Titan';
+                subtitle.innerText = 'Access your sovereign trading dashboard and academy.';
+                primaryBtn.innerText = 'LOGIN';
+                toggleText.innerHTML = `Don't have an account? <a href="#" onclick="toggleAuthMode(false)" style="color: var(--malachite); text-decoration: none; font-weight: 700;">Create Account</a>`;
+            } else {
+                title.innerText = 'Join Titan';
+                subtitle.innerText = 'Create your sovereign trading identity.';
+                primaryBtn.innerText = 'CREATE ACCOUNT';
+                toggleText.innerHTML = `Already have an account? <a href="#" onclick="toggleAuthMode(true)" style="color: var(--malachite); text-decoration: none; font-weight: 700;">Login</a>`;
+            }
+        }
+
+        async function handleAuth() {
+            if (isLoginMode) await signIn();
+            else await signUp();
+        }
+
+        async function signIn() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { error } = await _supabase.auth.signInWithPassword({ email, password });
+            if (error) showError(error.message);
+        }
+
+        async function signUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const { error } = await _supabase.auth.signUp({ email, password });
+            if (error) showError(error.message);
+            else alert('Account created successfully! You can now log in.');
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.reload();
+        }
+
+        function showError(msg) {
+            const err = document.getElementById('error-message');
+            err.innerText = msg;
+            err.style.display = 'block';
+        }
+
+        _supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                document.getElementById('auth-form').style.display = 'none';
+                document.getElementById('user-profile').style.display = 'block';
+                document.getElementById('user-email').innerText = session.user.email;
+                document.getElementById('user-initials').innerText = session.user.email[0].toUpperCase();
+            } else {
+                document.getElementById('auth-form').style.display = 'block';
+                document.getElementById('user-profile').style.display = 'none';
+            }
+        });
+    
+        function toggleMenu() {
+            const nav = document.querySelector('nav');
+            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+        }
+    </script>
+</body>
+</html>
