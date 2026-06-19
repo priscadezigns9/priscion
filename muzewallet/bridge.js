@@ -1,8 +1,8 @@
 // MUZE STANDALONE BRIDGE v4.0
 // Powered by Lucid-Cardano & Supabase
 
-const SB_URL = 'https://sktpjacowqaedddtrhuz.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNrdHBqYWNvd3FhZWRkZHRyaHV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MDIxMzksImV4cCI6MjA5NzM3ODEzOX0.u4_Vd_O2zW-o7w_i8B6Q7R5C-4W8u2E7_zY-q8r8-oA';
+const SB_URL = 'https://sazhdnqzaqpqcralmthh.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNhemhkbnF6YXFwcWNyYWxtdGhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNzE5NjYsImV4cCI6MjA5Mzc0Nzk2Nn0.uTyw31uWTNOTV5-HzNpm46vpAJABAsHLMzW-sYOkRhc';
 const sb = supabase.createClient(SB_URL, SB_KEY);
 
 const BLOCKFROST_PROJECT_ID = 'mainnetNq4H7z9A8z9z9z9z9z9z9z9z9z9z9z9z'; // Placeholder - user should provide real key or use bundled credential
