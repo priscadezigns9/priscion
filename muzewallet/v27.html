@@ -277,7 +277,14 @@
                 // Initialize $PRN reward for new accounts
                 if (!localStorage.getItem('prn_reward_claimed')) {
                     localStorage.setItem('prn_reward_claimed', 'true');
-                    alert(`Welcome Bonus! 5,000 $PRN has been granted to ${handle}`);
+                    // Logic: If referred, the referer gets a commission (Simulated for v2.7)
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const referrer = urlParams.get('ref');
+                    if(referrer) {
+                        alert(`Success! You've claimed your welcome $PRN. Referral commission sent to ${referrer}.`);
+                    } else {
+                        alert(`Welcome Bonus! 5,000 $PRN has been granted to ${handle}`);
+                    }
                 }
             }
         };
