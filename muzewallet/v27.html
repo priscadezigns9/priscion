@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MUZE | Priscion Console v2.7</title>
+    <title>MUZE | Prisca Dezigns Console v2.7</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=Playfair+Display:wght@900&display=swap">
     <style>
         :root { --bg: #F0F9FF; --text: #000; --muted: #64748b; --border: #bae6fd; --muze-blue: #5AC8FA; --accent: #0ea5e9; --surface: #fff; }
@@ -56,7 +56,7 @@
     <div id="layer-entrance" class="layer">
         <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_logo.png" class="muze-entrance-logo" onerror="this.src='https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_icon_logo.png'">
         <h1>Welcome to MUZE.</h1>
-        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">The secure bridge to the Priscion Network.</p>
+        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">The secure bridge to the Prisca Dezigns Network.</p>
         <div id="onboarding-main" style="width: 100%; max-width: 350px;">
             <div class="onboarding-card dark" onclick="neuralLogin()">
                 <h3 style="font-weight:900; margin-bottom:5px;">Neural Login</h3>
@@ -96,6 +96,7 @@
             <div class="balance-card">
                 <div class="balance-label" style="font-weight:900; font-size:0.6rem; color:var(--muted); letter-spacing:3px;">VAULT BALANCE</div>
                 <div class="balance-value">1,000.0 ADA</div>
+                <div id="wallet-address-display" style="font-size: 8px; opacity: 0.4; margin-top: 10px; font-family: monospace; word-break: break-all;"></div>
             </div>
             <div class="action-bar">
                 <div class="action-btn" onclick="alert('Sending interface active.')"><span>↑</span>SEND</div>
@@ -157,7 +158,7 @@
                     <button style="border:1px solid var(--border); background:#fff; padding:8px 15px; border-radius:10px; font-size:0.8rem; font-weight:700; cursor:pointer;">REVEAL</button>
                 </div>
                 <div style="margin-bottom:30px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-weight:700;">Ecosystem Node: Priscion Mainnet</span>
+                    <span style="font-weight:700;">Ecosystem Node: Prisca Dezigns Mainnet</span>
                     <span style="color:#22C55E; font-weight:900;">CONNECTED</span>
                 </div>
                 <button onclick="logout()" style="width:100%; padding:18px; background:#FFE4E6; color:#E11D48; border:none; border-radius:15px; font-weight:900; cursor:pointer; transition:all 0.2s;">LOGOUT OF VAULT</button>
@@ -180,7 +181,9 @@
             </div>
         </div>
 
-        <script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="bridge.js"></script>
+    <script>
         const handles = ['prisca.pri', 'pricey.pri', 'ateliagaming.pri', 'nurasen.pri', 'calalloo.pri', 'thewaymadeknown.pri', 'primelandnetwork.pri'];
         function neuralLogin() { const h = prompt('Anchor Handle:'); if(h) { localStorage.setItem('muze_active', 'true'); localStorage.setItem('muze_handle', h); location.reload(); } }
         function showVaultOptions() { document.getElementById('onboarding-main').style.display = 'none'; document.getElementById('vault-options').style.display = 'block'; }
@@ -190,7 +193,8 @@
         function openReceiveModal() { document.getElementById('recv-handle').innerText = document.getElementById('display-handle').innerText; document.getElementById('modal-receive').classList.add('active'); }
         function closeModals() { document.querySelectorAll('.sliding-modal').forEach(m => m.classList.remove('active')); }
         function logout() { localStorage.removeItem('muze_active'); location.reload(); }
-        window.onload = () => {
+        
+        window.onload = async () => {
             if(localStorage.getItem('muze_active') === 'true') { 
                 document.getElementById('layer-entrance').style.display = 'none'; 
                 const handle = localStorage.getItem('muze_handle') || 'prisca.pri';
@@ -198,11 +202,22 @@
                 document.getElementById('card-handle-display').innerText = handle.toUpperCase();
                 document.getElementById('ref-link').innerText = `https://priscion.com/share-to-earn.html?ref=${handle}`;
                 
+                // Standalone Address Sync
+                const encrypted = localStorage.getItem('muze_vault_v4');
+                if(encrypted) {
+                    const seed = MUZE_BRIDGE.decryptSeed(encrypted, prompt("ENTER VAULT PASSWORD TO SYNC:")); // Simple prompt for sync
+                    if(seed) {
+                        const addr = MUZE_BRIDGE.deriveAddress(seed);
+                        document.getElementById('wallet-address-display').innerText = addr;
+                        // Fetch real balance
+                        const balance = await MUZE_BRIDGE.getBalance(addr);
+                        document.querySelector('.balance-value').innerText = balance + " ADA";
+                    }
+                }
+
                 // Initialize $PRN reward for new accounts
                 if (!localStorage.getItem('prn_reward_claimed')) {
                     localStorage.setItem('prn_reward_claimed', 'true');
-                    // In a live system, this would be an on-chain grant.
-                    // For the UI demo, we show the updated asset amount.
                     alert(`Welcome Bonus! 5,000 $PRN has been granted to ${handle}`);
                 }
             }
