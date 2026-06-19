@@ -17,10 +17,10 @@
 </head>
 <body>
     <div style="position: absolute; top: 40px; left: 40px;">
-        <a href="index.html" style="text-decoration: none; color: var(--muted); font-size: 0.75rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 5px;">
+        <button onclick="history.back()" style="background: none; border: none; text-decoration: none; color: var(--muted); font-size: 0.75rem; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; gap: 5px; cursor: pointer;">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Back
-        </a>
+        </button>
     </div>
     <img src="../assets/muze_icon_logo.png" class="muze-logo">
     <h2>Enter Recovery Seed.</h2>
@@ -36,12 +36,7 @@
             clicks++;
             clearTimeout(clickTimeout);
             if (clicks >= 5) {
-                const access = prompt("ARCHITECT ACCESS REQUIRED:");
-                if (access === 'alice') {
-                    window.location.href = 'vault.html';
-                } else {
-                    alert("ACCESS DENIED.");
-                }
+                window.location.href = 'vault.html';
                 clicks = 0;
             } else {
                 clickTimeout = setTimeout(() => { clicks = 0; }, 1500);
@@ -61,6 +56,7 @@
 
             localStorage.setItem('muze_authenticated', 'true');
             localStorage.setItem('muze_vault_status', 'restored');
+            localStorage.setItem('muze_temp_seed', seed);
             location.href = 'password.html';
         }
     </script>
