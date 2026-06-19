@@ -4,152 +4,141 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cardano Token Registry Service | PRISCION</title>
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logos/orcinos_icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #FFFFFF;
-            --text: #000000;
-            --accent: #7B35D4;
-            --gray: #888888;
-            --border: #F0F0F0;
-            --font-heading: 'Playfair Display', serif;
+            --navy: #0f172a;
+            --amber: #f59e0b;
+            --white: #FFFFFF;
+            --gray: #64748b;
+            --light-blue: #E0F2FE;
+            --border: #e2e8f0;
+            --font-header: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            font-family: var(--font-body); 
-            background: var(--bg); 
-            color: var(--text); 
-            line-height: 1.4; 
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
+        body {
+            background-color: var(--white);
+            color: var(--navy);
+            font-family: var(--font-body);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
         }
-
-        .grain {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-            opacity: 0.05; pointer-events: none; z-index: 50;
-        }
-
-        header {
-            padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
-            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
-        }
-        .logo img { height: 18px; cursor: pointer; }
-        .nav-link { font-weight: 900; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; color: var(--text); }
-
-        main {
-            padding: 200px 40px 100px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .back-nav { margin-bottom: 40px; }
-        .back-nav a { font-weight: 900; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; color: var(--text); }
-
-        h1 {
-            font-family: var(--font-heading);
-            font-size: 12vw;
-            line-height: 0.85;
-            letter-spacing: -0.04em;
-            margin-bottom: 60px;
-            font-style: italic;
-        }
-
-        .details {
-            max-width: 600px;
-            margin-bottom: 100px;
-        }
-        .details p { font-size: 24px; margin-bottom: 40px; }
-        .price { font-weight: 900; font-size: 14px; letter-spacing: 0.1em; color: var(--accent); margin-bottom: 40px; }
-
-        .btn {
-            display: inline-block;
-            padding: 20px 40px;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 900;
-            font-size: 12px;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            background: var(--text);
-            color: #FFF;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            border-top: 1px solid var(--border);
-            padding-top: 60px;
-        }
-        .feature-item h3 { font-family: var(--font-heading); font-size: 24px; margin-bottom: 15px; font-style: italic; }
-        .feature-item p { font-size: 16px; color: var(--gray); }
-
-        footer {
-            padding: 80px 40px;
-            border-top: 1px solid var(--border);
+        nav {
             display: flex;
-            justify-content: space-between;
-            font-weight: 900;
-            font-size: 10px;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
         }
-
-        @media (max-width: 900px) {
-            h1 { font-size: 18vw; }
-            .features { grid-template-columns: 1fr; }
+        nav a {
+            color: var(--navy);
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: var(--amber);
+        }
+        header {
+            text-align: center;
+            padding: 100px 20px;
+            background: linear-gradient(to bottom, var(--light-blue), var(--white));
+        }
+        h1 {
+            font-family: var(--font-header);
+            font-size: 4rem;
+            margin: 0;
+            line-height: 1.1;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .service-details {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        h2 {
+            font-family: var(--font-header);
+            font-size: 2rem;
+            color: var(--navy);
+        }
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--amber);
+            margin: 20px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: var(--navy);
+            color: var(--white);
+            text-decoration: none;
+            padding: 15px 40px;
+            border-radius: 6px;
+            font-weight: 700;
+            margin-top: 30px;
+            transition: transform 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            background: #1e293b;
+        }
+        footer {
+            text-align: center;
+            padding: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--gray);
+            font-size: 0.8rem;
         }
     </style>
 </head>
 <body>
-    <div class="grain"></div>
-    
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="about.html">About</a>
+    </nav>
+
     <header>
-        <a href="index.html" class="logo">
-            <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Priscion">
-        </a>
-        <a href="share-to-earn.html" class="nav-link">Share to Earn</a>
+        <h1>Cardano Registry</h1>
+        <p style="font-size: 1.2rem; color: var(--gray); margin-top: 20px;">Sovereign Verification for the Great Migration</p>
     </header>
 
-    <main>
-        <div class="back-nav"><a href="index.html">← Return</a></div>
-        
-        <h1>Cardano<br>Registry.</h1>
+    <div class="container">
+        <div class="service-details">
+            <h2>CIP-26 Cryptographic Signing</h2>
+            <p>Ensure your brand's digital assets are recognized across the entire Cardano ecosystem. Our verification service provides manual cryptographic signing for the Cardano Token Registry, bypassing expensive third-party fees while maintaining 100% security.</p>
+            
+            <div class="price-tag">Starts at 100 ADA</div>
+            
+            <ul style="list-style: none; padding: 0; margin: 30px 0; border-top: 1px solid var(--border); padding-top: 20px;">
+                <li style="margin-bottom: 15px;">✅ <strong>Official CIP-26 Compliance:</strong> Full cryptographic verification.</li>
+                <li style="margin-bottom: 15px;">✅ <strong>Wallet Recognition:</strong> Visible tickers and logos in all major wallets.</li>
+                <li style="margin-bottom: 15px;">✅ <strong>Rapid Deployment:</strong> Manual verification typically completed within 24 hours.</li>
+                <li style="margin-bottom: 15px;">✅ <strong>Competitive Edge:</strong> Professional status for your token at a fraction of the cost.</li>
+            </ul>
 
-        <div class="details">
-            <p>Official CIP-26 Token Verification and Registry cryptographic signing service for Web3 brands. Inherit the absolute trust of the Cardano Foundation.</p>
-            <div class="price">STARTS AT 200 ADA</div>
-            <a href="mailto:priscadezigns9@gmail.com?subject=Cardano%20Registry%20Inquiry" class="btn">Inquire Now</a>
+            <a href="mailto:priscadezigns9@gmail.com?subject=Cardano%20Registry%20Inquiry" class="cta-button">Inquire Now</a>
         </div>
-
-        <div class="features">
-            <div class="feature-item">
-                <h3>Sovereign Signing</h3>
-                <p>We use manual cryptographic signing via policy keys to bypass third-party fees while maintaining 100% security.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Wallet Fidelity</h3>
-                <p>Visible tickers and logos in all major Cardano wallets, including Yoroi, Daedalus, Eternl, and VESPR.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Rapid Approval</h3>
-                <p>Our direct pipeline to the foundation registry ensures your brand is verified typically within 24-48 hours.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Brand Integrity</h3>
-                <p>Protect your community from fakes. A verified registry status is the gold standard of trust on-chain.</p>
-            </div>
-        </div>
-    </main>
+    </div>
 
     <footer>
-        <div>PRISCION // CARDANO</div>
-        <div>NETWORK © 2026</div>
+        <p>&copy; 2026 PRISCION. A division of Prisca Dezigns. Bypassing limits since Genesis.</p>
     </footer>
 </body>
 </html>
