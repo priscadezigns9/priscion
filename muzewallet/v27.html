@@ -255,6 +255,11 @@
                 if(isGuest) {
                     document.getElementById('s2e-locked').classList.remove('hidden');
                     document.getElementById('s2e-active').classList.add('hidden');
+                    // Web2 Onboarding Hook: Prompt to claim handle to activate identity
+                    if(!localStorage.getItem('handle_onboarding_shown')) {
+                        alert("WEB2 BRIDGE: Claim your .pri handle to convert your wallet into a full Ambassador profile and unlock rewards.");
+                        localStorage.setItem('handle_onboarding_shown', 'true');
+                    }
                 } else {
                     document.getElementById('s2e-locked').classList.add('hidden');
                     document.getElementById('s2e-active').classList.remove('hidden');
