@@ -55,23 +55,23 @@
 <body>
     <div class="v-tag">v2.7 PRISCION</div>
     <div id="layer-entrance" class="layer">
-        <img src="https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_logo.png" class="muze-entrance-logo" onerror="this.src='https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_icon_logo.png'">
-        <h1>Welcome to MUZE.</h1>
+        <img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png" class="muze-entrance-logo" style="width:80px;" onerror="this.src='https://res.cloudinary.com/davvgg5sy/image/upload/f_auto,q_auto/v1/assets/muze_logo.png'">
+        <h1 style="font-family:'Playfair Display'; font-size:3rem;">MUZE</h1>
         <p style="color:var(--muted); font-size:0.9rem; margin-bottom:40px;">The secure bridge to the Prisca Dezigns Network.</p>
         <div id="onboarding-main" style="width: 100%; max-width: 350px;">
             <div class="onboarding-card dark" onclick="neuralLogin()">
                 <h3 style="font-weight:900; margin-bottom:5px;">Neural Login</h3>
-                <p style="font-size:0.7rem; opacity:0.9;">Login with Handle or Email.</p>
+                <p style="font-size:0.7rem; opacity:0.9;">Login with Handle or Email (Web2 Bridge).</p>
             </div>
             <div class="onboarding-card" onclick="showVaultOptions()">
                 <h3 style="font-weight:900; margin-bottom:5px;">Vault Setup</h3>
-                <p style="font-size:0.7rem; color:var(--muted);">Create or recover your vault.</p>
+                <p style="font-size:0.7rem; color:var(--muted);">Create, Recover, or Connect Ledger.</p>
             </div>
         </div>
         <div id="vault-options" style="display: none; width: 100%; max-width: 350px;">
             <button class="btn-full" onclick="location.href='create.html'">CREATE NEW VAULT</button>
             <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='recover.html'">RECOVER WITH SEED</button>
-            <button class="btn-outline" style="margin-top: 10px;" onclick="location.href='ledger.html'">CONNECT LEDGER</button>
+            <button class="btn-outline" style="margin-top: 10px;" onclick="alert('Ledger Connectivity Initializing...')">CONNECT LEDGER</button>
             <p style="text-align: center; margin-top: 30px; font-size: 0.7rem; color: var(--muted); cursor: pointer;" onclick="backToOnboardingMain()">← BACK</p>
         </div>
     </div>
@@ -255,11 +255,6 @@
                 if(isGuest) {
                     document.getElementById('s2e-locked').classList.remove('hidden');
                     document.getElementById('s2e-active').classList.add('hidden');
-                    // Web2 Onboarding Hook: Prompt to claim handle to activate identity
-                    if(!localStorage.getItem('handle_onboarding_shown')) {
-                        alert("WEB2 BRIDGE: Claim your .pri handle to convert your wallet into a full Ambassador profile and unlock rewards.");
-                        localStorage.setItem('handle_onboarding_shown', 'true');
-                    }
                 } else {
                     document.getElementById('s2e-locked').classList.add('hidden');
                     document.getElementById('s2e-active').classList.remove('hidden');
