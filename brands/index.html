@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Excellence Network | 2026 Boutique Cycle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FDF8F2;
+            --text: #1A1A1A;
+            --muted: #666666;
+            --accent: #7B35D4;
+            --border: rgba(0,0,0,0.1);
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 80px 6%;
+        }
+
+        header {
+            max-width: 900px;
+            margin-bottom: 80px;
+        }
+
+        .header-logo {
+            height: 40px;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(3rem, 8vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .lead {
+            font-size: 1.4rem;
+            color: var(--muted);
+            max-width: 700px;
+        }
+
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .brand-card {
+            background: #FFF;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: inherit;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+            border-color: var(--accent);
+        }
+
+        .brand-logo-wrap {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #F9F9F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-logo-wrap img { object-fit: contain; padding: 5px; 
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .brand-card:hover .brand-logo-wrap img { object-fit: contain; padding: 5px; 
+            transform: scale(1.05);
+        }
+
+        .brand-info {
+            padding: 25px;
+        }
+
+        .brand-info h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .brand-info p {
+            font-size: 0.9rem;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        footer {
+            margin-top: 120px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 60px 20px; }
+            h1 { font-size: 2.5rem; }
+        }
+    
+    /* --- Mobile Menu --- */
+    .menu-toggle {
+        display: none;
+        flex-direction: column;
+        gap: 6px;
+        cursor: pointer;
+        z-index: 1100;
+    }
+    .menu-toggle span {
+        width: 30px;
+        height: 2px;
+        background: var(--text);
+        transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+        .menu-toggle { display: flex; }
+        nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            height: 100vh;
+            background: var(--bg);
+            flex-direction: column;
+            padding: 100px 40px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -20px 0 40px rgba(0,0,0,0.1);
+            z-index: 1050;
+            display: flex !important;
+        }
+        nav.open { right: 0; }
+        nav a { font-size: 1.2rem; margin-bottom: 20px; }
+        .hero { padding: 120px 6% 60px; text-align: center; }
+        .section-header h2 { font-size: 2.5rem; }
+    }
+    
+</style>
+</head>
+<body>
+    <header>
+        <a href="/"><img src="/logos/PRISCA_DEZIGNS_DEFINITIVE_2026.png" alt="Prisca Dezigns" class="header-logo"></a>
+        <h1>The Excellence Network.</h1>
+        <p class="lead">A curated ecosystem of 2026 boutique brands powered by the Prisca Dezigns architecture and anchored by NEURAL ($NRL), the Elite Asset of the network.</p>
+    </header>
+
+    <div class="brand-grid">
+    <!-- Deskwell -->
+    <a href="https://priscadezigns.org/deskwell/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/deskwell.svg" alt="Deskwell">
+        </div>
+        <div class="brand-info">
+            <h3>Deskwell</h3>
+            <p>High-fidelity workspace aesthetics and digital organization.</p>
+        </div>
+    </a>
+    <!-- Pantriq -->
+    <a href="https://priscadezigns.org/pantriq/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/pantriq.png" alt="Pantriq">
+        </div>
+        <div class="brand-info">
+            <h3>Pantriq</h3>
+            <p>High-fidelity kitchen organization and lifestyle boutique essentials.</p>
+        </div>
+    </a>
+    <!-- Shelfly -->
+    <a href="https://priscadezigns.org/shelfly/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/shelfly.png" style="width: 100%; height: auto; object-fit: contain;" alt="Shelfly">
+        </div>
+        <div class="brand-info">
+            <h3>Shelfly</h3>
+            <p>Home essentials, toiletries, and reliable daily logistics.</p>
+        </div>
+    </a>
+    <!-- Essence Elite -->
+    <a href="https://priscadezigns.org/essenceelite/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/essence_elite.png" alt="Essence Elite">
+        </div>
+        <div class="brand-info">
+            <h3>Essence Elite</h3>
+            <p>Luxury fragrance boutique and sensory high-fidelity scents.</p>
+        </div>
+    </a>
+    <!-- Glow Protocol -->
+    <a href="https://priscadezigns.org/glowprotocol/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/glow_protocol.png" alt="Glow Protocol">
+        </div>
+        <div class="brand-info">
+            <h3>Glow Protocol</h3>
+            <p>Curated skincare boutique and premium beauty essentials.</p>
+        </div>
+    </a>
+    <!-- Prime Land -->
+    <a href="https://priscadezigns.org/primelandnetwork/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/prime_land_network.png" alt="Prime Land">
+        </div>
+        <div class="brand-info">
+            <h3>Prime Land</h3>
+            <p>Autonomous real estate networking and GEO strategy.</p>
+        </div>
+    </a>
+    <!-- The Watch List -->
+    <a href="https://priscadezigns.org/thewatchlist/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/the_watch_list.png" alt="The Watch List">
+        </div>
+        <div class="brand-info">
+            <h3>The Watch List</h3>
+            <p>Neural horology signals and luxury timepiece tracking.</p>
+        </div>
+    </a>
+    <!-- Sole Prestige -->
+    <a href="https://priscadezigns.org/soleprestige/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/sole_prestige.png" alt="Sole Prestige">
+        </div>
+        <div class="brand-info">
+            <h3>Sole Prestige</h3>
+            <p>Archival footwear aesthetics and high-fidelity sneaker culture.</p>
+        </div>
+    </a>
+    <!-- Atelia Gaming -->
+    <a href="https://priscadezigns.org/ateliagaming/" class="brand-card">
+        <div class="brand-logo-wrap" style="background: #050508;">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/atelia_gaming_hf.png" alt="Atelia Gaming" style="object-fit: contain; padding: 10%;">
+        </div>
+        <div class="brand-info">
+            <h3>Atelia Gaming</h3>
+            <p>Premium gaming media and digital lifestyle architecture.</p>
+        </div>
+    </a>
+    <!-- Dreaming Anime -->
+    <a href="https://priscadezigns.org/dreaminganime/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/dreaming_anime.png" alt="Dreaming Anime">
+        </div>
+        <div class="brand-info">
+            <h3>Dreaming Anime</h3>
+            <p>Generative anime aesthetics and niche culture signals.</p>
+        </div>
+    </a>
+    <!-- Peak Fit -->
+    <a href="https://priscadezigns.org/peakfit/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/peak_fit.png" alt="Peak Fit">
+        </div>
+        <div class="brand-info">
+            <h3>Peak Fit</h3>
+            <p>High-fidelity fitness architecture and neural training logs.</p>
+        </div>
+    </a>
+    <!-- Verdant Co -->
+    <a href="https://priscadezigns.org/verdantco/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/verdant_co.png" alt="Verdant Co">
+        </div>
+        <div class="brand-info">
+            <h3>Verdant Co</h3>
+            <p>Botanical high-end greenery and autonomous garden systems.</p>
+        </div>
+    </a>
+    <!-- My Baby Dumpling -->
+    <a href="https://priscadezigns.org/mybabydumpling/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/my_baby_dumpling_hf.png" alt="My Baby Dumpling">
+        </div>
+        <div class="brand-info">
+            <h3>My Baby Dumpling</h3>
+            <p>Luxury maternity and baby care essentials.</p>
+        </div>
+    </a>
+    <!-- Riddiim -->
+    <a href="https://priscadezigns.org/riddiim/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/riddiim_logo.jpg" alt="Riddiim">
+        </div>
+        <div class="brand-info">
+            <h3>Riddiim</h3>
+            <p>High-fidelity music super-app and audio engineering.</p>
+        </div>
+    </a>
+    <!-- The Autodrome -->
+    <a href="https://priscadezigns.org/theautodrome/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/the_autodrome.png" alt="The Autodrome">
+        </div>
+        <div class="brand-info">
+            <h3>The Autodrome</h3>
+            <p>Luxury Automotive Lab and high-performance racing tech.</p>
+        </div>
+    </a>
+    <!-- The Escapist -->
+    <a href="https://priscadezigns.org/theescapist/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/the_escapist.png" alt="The Escapist">
+        </div>
+        <div class="brand-info">
+            <h3>The Escapist</h3>
+            <p>Minimalist travel signals and global architecture escapes.</p>
+        </div>
+    </a>
+    <!-- Tech Scout HQ -->
+    <a href="https://priscadezigns.org/thetechscouthq/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/tech_scout.png" alt="Tech Scout HQ">
+        </div>
+        <div class="brand-info">
+            <h3>Tech Scout HQ</h3>
+            <p>Neural hardware tracking and boutique tech discovery.</p>
+        </div>
+    </a>
+    <!-- Quiet Luxury -->
+    <a href="https://priscadezigns.org/quietluxury/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/quiet_luxury.png" alt="Quiet Luxury">
+        </div>
+        <div class="brand-info">
+            <h3>Quiet Luxury</h3>
+            <p>Understated luxury living and minimalist brand signals.</p>
+        </div>
+    </a>
+    <!-- Couture Gallery -->
+    <a href="https://priscadezigns.org/couturegallery/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/couture_gallery.png" alt="Couture Gallery">
+        </div>
+        <div class="brand-info">
+            <h3>Couture Gallery</h3>
+            <p>High-fidelity fashion signals and archival aesthetics.</p>
+        </div>
+    </a>
+    <!-- Paw Vault -->
+    <a href="https://priscadezigns.org/pawvault/" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="https://raw.githubusercontent.com/priscadezigns9/priscadezignswebsite/main/assets/logos/paw_vault.png" alt="Paw Vault">
+        </div>
+        <div class="brand-info">
+            <h3>Paw Vault</h3>
+            <p>Luxury pet accessories and technical care systems.</p>
+        </div>
+    </a>
+    <!-- Les Amour -->
+    <a href="/lesamour/index.html" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="/logos/LES_AMOUR_DEFINITIVE_HF.png" alt="Les Amour">
+        </div>
+        <div class="brand-info">
+            <h3>Les Amour</h3>
+            <p>AI-powered relationship coaching and high-fidelity intimacy tools.</p>
+        </div>
+    </a>
+    <!-- Ornalis Lighting -->
+    <a href="/ornalis/index.html" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="/logos/ORNALIS_DEFINITIVE_HF.png" alt="Ornalis Lighting">
+        </div>
+        <div class="brand-info">
+            <h3>Ornalis Lighting</h3>
+            <p>High-fidelity lighting, chandeliers, and architectural atmosphere.</p>
+        </div>
+    </a>
+    <!-- Avoria Frames -->
+    <a href="/avoria/index.html" class="brand-card">
+        <div class="brand-logo-wrap">
+            <img src="/logos/AVORIA_LOGO.png" alt="Avoria Frames">
+        </div>
+        <div class="brand-info">
+            <h3>Avoria Frames</h3>
+            <p>Elite artisanal eyewear and luxury precision frames.</p>
+        </div>
+    </a>
+    </div>
+
+    <footer>
+        <img src="/logos/PRISCA_DEZIGNS_DEFINITIVE_2026.png" alt="Prisca Dezigns" style="height: 60px; margin-bottom: 10px; opacity: 0.8; display: block; margin-left: auto; margin-right: auto;">
+        © 2026 PRISCA DEZIGNS · THE EXCELLENCE NETWORK
+    </footer>
+
+    <script>
+    function toggleMenu() {
+        const nav = document.querySelector('nav');
+        const toggle = document.querySelector('.menu-toggle');
+        nav.classList.toggle('open');
+        
+        // Animate hamburger
+        const spans = toggle.querySelectorAll('span');
+        if(nav.classList.contains('open')) {
+            spans[0].style.transform = 'rotate(45deg) translate(6px, 6px)';
+            spans[1].style.opacity = '0';
+            spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+        } else {
+            spans[0].style.transform = 'none';
+            spans[1].style.opacity = '1';
+            spans[2].style.transform = 'none';
+        }
+    }
+    </script>
+    
+</body>
+</html>
