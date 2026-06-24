@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Blog | Glow Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Space+Grotesk:wght@300;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #C5A059; --bg: #050508; --text: #FFFFFF; --border: rgba(255,255,255,0.08); }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Space Grotesk', sans-serif; line-height: 1.6; }
+        header { padding: 40px 6%; text-align: center; border-bottom: 1px solid var(--border); }
+        h1 { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-style: italic; margin-bottom: 10px; }
+        .subtitle { color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
+        
+        .container { max-width: 1000px; margin: 80px auto; padding: 0 20px; }
+        .blog-grid { display: grid; grid-template-columns: 1fr; gap: 40px; }
+        .blog-card { display: block; text-decoration: none; color: inherit; padding: 40px; border: 1px solid var(--border); border-radius: 20px; transition: 0.3s; background: rgba(255,255,255,0.02); }
+        .blog-card:hover { border-color: var(--accent); transform: translateY(-5px); background: rgba(255,255,255,0.05); }
+        .blog-card h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-style: italic; margin-bottom: 15px; color: var(--accent); }
+        .blog-card p { color: rgba(255,255,255,0.6); font-size: 1.1rem; }
+        .blog-card .meta { margin-top: 20px; font-size: 0.8rem; opacity: 0.4; text-transform: uppercase; letter-spacing: 1px; }
+
+        footer { padding: 60px 6%; border-top: 1px solid var(--border); text-align: center; color: rgba(255,255,255,0.4); font-size: 0.8rem; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+    <header>
+        <p class="subtitle">Excellence Hub</p>
+        <h1>Glow Protocol Blog</h1>
+        <p style="margin-top:16px;"><a href="../" style="color:var(--accent); text-decoration:none; text-transform:uppercase; letter-spacing:1px; font-size:0.85rem;">← Back to Glow Protocol</a></p>
+
+
+    </header>
+
+    <div class="container">
+        <div class="blog-grid">
+            <a href="./summer-2026-beauty-diagnostics/" class="blog-card">
+                <p class="meta">Featured Editorial // June 2026</p>
+                <h2>Summer 2026 Beauty Diagnostics: Rhode Pocket Bronze and the New Era of Skin Stewardship</h2>
+                <p>Read our latest Excellence Editorial exploring the intersection of professional stewardship and technical mastery.</p>
+                <p class="meta" style="margin-top: 20px; color: var(--accent); opacity: 1;">Read More →</p>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 GLOW PROTOCOL // PRISCA DEZIGNS // ANCHORED IN SAN FERNANDO</p>
+    </footer>
+</body>
+</html>
