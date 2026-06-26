@@ -215,29 +215,42 @@
         function openWalletSelector() {
             const cardano = window.cardano;
             if (!cardano) {
-                alert("No Cardano wallet found. Please install MUZE, Nami, or Lace.");
+                alert("No Cardano wallet found. Please install a CIP-30 compliant wallet (MUZE, Lace, Nami, etc).");
                 return;
             }
 
             const list = document.getElementById('wallet-list');
             list.innerHTML = '';
             
-            // Map of supported wallets to check in window.cardano
-            const supported = ['muze', 'nami', 'eternl', 'lace', 'vespr', 'gerowallet', 'typhoncip30'];
-            
-            supported.forEach(key => {
-                if (cardano[key]) {
-                    const btn = document.createElement('button');
-                    btn.style.cssText = "padding:15px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:white; font-weight:900; text-transform:uppercase; font-size:0.7rem;";
-                    btn.innerHTML = `<img src="${cardano[key].icon}" style="width:24px; display:block; margin:0 auto 8px;"> ${cardano[key].name || key}`;
-                    btn.onclick = () => connectWallet(key);
-                    list.appendChild(btn);
+            // Discover ALL installed Cardano wallets dynamically
+            const detectedWallets = [];
+            Object.keys(cardano).forEach(key => {
+                const wallet = cardano[key];
+                if (wallet && (wallet.enable || wallet.apiVersion)) {
+                    detectedWallets.push({ key, ...wallet });
                 }
             });
 
-            if (list.innerHTML === '') {
-                list.innerHTML = '<p style="grid-column: span 2; font-size:0.8rem; color:red;">No CIP-30 wallets detected.</p>';
+            if (detectedWallets.length === 0) {
+                alert("No CIP-30 wallets detected in your browser.");
+                return;
             }
+
+            // High-Fidelity Logic: If only one wallet is found, connect directly.
+            // Otherwise, show the selection modal.
+            if (detectedWallets.length === 1) {
+                connectWallet(detectedWallets[0].key);
+                return;
+            }
+
+            detectedWallets.forEach(wallet => {
+                const btn = document.createElement('button');
+                btn.style.cssText = "padding:15px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:white; font-weight:900; text-transform:uppercase; font-size:0.7rem; display:flex; flex-direction:column; align-items:center; gap:8px;";
+                const icon = wallet.icon || 'https://cardano.org/img/favicon.png';
+                btn.innerHTML = `<img src="${icon}" style="width:24px; height:24px;"> ${wallet.name || wallet.key}`;
+                btn.onclick = () => connectWallet(wallet.key);
+                list.appendChild(btn);
+            });
 
             document.getElementById('wallet-modal').style.display = 'block';
             document.getElementById('modal-overlay').style.display = 'block';
