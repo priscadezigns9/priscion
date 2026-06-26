@@ -3,1005 +3,438 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prisca Dezigns | The Rubik's Globe</title>
-    <!-- GDrive Direct Link Proxy -->
-    <link rel="icon" type="image/png" href="https://share.zapia.com/si99hoojrdxzaoos5dmo1x">
+    <title>Priscion | Cardano L1 Blockchain</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        @keyframes globePulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--purple); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--purple); } }
-        @keyframes pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 15px var(--purple); } 50% { transform: scale(1.1); box-shadow: 0 0 25px var(--purple); } }
         :root {
-            --ivory: #FFFFF0;
-            --lilac: #C8A2C8;
-            --purple: #301934;
-            --text: #1a1a1a;
+            --bg: #FFFFFF;
+            --text: #000000;
+            --accent: #7B35D4;
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Inter', sans-serif;
-            --accent: #14B8A6;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        #page-wrapper {
-            height: 100vh;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-        }
-
         body { 
             font-family: var(--font-body); 
-            background: var(--ivory); 
+            background: var(--bg); 
             color: var(--text); 
-            overflow: hidden;
-            height: 100vh;
+            line-height: 1; 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            transition: color 0.8s ease;
         }
 
-        section {
-            height: 100vh;
-            width: 100%;
-            position: relative;
+        .grain {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            opacity: 0.05; pointer-events: none; z-index: 50;
         }
 
-        #ui-layer {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+        .sky-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #FFFFFF;
+            z-index: -2;
+            transition: background 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .stars {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 110px 10px, #eee, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 150px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            opacity: 0;
+            z-index: -2;
+            transition: opacity 1.2s ease;
             pointer-events: none;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 50px;
+        }
+
+        .cloud-wrap {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+        }
+
+        .cloud {
+            position: absolute;
+            background: radial-gradient(circle, rgba(123, 53, 212, 0.25) 0%, rgba(123, 53, 212, 0) 70%);
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.8;
+            will-change: transform;
         }
 
         header {
-            display: flex; justify-content: space-between; align-items: center;
-            pointer-events: auto;
+            padding: 40px; position: fixed; width: 100%; top: 0; left: 0;
+            display: flex; justify-content: space-between; z-index: 1000;
         }
-
-        .logo-container {
-            display: flex; align-items: center; gap: 15px;
-        }
-
-        .logo-img {
-            width: 140px; height: 140px;
-            object-fit: contain;
-            pointer-events: none;
-        }
-
-        .logo { 
-            font-family: var(--font-heading); 
-            font-size: 2.2rem; font-weight: 900; letter-spacing: -1.5px;
-            color: var(--purple);
-            text-transform: lowercase;
-        }
+        .logo img { height: 40px; cursor: pointer; transition: height 0.3s ease; }
 
         main {
+            position: relative; z-index: 10;
+            max-width: 1000px; margin: 0 auto; padding: 0 40px;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1.5s cubic-bezier(0.23, 1, 0.32, 1), color 0.8s ease;
+            margin-bottom: 25vh;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal.fade-out {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+
+        .hero-title {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             text-align: left;
-            pointer-events: auto;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
         }
-
-        .brand-visual-container {
-            display: flex;
-            align-items: center;
-            gap: 35px;
-        }
-
-        .dynamic-brand-logo {
-            width: 280px;
-            height: 280px;
-            object-fit: contain;
-            filter: drop-shadow(0 15px 35px rgba(48, 25, 52, 0.2));
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            margin-bottom: 20px;
-        }
-
-        .brand-text-content {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand-label {
-            font-weight: 900; font-size: 0.75rem;
-            letter-spacing: 6px; text-transform: uppercase;
-            color: var(--lilac);
-            margin-bottom: 12px;
-        }
-
         h1 {
             font-family: var(--font-heading);
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            line-height: 0.9;
-            color: var(--purple);
-            letter-spacing: -3px;
+            font-size: clamp(3.5rem, 12vw, 10rem);
             font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-
-        .brand-description {
-            font-size: 1rem;
-            color: var(--text);
-            max-width: 500px;
-            line-height: 1.6;
+            letter-spacing: -0.06em;
+            line-height: 0.75;
             margin-bottom: 20px;
-            font-style: italic;
         }
+        h1 span { color: var(--accent); font-style: italic; }
 
-        .price-tag {
-            font-family: var(--font-body);
-            font-weight: 900;
-            font-size: 1.5rem;
-            color: var(--purple);
-            margin-bottom: 20px;
-            display: block;
+        .narrative {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 400; letter-spacing: -0.05em; line-height: 1.1;
+            margin: 40vh 0;
         }
+        .narrative b { font-weight: 900; color: var(--accent); }
 
-        .view-cta {
-            display: inline-block;
-            padding: 14px 40px;
-            border: 1px solid var(--purple);
-            color: var(--purple);
-            text-decoration: none;
-            font-weight: 900;
-            font-size: 0.75rem;
-            letter-spacing: 2.5px;
-            transition: all 0.3s ease;
-            width: fit-content;
-            text-transform: uppercase;
-            cursor: pointer;
-            background: transparent;
+        .center-btn-group { text-align: center; margin: 150px 0; }
+        .primary-btn {
+            display: inline-block; padding: 25px 60px; background: #000; color: #FFF; border-radius: 100px;
+            text-decoration: none; font-weight: 900; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3em;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
+        .primary-btn:hover { background: var(--accent); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(123, 53, 212, 0.2); }
 
-        .view-cta:hover {
-            background: var(--purple);
-            color: var(--ivory);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(48, 25, 52, 0.2);
-        }
-
-        footer {
-            display: flex; justify-content: space-between; align-items: flex-end;
-            pointer-events: auto;
-        }
-
-        .footer-info { 
-            font-family: var(--font-heading);
-            font-style: italic;
-            font-size: 1.1rem; 
-            color: var(--lilac);
-            max-width: 400px;
-        }
-
-        #canvas-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1;
-        }
-
-        #scroll-indicator {
-            position: fixed;
-            right: 40px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 100;
-            align-items: flex-end;
-            pointer-events: auto;
-        }
-
-        @media (max-width: 768px) {
-            #scroll-indicator { display: none !important; }
-            .logo-img { height: 80px !important; width: 80px !important; }
-            header { padding: 15px 15px !important; display: flex !important; justify-content: center !important; align-items: center !important; flex-direction: row !important; width: 100% !important; box-sizing: border-box !important; position: relative !important; }
-            #neural-search-container { display: none !important; }
-            .hamburger { display: flex !important; position: absolute !important; left: 20px !important; top: 50% !important; transform: translateY(-50%) !important; margin: 0 !important; }
-            .logo-container { margin: 0 auto !important; }
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            z-index: 400;
-            pointer-events: auto;
-        }
-        .hamburger div {
-            width: 25px;
-            height: 2px;
-            background: var(--purple);
-            transition: 0.3s;
-        }
-        .hamburger.active div:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .hamburger.active div:nth-child(2) { opacity: 0; }
-        .hamburger.active div:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        #mobile-menu {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: var(--ivory);
-            z-index: 350;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow-y: auto;
-            padding: 80px 20px;
-        }
-        .mobile-back-btn {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            font-family: var(--font-body);
-            font-size: 0.7rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: var(--purple);
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .mobile-menu-item {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-            color: var(--purple);
-            margin: 10px 0;
-            cursor: pointer;
-            text-transform: uppercase;
-            text-decoration: none;
-            font-weight: 900;
-            letter-spacing: 2px;
-        }
-
-        .dot-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            opacity: 0.3;
-        }
-
-        .dot-wrapper:hover, .dot-wrapper.active {
-            opacity: 1;
-        }
-
-        .dot-label {
-            font-size: 0.55rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--lilac);
-            transition: 0.3s;
-            transform: translateX(10px);
-            opacity: 0;
-            white-space: nowrap;
-        }
-
-        .dot-wrapper:hover .dot-label, .dot-wrapper.active .dot-label {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .dot {
-            width: 8px; height: 8px;
-            border-radius: 50%;
-            background: var(--lilac);
-            transition: 0.3s;
-        }
-
-        .dot-wrapper.active .dot {
-            background: var(--purple);
-            box-shadow: 0 0 15px var(--purple);
-            transform: scale(1.3);
-        }
-
-        #modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(48, 25, 52, 0.95);
-            z-index: 200;
-            display: none;
-            align-items: center; justify-content: center;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        #modal-content {
-            background: var(--ivory);
-            padding: 60px;
-            border-radius: 20px;
-            width: 100%;
-            max-width: 500px;
-            position: relative;
-            transform: translateY(20px);
-            transition: transform 0.4s ease;
-        }
-
-        .modal-active #modal-overlay { display: flex; opacity: 1; }
-        .modal-active #modal-content { transform: translateY(0); }
-
-        .close-modal {
-            position: absolute; top: 20px; right: 20px;
-            font-size: 2rem; color: var(--purple);
-            cursor: pointer; font-weight: 300;
-        }
-
-        #lead-form { display: flex; flex-direction: column; gap: 20px; }
-        .form-field { display: flex; flex-direction: column; gap: 8px; }
-        .form-field label { font-weight: 900; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; color: var(--lilac); }
-        .form-field input, .form-field select {
-            padding: 15px; border: 1px solid rgba(48, 25, 52, 0.1);
-            background: #fff; font-family: var(--font-body);
-            font-size: 1rem; border-radius: 8px;
-        }
-
-        #submit-btn {
-            background: var(--purple); color: #fff;
-            padding: 18px; border: none; border-radius: 100px;
-            font-weight: 900; font-size: 0.8rem; letter-spacing: 3px;
-            text-transform: uppercase; cursor: pointer; transition: 0.3s;
-        }
-
-        #bg-logo-overlay {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80vw;
-            height: 80vw;
-            background: url("assets/background_logo.jpg") no-repeat center;
-            background-size: contain;
-            opacity: 0.03;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        #package-section {
-            background: var(--ivory);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 80px 50px;
-            z-index: 50;
-            min-height: 100vh;
-            position: relative;
-        }
-
-        .back-to-home {
-            position: fixed;
-            top: 40px;
-            right: 40px;
-            padding: 12px 30px;
-            background: var(--purple);
-            color: var(--ivory);
-            font-weight: 900;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .header-btn {
+            background: var(--accent);
+            color: #fff;
+            padding: 12px 25px;
             border-radius: 100px;
-            cursor: pointer;
-            z-index: 100;
-            transition: all 0.3s ease;
             text-decoration: none;
-            display: none;
-            border: none;
+            font-weight: 900;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .header-btn:hover {
+            background: #000;
+            transform: translateY(-2px);
         }
 
-        .package-active .back-to-home {
-            display: block;
+        .node-list { margin: 250px 0; border-top: 2px solid currentColor; }
+        .node-item {
+            padding: 100px 0; border-bottom: 2px solid currentColor;
+            display: flex; justify-content: space-between; align-items: center;
+            text-decoration: none; color: inherit; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
+        .node-item:hover { color: var(--accent); padding-left: 30px; }
+        .node-title { font-family: var(--font-heading); font-size: 6rem; font-weight: 900; letter-spacing: -0.05em; line-height: 0.85; }
+        .node-meta { font-weight: 900; font-size: 10px; text-transform: uppercase; letter-spacing: 0.3em; opacity: 0.5; }
 
-        .back-to-home:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(48, 25, 52, 0.2);
+        .cta-box { text-align: center; margin: 150px 0; }
+        .btn-glow {
+            display: inline-block; padding: 30px 80px; background: #000; color: #FFF; border-radius: 100px;
+            font-weight: 900; font-size: 16px; text-transform: uppercase; letter-spacing: 0.4em;
+            cursor: pointer; transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-
-        #package-section h2 {
-            margin-top: 100px;
-        }
-
-        .package-active #package-section {
-            display: flex;
-        }
-
-        .package-active #globe-section {
-            height: auto;
-            filter: blur(15px);
-            opacity: 0.3;
-        }
-
-        .package-active #page-wrapper {
-            overflow-y: auto;
-        }
-
-        .package-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            max-width: 1400px;
-            width: 100%;
-            margin-top: 60px;
-        }
-
-        @media (max-width: 1024px) {
-            .package-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 768px) {
-            #ui-layer { 
-                padding: 15px; 
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                height: 100%;
-            }
-            header { 
-                flex-direction: column; 
-                align-items: center; 
-                gap: 5px; 
-                width: 100%;
-            }
-            .logo-container { transform: scale(0.7); margin-bottom: -20px; }
-            #neural-search-container { 
-                margin-right: 0 !important; 
-                width: 70%; 
-                transform: scale(0.85);
-            }
-            #neural-search { width: 100%; text-align: center; padding: 8px 15px; }
-            
-            main { 
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center; 
-                padding: 0;
-                margin-top: -20px;
-            }
-            .brand-label { font-size: 0.55rem; letter-spacing: 2px; margin-bottom: 5px; }
-            h1 { font-size: 2.2rem; line-height: 1.0; margin-bottom: 10px; }
-            .brand-description { font-size: 0.8rem; line-height: 1.4; margin: 0 auto 15px auto; padding: 0 10px; }
-            .price-tag { font-size: 1.2rem; margin-bottom: 15px; }
-            .view-cta { padding: 10px 25px; font-size: 0.65rem; margin: 0 auto; }
-            
-            footer { 
-                flex-direction: column;
-                align-items: center; 
-                text-align: center; 
-                gap: 10px;
-                padding-bottom: 10px;
-            }
-            .footer-info { font-size: 0.6rem; max-width: 200px; margin: 0 auto; line-height: 1.3; }
-            #interaction-guide { margin-bottom: 10px !important; font-size: 0.5rem; }
-            
-            .back-to-home { top: 15px; right: 15px; font-size: 0.55rem; padding: 8px 20px; }
-            
-            .package-grid { grid-template-columns: 1fr; padding: 15px; }
-            .pkg-card { padding: 25px; }
-            .pkg-card h3 { font-size: 1.6rem; }
-            .pkg-card .price { font-size: 1.8rem; }
-            #package-section h2 { font-size: 2.5rem; margin-top: 60px; }
-        }
-
-        .pkg-category-title {
-            grid-column: 1 / -1;
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            color: var(--purple);
-            border-bottom: 2px solid var(--lilac);
-            padding-bottom: 10px;
-            margin-top: 40px;
-        }
-
-        .pkg-card {
-            background: #fff;
-            border: 1px solid var(--lilac);
-            padding: 50px;
-            border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            display: flex;
-            flex-direction: column;
-            text-align: left;
-        }
-
-        .pkg-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 30px 60px rgba(48, 25, 52, 0.1);
-            border-color: var(--purple);
-        }
-
-        .pkg-card h3 { font-family: var(--font-heading); color: var(--purple); font-size: 2.2rem; margin-bottom: 15px; letter-spacing: -1px; }
-        .pkg-card .price { font-size: 2.5rem; font-weight: 900; color: var(--purple); margin-bottom: 25px; font-family: var(--font-body); }
-        .pkg-card ul { list-style: none; margin-bottom: 40px; flex-grow: 1; }
-        .pkg-card ul li { font-size: 1rem; color: #444; margin-bottom: 15px; display: flex; align-items: flex-start; gap: 12px; line-height: 1.4; }
-        .pkg-card ul li::before { content: "✓"; color: var(--purple); font-weight: 900; }
+        .btn-glow:hover { background: var(--accent); transform: scale(1.05); color: #FFF; }
         
-        .pkg-btn {
-            background: var(--purple); color: #fff;
-            padding: 20px; border: none; border-radius: 100px;
-            font-weight: 900; font-size: 0.75rem; letter-spacing: 3px;
-            cursor: pointer; transition: 0.3s; text-transform: uppercase;
-            width: 100%;
-        }
+        [data-theme="dark"] .btn-glow { background: #FFF; color: #000; box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
+        [data-theme="dark"] .btn-glow:hover { background: var(--accent); color: #FFF; }
 
-        .pkg-btn:hover {
-            transform: scale(1.02);
-            filter: brightness(1.2);
+        footer { padding: 150px 40px; border-top: 1px solid rgba(128,128,128,0.2); display: flex; justify-content: space-between; font-size: 12px; font-weight: 900; letter-spacing: 0.4em; text-transform: uppercase; }
+
+        #leadModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; z-index: 2000; transition: opacity 0.5s;
+            color: #000;
+        }
+        #leadModal.open { opacity: 1; pointer-events: auto; }
+        .modal-inner {
+            width: 100%; max-width: 600px; padding: 60px; text-align: left;
+        }
+        .modal-inner h2 { font-family: var(--font-heading); font-size: 4rem; letter-spacing: -0.05em; line-height: 0.85; margin-bottom: 40px; }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; font-weight: 900; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 10px; opacity: 0.5; }
+        .form-group input { 
+            width: 100%; border: none; border-bottom: 3px solid #000; padding: 15px 0; 
+            font-size: 1.5rem; font-weight: 700; outline: none; background: transparent;
+        }
+        .submit-btn {
+            width: 100%; padding: 25px; background: #000; color: #FFF; border: none; border-radius: 100px;
+            font-weight: 900; font-size: 1rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.2em;
+            margin-top: 20px; transition: background 0.3s;
+        }
+        .submit-btn:hover { background: var(--accent); }
+        .close-modal { margin-top: 30px; display: block; text-align: center; font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; cursor: pointer; opacity: 0.4; }
+
+        @media (max-width: 600px) {
+            .node-title { font-size: 3rem; }
+            h1 { font-size: 5rem; }
+            .modal-inner { padding: 30px; }
+            .modal-inner h2 { font-size: 2.5rem; }
         }
     </style>
 </head>
-<body>
-    <div id="page-wrapper">
-        <div class="back-to-home" onclick="hidePackages()">← RETURN TO GLOBE</div>
-        <section id="globe-section">
-            <div id="bg-logo-overlay"></div>
-            <div id="ui-layer">
-                <header>
-                    <div class="logo-container">
-                        <img src="https://share.zapia.com/57sonyoar08flg9xz5v667" alt="Prisca Dezigns" class="logo-img">
-                    </div>
-                    <div class="hamburger" id="hamburger">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                    </div>
-                    <nav style="display: flex; gap: 30px; pointer-events: auto;">
-                        
-                    </nav>
-                    
-                    <div id="neural-search-container" style="position: relative; margin-right: 40px; pointer-events: auto;">
-                        <input type="text" id="neural-search" placeholder="⚲ SEARCH..." 
-                               style="background: rgba(255,255,240,0.2); border: 1.5px solid var(--border); color: var(--purple); padding: 12px 24px; border-radius: 4px; font-size: 0.8rem; letter-spacing: 2px; font-weight: 900; width: 200px; outline: none; transition: 0.3s; font-family: var(--font-body);">
-                        <div id="search-results" style="position: absolute; top: 110%; left: 0; width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 4px; display: none; flex-direction: column; z-index: 2000; box-shadow: 0 10px 30px rgba(0,0,0,0.1);"></div>
-                    </div>
-                </header>
+<body data-theme="light">
 
-                <main>
-                        <div class="brand-text-content">
-                            <div class="brand-label" id="current-sector">SYSTEM ENTRY</div>
-                            <h1 id="current-brand">BRAND SCAN</h1>
-                            <div class="brand-description" id="current-desc"></div>
-                            <div class="price-tag" id="current-price"></div>
-                            <button id="main-cta" class="view-cta">ENTER DOMAIN</button>
-                        </div>
-                </main>
+    <div class="grain"></div>
+    <div class="sky-canvas"></div>
+    <div class="stars" id="stars"></div>
 
-                <footer>
-                    <div class="footer-info">Architecting Private Digital Networks for the Sovereign Individual.</div>
-                </footer>
-                <a href="https://priscadezigns.org/privacy.html" style="pointer-events: auto; display: block; text-align: center; color: var(--accent); font-size: 0.65rem; font-weight: 900; letter-spacing: 3px; text-decoration: none; text-transform: uppercase; font-family: var(--font-body); margin-bottom: 20px;">Privacy</a>
-            </div>
-            <div id="canvas-container"></div>
-            <div id="scroll-indicator"></div>
-            <div id="mobile-menu"></div>
-        </section>
-
-        <section id="package-section">
-            <h2 style="font-family: var(--font-heading); font-size: 4rem; color: var(--purple); margin-bottom: 10px; letter-spacing: -2px;">Our High-Fidelity Packages</h2>
-            <p style="color: var(--lilac); font-weight: 900; letter-spacing: 4px; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 40px;">Select your digital evolution tier</p>
-            
-            <div class="package-grid">
-                <div class="pkg-category-title">Standard Brand Packages</div>
-                <div class="pkg-card">
-                    <h3>Starter</h3>
-                    <div class="price">$297</div>
-                    <ul>
-                        <li>1-Page High-Fidelity Website</li>
-                        <li>Full Brand Setup (Logo, Domain, Favicon)</li>
-                        <li>Social Media Integration (FB/IG Covers)</li>
-                        <li>Technical SEO & SSL</li>
-                        <li>1 Month Free Maintenance</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('STARTER PKG')">Initiate</button>
-                </div>
-                <div class="pkg-card">
-                    <h3>Growth</h3>
-                    <div class="price">$597</div>
-                    <ul>
-                        <li>Manage 1 Brand Page (Full Social Setup)</li>
-                        <li>Full Branding & App/Web Architecture</li>
-                        <li>Content Creation & Copywriting</li>
-                        <li>Advanced SEO & Analytics</li>
-                        <li>1 Month Free Maintenance</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('GROWTH PKG')">Initiate</button>
-                </div>
-                <div class="pkg-card">
-                    <h3>Trusted</h3>
-                    <div class="price">$1,200</div>
-                    <ul>
-                        <li>Full Business Automation Node</li>
-                        <li>10-15 Pages of High-Fidelity Content</li>
-                        <li>Premium Brand Scaling & PR Logic</li>
-                        <li>24/7 Sovereign Tech Support</li>
-                        <li>1 Month Free Maintenance</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('TRUSTED PKG')">Initiate</button>
-                </div>
-                <div class="pkg-card">
-                    <h3>Custom</h3>
-                    <div class="price">Bespoke</div>
-                    <ul>
-                        <li>Tailored Digital Architecture</li>
-                        <li>Custom API & Tool Integration</li>
-                        <li>Unique Brand Identity Design</li>
-                        <li>Scalable Infrastructure Logic</li>
-                        <li>Priority Sovereign Support</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('CUSTOM PKG')">Inquire</button>
-                </div>
-
-                <div class="pkg-category-title">E-Commerce Ecosystems</div>
-                <div class="pkg-card">
-                    <h3>E-Starter</h3>
-                    <div class="price">$497</div>
-                    <ul>
-                        <li>1-Page Shop Node</li>
-                        <li>Full Store Branding & Domain</li>
-                        <li>Integrated Social Shop Setup</li>
-                        <li>Payment Gateway Integration</li>
-                        <li>1 Month Free Maintenance</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('E-STARTER PKG')">Initiate</button>
-                </div>
-                <div class="pkg-card">
-                    <h3>E-Growth</h3>
-                    <div class="price">$1,497</div>
-                    <ul>
-                        <li>2-5 Page Store Architecture</li>
-                        <li>Full Shop Logic (10+ Products)</li>
-                        <li>Deep Copywriting & Product SEO</li>
-                        <li>Automated Fulfillment Sync</li>
-                        <li>1 Month Free Maintenance</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('E-GROWTH PKG')">Initiate</button>
-                </div>
-                <div class="pkg-card">
-                    <h3>E-Trusted</h3>
-                    <div class="price">$2,500</div>
-                    <ul>
-                        <li>Elite Store (50+ Products)</li>
-                        <li>15+ Page Network Architecture</li>
-                        <li>Advanced Inventory & CRM Automation</li>
-                        <li>On-Chain Inventory Logic</li>
-                        <li>1 Month Free Maintenance</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('E-TRUSTED PKG')">Initiate</button>
-                </div>
-
-                <div class="pkg-category-title">System Continuity</div>
-                <div class="pkg-card" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
-                    <h3>Maintenance</h3>
-                    <div class="price">$97/mo</div>
-                    <ul>
-                        <li>Daily Uptime & Security Monitoring</li>
-                        <li>Monthly Content Optimization</li>
-                        <li>High-Fidelity Technical Backups</li>
-                        <li>Priority Sovereign Support</li>
-                        <li>1 Month Free Maintenance</li>
-                    </ul>
-                    <button class="pkg-btn" onclick="openModal('MAINTENANCE PKG')">Initiate</button>
-                </div>
-            </div>
-        </section>
+    <div class="cloud-wrap">
+        <div class="cloud" style="width: 600px; height: 600px; top: -10%; left: -10%;" data-depth="0.1"></div>
+        <div class="cloud" style="width: 800px; height: 800px; top: 20%; right: -20%;" data-depth="0.3"></div>
+        <div class="cloud" style="width: 500px; height: 500px; bottom: 10%; left: 10%;" data-depth="0.2"></div>
+        <div class="cloud" style="width: 900px; height: 900px; top: 50%; left: -30%;" data-depth="0.5"></div>
+        <div class="cloud" style="width: 700px; height: 700px; top: 80%; right: 10%;" data-depth="0.4"></div>
     </div>
 
-    <div id="modal-overlay">
-        <div id="modal-content">
-            <span class="close-modal" id="close-modal">&times;</span>
-            <h2 id="modal-title" style="font-family: var(--font-heading); color: var(--purple); margin-bottom: 10px;">Secure Your Slot</h2>
-            <div id="pkg-checklist" style="margin-bottom: 25px; padding: 20px; background: rgba(48, 25, 52, 0.05); border-radius: 12px; display: none;">
-                <ul id="checklist-items" style="list-style: none; font-size: 0.9rem; color: #444; display: grid; gap: 10px;"></ul>
-            </div>
-            <form id="lead-form">
-                <div class="form-field">
-                    <label>Full Name</label>
-                    <input type="text" id="user-name" placeholder="E.g. Satoshi Nakamoto" required>
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png" alt="Priscion" id="headerLogo"></a>
+        </div>
+        <div class="nav-right">
+            <a href="share-to-earn.html" class="header-btn">SHARE TO EARN</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero-title reveal">
+            <h1>architecting</h1>
+            <h1><span>reality.</span></h1>
+        </div>
+
+        <div class="narrative reveal">
+            Priscion is a <b>Cardano L1 Blockchain</b> and digital agency ecosystem.
+        </div>
+
+        <div class="narrative reveal" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
+            As an L1 network, we don't just build on the blockchain—we <b>are</b> the infrastructure. Inheriting the security of Cardano, we provide the sovereign rails for the next generation of global brands.
+        </div>
+
+        <div class="center-btn-group reveal">
+            <a href="share-to-earn.html" class="primary-btn">SHARE TO EARN</a>
+            <a href="#" class="primary-btn" onclick="openLeadModal('.PRI Handle Claim')" style="margin-left: 20px; background: var(--accent);">CLAIM .PRI HANDLE</a>
+        </div>
+
+        <div class="narrative reveal">
+            We migrate brands from the noise of Web2 into the <b>absolute fidelity</b> of the Web3 Ledger.
+        </div>
+
+        <div class="narrative reveal" style="font-size: clamp(1.5rem, 4vw, 2.5rem); opacity: 0.6;">
+            The Priscion mission is to bridge the gap between <b>E-commerce</b>, <b>Affiliate Marketing</b>, and <b>Web3</b>—creating a unified ecosystem where identity and commerce are sovereign.
+        </div>
+
+        <div class="node-list reveal">
+            <a href="pulse/" class="node-item">
+                <div class="node-title">PULSE</div>
+                <div class="node-meta">Explorer</div>
+            </a>
+            <a href="muzewallet/" class="node-item">
+                <div class="node-title">MUZE</div>
+                <div class="node-meta">Vault</div>
+            </a>
+            <a href="chillata/" class="node-item">
+                <div class="node-title">CHILLATA</div>
+                <div class="node-meta">Liquidity</div>
+            </a>
+            <a href="mynt/" class="node-item">
+                <div class="node-title">MYNT</div>
+                <div class="node-meta">Market</div>
+            </a>
+            <a href="blog/" class="node-item">
+                <div class="node-title">INTELLIGENCE</div>
+                <div class="node-meta">Blog</div>
+            </a>
+            <a href="whitepaper.html" class="node-item">
+                <div class="node-title">WHITEPAPER</div>
+                <div class="node-meta">Protocol</div>
+            </a>
+            <a href="services.html" class="node-item">
+                <div class="node-title">SERVICES</div>
+                <div class="node-meta">Verification</div>
+            </a>
+        </div>
+
+        <div class="cta-box reveal">
+            <div class="btn-glow" onclick="openLeadModal('Network Migration')">Begin Migration</div>
+        </div>
+
+        <div class="narrative reveal" style="margin-top: 400px; opacity: 0.15; font-size: 1.5rem; letter-spacing: 0.2em; text-align: center;">
+            ABSOLUTE AUTONOMY. NO SIMULATIONS.<br>THE LEDGER NEVER LIES.
+        </div>
+    </main>
+
+    <div id="leadModal">
+        <div class="modal-inner">
+            <h2 id="modal-title">MIGRATION</h2>
+            <form id="leadForm">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="leadName" placeholder="Full Name" required>
                 </div>
-                <div class="form-field">
-                    <label>Contact Signal (Email)</label>
-                    <input type="email" id="user-email" placeholder="email@nexus.com" required>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="leadEmail" placeholder="email@domain.com" required>
                 </div>
-                <div class="form-field">
-                    <label>Selected Target</label>
-                    <input type="text" id="target-package" readonly>
+                <div class="form-group">
+                    <label>Brand / Business</label>
+                    <input type="text" id="leadCompany" placeholder="Empire Name" required>
                 </div>
-                <button type="submit" id="submit-btn">INITIATE CONNECTION</button>
+                <button type="submit" class="submit-btn" id="submitBtn">SYNCHRONIZE</button>
             </form>
-            <div id="form-msg"></div>
+            <div id="successMsg" style="display:none; text-align:center;">
+                <h2 style="color:var(--accent);">SYNCED.</h2>
+                <p style="font-weight:900; text-transform:uppercase; letter-spacing:0.2em;">The Great Migration has begun.</p>
+            </div>
+            <div class="close-modal" onclick="closeLeadModal()">← Cancel</div>
         </div>
     </div>
 
+    <footer>
+        <div id="footerLeft">PRISCION // CARDANO</div>
+        <div id="footerRight">NETWORK &copy; 2026</div>
+    </footer>
+
     <script>
-        const SB_URL = "https://sktpjacowqaedddtrhuz.supabase.co";
-        const SB_KEY = "{{credential:supabase-anon-key}}";
-        const supabaseClient = supabase.createClient(SB_URL, SB_KEY);
+        const sb = supabase.createClient('https://sktpjacowqaedddtrhuz.supabase.co', 'sb_publishable_ChdrHQEJV7pVpJMKt-ZaUw_6V0WRKAR');
+        const sky = document.querySelector('.sky-canvas');
+        const stars = document.getElementById('stars');
+        const clouds = document.querySelectorAll('.cloud');
+        const reveals = document.querySelectorAll('.reveal');
+        const logo = document.getElementById('headerLogo');
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
-        dirLight.position.set(5, 5, 5);
-        scene.add(dirLight);
-
-        const globeGeo = new THREE.IcosahedronGeometry(2.8, 3);
-        const globeMat = new THREE.MeshPhongMaterial({ color: 0xC8A2C8, wireframe: true, transparent: true, opacity: 0.25 });
-        const globe = new THREE.Mesh(globeGeo, globeMat);
-        scene.add(globe);
-        camera.position.z = 6.5;
-
-        const brands = [
-            { name: "BRAND SCAN", sector: "SYSTEM ENTRY", logo: "", desc: "Real-time diagnostic analysis of digital identity and brand footprint.", url: "scan/", type: "external" },
-            { name: "PACKAGES", sector: "SYSTEM HUB", logo: "", desc: "Explore our high-fidelity service tiers and brand packages.", type: "scroll" },
-            { name: "ROWCELL", sector: "PRODUCT", logo: "", desc: "Advanced cellular logistics and data management node.", url: "rowcell/", type: "external" },
-            { name: "VELLOQ", sector: "PRODUCT", logo: "", desc: "Next-gen communication and encryption protocol.", url: "velloq/", type: "external" },
-            { name: "MOBLYNC", sector: "PRODUCT", logo: "", desc: "Mobile-first synchronization for multi-device brand ecosystems.", url: "moblync/", type: "external" },
-            { name: "CUPYX", sector: "PRODUCT", logo: "", desc: "Digital resource containerization and distribution utility.", url: "cupyx/", type: "external" },
-            { name: "ESSENCE ELITE", sector: "BRAND", logo: "", desc: "Artisanal olfactory science and scent-layering mastery.", url: "essenceelite/", type: "external" },
-            { name: "THE AUTODROME", sector: "BRAND", logo: "", desc: "Engineering-grade supercar culture and automotive performance.", url: "theautodrome/", type: "external" },
-            { name: "DESKWELL", sector: "BRAND", logo: "", desc: "High-fidelity ergonomic environments for peak productivity.", url: "deskwell/", type: "external" },
-            { name: "THE GEN PLAY", sector: "BRAND", logo: "", desc: "Generational toys and high-fidelity collectible engineering.", url: "thegenplay/", type: "external" },
-            { name: "LES AMOUR", sector: "BRAND", logo: "", desc: "AI-powered emotional intelligence and relationship coaching.", url: "lesamour/", type: "external" },
-            { name: "ORNALIS LIGHTING", sector: "BRAND", logo: "", desc: "Architectural illumination and sanctuary atmosphere engineering.", url: "ornalis/", type: "external" },
-            { name: "AVORIA FRAMES", sector: "BRAND", logo: "", desc: "Sovereign eyewear and architectural vision design.", url: "axoria/", type: "external" },
-            { name: "SHELFLY", sector: "BRAND", logo: "", desc: "Intelligent storage logistics for modern living spaces.", url: "shelfly/", type: "external" },
-            { name: "PANTRIQ", sector: "BRAND", logo: "", desc: "Automated culinary logistics and smart kitchen tech.", url: "pantriq/", type: "external" },
-            { name: "VERDANT CO", sector: "BRAND", logo: "", desc: "Regenerative sustainability and circular economy infrastructure.", url: "verdantco/", type: "external" },
-            { name: "QUIET LUXURY", sector: "BRAND", logo: "", desc: "Minimalist luxury and sanctuary-focused home decor.", url: "quietluxury/", type: "external" },
-            { name: "COUTURE GALLERY", sector: "BRAND", logo: "", desc: "Archival fashion craftsmanship and luxury accessories.", url: "couturegallery/", type: "external" },
-            { name: "PAW VAULT", sector: "BRAND", logo: "", desc: "High-fidelity pet care and smart nutrition technology.", url: "pawvault/", type: "external" },
-            { name: "THE WATCH LIST", sector: "BRAND", logo: "", desc: "Elite horological engineering and archival timepiece intelligence.", url: "thewatchlist/", type: "external" },
-            { name: "THE ESCAPIST", sector: "BRAND", logo: "", desc: "Sanctuary travel experiences and luxury destination intelligence.", url: "theescapist/", type: "external" },
-            { name: "GLOW PROTOCOL", sector: "BRAND", logo: "", desc: "Regenerative beauty tech and longevity skin diagnostics.", url: "glowprotocol/", type: "external" },
-            { name: "SOLE PRESTIGE", sector: "BRAND", logo: "", desc: "Bespoke footwear design and elite streetwear culture.", url: "soleprestige/", type: "external" },
-            { name: "PRIME LAND NETWORK", sector: "BRAND", logo: "", desc: "Global property investment and luxury real estate logistics.", url: "primelandnetwork/", type: "external" },
-            { name: "ATELIA GAMING", sector: "BRAND", logo: "", desc: "High-fidelity gaming media and tech hardware engineering.", url: "ateliagaming/", type: "external" },
-            { name: "THE WAY MADE KNOWN", sector: "MISSION", logo: "", desc: "Analytical faith evidence and historical gospel proclamation.", url: "https://thewaymadeknown.com", type: "external" },
-            { name: "DREAMING ANIME", sector: "BRAND", logo: "", desc: "High-fidelity animation media and studio production news.", url: "https://dreaminganime.com", type: "external" },
-            { name: "THE TECH SCOUT HQ", sector: "BRAND", logo: "", desc: "Innovation news and emerging neural technology signals.", url: "thetechscouthq/", type: "external" },
-            { name: "PEAK FIT", sector: "BRAND", logo: "", desc: "Biohacking recovery science and elite fitness performance.", url: "peakfit/", type: "external" },
-            { name: "PRIVACY", sector: "LEGAL", logo: "", desc: "Sovereign data protection and privacy policy protocols.", url: "https://priscadezigns.org/privacy.html", type: "external" },
-            { name: "EVOLVE", sector: "PARTNER", logo: "", desc: "Caribbean-wide corporate mobility and fleet sales logistics.", url: "/evolve/", type: "external" },
-            { name: "THE BLOG", sector: "INTELLIGENCE", logo: "", desc: "Deep-dives into product news and digital agency evolution.", url: "blog.html", type: "external" }
-        ];
-
-        let currentIndex = 0;
-        let isAnimating = false; 
-        const searchInput = document.getElementById('neural-search');
-        const searchResults = document.getElementById('search-results');
-        searchInput.oninput = (e) => {
-            const query = e.target.value.toLowerCase();
-            if (query.length < 1) { searchResults.style.display = 'none'; return; }
-            const matches = brands.filter(b => b.name.toLowerCase().includes(query) || b.sector.toLowerCase().includes(query));
-            if (matches.length > 0) {
-                searchResults.innerHTML = matches.map(m => {
-                    const idx = brands.indexOf(m);
-                    return `<div onclick="jumpTo(${idx}); document.getElementById('neural-search').value=''; document.getElementById('search-results').style.display='none';" 
-                                 style="padding: 15px 20px; font-size: 0.75rem; font-weight: 900; letter-spacing: 1px; color: #1a1a1a; cursor: pointer; border-bottom: 1px solid #f0f0f0; text-transform: uppercase;">
-                                 ${m.name}
-                            </div>`;
-                }).join('');
-                searchResults.style.display = 'flex';
-            } else { searchResults.style.display = 'none'; }
-        };
-        window.addEventListener('click', (e) => {
-            if (!document.getElementById('neural-search-container').contains(e.target)) { searchResults.style.display = 'none'; }
-        });
-
-
-        function rotateSlices(dir) {
-            if (isAnimating) return;
-            isAnimating = true;
-            const direction = dir === 'next' ? 1 : -1;
-            currentIndex = (currentIndex + direction + brands.length) % brands.length;
-            gsap.to(globe.rotation, { y: globe.rotation.y + (Math.PI / 2.5 * direction), duration: 0.8, ease: "power2.out", onComplete: () => { isAnimating = false; } });
-            updateUI(currentIndex);
-        }
-
-        function jumpTo(index) {
-            if (isAnimating || index === currentIndex) return;
-            const diff = index - currentIndex;
-            isAnimating = true; currentIndex = index;
-            gsap.to(globe.rotation, { y: globe.rotation.y + (Math.PI / 2.5 * diff), duration: 0.8, ease: "power2.out", onComplete: () => { isAnimating = false; } });
-            updateUI(currentIndex);
-        }
-
-        const dotsContainer = document.getElementById('scroll-indicator');
-        brands.forEach((brand, i) => {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'dot-wrapper' + (i === 0 ? ' active' : '');
-            wrapper.onclick = () => jumpTo(i);
-            const label = document.createElement('span'); label.className = 'dot-label'; label.innerText = brand.name;
-            const dot = document.createElement('div'); dot.className = 'dot';
-            wrapper.appendChild(label); wrapper.appendChild(dot);
-            dotsContainer.appendChild(wrapper);
-        });
-
-        function updateUI(index) {
-            const brand = brands[index];
-            gsap.to(".brand-visual-container", { opacity: 0, y: 30, duration: 0.3, onComplete: () => {
-                document.getElementById('current-brand').innerText = brand.name;
-                document.getElementById('current-sector').innerText = brand.sector;
-                document.getElementById('current-desc').innerText = brand.desc;
-                document.getElementById('current-price').innerText = brand.price || "";
-                const cta = document.getElementById('main-cta');
-                if (brand.type === "scroll") {
-                    cta.innerText = "VIEW PACKAGES";
-                    cta.onclick = () => {
-                        document.body.classList.add('package-active');
-                        setTimeout(() => {
-                            document.getElementById('package-section').scrollIntoView({ behavior: "smooth", block: "start" });
-                        }, 10);
-                    };
-                } else {
-                    cta.innerText = "ENTER DOMAIN";
-                    cta.onclick = () => window.open(brand.url, '_blank');
-                }
-                const dots = document.querySelectorAll('.dot-wrapper');
-                dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-                gsap.to(".brand-visual-container", { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
-            }});
-        }
-
-        const modal = document.body;
-        function openModal(pkgName) {
-            const pkgData = {
-                'STARTER PKG': { title: 'Activate Starter', items: ['1-Page High-Fidelity Website', 'Full Brand Setup (Logo, Domain, Favicon)', 'Social Media Integration', 'Technical SEO & SSL', '1 Month Free Maintenance'] },
-                'GROWTH PKG': { title: 'Activate Growth', items: ['Manage 1 Brand Page (Social Setup)', 'Full Branding & Architecture', 'Content Creation & Copywriting', 'Advanced SEO & Analytics', '1 Month Free Maintenance'] },
-                'TRUSTED PKG': { title: 'Activate Trusted', items: ['Full Business Automation Node', '10-15 Pages of Content', 'Premium Brand Scaling & PR', '24/7 Sovereign Tech Support', '1 Month Free Maintenance'] },
-                'CUSTOM PKG': { title: 'Custom Inquiry', items: ['Tailored Digital Architecture', 'Custom API & Tool Integration', 'Unique Brand Identity Design', 'Scalable Infrastructure Logic', 'Priority Sovereign Support'] },
-                'E-STARTER PKG': { title: 'Activate E-Starter', items: ['1-Page Shop Node', 'Full Store Branding & Domain', 'Integrated Social Shop Setup', 'Payment Gateway Integration', '1 Month Free Maintenance'] },
-                'E-GROWTH PKG': { title: 'Activate E-Growth', items: ['2-5 Page Store Architecture', 'Full Shop Logic (10+ Products)', 'Deep Copywriting & Product SEO', 'Automated Fulfillment Sync', '1 Month Free Maintenance'] },
-                'E-TRUSTED PKG': { title: 'Activate E-Trusted', items: ['Elite Store (50+ Products)', '15+ Page Network Architecture', 'Advanced Inventory Automation', 'On-Chain Inventory Logic', '1 Month Free Maintenance'] },
-                'MAINTENANCE PKG': { title: 'Activate Maintenance', items: ['Daily Uptime & Security Monitoring', 'Monthly Content Optimization', 'Technical Backups', 'Priority Sovereign Support', '1 Month Free Maintenance'] }
-            };
-            const data = pkgData[pkgName];
-            document.getElementById('target-package').value = pkgName;
-            document.getElementById('modal-title').innerText = data.title;
-            const list = document.getElementById('checklist-items');
-            list.innerHTML = "";
-            data.items.forEach(item => { const li = document.createElement('li'); li.innerText = item; list.appendChild(li); });
-            document.getElementById('pkg-checklist').style.display = "block";
-            modal.classList.add('modal-active');
-        }
-
-        function hidePackages() {
-            document.body.classList.remove('package-active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        document.getElementById('close-modal').onclick = () => modal.classList.remove('modal-active');
-        document.getElementById('modal-overlay').onclick = (e) => { if (e.target.id === 'modal-overlay') modal.classList.remove('modal-active'); };
-
-        const leadForm = document.getElementById('lead-form');
-        const submitBtn = document.getElementById('submit-btn');
-        const formMsg = document.getElementById('form-msg');
-        leadForm.onsubmit = async (e) => {
-            e.preventDefault();
-            submitBtn.disabled = true; submitBtn.innerText = "SYNCHRONIZING...";
-            const data = {
-                name: document.getElementById('user-name').value,
-                email: document.getElementById('user-email').value,
-                package: document.getElementById('target-package').value,
-                brand: "Prisca Dezigns",
-                created_at: new Date().toISOString()
-            };
-            const { error } = await supabaseClient.from('client_leads').insert([data]);
-            if (error) {
-                formMsg.style.color = "#EF4444"; formMsg.innerText = "ERROR: UPLINK FAILED.";
-                submitBtn.disabled = false; submitBtn.innerText = "RETRY INITIATION";
+        function handleScroll() {
+            const scrollY = window.pageYOffset;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = scrollY / scrollHeight;
+            
+            // Color Shift & Theme Logic
+            if (scrollPercent < 0.6) {
+                const p = scrollPercent / 0.6;
+                const r = Math.floor(255 - (255 - 245) * p);
+                const g = Math.floor(255 - (255 - 239) * p);
+                const b = 255;
+                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                if(stars) stars.style.opacity = 0;
+                
+                // Light Theme
+                document.body.style.color = "#000000";
+                document.body.setAttribute('data-theme', 'light');
+                if(logo) logo.style.filter = "none";
             } else {
-                formMsg.style.color = "var(--accent)"; formMsg.innerText = "NODE ACTIVATED.";
-                submitBtn.innerText = "CONNECTION SECURED";
-                leadForm.reset();
-                setTimeout(() => modal.classList.remove('modal-active'), 2000);
-            }
-        };
+                const p = (scrollPercent - 0.6) / 0.4;
+                // Transition to deep dark purple (#13021F)
+                const r = Math.floor(245 - (245 - 19) * p);
+                const g = Math.floor(239 - (239 - 2) * p);
+                const b = Math.floor(255 - (255 - 31) * p);
+                if(sky) sky.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                
+                // Show stars in the deep purple sky
+                if(stars) stars.style.opacity = p;
 
-        let startX = 0;
-        window.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; });
-        window.addEventListener('mousemove', (e) => {
-            if (!isDragging || isAnimating) return;
-            const dx = e.clientX - startX;
-            if (Math.abs(dx) > 50) { if (dx > 0) rotateSlices('prev'); else rotateSlices('next'); startX = e.clientX; }
-        });
-        window.addEventListener('mouseup', () => { isDragging = false; });
-
-        // High-fidelity touch sensitivity update
-        let touchStartY = 0;
-        window.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: true });
-
-        window.addEventListener('touchmove', (e) => {
-            if (isAnimating || modal.classList.contains('modal-active') || document.body.classList.contains('package-active')) return;
-            
-            const touchY = e.touches[0].clientY;
-            const dy = touchStartY - touchY;
-            const TOUCH_THRESHOLD = 20; // Sensitive light flick
-
-            if (Math.abs(dy) >= TOUCH_THRESHOLD) {
-                rotateSlices(dy > 0 ? 'next' : 'prev');
-                touchStartY = touchY; // Reset starting point for fluid swiping
-            }
-        }, { passive: true });
-
-        let wheelAccumulator = 0;
-        const WHEEL_THRESHOLD = 25; // Reduced from default behavior for higher sensitivity
-
-        window.addEventListener('wheel', (e) => { 
-            if (isAnimating || modal.classList.contains('modal-active') || document.body.classList.contains('package-active')) return;
-            
-            wheelAccumulator += e.deltaY;
-            
-            if (Math.abs(wheelAccumulator) >= WHEEL_THRESHOLD) {
-                rotateSlices(wheelAccumulator > 0 ? 'next' : 'prev');
-                wheelAccumulator = 0;
-            }
-        }, { passive: true });
-
-        function animate() { requestAnimationFrame(animate); globe.rotation.y += 0.0015; renderer.render(scene, camera); }
-        animate();
-        window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
-        // Mobile Menu Logic
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        brands.forEach((brand, index) => {
-            const item = document.createElement('div');
-            item.className = 'mobile-menu-item';
-            item.textContent = brand.name;
-            item.onclick = () => {
-                if (brand.type === 'scroll') {
-                    document.body.classList.add('package-active');
-                    gsap.to('#page-wrapper', { scrollTo: '#package-section', duration: 1.5, ease: 'power4.inOut' });
+                // Dark Theme: Change text to white for readability
+                if (p > 0.3) {
+                    document.body.style.color = "#FFFFFF";
+                    document.body.setAttribute('data-theme', 'dark');
+                    if(logo) logo.style.filter = "invert(1)";
                 } else {
-                    jumpTo(index);
+                    document.body.style.color = "#000000";
+                    document.body.setAttribute('data-theme', 'light');
+                    if(logo) logo.style.filter = "none";
                 }
-                toggleMenu();
-            };
-            mobileMenu.appendChild(item);
-        });
+            }
 
-        const backBtn = document.createElement('div');
-        backBtn.className = 'mobile-back-btn';
-        backBtn.innerHTML = '← BACK';
-        backBtn.onclick = toggleMenu;
-        mobileMenu.insertBefore(backBtn, mobileMenu.firstChild);
+            // Cloud Parallax
+            clouds.forEach(cloud => {
+                const depth = cloud.getAttribute('data-depth');
+                const move = scrollY * depth;
+                cloud.style.transform = `translateY(-${move}px) scale(${1 + scrollPercent * depth})`;
+            });
 
-        function toggleMenu() {
-            const isActive = hamburger.classList.toggle('active');
-            mobileMenu.style.display = isActive ? 'flex' : 'none';
-            document.body.style.overflow = isActive ? 'hidden' : 'auto';
+            // Reveal Animation
+            reveals.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                if (rect.top <= windowHeight * 0.85 && rect.bottom >= windowHeight * 0.15) {
+                    el.classList.add('visible');
+                    el.classList.remove('fade-out');
+                } else if (rect.bottom < windowHeight * 0.15) {
+                    el.classList.remove('visible');
+                    el.classList.add('fade-out');
+                } else {
+                    el.classList.remove('visible');
+                    el.classList.remove('fade-out');
+                }
+            });
         }
 
-        hamburger.addEventListener('click', toggleMenu);
+        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('load', handleScroll);
 
-        updateUI(0);
+        let currentPlan = '';
+        function openLeadModal(plan) {
+            currentPlan = plan;
+            document.getElementById('modal-title').textContent = plan.toUpperCase();
+            document.getElementById('leadModal').classList.add('open');
+            document.getElementById('leadForm').style.display = 'block';
+            document.getElementById('successMsg').style.display = 'none';
+        }
+        function closeLeadModal() { document.getElementById('leadModal').classList.remove('open'); }
+
+        document.getElementById('leadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = 'SYNCING...'; btn.disabled = true;
+            try {
+                await sb.from('leads').insert([{ 
+                    email: document.getElementById('leadEmail').value, 
+                    type: 'priscion_inquiry', 
+                    plan_interest: currentPlan,
+                    name: document.getElementById('leadName').value,
+                    business_name: document.getElementById('leadCompany').value
+                }]);
+                document.getElementById('leadForm').style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+            } catch (err) {
+                alert('Connection failed.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'SYNCHRONIZE';
+            }
+        });
     </script>
 </body>
 </html>
+
 
