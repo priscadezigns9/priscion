@@ -286,14 +286,32 @@
             const btn = document.getElementById('connect-cardano-btn');
             closeWalletModal();
             btn.innerText = `CONNECTING TO ${walletKey.toUpperCase()}...`;
+            console.log(`Attempting to connect to: ${walletKey}`);
             
             try {
-                const api = await window.cardano[walletKey].enable();
-                const usedAddresses = await api.getUsedAddresses();
+                const wallet = window.cardano[walletKey];
+                if (!wallet) throw new Error("Wallet not found in window.cardano");
+
+                const api = await wallet.enable();
+                console.log("Wallet enabled, fetching address...");
+
+                // Fetch addresses (CIP-30)
+                let addresses = await api.getUsedAddresses();
+                if (addresses.length === 0) {
+                    addresses = await api.getUnusedAddresses();
+                }
                 
-                if (usedAddresses.length > 0) {
-                    connectedAddress = usedAddresses[0];
-                    document.getElementById('wallet-address-display').innerText = connectedAddress.substring(0,15) + "...";
+                if (addresses.length === 0) {
+                    const changeAddr = await api.getChangeAddress();
+                    if (changeAddr) addresses = [changeAddr];
+                }
+
+                if (addresses && addresses.length > 0) {
+                    connectedAddress = addresses[0];
+                    console.log("Connected address (hex):", connectedAddress);
+
+                    // Display a short snippet of the address
+                    document.getElementById('wallet-address-display').innerText = connectedAddress.substring(0,20) + "...";
                     document.getElementById('wallet-status').style.display = 'block';
                     btn.innerText = "MUZE / CARDANO CONNECTED";
                     btn.style.background = "#10B981";
@@ -302,10 +320,12 @@
                     document.getElementById('handle-selection').style.display = 'block';
                     localStorage.setItem('cardano_address', connectedAddress);
                     localStorage.setItem('connected_wallet', walletKey);
+                } else {
+                    throw new Error("No addresses found in wallet.");
                 }
             } catch (err) {
-                console.error(err);
-                alert("Wallet connection failed.");
+                console.error("Wallet Connection Error:", err);
+                alert(`Connection Failed: ${err.message || "Please try again or check your wallet extension."}`);
                 btn.innerText = "CONNECT VIA MUZE / CARDANO";
             }
         }
@@ -367,6 +387,7 @@
     </script>
 </body>
 </html>
+
 
 
 
