@@ -215,29 +215,50 @@
         function openWalletSelector() {
             const cardano = window.cardano;
             if (!cardano) {
-                alert("No Cardano wallet found. Please install a CIP-30 compliant wallet (MUZE, Lace, Nami, etc).");
+                alert("No Cardano wallet found. Please install a Cardano-compatible wallet (MUZE, Lace, Vespr, Eternl, etc).");
                 return;
             }
 
             const list = document.getElementById('wallet-list');
             list.innerHTML = '';
             
-            // Discover ALL installed Cardano wallets dynamically
+            // Define the authoritative list of Cardano-native wallets
+            const cardanoWallets = [
+                { key: 'muze', name: 'MUZE Vault' },
+                { key: 'lace', name: 'Lace' },
+                { key: 'vespr', name: 'Vespr' },
+                { key: 'eternl', name: 'Eternl' },
+                { key: 'nami', name: 'Nami' },
+                { key: 'yoroi', name: 'Yoroi' },
+                { key: 'gerowallet', name: 'GeroWallet' },
+                { key: 'typhoncip30', name: 'Typhon' },
+                { key: 'nuafi', name: 'NuFi' },
+                { key: 'begin', name: 'Begin' },
+                { key: 'flint', name: 'Flint' }
+            ];
+
             const detectedWallets = [];
-            Object.keys(cardano).forEach(key => {
-                const wallet = cardano[key];
-                if (wallet && (wallet.enable || wallet.apiVersion)) {
-                    detectedWallets.push({ key, ...wallet });
+            cardanoWallets.forEach(w => {
+                if (cardano[w.key]) {
+                    detectedWallets.push({ ...w, icon: cardano[w.key].icon });
                 }
             });
 
             if (detectedWallets.length === 0) {
-                alert("No CIP-30 wallets detected in your browser.");
+                // Fallback: check if ANY CIP-30 exists that isn't in our curated list
+                Object.keys(cardano).forEach(key => {
+                    if (cardano[key] && (cardano[key].enable || cardano[key].apiVersion)) {
+                        detectedWallets.push({ key, name: cardano[key].name || key, icon: cardano[key].icon });
+                    }
+                });
+            }
+
+            if (detectedWallets.length === 0) {
+                alert("No compatible Cardano wallets detected.");
                 return;
             }
 
-            // High-Fidelity Logic: If only one wallet is found, connect directly.
-            // Otherwise, show the selection modal.
+            // High-Fidelity Logic: Direct connect if only one
             if (detectedWallets.length === 1) {
                 connectWallet(detectedWallets[0].key);
                 return;
@@ -247,7 +268,7 @@
                 const btn = document.createElement('button');
                 btn.style.cssText = "padding:15px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:white; font-weight:900; text-transform:uppercase; font-size:0.7rem; display:flex; flex-direction:column; align-items:center; gap:8px;";
                 const icon = wallet.icon || 'https://cardano.org/img/favicon.png';
-                btn.innerHTML = `<img src="${icon}" style="width:24px; height:24px;"> ${wallet.name || wallet.key}`;
+                btn.innerHTML = `<img src="${icon}" style="width:24px; height:24px;"> ${wallet.name}`;
                 btn.onclick = () => connectWallet(wallet.key);
                 list.appendChild(btn);
             });
@@ -346,6 +367,7 @@
     </script>
 </body>
 </html>
+
 
 
 
