@@ -222,25 +222,25 @@
             const list = document.getElementById('wallet-list');
             list.innerHTML = '';
             
-            // Define the authoritative list of Cardano-native wallets
+            // Define the authoritative list of Cardano-native wallets with fallbacks for icons
             const cardanoWallets = [
-                { key: 'muze', name: 'MUZE Vault' },
-                { key: 'lace', name: 'Lace' },
-                { key: 'vespr', name: 'Vespr' },
-                { key: 'eternl', name: 'Eternl' },
-                { key: 'nami', name: 'Nami' },
-                { key: 'yoroi', name: 'Yoroi' },
-                { key: 'gerowallet', name: 'GeroWallet' },
-                { key: 'typhoncip30', name: 'Typhon' },
-                { key: 'nuafi', name: 'NuFi' },
-                { key: 'begin', name: 'Begin' },
-                { key: 'flint', name: 'Flint' }
+                { key: 'muze', name: 'MUZE Vault', icon: 'https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/muze_icon_logo.png' },
+                { key: 'lace', name: 'Lace', icon: 'https://www.lace.io/favicon.ico' },
+                { key: 'vespr', name: 'Vespr', icon: 'https://vespr.xyz/favicon.ico' },
+                { key: 'eternl', name: 'Eternl', icon: 'https://eternl.io/favicon.png' },
+                { key: 'nami', name: 'Nami', icon: 'https://namiwallet.io/favicon.ico' },
+                { key: 'yoroi', name: 'Yoroi', icon: 'https://yoroi-wallet.com/assets/favicon.ico' },
+                { key: 'gerowallet', name: 'GeroWallet', icon: 'https://gerowallet.io/assets/img/logo2.png' },
+                { key: 'typhoncip30', name: 'Typhon', icon: 'https://typhonwallet.io/assets/favicon.ico' },
+                { key: 'nuafi', name: 'NuFi', icon: 'https://nu.fi/favicon.ico' }
             ];
 
             const detectedWallets = [];
             cardanoWallets.forEach(w => {
                 if (cardano[w.key]) {
-                    detectedWallets.push({ ...w, icon: cardano[w.key].icon });
+                    // Use the wallet's provided icon if available, otherwise use our high-fidelity fallback
+                    const liveIcon = cardano[w.key].icon && cardano[w.key].icon.startsWith('data:image') ? cardano[w.key].icon : w.icon;
+                    detectedWallets.push({ ...w, icon: liveIcon });
                 }
             });
 
@@ -248,7 +248,7 @@
                 // Fallback: check if ANY CIP-30 exists that isn't in our curated list
                 Object.keys(cardano).forEach(key => {
                     if (cardano[key] && (cardano[key].enable || cardano[key].apiVersion)) {
-                        detectedWallets.push({ key, name: cardano[key].name || key, icon: cardano[key].icon });
+                        detectedWallets.push({ key, name: cardano[key].name || key, icon: cardano[key].icon || 'https://cardano.org/img/favicon.png' });
                     }
                 });
             }
@@ -266,12 +266,20 @@
 
             detectedWallets.forEach(wallet => {
                 const btn = document.createElement('button');
-                btn.style.cssText = "padding:15px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:white; font-weight:900; text-transform:uppercase; font-size:0.7rem; display:flex; flex-direction:column; align-items:center; gap:8px;";
-                const icon = wallet.icon || 'https://cardano.org/img/favicon.png';
-                btn.innerHTML = `<img src="${icon}" style="width:24px; height:24px;"> ${wallet.name}`;
+                btn.style.cssText = "padding:15px; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:white; font-weight:900; text-transform:uppercase; font-size:0.7rem; display:flex; flex-direction:column; align-items:center; gap:8px; transition: all 0.2s ease;";
+                btn.onmouseover = () => btn.style.borderColor = "var(--accent)";
+                btn.onmouseout = () => btn.style.borderColor = "#ddd";
+                
+                btn.innerHTML = `<img src="${wallet.icon}" style="width:32px; height:32px; object-fit:contain;"> ${wallet.name}`;
                 btn.onclick = () => connectWallet(wallet.key);
                 list.appendChild(btn);
             });
+
+            // Add Ledger/Hardware Note
+            const note = document.createElement('p');
+            note.style.cssText = "grid-column: span 2; font-size: 0.65rem; color: var(--muted); margin-top: 15px; text-align: center; line-height: 1.4;";
+            note.innerHTML = "<strong>Using a Ledger?</strong> Connect your hardware device to Lace, Eternl, or Typhon first, then select that wallet above.";
+            list.appendChild(note);
 
             document.getElementById('wallet-modal').style.display = 'block';
             document.getElementById('modal-overlay').style.display = 'block';
@@ -387,6 +395,7 @@
     </script>
 </body>
 </html>
+
 
 
 
