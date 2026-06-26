@@ -125,7 +125,7 @@
     <div class="hero">
         <div class="kicker">Sovereign Affiliate Protocol</div>
         <h1>Claim Your Handle.<br>Start Earning.</h1>
-        <p>Architect your legacy in the Priscion Network. Claim your unique <strong>.pri</strong> handle to activate your referral link and earn instant <strong>$PRN</strong> commissions on every brand migration.</p>
+        <p>Architect your legacy in the Priscion Network. Claim your unique <strong>.pri</strong> handle and connect your <strong>Cardano</strong> wallet to activate your referral link and earn instant <strong>$PRN</strong> commissions on every brand migration.</p>
 
         <div class="claim-engine">
             <div id="step-claim">
@@ -134,7 +134,12 @@
                     <input type="text" id="handle-input" placeholder="satoshi" onkeyup="updatePreview(this.value)">
                     <span class="suffix">.pri</span>
                 </div>
-                <button class="btn-claim" id="claim-btn" onclick="claimHandle()">Claim Handle & Get Link</button>
+                
+                <span class="step-title" style="margin-top:20px;">Step 2: Connect Cardano Wallet</span>
+                <button class="btn-claim" id="connect-cardano-btn" onclick="connectCardano()" style="background:#0033AD; margin-bottom:15px;">Connect Cardano Wallet</button>
+                <div id="wallet-status" style="font-size:0.7rem; font-weight:900; margin-bottom:15px; color:var(--muted); display:none;">WALLET CONNECTED: <span id="wallet-address-display" style="color:var(--accent);"></span></div>
+
+                <button class="btn-claim" id="claim-btn" onclick="claimHandle()" disabled style="opacity:0.5;">Claim Handle & Get Link</button>
             </div>
 
             <div id="step-success" class="success-box">
@@ -187,6 +192,46 @@
     </footer>
 
     <script>
+        let connectedAddress = '';
+
+        async function connectCardano() {
+            const btn = document.getElementById('connect-cardano-btn');
+            btn.innerText = "CHECKING WALLETS...";
+            
+            try {
+                // Check for Eternl, Nami, or Lace
+                const cardano = window.cardano;
+                if (!cardano) {
+                    alert("No Cardano wallet found. Please install Nami, Eternl, or Lace.");
+                    btn.innerText = "CONNECT CARDANO WALLET";
+                    return;
+                }
+
+                // Prefer Nami for this implementation as a standard
+                const api = await cardano.nami.enable();
+                const networkId = await api.getNetworkId();
+                const usedAddresses = await api.getUsedAddresses();
+                
+                if (usedAddresses.length > 0) {
+                    connectedAddress = usedAddresses[0];
+                    document.getElementById('wallet-address-display').innerText = connectedAddress.substring(0,15) + "...";
+                    document.getElementById('wallet-status').style.display = 'block';
+                    btn.innerText = "CARDANO CONNECTED";
+                    btn.style.background = "#10B981";
+                    btn.disabled = true;
+                    
+                    // Enable the claim button
+                    document.getElementById('claim-btn').disabled = false;
+                    document.getElementById('claim-btn').style.opacity = '1';
+                    localStorage.setItem('cardano_address', connectedAddress);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Wallet connection failed or cancelled.");
+                btn.innerText = "CONNECT CARDANO WALLET";
+            }
+        }
+
         function updatePreview(val) {
             // Optional: Live check or formatting
         }
@@ -239,3 +284,4 @@
     </script>
 </body>
 </html>
+
