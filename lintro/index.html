@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lintro Realty - High-Fidelity Demo</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: #f4f4f9; color: #333; }
+        .hero { background: linear-gradient(135deg, #2c3e50, #27ae60); color: white; padding: 60px 20px; text-align: center; }
+        .logo { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; }
+        .tagline { font-size: 1.2rem; opacity: 0.9; margin-top: 10px; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-5px); }
+        .card-img { height: 200px; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #999; }
+        .card-body { padding: 20px; }
+        .card-title { font-size: 1.25rem; font-weight: 700; margin: 0; }
+        .card-price { color: #27ae60; font-weight: 800; font-size: 1.1rem; margin: 10px 0; }
+        .chat-widget { position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.2); border: 1px solid #eee; overflow: hidden; }
+        .chat-header { background: #2c3e50; color: white; padding: 15px; font-weight: 700; }
+        .chat-body { height: 300px; padding: 15px; font-size: 0.9rem; background: #fafafa; }
+        .chat-bubble { background: #eee; padding: 10px; border-radius: 8px; margin-bottom: 10px; width: fit-content; max-width: 85%; }
+        .chat-bubble.sierra { background: #d1e7dd; color: #0f5132; align-self: flex-start; }
+        .footer { text-align: center; padding: 40px; color: #999; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="logo">LINTRO REALTY</div>
+        <div class="tagline">The Future of Property Management in Trinidad</div>
+    </div>
+
+    <div class="container">
+        <h2>Featured Listings</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="card-img">Property Image Placeholder</div>
+                <div class="card-body">
+                    <div class="card-title">Luxury 3-Bedroom Villa</div>
+                    <div class="card-price">$12,000 TTD / Month</div>
+                    <p>Located in the heart of Palmiste. Fully furnished with high-fidelity finishes.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-img">Property Image Placeholder</div>
+                <div class="card-body">
+                    <div class="card-title">Modern Executive Studio</div>
+                    <div class="card-price">$4,500 TTD / Month</div>
+                    <p>San Fernando Central. Perfect for young professionals.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-widget">
+        <div class="chat-header">Sierra | Lintro Concierge</div>
+        <div class="chat-body">
+            <div class="chat-bubble sierra">Good afternoon! I'm Sierra. Are you looking to rent or need property management today?</div>
+        </div>
+        <div style="padding: 10px; border-top: 1px solid #eee;">
+            <input type="text" placeholder="Type your message..." style="width: 100%; border: none; outline: none; font-size: 0.9rem;">
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 Lintro Realty &middot; Strategic AI Deployment by Prisca Dezigns
+    </div>
+</body>
+</html>
