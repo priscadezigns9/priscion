@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sculpture Boy | Elite Fitness & Performance</title>
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --accent: #f39c12; /* Gold/Strength */
+            --text: #ffffff;
+            --bg-dark: #0f0f0f;
+        }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; background-color: var(--bg-dark); color: var(--text); line-height: 1.6; }
+        .hero { height: 80vh; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .hero h1 { font-size: 3.5rem; text-transform: uppercase; letter-spacing: 5px; margin: 0; color: var(--accent); }
+        .hero p { font-size: 1.5rem; max-width: 700px; margin: 20px 0; }
+        .btn { background: var(--accent); color: var(--primary); padding: 15px 40px; text-decoration: none; font-weight: 800; text-transform: uppercase; border-radius: 5px; transition: 0.3s; }
+        .btn:hover { transform: scale(1.05); }
+        .features { padding: 80px 20px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .feature-card { background: #222; padding: 40px; border-radius: 15px; border-bottom: 4px solid var(--accent); }
+        .feature-card h3 { color: var(--accent); margin-top: 0; font-size: 1.5rem; }
+        .app-preview { background: #1a1a1a; padding: 60px 20px; text-align: center; }
+        .phone-mock { width: 300px; height: 600px; border: 8px solid #333; border-radius: 40px; margin: 0 auto; background: #000; overflow: hidden; position: relative; }
+        .chat-widget { position: fixed; bottom: 30px; right: 30px; width: 350px; background: #fff; color: #333; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
+        .chat-header { background: var(--accent); color: var(--primary); padding: 20px; font-weight: 800; display: flex; align-items: center; justify-content: space-between; }
+        .chat-body { height: 350px; padding: 20px; overflow-y: auto; background: #f9f9f9; }
+        .msg { margin-bottom: 15px; padding: 12px; border-radius: 10px; font-size: 0.9rem; }
+        .msg.bot { background: #e8f4fd; align-self: flex-start; border-left: 4px solid var(--accent); }
+        .footer { padding: 40px; text-align: center; background: #000; font-size: 0.8rem; color: #555; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>Sculpture Boy</h1>
+        <p>Forge Your Legacy. Advanced Workout Programs & Premium Performance Apparel.</p>
+        <a href="#" class="btn">View Programs</a>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <h3>Neural Coaching</h3>
+            <p>Our AI Coach (Sierra) manages your subscriptions, nutrition logs, and workout adjustments 24/7. No more waiting for a reply.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Apparel Vault</h3>
+            <p>Exclusive access to the Sculpture Boy clothing line. Seamless ordering integrated directly into your training portal.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Sovereign Fitness Hub</h3>
+            <p>A private infrastructure for your community. You own your data, your content, and your empire.</p>
+        </div>
+    </div>
+
+    <div class="app-preview">
+        <h2>Your Digital Empire</h2>
+        <div class="phone-mock">
+            <div style="padding: 20px; text-align: left;">
+                <h4 style="color: var(--accent);">Workout of the Day</h4>
+                <div style="background: #222; height: 100px; border-radius: 10px; margin: 10px 0;"></div>
+                <h4 style="color: var(--accent);">Your Stats</h4>
+                <div style="background: #222; height: 200px; border-radius: 10px; margin: 10px 0;"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-widget">
+        <div class="chat-header">
+            <span>Sculpture Boy Assistant</span>
+            <span style="font-size: 0.7rem;">Powered by Sierra</span>
+        </div>
+        <div class="chat-body">
+            <div class="msg bot">Welcome to Sculpture Boy. I'm Sierra. Are you looking to join a workout program or check out the new apparel drop?</div>
+            <div class="msg bot" style="font-style: italic; font-size: 0.8rem; color: #777;">*Analyzing your fitness goals...*</div>
+        </div>
+        <div style="padding: 15px; border-top: 1px solid #eee;">
+            <input type="text" placeholder="Type to start your transformation..." style="width: 100%; border: none; outline: none;">
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 Sculpture Boy &middot; Built & Managed by Prisca Dezigns
+    </div>
+</body>
+</html>
