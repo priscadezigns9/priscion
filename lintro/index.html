@@ -1,70 +1,531 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lintro Realty - High-Fidelity Demo</title>
-    <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; background-color: #f4f4f9; color: #333; }
-        .hero { background: linear-gradient(135deg, #2c3e50, #27ae60); color: white; padding: 60px 20px; text-align: center; }
-        .logo { font-size: 2.5rem; font-weight: 800; letter-spacing: 2px; }
-        .tagline { font-size: 1.2rem; opacity: 0.9; margin-top: 10px; }
-        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); }
-        .card-img { height: 200px; background: #ddd; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #999; }
-        .card-body { padding: 20px; }
-        .card-title { font-size: 1.25rem; font-weight: 700; margin: 0; }
-        .card-price { color: #27ae60; font-weight: 800; font-size: 1.1rem; margin: 10px 0; }
-        .chat-widget { position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.2); border: 1px solid #eee; overflow: hidden; }
-        .chat-header { background: #2c3e50; color: white; padding: 15px; font-weight: 700; }
-        .chat-body { height: 300px; padding: 15px; font-size: 0.9rem; background: #fafafa; }
-        .chat-bubble { background: #eee; padding: 10px; border-radius: 8px; margin-bottom: 10px; width: fit-content; max-width: 85%; }
-        .chat-bubble.sierra { background: #d1e7dd; color: #0f5132; align-self: flex-start; }
-        .footer { text-align: center; padding: 40px; color: #999; font-size: 0.8rem; }
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Lintro Realty | Property Management Trinidad</title>
+  <meta name="description" content="Lintro Realty Property Management — Listing, Buying, Selling, Renting, Leasing, and Investment Analysis across Trinidad and Tobago."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root{
+      --green:#1B6B3A;
+      --green-light:#27ae60;
+      --green-pale:#e8f5ee;
+      --dark:#0f1e16;
+      --text:#1a1a1a;
+      --muted:#666;
+      --bg:#FAFAF7;
+      --white:#fff;
+      --border:#e0e8e3;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;line-height:1.6}
+    a{text-decoration:none;color:inherit}
+
+    /* ─── NAV ─── */
+    nav{position:fixed;top:0;left:0;right:0;z-index:999;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;transition:all 0.3s;background:rgba(15,30,22,0.97);backdrop-filter:blur(12px)}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:2px}
+    .nav-logo span{color:var(--green-light)}
+    .nav-links{display:flex;gap:28px;align-items:center}
+    .nav-links a{font-size:0.7rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.65);transition:color 0.2s}
+    .nav-links a:hover{color:#fff}
+    .nav-cta{background:var(--green-light);color:#fff!important;padding:10px 22px;border-radius:3px;font-size:0.68rem!important;font-weight:700!important;letter-spacing:1.5px!important;transition:background 0.2s!important}
+    .nav-cta:hover{background:var(--green)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+    .hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:2px;transition:all 0.3s}
+    @media(max-width:768px){
+      .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:rgba(15,30,22,0.98);flex-direction:column;align-items:center;padding:24px 0;gap:20px}
+      .nav-links.open{display:flex}
+      .hamburger{display:flex}
+    }
+
+    /* ─── HERO ─── */
+    .hero{min-height:100vh;background:linear-gradient(150deg,var(--dark) 0%,#0d2b1a 50%,#1a3d25 100%);display:flex;align-items:center;padding:100px 6% 60px;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1600&q=80') center/cover;opacity:0.12}
+    .hero-inner{position:relative;z-index:1;max-width:700px}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.3);color:var(--green-light);padding:6px 16px;border-radius:20px;font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5.5vw,4rem);font-weight:900;color:#fff;line-height:1.15;margin-bottom:20px}
+    .hero h1 em{color:var(--green-light);font-style:normal}
+    .hero p{font-size:1.05rem;color:rgba(255,255,255,0.7);max-width:540px;margin-bottom:36px;line-height:1.75}
+    .hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+    .btn-green{background:var(--green-light);color:#fff;padding:14px 32px;font-size:0.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;border-radius:3px;transition:all 0.25s;display:inline-flex;align-items:center;gap:8px}
+    .btn-green:hover{background:var(--green);transform:translateY(-2px)}
+    .btn-outline-white{border:1.5px solid rgba(255,255,255,0.4);color:#fff;padding:14px 32px;font-size:0.78rem;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-radius:3px;transition:all 0.25s}
+    .btn-outline-white:hover{border-color:#fff;background:rgba(255,255,255,0.08)}
+    .hero-stats{display:flex;gap:40px;margin-top:48px;padding-top:36px;border-top:1px solid rgba(255,255,255,0.12);flex-wrap:wrap}
+    .stat{text-align:center}
+    .stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--green-light)}
+    .stat-label{font-size:0.65rem;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+
+    /* ─── SECTION COMMONS ─── */
+    section{padding:80px 6%}
+    .section-label{font-size:0.62rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--green-light);margin-bottom:12px}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:900;line-height:1.25;margin-bottom:16px}
+    .section-sub{color:var(--muted);max-width:560px;line-height:1.75;margin-bottom:48px}
+
+    /* ─── SERVICES ─── */
+    .services-bg{background:#fff}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px}
+    .service-card{border:1px solid var(--border);border-radius:8px;padding:32px 28px;transition:all 0.25s;background:var(--bg)}
+    .service-card:hover{border-color:var(--green-light);box-shadow:0 6px 24px rgba(39,174,96,0.1);transform:translateY(-3px)}
+    .service-icon{width:48px;height:48px;background:var(--green-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px}
+    .service-card h3{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;margin-bottom:8px}
+    .service-card p{font-size:0.85rem;color:var(--muted);line-height:1.65}
+
+    /* ─── LISTINGS ─── */
+    .listings-bg{background:var(--bg)}
+    .listings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px}
+    .listing-card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid var(--border);transition:all 0.25s}
+    .listing-card:hover{box-shadow:0 10px 30px rgba(0,0,0,0.1);transform:translateY(-4px)}
+    .listing-img{height:220px;background:#c8ddd0;position:relative;overflow:hidden}
+    .listing-img img{width:100%;height:100%;object-fit:cover}
+    .listing-badge{position:absolute;top:14px;left:14px;background:var(--green-light);color:#fff;font-size:0.6rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:5px 12px;border-radius:2px}
+    .listing-badge.sale{background:#c0392b}
+    .listing-body{padding:22px}
+    .listing-price{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:900;color:var(--green);margin-bottom:6px}
+    .listing-price span{font-size:0.75rem;font-weight:400;color:var(--muted);font-family:'Inter',sans-serif}
+    .listing-title{font-size:1rem;font-weight:700;margin-bottom:6px}
+    .listing-location{font-size:0.78rem;color:var(--muted);display:flex;align-items:center;gap:5px;margin-bottom:14px}
+    .listing-meta{display:flex;gap:16px;padding-top:14px;border-top:1px solid var(--border);font-size:0.75rem;color:var(--muted)}
+    .listing-meta span{display:flex;align-items:center;gap:4px}
+    .listing-cta{display:block;margin-top:18px;background:var(--green-pale);color:var(--green);text-align:center;padding:11px;border-radius:4px;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all 0.2s}
+    .listing-cta:hover{background:var(--green-light);color:#fff}
+
+    /* ─── WHY ─── */
+    .why-bg{background:var(--dark);color:#fff}
+    .why-bg .section-title{color:#fff}
+    .why-bg .section-sub{color:rgba(255,255,255,0.6)}
+    .why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+    .why-card{padding:28px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;transition:border-color 0.2s}
+    .why-card:hover{border-color:var(--green-light)}
+    .why-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--green-light);margin-bottom:12px}
+    .why-card h3{font-size:0.95rem;font-weight:700;margin-bottom:8px;color:#fff}
+    .why-card p{font-size:0.82rem;color:rgba(255,255,255,0.55);line-height:1.65}
+
+    /* ─── TESTIMONIAL ─── */
+    .testi-bg{background:#fff}
+    .testi-card{background:var(--green-pale);border-left:4px solid var(--green-light);border-radius:6px;padding:32px;margin-bottom:20px;max-width:720px}
+    .testi-text{font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;color:var(--dark);line-height:1.7;margin-bottom:16px}
+    .testi-author{font-size:0.78rem;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase}
+
+    /* ─── CHATBOT ─── */
+    .chat-fab{position:fixed;bottom:28px;right:28px;z-index:1000;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+    .chat-toggle{width:58px;height:58px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(39,174,96,0.45);cursor:pointer;border:none;transition:transform 0.2s}
+    .chat-toggle:hover{transform:scale(1.08)}
+    .chat-toggle svg{width:26px;height:26px;fill:#fff}
+    .chat-window{width:320px;background:#fff;border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.18);overflow:hidden;display:none;flex-direction:column;max-height:440px}
+    .chat-window.open{display:flex}
+    .chat-head{background:var(--dark);padding:16px 20px;display:flex;align-items:center;gap:12px}
+    .chat-avatar{width:38px;height:38px;background:var(--green-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:0.9rem}
+    .chat-head-info h4{color:#fff;font-size:0.88rem;font-weight:700;margin-bottom:1px}
+    .chat-head-info p{color:rgba(255,255,255,0.55);font-size:0.68rem}
+    .chat-body{flex:1;padding:16px;overflow-y:auto;background:#f7f9f7;display:flex;flex-direction:column;gap:10px}
+    .msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:0.83rem;line-height:1.55}
+    .msg.sierra{background:var(--green-pale);color:var(--dark);align-self:flex-start;border-bottom-left-radius:3px}
+    .msg.user{background:var(--green-light);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+    .chat-quick{display:flex;flex-direction:column;gap:6px;align-self:flex-start;margin-top:4px}
+    .quick-btn{background:#fff;border:1px solid var(--border);color:var(--green);padding:7px 14px;border-radius:20px;font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;text-align:left}
+    .quick-btn:hover{background:var(--green-light);color:#fff;border-color:var(--green-light)}
+    .chat-input-row{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--border);background:#fff}
+    .chat-input{flex:1;border:1px solid var(--border);border-radius:20px;padding:9px 14px;font-size:0.82rem;outline:none;font-family:'Inter',sans-serif}
+    .chat-input:focus{border-color:var(--green-light)}
+    .chat-send{background:var(--green-light);color:#fff;border:none;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s}
+    .chat-send:hover{background:var(--green)}
+
+    /* ─── CONTACT ─── */
+    .contact-bg{background:var(--green-pale)}
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+    @media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+    .contact-info p{font-size:0.9rem;color:var(--muted);margin-bottom:28px;line-height:1.75}
+    .contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-size:0.88rem}
+    .contact-detail .icon{width:38px;height:38px;background:var(--green-light);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;color:#fff}
+    .contact-form{background:#fff;border-radius:10px;padding:36px;border:1px solid var(--border)}
+    .form-row{margin-bottom:18px}
+    .form-row label{display:block;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:7px}
+    .form-row input,.form-row select,.form-row textarea{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:12px 15px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s;background:#fafaf7}
+    .form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--green-light)}
+    .form-row textarea{height:110px;resize:vertical}
+    .form-submit{background:var(--green-light);color:#fff;border:none;padding:14px 32px;font-size:0.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;border-radius:4px;cursor:pointer;width:100%;transition:background 0.2s}
+    .form-submit:hover{background:var(--green)}
+
+    /* ─── FOOTER ─── */
+    footer{background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:36px 6%;font-size:0.78rem;line-height:2}
+    footer strong{color:#fff;font-weight:700}
+    footer a{color:var(--green-light)}
+
+    /* ─── WA FLOAT ─── */
+    .wa-float{position:fixed;bottom:100px;right:32px;z-index:998;background:#25D366;color:#fff;width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,211,102,0.5);font-size:1.4rem;transition:transform 0.2s}
+    .wa-float:hover{transform:scale(1.1)}
+  </style>
 </head>
 <body>
-    <div class="hero">
-        <div class="logo">LINTRO REALTY</div>
-        <div class="tagline">The Future of Property Management in Trinidad</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">LINTRO<span>.</span></div>
+  <div class="nav-links" id="navLinks">
+    <a href="#services">Services</a>
+    <a href="#listings">Listings</a>
+    <a href="#why">Why Us</a>
+    <a href="#contact">Contact</a>
+    <a href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!%20I%27d%20like%20to%20enquire%20about%20a%20property." class="nav-cta" target="_blank" rel="noopener">WhatsApp Us</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+      San Fernando · Trinidad & Tobago
+    </div>
+    <h1>Your Property.<br/><em>Expertly Managed.</em></h1>
+    <p>From listing to lease — rent collection to real estate investment — Lintro Realty handles every detail of your property journey with professionalism and precision.</p>
+    <div class="hero-btns">
+      <a class="btn-green" href="#listings">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        View Listings
+      </a>
+      <a class="btn-outline-white" href="#contact">Get a Free Consultation</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">2,500+</div><div class="stat-label">Followers</div></div>
+      <div class="stat"><div class="stat-num">7+</div><div class="stat-label">Service Areas</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Dedicated</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-bg" id="services">
+  <div class="section-label">What We Do</div>
+  <div class="section-title">Full-Spectrum Property Services</div>
+  <p class="section-sub">From individual landlords to investment portfolios, Lintro Realty manages every layer of your property needs under one roof.</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🏠</div>
+      <h3>Listing · Buying · Selling</h3>
+      <p>High-fidelity property marketing across Trinidad and Tobago. We connect qualified buyers and sellers fast.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔑</div>
+      <h3>Renting & Leasing</h3>
+      <p>Residential and commercial leasing handled from start to finish — viewings, vetting, and agreements.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💰</div>
+      <h3>Rent Collection & Evictions</h3>
+      <p>We collect on your behalf and handle legal eviction proceedings so you never have to chase a tenant.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Investment Analysis</h3>
+      <p>Data-backed real estate investment reviews to help you identify high-yield opportunities across TT.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚖️</div>
+      <h3>Legal Services</h3>
+      <p>Real estate legal support from contract drafting to dispute resolution — protecting your assets at every step.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛡️</div>
+      <h3>Asset Protection Consulting</h3>
+      <p>Strategic advisory to protect, grow, and future-proof your property portfolio for the long term.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LISTINGS -->
+<section class="listings-bg" id="listings">
+  <div class="section-label">Active Listings</div>
+  <div class="section-title">Properties Available Now</div>
+  <p class="section-sub">Real listings sourced directly from Lintro Realty's active portfolio. Enquire via WhatsApp for viewings.</p>
+  <div class="listings-grid">
+
+    <div class="listing-card">
+      <div class="listing-img">
+        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" alt="Blue Range, Diego Martin"/>
+        <span class="listing-badge sale">For Sale</span>
+      </div>
+      <div class="listing-body">
+        <div class="listing-price">TT$4.3M <span>(was TT$5.2M)</span></div>
+        <div class="listing-title">Renovated 3-Bedroom Single Family Home</div>
+        <div class="listing-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--green-light)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          Blue Range, Diego Martin (Unfurnished)
+        </div>
+        <div class="listing-meta">
+          <span>🛏 3 Beds</span>
+          <span>🏠 Single Family</span>
+          <span>✨ Renovated</span>
+        </div>
+        <a class="listing-cta" href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!%20I%27m%20interested%20in%20the%20Blue%20Range%2C%20Diego%20Martin%20property%20(TT%244.3M).%20Please%20book%20me%20a%20viewing." target="_blank" rel="noopener">Enquire on WhatsApp →</a>
+      </div>
     </div>
 
-    <div class="container">
-        <h2>Featured Listings</h2>
-        <div class="grid">
-            <div class="card">
-                <div class="card-img">Property Image Placeholder</div>
-                <div class="card-body">
-                    <div class="card-title">Luxury 3-Bedroom Villa</div>
-                    <div class="card-price">$12,000 TTD / Month</div>
-                    <p>Located in the heart of Palmiste. Fully furnished with high-fidelity finishes.</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-img">Property Image Placeholder</div>
-                <div class="card-body">
-                    <div class="card-title">Modern Executive Studio</div>
-                    <div class="card-price">$4,500 TTD / Month</div>
-                    <p>San Fernando Central. Perfect for young professionals.</p>
-                </div>
-            </div>
+    <div class="listing-card">
+      <div class="listing-img">
+        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="Luxury Villa Palmiste"/>
+        <span class="listing-badge">For Rent</span>
+      </div>
+      <div class="listing-body">
+        <div class="listing-price">TT$12,000 <span>/ month</span></div>
+        <div class="listing-title">Luxury 3-Bedroom Villa</div>
+        <div class="listing-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--green-light)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          Palmiste, San Fernando (Fully Furnished)
         </div>
+        <div class="listing-meta">
+          <span>🛏 3 Beds</span>
+          <span>🏊 Premium Finishes</span>
+          <span>🔑 Furnished</span>
+        </div>
+        <a class="listing-cta" href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!%20I%27m%20interested%20in%20the%20Palmiste%20Villa%20(TT%2412%2C000%2Fmo).%20Please%20book%20me%20a%20viewing." target="_blank" rel="noopener">Enquire on WhatsApp →</a>
+      </div>
     </div>
 
-    <div class="chat-widget">
-        <div class="chat-header">Sierra | Lintro Concierge</div>
-        <div class="chat-body">
-            <div class="chat-bubble sierra">Good afternoon! I'm Sierra. Are you looking to rent or need property management today?</div>
+    <div class="listing-card">
+      <div class="listing-img">
+        <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80" alt="Studio San Fernando"/>
+        <span class="listing-badge">For Rent</span>
+      </div>
+      <div class="listing-body">
+        <div class="listing-price">TT$4,500 <span>/ month</span></div>
+        <div class="listing-title">Modern Executive Studio</div>
+        <div class="listing-location">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--green-light)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          San Fernando Central
         </div>
-        <div style="padding: 10px; border-top: 1px solid #eee;">
-            <input type="text" placeholder="Type your message..." style="width: 100%; border: none; outline: none; font-size: 0.9rem;">
+        <div class="listing-meta">
+          <span>🏙 Studio</span>
+          <span>💼 Executive</span>
+          <span>📍 Central</span>
         </div>
+        <a class="listing-cta" href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!%20I%27m%20interested%20in%20the%20San%20Fernando%20Executive%20Studio%20(TT%244%2C500%2Fmo).%20Please%20book%20me%20a%20viewing." target="_blank" rel="noopener">Enquire on WhatsApp →</a>
+      </div>
     </div>
 
-    <div class="footer">
-        &copy; 2026 Lintro Realty &middot; Strategic AI Deployment by Prisca Dezigns
+  </div>
+
+  <div style="text-align:center;margin-top:36px">
+    <a class="btn-green" href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!%20I%27d%20like%20to%20see%20your%20full%20list%20of%20available%20properties." target="_blank" rel="noopener">See All Listings on WhatsApp →</a>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why-bg" id="why">
+  <div class="section-label">Why Lintro</div>
+  <div class="section-title">Built on Trust. Driven by Results.</div>
+  <p class="section-sub">We don't just manage properties — we protect your investment and your peace of mind.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <h3>End-to-End Management</h3>
+      <p>From listing to eviction, every step is handled professionally so you can stay hands-free.</p>
     </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <h3>Legal Expertise</h3>
+      <p>Our legal services arm ensures your contracts, evictions, and disputes are always handled correctly.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <h3>Investment Intelligence</h3>
+      <p>Data-driven analysis means you know exactly which properties to acquire, hold, or divest.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <h3>Local Authority</h3>
+      <p>Based in San Fernando, we know Trinidad's property market better than anyone else in the south.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testi-bg">
+  <div class="section-label">Client Trust</div>
+  <div class="section-title">What Our Clients Say</div>
+  <div class="testi-card">
+    <div class="testi-text">"Lintro Realty handled everything from finding tenants to rent collection. I haven't had to worry about my property in over a year. Absolutely professional."</div>
+    <div class="testi-author">— Property Owner, San Fernando</div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-bg" id="contact">
+  <div class="section-label">Get In Touch</div>
+  <div class="section-title">Book a Free Consultation</div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>Whether you're looking to rent, buy, sell, or simply need expert property management — we're ready. Reach us directly on WhatsApp for the fastest response.</p>
+      <div class="contact-detail">
+        <div class="icon">📞</div>
+        <div><strong>+1 868-770-4976</strong><br/><small style="color:var(--muted)">Call or WhatsApp</small></div>
+      </div>
+      <div class="contact-detail">
+        <div class="icon">📧</div>
+        <div><strong>lintrorealtypmgt.info@gmail.com</strong></div>
+      </div>
+      <div class="contact-detail">
+        <div class="icon">📍</div>
+        <div><strong>San Fernando, Trinidad & Tobago</strong></div>
+      </div>
+      <div style="margin-top:28px">
+        <a class="btn-green" href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!%20I%27d%20like%20to%20book%20a%20free%20consultation." target="_blank" rel="noopener">
+          📲 Message Us on WhatsApp
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <form onsubmit="handleForm(event)">
+        <div class="form-row">
+          <label>Your Name</label>
+          <input type="text" id="fname" placeholder="e.g. Marcus Joseph" required/>
+        </div>
+        <div class="form-row">
+          <label>Phone / WhatsApp</label>
+          <input type="tel" id="fphone" placeholder="e.g. 868-XXX-XXXX" required/>
+        </div>
+        <div class="form-row">
+          <label>I'm interested in</label>
+          <select id="ftype">
+            <option value="Renting a Property">Renting a Property</option>
+            <option value="Buying a Property">Buying a Property</option>
+            <option value="Selling a Property">Selling a Property</option>
+            <option value="Property Management">Property Management</option>
+            <option value="Investment Analysis">Investment Analysis</option>
+            <option value="Legal Services">Legal Services</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Message</label>
+          <textarea id="fmsg" placeholder="Tell us a bit more about what you need..."></textarea>
+        </div>
+        <button class="form-submit" type="submit">Send via WhatsApp →</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>LINTRO REALTY</strong> · Property Management · San Fernando, Trinidad &amp; Tobago<br/>
+  <a href="mailto:lintrorealtypmgt.info@gmail.com">lintrorealtypmgt.info@gmail.com</a> · <a href="tel:+18687704976">+1 868-770-4976</a><br/>
+  <span style="font-size:0.7rem;opacity:0.5;margin-top:8px;display:block">AI-Powered Website by <a href="https://priscadezigns.org">Prisca Dezigns</a></span>
+</footer>
+
+<!-- WA FLOAT -->
+<a class="wa-float" href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.12 1.526 5.855L.057 23.882l6.2-1.627A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.8 9.8 0 01-5.032-1.389l-.36-.214-3.737.98 1-3.643-.235-.374A9.818 9.818 0 1112 21.818z"/></svg>
+</a>
+
+<!-- CHATBOT -->
+<div class="chat-fab">
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-head">
+      <div class="chat-avatar">S</div>
+      <div class="chat-head-info">
+        <h4>Sierra · Lintro Concierge</h4>
+        <p>Typically replies instantly</p>
+      </div>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="msg sierra">👋 Good evening! I'm Sierra, Lintro Realty's AI concierge. How can I help you today?</div>
+      <div class="chat-quick">
+        <button class="quick-btn" onclick="quickReply('I want to rent a property')">🔑 I want to rent a property</button>
+        <button class="quick-btn" onclick="quickReply('I want to buy a property')">🏠 I want to buy a property</button>
+        <button class="quick-btn" onclick="quickReply('I need property management')">📋 I need property management</button>
+        <button class="quick-btn" onclick="quickReply('I want to see all listings')">📋 Show me all listings</button>
+      </div>
+    </div>
+    <div class="chat-input-row">
+      <input class="chat-input" id="chatInput" type="text" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()"/>
+      <button class="chat-send" onclick="sendChat()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+  <button class="chat-toggle" id="chatToggle" onclick="toggleChat()" aria-label="Open chat">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+  </button>
+</div>
+
+<script>
+function handleForm(e){
+  e.preventDefault();
+  const name=document.getElementById('fname').value;
+  const phone=document.getElementById('fphone').value;
+  const type=document.getElementById('ftype').value;
+  const msg=document.getElementById('fmsg').value;
+  const text=`Hi Lintro Realty! My name is ${name}. Phone: ${phone}. I'm interested in: ${type}. ${msg}`;
+  window.open('https://wa.me/18687704976?text='+encodeURIComponent(text),'_blank');
+}
+
+function toggleChat(){
+  const w=document.getElementById('chatWindow');
+  w.classList.toggle('open');
+}
+
+const sierraReplies={
+  'rent':['Great! We have several rental properties available across Trinidad. Are you looking in North, South, or Central TT?','Our rentals range from TT$4,500/month for studios to TT$12,000/month for luxury villas. Which budget works for you?'],
+  'buy':["Perfect! We have listings from TT$4.3M and up. I'll connect you with our sales team now.",'Buying is a great decision right now. Let me get your details to a specialist.'],
+  'manage':['We offer full property management — rent collection, maintenance, evictions, and legal support. How many units do you have?','Our management packages are tailored to your portfolio size. Want to book a free consultation?'],
+  'listing':['Here are our current listings above! The Blue Range 3-bed (TT$4.3M for sale) and Palmiste villa (TT$12K/mo) are very popular.','Tap any listing above to enquire directly, or I can connect you with an agent now.'],
+  'default':["Thanks for reaching out! Let me connect you with a Lintro Realty agent on WhatsApp for the fastest help.",'I'd love to help you further. Our team is available on WhatsApp at +1 868-770-4976.']
+};
+
+function getReply(msg){
+  const m=msg.toLowerCase();
+  if(m.includes('rent')||m.includes('lease'))return sierraReplies.rent[Math.floor(Math.random()*2)];
+  if(m.includes('buy')||m.includes('sale')||m.includes('purchase'))return sierraReplies.buy[Math.floor(Math.random()*2)];
+  if(m.includes('manage')||m.includes('management'))return sierraReplies.manage[Math.floor(Math.random()*2)];
+  if(m.includes('list')||m.includes('property')||m.includes('properties'))return sierraReplies.listing[Math.floor(Math.random()*2)];
+  return sierraReplies.default[Math.floor(Math.random()*2)];
+}
+
+function addMsg(text,type){
+  const body=document.getElementById('chatBody');
+  const d=document.createElement('div');
+  d.className='msg '+type;
+  d.textContent=text;
+  body.appendChild(d);
+  body.scrollTop=body.scrollHeight;
+}
+
+function addWABtn(){
+  const body=document.getElementById('chatBody');
+  const a=document.createElement('a');
+  a.href="https://wa.me/18687704976?text=Hi%20Lintro%20Realty!%20Sierra%20connected%20me.%20I%20need%20help%20with%20a%20property.";
+  a.target="_blank";
+  a.style.cssText="display:inline-block;margin:6px 0;background:#25D366;color:#fff;padding:9px 18px;border-radius:20px;font-size:0.78rem;font-weight:700;text-decoration:none;";
+  a.textContent="📲 Continue on WhatsApp →";
+  body.appendChild(a);
+  body.scrollTop=body.scrollHeight;
+}
+
+function sendChat(){
+  const input=document.getElementById('chatInput');
+  const val=input.value.trim();
+  if(!val)return;
+  addMsg(val,'user');
+  input.value='';
+  setTimeout(()=>{
+    const reply=getReply(val);
+    addMsg(reply,'sierra');
+    if(reply.includes('WhatsApp')||reply.includes('agent'))addWABtn();
+  },700);
+}
+
+function quickReply(text){
+  document.getElementById('chatInput').value=text;
+  sendChat();
+  document.querySelectorAll('.chat-quick').forEach(el=>el.remove());
+}
+</script>
 </body>
 </html>
