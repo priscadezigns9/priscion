@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Advance Printing TT | Banners, Signs &amp; Signage — San Fernando</title>
+<meta name="description" content="Trinidad's leading print shop for banners, flags, labels, vehicle wraps, and custom signage. San Fernando. Call/WhatsApp (868) 706-3018."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --ink:#0A0A0A;--blue:#003087;--blue-light:#0050C8;--cyan:#00AAFF;
+    --yellow:#FFD100;--white:#FFFFFF;--grey:#6B7280;--light:#F8F9FB;--mid:#E5E7EB;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter',sans-serif;color:var(--ink);background:var(--white);}
+
+  /* ── NAV ── */
+  nav{position:fixed;top:0;left:0;right:0;z-index:999;background:var(--ink);padding:0 5%;}
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px;}
+  .logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;}
+  .logo-mark{width:32px;height:32px;background:var(--blue-light);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white);}
+  .logo-text{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:700;color:var(--white);letter-spacing:.02em;}
+  .logo-text span{color:var(--cyan);}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.85rem;transition:.2s;}
+  .nav-links a:hover{color:var(--cyan);}
+  .nav-cta{background:var(--blue-light);color:var(--white)!important;padding:.45rem 1.2rem;border-radius:4px;}
+  .nav-cta:hover{background:var(--cyan)!important;}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{width:24px;height:2px;background:var(--white);}
+  @media(max-width:768px){
+    .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:var(--ink);flex-direction:column;padding:1.5rem 5%;gap:1rem;}
+    .nav-links.open{display:flex;}
+    .hamburger{display:flex;}
+  }
+
+  /* ── HERO ── */
+  .hero{min-height:100vh;background:var(--ink);padding:100px 5% 5rem;display:flex;align-items:center;position:relative;overflow:hidden;}
+  .hero::before{content:'';position:absolute;top:0;right:0;width:55%;height:100%;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-light) 50%,var(--cyan) 100%);clip-path:polygon(15% 0,100% 0,100% 100%,0% 100%);}
+  .hero-content{position:relative;z-index:2;max-width:560px;}
+  .hero-eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--cyan);margin-bottom:1rem;}
+  .hero h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(3rem,6vw,5rem);font-weight:800;color:var(--white);line-height:1.0;margin-bottom:1.2rem;text-transform:uppercase;}
+  .hero h1 span{color:var(--yellow);}
+  .hero p{color:rgba(255,255,255,.75);font-size:1rem;line-height:1.7;margin-bottom:2rem;max-width:460px;}
+  .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.8rem;border-radius:4px;font-size:.9rem;font-weight:700;text-decoration:none;transition:.25s;cursor:pointer;border:none;text-transform:uppercase;letter-spacing:.05em;}
+  .btn-primary{background:var(--blue-light);color:var(--white);}
+  .btn-primary:hover{background:var(--cyan);}
+  .btn-yellow{background:var(--yellow);color:var(--ink);}
+  .btn-yellow:hover{opacity:.9;}
+  .btn-outline{background:transparent;color:var(--white);border:2px solid rgba(255,255,255,.4);}
+  .btn-outline:hover{border-color:var(--cyan);color:var(--cyan);}
+  .hero-badges{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:2.5rem;}
+  .badge{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:rgba(255,255,255,.6);}
+  .badge strong{color:var(--white);}
+
+  /* ── SERVICES TICKER ── */
+  .ticker{background:var(--blue-light);padding:.75rem 0;overflow:hidden;white-space:nowrap;}
+  .ticker-inner{display:inline-flex;gap:3rem;animation:scroll 30s linear infinite;}
+  .ticker-inner span{font-size:.8rem;font-weight:600;color:var(--white);letter-spacing:.1em;text-transform:uppercase;}
+  .ticker-inner span::before{content:'▶ ';}
+  @keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+  /* ── SECTION BASE ── */
+  section{padding:5rem 5%;}
+  .section-label{font-size:.7rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:.5rem;}
+  .section-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;text-transform:uppercase;color:var(--ink);line-height:1.1;margin-bottom:.8rem;}
+  .section-sub{color:var(--grey);font-size:.95rem;line-height:1.7;}
+  .centered{text-align:center;}
+  .centered .section-sub{margin:0 auto 3rem;max-width:540px;}
+
+  /* ── PRODUCTS ── */
+  .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:3rem;}
+  .product-card{background:var(--light);border-radius:6px;overflow:hidden;border:1px solid var(--mid);transition:.3s;cursor:pointer;}
+  .product-card:hover{border-color:var(--blue-light);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,80,200,.12);}
+  .product-img{aspect-ratio:16/9;overflow:hidden;background:var(--mid);}
+  .product-img img{width:100%;height:100%;object-fit:cover;transition:.4s;}
+  .product-card:hover .product-img img{transform:scale(1.05);}
+  .product-body{padding:1.2rem;}
+  .product-tag{display:inline-block;background:var(--blue-light);color:var(--white);font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;border-radius:2px;margin-bottom:.6rem;}
+  .product-body h3{font-family:'Barlow Condensed',sans-serif;font-size:1.15rem;font-weight:700;text-transform:uppercase;margin-bottom:.4rem;}
+  .product-body p{font-size:.82rem;color:var(--grey);line-height:1.55;}
+
+  /* ── WHY US ── */
+  .why{background:var(--ink);}
+  .why .section-label{color:var(--cyan);}
+  .why .section-title{color:var(--white);}
+  .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem;}
+  .why-img{border-radius:6px;overflow:hidden;aspect-ratio:4/3;background:var(--blue);}
+  .why-img img{width:100%;height:100%;object-fit:cover;}
+  .why-points{display:grid;gap:1.5rem;}
+  .why-point{display:flex;gap:1rem;align-items:flex-start;}
+  .why-icon{width:44px;height:44px;min-width:44px;background:rgba(0,170,255,.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+  .why-point h4{color:var(--white);font-size:.95rem;font-weight:600;margin-bottom:.3rem;}
+  .why-point p{color:rgba(255,255,255,.55);font-size:.82rem;line-height:1.6;}
+  @media(max-width:768px){.why-grid{grid-template-columns:1fr;}}
+
+  /* ── QUOTE CALCULATOR ── */
+  .calculator{background:var(--light);border:1px solid var(--mid);}
+  .calc-box{background:var(--white);border-radius:8px;border:1px solid var(--mid);padding:2.5rem;max-width:720px;margin:3rem auto 0;}
+  .calc-title{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;text-transform:uppercase;margin-bottom:1.5rem;color:var(--ink);}
+  .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+  .calc-field label{display:block;font-size:.78rem;font-weight:600;color:var(--grey);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05em;}
+  .calc-field input,.calc-field select{width:100%;padding:.75rem 1rem;border:1px solid var(--mid);border-radius:4px;font-size:.9rem;outline:none;transition:.2s;font-family:'Inter',sans-serif;}
+  .calc-field input:focus,.calc-field select:focus{border-color:var(--blue-light);}
+  .calc-result{margin-top:1.5rem;padding:1.2rem;background:var(--blue-light);border-radius:6px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+  .calc-result .estimate{color:var(--white);}
+  .calc-result .estimate small{display:block;font-size:.72rem;opacity:.7;}
+  .calc-result .estimate strong{font-size:1.5rem;font-family:'Barlow Condensed',sans-serif;}
+  @media(max-width:640px){.calc-row{grid-template-columns:1fr;}}
+
+  /* ── PROCESS ── */
+  .process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0;margin-top:3rem;position:relative;}
+  .process-steps::before{content:'';position:absolute;top:26px;left:0;right:0;height:2px;background:var(--mid);z-index:0;}
+  .process-step{text-align:center;position:relative;z-index:1;padding:0 1rem;}
+  .step-dot{width:52px;height:52px;background:var(--blue-light);color:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;margin:0 auto 1rem;}
+  .process-step h4{font-size:.9rem;font-weight:700;margin-bottom:.4rem;}
+  .process-step p{font-size:.8rem;color:var(--grey);line-height:1.5;}
+  @media(max-width:600px){.process-steps::before{display:none;}}
+
+  /* ── GALLERY ── */
+  .gallery{background:var(--ink);}
+  .gallery .section-label{color:var(--cyan);}
+  .gallery .section-title{color:var(--white);}
+  .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:200px 200px;gap:.5rem;margin-top:2rem;}
+  .gallery-grid img{width:100%;height:100%;object-fit:cover;border-radius:4px;transition:.3s;}
+  .gallery-grid img:first-child{grid-column:span 2;grid-row:span 2;}
+  .gallery-grid img:hover{opacity:.85;}
+  @media(max-width:600px){.gallery-grid{grid-template-columns:1fr 1fr;}.gallery-grid img:first-child{grid-column:span 2;grid-row:span 1;}}
+
+  /* ── QUOTE FORM ── */
+  .quote-form{background:var(--blue-light);}
+  .quote-form .section-title{color:var(--white);}
+  .quote-form .section-label{color:var(--yellow);}
+  .quote-form .section-sub{color:rgba(255,255,255,.75);}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2.5rem;max-width:860px;margin-left:auto;margin-right:auto;}
+  .form-group{display:flex;flex-direction:column;gap:.4rem;}
+  .form-group.full{grid-column:span 2;}
+  .form-group label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.8);text-transform:uppercase;letter-spacing:.05em;}
+  .form-group input,.form-group select,.form-group textarea{padding:.75rem 1rem;border:1px solid rgba(255,255,255,.2);border-radius:4px;background:rgba(255,255,255,.1);color:var(--white);font-size:.9rem;outline:none;font-family:'Inter',sans-serif;}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,.4);}
+  .form-group select option{background:var(--ink);}
+  .form-group textarea{resize:vertical;min-height:100px;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--yellow);}
+  .form-submit{grid-column:span 2;text-align:center;margin-top:.5rem;}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr;}.form-group.full,.form-submit{grid-column:span 1;}}
+
+  /* ── CONTACT ── */
+  .contact-bar{background:var(--yellow);padding:2.5rem 5%;}
+  .contact-bar-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;max-width:960px;margin:0 auto;}
+  .contact-bar h3{font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:800;text-transform:uppercase;color:var(--ink);}
+  .contact-bar p{color:rgba(0,0,0,.6);font-size:.9rem;}
+  .contact-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:3rem;}
+  .contact-card{background:var(--light);border-radius:6px;padding:1.5rem;text-align:center;border:1px solid var(--mid);}
+  .contact-card .icon{font-size:1.8rem;margin-bottom:.7rem;}
+  .contact-card h4{font-size:.88rem;font-weight:700;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.05em;}
+  .contact-card a,.contact-card p{color:var(--grey);font-size:.85rem;text-decoration:none;}
+  .contact-card a:hover{color:var(--blue-light);}
+
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float{position:fixed;bottom:1.8rem;right:1.8rem;z-index:1000;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);text-decoration:none;transition:.3s;}
+  .wa-float:hover{transform:scale(1.1);}
+  .wa-float svg{width:28px;height:28px;fill:var(--white);}
+
+  /* ── FOOTER ── */
+  footer{background:var(--ink);padding:3rem 5% 1.5rem;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08);}
+  .footer-brand p{color:rgba(255,255,255,.45);font-size:.82rem;line-height:1.7;margin-top:1rem;}
+  .footer-col h5{color:var(--white);font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;}
+  .footer-col ul{list-style:none;}
+  .footer-col li{margin-bottom:.6rem;}
+  .footer-col a{color:rgba(255,255,255,.45);text-decoration:none;font-size:.82rem;transition:.2s;}
+  .footer-col a:hover{color:var(--cyan);}
+  .footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;padding-top:1.5rem;}
+  .footer-bottom p{color:rgba(255,255,255,.3);font-size:.76rem;}
+  @media(max-width:640px){.footer-grid{grid-template-columns:1fr;gap:2rem;}.footer-bottom{flex-direction:column;text-align:center;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">AP</div>
+      <div class="logo-text">Advance <span>Printing</span> TT</div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#why">Why Us</a></li>
+      <li><a href="#calculator">Pricing</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#quote" class="nav-cta">Get a Quote</a></li>
+    </ul>
+    <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">San Fernando, Trinidad &amp; Tobago</p>
+    <h1>Print That<br/><span>Makes an</span><br/>Impact.</h1>
+    <p>Banners. Flags. Labels. Signage. Vehicle wraps. Custom prints of any size — delivered fast, built to last. Serving all of Trinidad &amp; Tobago from #40 Cocoyea, San Fernando.</p>
+    <div class="hero-btns">
+      <a href="#quote" class="btn btn-yellow">📋 Get a Free Quote</a>
+      <a href="https://wa.me/18687063018?text=Hi!%20I%27d%20like%20to%20get%20a%20print%20quote." class="btn btn-outline" target="_blank">💬 WhatsApp Us</a>
+    </div>
+    <div class="hero-badges">
+      <span class="badge">⚡ <strong>Same-Day</strong> Banners Available</span>
+      <span class="badge">📦 <strong>T&T-Wide</strong> Delivery</span>
+      <span class="badge">🖨️ <strong>UV Ink</strong> — No Lamination Needed</span>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>Banners</span><span>Flags</span><span>Labels</span><span>Displays</span>
+    <span>Vehicle Wraps</span><span>3D PVC Cutouts</span><span>Mesh Banners</span>
+    <span>Large Format Printing</span><span>Custom Stickers</span><span>Backdrops</span>
+    <span>Event Signage</span><span>Pull-Up Banners</span>
+    <!-- repeat for seamless loop -->
+    <span>Banners</span><span>Flags</span><span>Labels</span><span>Displays</span>
+    <span>Vehicle Wraps</span><span>3D PVC Cutouts</span><span>Mesh Banners</span>
+    <span>Large Format Printing</span><span>Custom Stickers</span><span>Backdrops</span>
+    <span>Event Signage</span><span>Pull-Up Banners</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <p class="section-label centered">What We Print</p>
+  <h2 class="section-title centered">Our Products</h2>
+  <p class="section-sub centered">From a 1-foot sticker to a 250-foot banner — we handle every format with precision UV ink and zero joins.</p>
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-img"><img src="https://images.unsplash.com/photo-1612838320302-4b3b3996e87e?w=600&q=80" alt="Banners"/></div>
+      <div class="product-body"><span class="product-tag">Best Seller</span><h3>Banners</h3><p>UV ink on heavy-duty vinyl. Up to 20ft wide, 250ft long — no joins. Ideal for events, storefronts, and roadside promotions.</p></div>
+    </div>
+    <div class="product-card">
+      <div class="product-img"><img src="https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=600&q=80" alt="Flags"/></div>
+      <div class="product-body"><span class="product-tag">Popular</span><h3>Flags &amp; Displays</h3><p>Teardrop, feather, and rectangle flags for indoor or outdoor use. Perfect for brand visibility at events and trade shows.</p></div>
+    </div>
+    <div class="product-card">
+      <div class="product-img"><img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&q=80" alt="Vehicle Wraps"/></div>
+      <div class="product-body"><span class="product-tag">High Impact</span><h3>Vehicle Wraps</h3><p>Turn your vehicle into a moving billboard. Full or partial wraps in vivid colour with long-lasting UV-resistant inks.</p></div>
+    </div>
+    <div class="product-card">
+      <div class="product-img"><img src="https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=600&q=80" alt="Labels"/></div>
+      <div class="product-body"><span class="product-tag">Custom</span><h3>Labels &amp; Stickers</h3><p>Product labels, brand stickers, roll labels — any shape, any size. Waterproof and UV-resistant options available.</p></div>
+    </div>
+    <div class="product-card">
+      <div class="product-img"><img src="https://images.unsplash.com/photo-1590650516494-0c8e4a4dd67e?w=600&q=80" alt="3D Cutouts"/></div>
+      <div class="product-body"><span class="product-tag">New</span><h3>3D PVC Cutouts</h3><p>Self-standing 3D signs in any colour, size, or shape. Perfect for grand openings, exhibitions, and photo backdrops.</p></div>
+    </div>
+    <div class="product-card">
+      <div class="product-img"><img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Event Signage"/></div>
+      <div class="product-body"><span class="product-tag">Events</span><h3>Backdrops &amp; Step &amp; Repeat</h3><p>Full-colour printed backdrops for corporate events, weddings, and brand activations. Any size available.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why" id="why">
+  <div class="why-grid">
+    <div class="why-img">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Print Quality"/>
+    </div>
+    <div>
+      <p class="section-label">Why Choose Us</p>
+      <h2 class="section-title">Leaders in Labels<br/>&amp; Signage Production.</h2>
+      <div class="why-points">
+        <div class="why-point"><div class="why-icon">⚡</div><div><h4>Fast Turnaround</h4><p>Same-day banners and stickers available when you provide ready artwork. 1-hour express option for urgent jobs.</p></div></div>
+        <div class="why-point"><div class="why-icon">🎨</div><div><h4>UV Ink — No Lamination</h4><p>Gen 4 HP Latex and Eco inks mean your prints stay vibrant and durable without needing lamination — saving you money.</p></div></div>
+        <div class="why-point"><div class="why-icon">📐</div><div><h4>Any Size. No Joins.</h4><p>Our large-format printer handles banners up to 20ft wide and 250ft long — all in one seamless print.</p></div></div>
+        <div class="why-point"><div class="why-icon">🚚</div><div><h4>T&T-Wide Delivery</h4><p>Trinidad delivery from TT$35. Tobago delivery from TT$50. We bring your prints right to your door.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="calculator" id="calculator">
+  <p class="section-label centered">Instant Estimate</p>
+  <h2 class="section-title centered">Get a Price Estimate</h2>
+  <p class="section-sub centered">Use the calculator below for a ballpark figure. For exact pricing, WhatsApp us directly.</p>
+  <div class="calc-box">
+    <p class="calc-title">Banner &amp; Signage Estimator</p>
+    <div class="calc-row">
+      <div class="calc-field">
+        <label>Product Type</label>
+        <select id="calcType" onchange="calcPrice()">
+          <option value="banner">Vinyl Banner</option>
+          <option value="flag">Flag / Display</option>
+          <option value="sticker">Sticker / Label</option>
+          <option value="backdrop">Backdrop</option>
+          <option value="mesh">Mesh Banner</option>
+          <option value="pvc">3D PVC Cutout</option>
+        </select>
+      </div>
+      <div class="calc-field">
+        <label>Width (feet)</label>
+        <input type="number" id="calcW" value="4" min="1" max="20" oninput="calcPrice()"/>
+      </div>
+    </div>
+    <div class="calc-row">
+      <div class="calc-field">
+        <label>Height (feet)</label>
+        <input type="number" id="calcH" value="2" min="1" oninput="calcPrice()"/>
+      </div>
+      <div class="calc-field">
+        <label>Quantity</label>
+        <input type="number" id="calcQ" value="1" min="1" oninput="calcPrice()"/>
+      </div>
+    </div>
+    <div class="calc-result">
+      <div class="estimate">
+        <small>Estimated Total (TT$)</small>
+        <strong id="calcOut">TT$96</strong>
+      </div>
+      <a href="https://wa.me/18687063018?text=Hi!%20I%20want%20an%20exact%20quote%20for%20my%20print%20job." class="btn btn-yellow" target="_blank" style="font-size:.85rem;padding:.7rem 1.4rem;">Get Exact Quote on WhatsApp ↗</a>
+    </div>
+    <p style="font-size:.72rem;color:var(--grey);margin-top:.8rem;text-align:center;">* Estimates are approximate. Final price depends on material, artwork complexity, and delivery. VAT included where applicable.</p>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section>
+  <p class="section-label centered">How It Works</p>
+  <h2 class="section-title centered">From Order to Delivery</h2>
+  <div class="process-steps">
+    <div class="process-step"><div class="step-dot">1</div><h4>Send Your Artwork</h4><p>WhatsApp or email your artwork file. We'll let you know if any adjustments are needed.</p></div>
+    <div class="process-step"><div class="step-dot">2</div><h4>Get Your Quote</h4><p>Receive an exact price within minutes based on your specifications and quantity.</p></div>
+    <div class="process-step"><div class="step-dot">3</div><h4>Confirm &amp; Pay</h4><p>Approve the quote and pay via bank transfer, Linx, or WiPay. Production begins immediately.</p></div>
+    <div class="process-step"><div class="step-dot">4</div><h4>Pick Up or Delivery</h4><p>Walk in at #40 Cocoyea, San Fernando — or we deliver island-wide from TT$35.</p></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="gallery">
+  <p class="section-label centered">Our Work</p>
+  <h2 class="section-title centered">Prints That Perform</h2>
+  <div class="gallery-grid">
+    <img src="https://images.unsplash.com/photo-1612838320302-4b3b3996e87e?w=800&q=80" alt="Large format banner"/>
+    <img src="https://images.unsplash.com/photo-1598512752271-33f913a5af13?w=600&q=80" alt="Flag print"/>
+    <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80" alt="Event backdrop"/>
+    <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=600&q=80" alt="Vehicle wrap"/>
+    <img src="https://images.unsplash.com/photo-1566241440091-ec10de8db2e1?w=600&q=80" alt="Sticker labels"/>
+  </div>
+</section>
+
+<!-- QUOTE FORM -->
+<section class="quote-form" id="quote">
+  <div style="max-width:860px;margin:0 auto;">
+    <p class="section-label">Request a Quote</p>
+    <h2 class="section-title" style="color:var(--white);">Tell Us What You Need</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.7);margin-bottom:0;">We'll respond within the hour — Monday to Friday, 10am to 6pm.</p>
+  </div>
+  <form class="form-grid" onsubmit="submitQuote(event)">
+    <div class="form-group"><label>Full Name *</label><input type="text" placeholder="Your name" required/></div>
+    <div class="form-group"><label>Phone / WhatsApp *</label><input type="tel" placeholder="868-XXX-XXXX" required/></div>
+    <div class="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com"/></div>
+    <div class="form-group"><label>Product Type *</label>
+      <select required>
+        <option value="">Select product</option>
+        <option>Vinyl Banner</option>
+        <option>Mesh Banner</option>
+        <option>Flag / Display</option>
+        <option>Sticker / Label</option>
+        <option>Vehicle Wrap</option>
+        <option>3D PVC Cutout</option>
+        <option>Backdrop / Step &amp; Repeat</option>
+        <option>Other / Multiple</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Size (W × H)</label><input type="text" placeholder='e.g. "4ft x 2ft" or "A4 labels"'/></div>
+    <div class="form-group"><label>Quantity</label><input type="number" placeholder="How many?" min="1"/></div>
+    <div class="form-group full"><label>Additional Details</label><textarea placeholder="Artwork ready? Specific material? Delivery needed? Any deadline?"></textarea></div>
+    <div class="form-submit">
+      <button type="submit" class="btn btn-yellow" style="font-size:.95rem;padding:1rem 2.5rem;">📩 Send Quote Request</button>
+      <p style="color:rgba(255,255,255,.55);font-size:.78rem;margin-top:.8rem;">Or WhatsApp <a href="https://wa.me/18687063018" style="color:var(--yellow);" target="_blank">(868) 706-3018</a> for an instant response.</p>
+    </div>
+  </form>
+</section>
+
+<!-- CONTACT BAR -->
+<div class="contact-bar">
+  <div class="contact-bar-inner">
+    <div><h3>Visit Our Store</h3><p>#40 Cocoyea Village, San Fernando, Trinidad</p><p>Mon – Fri: 10:00 AM – 6:00 PM</p></div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="https://wa.me/18687063018" class="btn btn-primary" target="_blank">💬 WhatsApp Us</a>
+      <a href="mailto:advanceprintingtt@gmail.com" class="btn btn-outline" style="border-color:rgba(0,0,0,.3);color:var(--ink);">📧 Email Us</a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label centered">Get In Touch</p>
+  <h2 class="section-title centered">Contact &amp; Location</h2>
+  <div class="contact-cards">
+    <div class="contact-card"><div class="icon">📞</div><h4>Call or WhatsApp</h4><a href="tel:+18687063018">(868) 706-3018</a></div>
+    <div class="contact-card"><div class="icon">📧</div><h4>Email</h4><a href="mailto:advanceprintingtt@gmail.com">advanceprintingtt@gmail.com</a></div>
+    <div class="contact-card"><div class="icon">📍</div><h4>Location</h4><p>#40 Cocoyea Village<br/>San Fernando, Trinidad</p></div>
+    <div class="contact-card"><div class="icon">🕒</div><h4>Hours</h4><p>Mon – Fri: 10 AM – 6 PM</p></div>
+  </div>
+</section>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/18687063018?text=Hi!%20I%27d%20like%20to%20get%20a%20quote%20for%20a%20print%20job." class="wa-float" target="_blank" title="WhatsApp Us">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">
+        <div class="logo-mark">AP</div>
+        <div class="logo-text" style="font-size:1rem;">Advance <span>Printing</span> TT</div>
+      </a>
+      <p>Leaders in Labels &amp; Signage Production. Serving all of Trinidad &amp; Tobago from #40 Cocoyea, San Fernando. UV ink. No lamination. Any size.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Products</h5>
+      <ul>
+        <li><a href="#products">Vinyl Banners</a></li>
+        <li><a href="#products">Flags &amp; Displays</a></li>
+        <li><a href="#products">Vehicle Wraps</a></li>
+        <li><a href="#products">Labels &amp; Stickers</a></li>
+        <li><a href="#products">3D PVC Cutouts</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="tel:+18687063018">(868) 706-3018</a></li>
+        <li><a href="mailto:advanceprintingtt@gmail.com">advanceprintingtt@gmail.com</a></li>
+        <li><a href="https://www.facebook.com/advanceprintingtrinidad" target="_blank">Facebook</a></li>
+        <li><a href="https://www.instagram.com/advance_printing_tt/" target="_blank">Instagram</a></li>
+        <li><a href="#quote">Get a Quote</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Advance Printing TT. All rights reserved.</p>
+    <p>Website by <strong style="color:rgba(255,255,255,.4);">Prisca Dezigns</strong></p>
+  </div>
+</footer>
+
+<script>
+// Banner estimator
+const rates = {banner:6,flag:12,sticker:4,backdrop:8,mesh:7,pvc:18};
+function calcPrice(){
+  const type = document.getElementById('calcType').value;
+  const w = parseFloat(document.getElementById('calcW').value)||1;
+  const h = parseFloat(document.getElementById('calcH').value)||1;
+  const q = parseInt(document.getElementById('calcQ').value)||1;
+  const sqft = w*h;
+  const rate = rates[type]||6;
+  const total = Math.max(rate*sqft*q, rate*q);
+  document.getElementById('calcOut').textContent = 'TT$'+Math.round(total).toLocaleString();
+}
+calcPrice();
+
+// Quote form
+function submitQuote(e){
+  e.preventDefault();
+  const form=e.target;
+  const name=form.querySelector('[placeholder="Your name"]').value;
+  const phone=form.querySelector('[type="tel"]').value;
+  const msg=encodeURIComponent(`Hi! My name is ${name} (${phone}). I'd like a quote for a print job.`);
+  window.open(`https://wa.me/18687063018?text=${msg}`,'_blank');
+  alert('Opening WhatsApp — we\'ll respond within the hour!');
+  form.reset(); calcPrice();
+}
+</script>
+</body>
+</html>
