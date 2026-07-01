@@ -203,7 +203,77 @@
             .modal-inner { padding: 30px; }
             .modal-inner h2 { font-size: 2.5rem; }
         }
-    </style>
+    
+        /* ── ABOUT SECTION ─────────────────────────────── */
+        .about-section {
+            padding: 160px 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .about-eyebrow {
+            font-weight: 900; font-size: 11px; text-transform: uppercase;
+            letter-spacing: 0.4em; opacity: 0.45; margin-bottom: 24px;
+        }
+        .about-headline {
+            font-family: var(--font-heading);
+            font-size: clamp(2.8rem, 6vw, 5.5rem);
+            font-weight: 900; line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: 40px;
+        }
+        .about-headline span { color: var(--accent); }
+        .about-lead {
+            font-size: 1.1rem; font-weight: 400; line-height: 1.75;
+            opacity: 0.6; max-width: 640px; margin-bottom: 80px;
+        }
+        .about-services {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+        }
+        @media (max-width: 768px) {
+            .about-section { padding: 100px 30px; }
+            .about-services { grid-template-columns: 1fr; }
+            .about-headline { font-size: 2.8rem; }
+        }
+        .service-card {
+            padding: 48px 40px;
+            border: 1px solid rgba(128,128,128,0.15);
+            transition: border-color 0.4s ease, background 0.4s ease;
+            cursor: default;
+        }
+        .service-card:hover { border-color: var(--accent); background: rgba(123,53,212,0.03); }
+        [data-theme="dark"] .service-card:hover { background: rgba(123,53,212,0.06); }
+        .service-num {
+            font-size: 11px; font-weight: 900; letter-spacing: 0.4em;
+            text-transform: uppercase; opacity: 0.35; margin-bottom: 20px;
+        }
+        .service-title {
+            font-family: var(--font-heading);
+            font-size: 2.2rem; font-weight: 900; line-height: 1;
+            letter-spacing: -0.02em; margin-bottom: 16px;
+        }
+        .service-divider {
+            width: 32px; height: 2px; background: var(--accent);
+            margin-bottom: 20px; opacity: 0.7;
+        }
+        .service-desc {
+            font-size: 0.9rem; line-height: 1.7; opacity: 0.55; margin-bottom: 28px;
+        }
+        .service-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+        .pill {
+            font-size: 10px; font-weight: 900; letter-spacing: 0.25em;
+            text-transform: uppercase; padding: 6px 14px;
+            border: 1px solid rgba(128,128,128,0.25); border-radius: 100px;
+            opacity: 0.6;
+        }
+        .about-divider {
+            border: none; border-top: 1px solid rgba(128,128,128,0.15);
+            margin: 0 80px;
+        }
+        @media (max-width: 768px) { .about-divider { margin: 0 30px; } }
+
+        </style>
 </head>
 <body data-theme="light">
 
@@ -292,6 +362,61 @@
         <div class="narrative reveal" style="margin-top: 400px; opacity: 0.15; font-size: 1.5rem; letter-spacing: 0.2em; text-align: center;">
             ABSOLUTE AUTONOMY. NO SIMULATIONS.<br>THE LEDGER NEVER LIES.
         </div>
+
+    <hr class="about-divider reveal">
+
+    <!-- ABOUT / WHAT WE DO — Added 2026-06-30 -->
+    <section class="about-section reveal">
+        <div class="about-eyebrow">What We Build</div>
+        <h2 class="about-headline">
+            We build the system<br>
+            that <span>closes for you.</span>
+        </h2>
+        <p class="about-lead">
+            Most businesses don't have a marketing problem. They have a filter problem — 
+            they can't separate the browsers from the buyers. 
+            Prisca Dezigns builds the systems that do it automatically, 
+            from your digital presence to your lead pipeline.
+        </p>
+
+        <div class="about-services">
+            <div class="service-card">
+                <div class="service-num">Service 01</div>
+                <div class="service-title">Web Design &amp;<br>Digital Presence</div>
+                <div class="service-divider"></div>
+                <p class="service-desc">
+                    Your website is your 24/7 salesperson. We build high-fidelity, 
+                    brand-aligned websites that rank, convert, and present your business 
+                    with the authority it deserves — before you say a single word to a client.
+                </p>
+                <div class="service-pills">
+                    <span class="pill">UI / UX Design</span>
+                    <span class="pill">SEO Ready</span>
+                    <span class="pill">Mobile First</span>
+                    <span class="pill">Brand Identity</span>
+                </div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-num">Service 02</div>
+                <div class="service-title">Lead &amp; Customer<br>Service Automation</div>
+                <div class="service-divider"></div>
+                <p class="service-desc">
+                    A chatbot that qualifies every lead the second they land — budget, 
+                    timeline, intent — so only the ones ready to pay reach you. 
+                    We replace the manual follow-up, the missed messages, and the 
+                    after-hours silence with a system that never sleeps.
+                </p>
+                <div class="service-pills">
+                    <span class="pill">AI Chatbot</span>
+                    <span class="pill">Lead Filtering</span>
+                    <span class="pill">Auto Follow-Up</span>
+                    <span class="pill">24 / 7 Response</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     </main>
 
     <div id="leadModal">
