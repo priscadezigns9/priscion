@@ -96,16 +96,26 @@
         .nav-logo {
             height: 40px;
             width: auto;
+            transition: filter 1.2s ease;
+        }
+
+        body.dark-mode .nav-logo {
+            filter: brightness(0) invert(1);
         }
 
         .nav-links { display: flex; gap: 2rem; }
         .nav-link {
             text-decoration: none;
-            color: #fff; /* Inverted due to difference mode */
+            color: #000;
             font-weight: 500;
             font-size: 0.9rem;
             letter-spacing: 0.05em;
             text-transform: uppercase;
+            transition: color 1.2s ease;
+        }
+
+        body.dark-mode .nav-link {
+            color: #fff;
         }
 
         /* Layout */
