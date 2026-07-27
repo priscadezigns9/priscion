@@ -90,13 +90,13 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            mix-blend-mode: difference;
         }
 
         .nav-logo {
             height: 40px;
             width: auto;
-            transition: filter 1.2s ease;
+            transition: filter 1.2s ease, transform 0.5s ease;
+            filter: none;
         }
 
         body.dark-mode .nav-logo {
@@ -106,7 +106,7 @@
         .nav-links { display: flex; gap: 2rem; }
         .nav-link {
             text-decoration: none;
-            color: #000;
+            color: #000000;
             font-weight: 500;
             font-size: 0.9rem;
             letter-spacing: 0.05em;
@@ -115,7 +115,7 @@
         }
 
         body.dark-mode .nav-link {
-            color: #fff;
+            color: #ffffff;
         }
 
         /* Layout */
@@ -140,6 +140,12 @@
             font-weight: 900;
             margin-bottom: 1.5rem;
             line-height: 1;
+            color: #000000;
+            transition: color 1.2s ease;
+        }
+
+        body.dark-mode .hero-title {
+            color: #ffffff;
         }
 
         .hero-subtitle {
@@ -147,6 +153,12 @@
             max-width: 700px;
             opacity: 0.8;
             font-weight: 400;
+            color: #000000;
+            transition: color 1.2s ease;
+        }
+
+        body.dark-mode .hero-subtitle {
+            color: #ffffff;
         }
 
         .holdings-grid {
