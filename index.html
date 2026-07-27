@@ -24,7 +24,7 @@
             line-height: 1.4; 
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            transition: background-color 1.5s ease, color 1.2s ease;
+            transition: background-color 3s cubic-bezier(0.4, 0, 0.2, 1), color 2s ease;
         }
 
         body.dark-mode {
@@ -338,6 +338,5 @@
         window.addEventListener('load', handleScroll);
         handleScroll(); // Initial check
     </script>
-<script src="/chatbot.js"></script>
 </body>
 </html>
