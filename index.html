@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta name="description" content="PRISCION Ltd provides strategic asset governance and institutional oversight for a diversified portfolio. Specializing in capital allocation and operational excellence across Blockchain, Media, and Luxury sectors.">
-    <meta name="keywords" content="Strategic Asset Governance, Centralized Ownership, Capital Allocation, Subsidiary Oversight, Institutional Ledger, Digital Asset Management, Multi-Industry Holding, Corporate Strategy 2026, Asset Valuation, Regional Infrastructure, Investment Thesis, Board Transparency, Market Intelligence, Global Investor Relations, Portfolio Diversification, Operational Excellence, Stakeholder Value, Governance Standards, Caribbean Investment Hub, Strategic Growth">
-    <!-- GEO Optimization -->
-    <meta name="geo.region" content="TT" />
-    <meta name="geo.placename" content="Port of Spain" />
-    <title>PRISCION Ltd | Strategic Asset Governance</title>
+    <meta name="description" content="PRISCION HOLDINGS LTD provides strategic asset governance and institutional oversight for a diversified portfolio. Specializing in capital allocation and operational excellence across Blockchain, Media, and Luxury sectors.">
+    <meta name="keywords" content="Strategic Asset Governance, PRISCION HOLDINGS LTD, Blockchain, Luxury Vehicles, Anime Media, Caribbean AI">
+    <title>PRISCION HOLDINGS LTD | Strategic Asset Governance</title>
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/priscadezigns9/priscion/main/assets/priscion_logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,900;1,900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
@@ -18,8 +14,8 @@
             --bg: #FFFFFF;
             --text: #000000;
             --accent: #7B35D4;
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Inter', sans-serif;
+            --font-heading: "Playfair Display", serif;
+            --font-body: "Inter", sans-serif;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,53 +31,38 @@
         }
 
         .bg-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #6a4da8;
             z-index: -2;
             opacity: 0;
-            transition: opacity 3s linear; /* Changed to linear and simplified for performance */
-            will-change: opacity; /* Optimizes for GPU rendering */
+            transition: opacity 3s linear;
+            will-change: opacity;
             pointer-events: none;
         }
 
-        body.dark-mode .bg-overlay {
-            opacity: 1;
-        }
+        body.dark-mode .bg-overlay { opacity: 1; }
+        body.dark-mode { color: #FFFFFF; }
 
-        body.dark-mode {
-            color: #FFFFFF;
-        }
-
-        /* Sky Canvas */
         .sky-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             pointer-events: none;
         }
 
         .grain {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url("https://grainy-gradients.vercel.app/noise.svg");
             opacity: 0.05;
             mix-blend-mode: overlay;
         }
 
         .starfield {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
-                              radial-gradient(1.5px 1.5px at 40px 70px, #fff, rgba(0,0,0,0)),
-                              radial-gradient(1px 1px at 50px 160px, #fff, rgba(0,0,0,0)),
-                              radial-gradient(1.5px 1.5px at 90px 40px, #fff, rgba(0,0,0,0));
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 90px 40px, #fff, rgba(0,0,0,0));
             background-repeat: repeat;
             background-size: 200px 200px;
             opacity: 0;
@@ -104,165 +85,80 @@
         .cloud-1 { top: -10%; left: -10%; }
         .cloud-2 { bottom: -10%; right: -10%; }
 
-        /* Nav */
         .nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.5rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            position: fixed; top: 0; width: 100%; padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
             z-index: 1000;
         }
 
-        .nav-logo {
-            height: 40px;
-            width: auto;
-            transition: filter 1.2s ease, transform 0.5s ease;
-            filter: none;
-        }
-
-        body.dark-mode .nav-logo {
-            filter: brightness(0) invert(1);
-        }
+        .nav-logo { height: 40px; width: auto; transition: filter 1.2s ease; }
+        body.dark-mode .nav-logo { filter: brightness(0) invert(1); }
 
         .nav-links { display: flex; gap: 2rem; }
         .nav-link {
-            text-decoration: none;
-            color: #000000;
-            font-weight: 500;
-            font-size: 0.9rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            transition: color 1.2s ease;
+            text-decoration: none; color: inherit; font-weight: 500; font-size: 0.9rem;
+            letter-spacing: 0.05em; text-transform: uppercase; transition: color 1.2s ease;
         }
 
-        body.dark-mode .nav-link {
-            color: #ffffff;
-        }
-
-        /* Layout */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 5%;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
 
         .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
         }
 
         .hero-title {
-            font-family: var(--font-heading);
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 900;
-            margin-bottom: 1.5rem;
-            line-height: 1;
-            color: #000000;
-            transition: color 1.2s ease;
-        }
-
-        body.dark-mode .hero-title {
-            color: #ffffff;
+            font-family: var(--font-heading); font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900; margin-bottom: 1.5rem; line-height: 1;
         }
 
         .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            max-width: 700px;
-            opacity: 0.8;
-            font-weight: 400;
-            color: #000000;
-            transition: color 1.2s ease;
-        }
-
-        body.dark-mode .hero-subtitle {
-            color: #ffffff;
+            font-size: clamp(1rem, 2vw, 1.25rem); max-width: 700px;
+            opacity: 0.8; font-weight: 400;
         }
 
         .holdings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding-bottom: 10rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem; padding-bottom: 10rem;
         }
 
-        .holding-card-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
+        .holding-card-link { text-decoration: none; color: inherit; }
         .holding-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(123, 53, 212, 0.1);
-            padding: 3rem 2rem;
-            border-radius: 4px;
-            transition: all 0.5s ease;
-            height: 100%;
+            padding: 3rem 2rem; border-radius: 4px;
+            transition: all 0.5s ease; height: 100%;
         }
 
-        body:not(.dark-mode) .holding-card {
-            background: rgba(0, 0, 0, 0.02);
-        }
+        body:not(.dark-mode) .holding-card { background: rgba(0, 0, 0, 0.02); }
 
         .holding-card:hover {
             background: rgba(123, 53, 212, 0.05);
-            transform: translateY(-10px);
-            border-color: var(--accent);
+            transform: translateY(-10px); border-color: var(--accent);
         }
 
         .status-badge {
-            display: inline-block;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1rem;
-            padding: 0.2rem 0.6rem;
-            background: var(--accent);
-            color: #fff;
-            border-radius: 2px;
+            display: inline-block; font-size: 0.7rem; text-transform: uppercase;
+            letter-spacing: 0.1em; margin-bottom: 1rem; padding: 0.2rem 0.6rem;
+            background: var(--accent); color: #fff; border-radius: 2px;
         }
 
-        .holding-card h3 {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .holding-card p {
-            font-size: 1rem;
-            opacity: 0.7;
-            line-height: 1.6;
-        }
+        .holding-card h3 { font-family: var(--font-heading); font-size: 2rem; margin-bottom: 1rem; }
+        .holding-card p { font-size: 1rem; opacity: 0.7; line-height: 1.6; }
 
         footer {
-            padding: 4rem 5%;
-            text-align: center;
-            font-size: 0.8rem;
-            opacity: 0.5;
-            letter-spacing: 0.1em;
+            padding: 4rem 5%; text-align: center; font-size: 0.8rem;
+            opacity: 0.5; letter-spacing: 0.1em; line-height: 1.8;
         }
 
-        /* Animations */
         .reveal {
-            opacity: 0;
-            transform: translateY(30px);
+            opacity: 0; transform: translateY(30px);
             transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-        }
+        @media (max-width: 768px) { .nav-links { display: none; } }
     </style>
 </head>
 <body>
@@ -289,7 +185,7 @@
     <main class="container">
         <section class="hero reveal">
             <h1 class="hero-title">Strategic Asset Governance</h1>
-            <p class="hero-subtitle">PRISCION Ltd serves as the central governing body for a diversified portfolio of digital interests. We focus on long-term value preservation and the strategic expansion of the Priscion ecosystem.</p>
+            <p class="hero-subtitle">PRISCION HOLDINGS LTD serves as the central governing body for a diversified portfolio of digital interests. We focus on long-term value preservation and the strategic expansion of the Priscion ecosystem.</p>
         </section>
 
         <section id="holdings" class="holdings-grid reveal">
@@ -335,45 +231,44 @@
         </section>
     </main>
 
-    <footer>&copy; 2026 PRISCION LTD. ALL RIGHTS RESERVED.</footer>
+    <footer>
+        <p>PRISCION HOLDINGS LTD &copy; 2026. ALL RIGHTS RESERVED.</p>
+        <p style="font-size: 10px; margin-top: 10px;">PRISCION is a trademark of Prisca Dezigns. Used under license by PRISCION HOLDINGS LTD.</p>
+    </footer>
 
     <script>
         const body = document.body;
-        const cloud1 = document.querySelector('.cloud-1');
-        const cloud2 = document.querySelector('.cloud-2');
+        const cloud1 = document.querySelector(".cloud-1");
+        const cloud2 = document.querySelector(".cloud-2");
 
         function handleScroll() {
             const scroll = window.scrollY;
             
-            // Use requestAnimationFrame for smoother performance
             requestAnimationFrame(() => {
-                // Theme Toggle
                 if (scroll > window.innerHeight * 0.4) {
-                    body.classList.add('dark-mode');
+                    body.classList.add("dark-mode");
                 } else {
-                    body.classList.remove('dark-mode');
+                    body.classList.remove("dark-mode");
                 }
 
-                // Cloud Parallax - Simplified to reduce CPU load
                 const cloudMove1 = scroll * 0.05;
                 const cloudMove2 = scroll * 0.03;
                 cloud1.style.transform = `translate(${cloudMove1}px, ${cloudMove1 * 0.5}px)`;
                 cloud2.style.transform = `translate(${-cloudMove2}px, ${-cloudMove2 * 0.5}px)`;
 
-                // Reveal Animation
-                const reveals = document.querySelectorAll('.reveal');
+                const reveals = document.querySelectorAll(".reveal");
                 reveals.forEach(el => {
                     const rect = el.getBoundingClientRect();
                     if (rect.top <= window.innerHeight * 0.9) {
-                        el.classList.add('visible');
+                        el.classList.add("visible");
                     }
                 });
             });
         }
 
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('load', handleScroll);
-        handleScroll(); // Initial check
+        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("load", handleScroll);
+        handleScroll();
     </script>
 </body>
 </html>
