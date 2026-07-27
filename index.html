@@ -37,7 +37,9 @@
             background: #6a4da8;
             z-index: -2;
             opacity: 0;
-            transition: opacity 4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: opacity 3s linear; /* Changed to linear and simplified for performance */
+            will-change: opacity; /* Optimizes for GPU rendering */
+            pointer-events: none;
         }
 
         body.dark-mode .bg-overlay {
@@ -336,27 +338,30 @@
 
         function handleScroll() {
             const scroll = window.scrollY;
-            const height = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = scroll / height;
-
-            // Smoother Theme Toggle (using window.innerHeight as threshold)
-            if (scroll > window.innerHeight * 0.4) {
-                body.classList.add('dark-mode');
-            } else {
-                body.classList.remove('dark-mode');
-            }
-
-            // Cloud Parallax
-            cloud1.style.transform = `translate(${scroll * 0.1}px, ${scroll * 0.05}px) scale(${1 + scroll * 0.0005})`;
-            cloud2.style.transform = `translate(${-scroll * 0.1}px, ${-scroll * 0.05}px) scale(${1 + scroll * 0.0003})`;
-
-            // Reveal Animation
-            const reveals = document.querySelectorAll('.reveal');
-            reveals.forEach(el => {
-                const rect = el.getBoundingClientRect();
-                if (rect.top <= window.innerHeight * 0.85) {
-                    el.classList.add('visible');
+            
+            // Use requestAnimationFrame for smoother performance
+            requestAnimationFrame(() => {
+                // Theme Toggle
+                if (scroll > window.innerHeight * 0.4) {
+                    body.classList.add('dark-mode');
+                } else {
+                    body.classList.remove('dark-mode');
                 }
+
+                // Cloud Parallax - Simplified to reduce CPU load
+                const cloudMove1 = scroll * 0.05;
+                const cloudMove2 = scroll * 0.03;
+                cloud1.style.transform = `translate(${cloudMove1}px, ${cloudMove1 * 0.5}px)`;
+                cloud2.style.transform = `translate(${-cloudMove2}px, ${-cloudMove2 * 0.5}px)`;
+
+                // Reveal Animation
+                const reveals = document.querySelectorAll('.reveal');
+                reveals.forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top <= window.innerHeight * 0.9) {
+                        el.classList.add('visible');
+                    }
+                });
             });
         }
 
