@@ -21,7 +21,7 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 function openWallet(){document.getElementById('wallet-modal').classList.add('open')}function closeWallet(){document.getElementById('wallet-modal').classList.remove('open')}
 function utf8Hex(value){return [...new TextEncoder().encode(value)].map(b=>b.toString(16).padStart(2,'0')).join('')}
-async function connect(id){const provider=window.cardano?.[id];if(!provider){alert('Install '+id+' or open PRISCION Care inside its dApp browser.');return}try{const api=await provider.enable();const addresses=await api.getRewardAddresses();const address=addresses?.[0]||await api.getChangeAddress();
+async function connect(id){const provider=window.cardano?.[id];if(!provider){alert('Install '+id+' or open PRISCION Care inside its dApp browser.');return}try{const api=await provider.enable();const usedAddresses=await api.getUsedAddresses();const address=usedAddresses?.[0]||await api.getChangeAddress();
   const {error:sessionError}=await sb.auth.signInAnonymously(); if(sessionError) throw sessionError;
   const {data:challenge,error:nonceError}=await sb.functions.invoke('wallet-auth',{body:{action:'nonce',walletAddress:address}}); if(nonceError) throw nonceError;
   const signature=await api.signData(address,utf8Hex(challenge.message));
