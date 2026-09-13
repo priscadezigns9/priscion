@@ -21,11 +21,11 @@ const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 function openWallet(){document.getElementById('wallet-modal').classList.add('open')}function closeWallet(){document.getElementById('wallet-modal').classList.remove('open')}
 function utf8Hex(value){return [...new TextEncoder().encode(value)].map(b=>b.toString(16).padStart(2,'0')).join('')}
-async function connect(id){const provider=window.cardano?.[id];if(!provider){alert('Install '+id+' or open PRISCION Care inside its dApp browser.');return}try{const api=await provider.enable();const rewardAddresses=await api.getRewardAddresses();const address=rewardAddresses?.[0]||await api.getChangeAddress();
+async function connect(id){const provider=window.cardano?.[id];if(!provider){alert('Install '+id+' or open PRISCION Care inside its dApp browser.');return}try{const api=await provider.enable();const rewardAddresses=await api.getRewardAddresses();const rewardAddressHex=rewardAddresses?.[0]||await api.getChangeAddress();if(!rewardAddressHex) throw new Error('The wallet did not provide a signing address.');const {Address}=await import('https://esm.sh/@emurgo/cardano-serialization-lib-browser');const address=Address.from_bytes(Uint8Array.from(rewardAddressHex.match(/.{1,2}/g).map(byte=>parseInt(byte,16)))).to_bech32();
   const {data:authData,error:sessionError}=await sb.auth.signInAnonymously(); if(sessionError) throw sessionError;
   const accessToken=authData?.session?.access_token; if(!accessToken) throw new Error('Could not create a private sign-in session.'); const authHeaders={Authorization:`Bearer ${accessToken}`};
   const {data:challenge,error:nonceError}=await sb.functions.invoke('wallet-auth',{body:{action:'nonce',walletAddress:address},headers:authHeaders}); if(nonceError) throw nonceError;
-  const signature=await api.signData(address,utf8Hex(challenge.message));
+  const signature=await api.signData(rewardAddressHex,utf8Hex(challenge.message));
   const {data:verified,error:verifyError}=await sb.functions.invoke('wallet-auth',{body:{action:'verify',walletAddress:address,walletProvider:id,nonce:challenge.nonce,message:challenge.message,key:signature.key,signature:signature.signature},headers:authHeaders}); if(verifyError) throw verifyError;
   localStorage.setItem('priscion_wallet',JSON.stringify({id,address,account:verified.account}));location.href='/care/applicant/'
 }catch(e){let detail='';try{if(e?.context?.json){const body=await e.context.json();detail=body?.error||body?.message||''}}catch(_){}alert(detail||e.message||'Wallet connection or signature was cancelled.')}}
